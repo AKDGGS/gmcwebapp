@@ -1,0 +1,52 @@
+			<fieldset class="fs-detail">
+				<legend>Detail</legend>
+				<table>
+					<tbody>
+						<tr>
+							<th>Name:</th>
+							<td><a href="../search#prospect_id={{.prospect_id}}">{{.name}}</a></td>
+						</tr>
+						{{- if .alt_names}}
+						<tr>
+							<th>Alternatives Name(s):</th>
+							<td>{{.alt_names}}</td>
+						</tr>
+						{{- end}}
+						{{- if .ardf_number}}
+						<tr>
+							<th>ARDF Number:</th>
+							<td><a href="http://mrdata.usgs.gov/ardf/show-ardf.php?ardf_num={{.ardf_number}}">{{.ardf_number}}</a></td>
+						</tr>
+						{{- end}}
+						{{- if .boreholes}}
+						<tr>
+							<th>Boreholes:</th>
+							<td>{{range $i, $bh := .boreholes}}{{if ne $i 0}}, {{end}}<a href="../borehole/{{$bh.borehole_id}}">{{$bh.name}}</a>{{end}}</td>
+						</tr>
+						{{- end}}
+					</tbody>
+				</table>
+			</fieldset>
+			{{- if .spatial}}
+
+			<fieldset class="fs-map">
+				<legend>Geospatial</legend>
+				<div id="map"></div>
+				<script>
+					var geojsons = [
+						{{range $i, $e := .spatial}}{{if $i}},
+						{{end}}{{rawjs $e.geojson}}{{- end}}
+					];
+				</script>
+			</fieldset>
+			<div class="flex-break"></div>
+			{{- end}}
+		
+			{{- if .files}}
+			<fieldset>
+				<legend>Files</legend>
+				{{range .files}}
+				<div><a href="../file/{{.file_id}}">{{.file_name}}</a> ({{.file_size}})</div>
+				{{end}}
+			</fieldset>
+			{{- end}}

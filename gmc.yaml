@@ -1,0 +1,26 @@
+# address service listens on
+listen_address: 127.0.0.1:8080
+
+# URL used to access database
+database_url: postgresql://localhost
+
+# base URL path for web requests - useful if behind a proxy
+base_path: /
+
+file_store:
+  ## File store is a directory
+  #type: dir
+  #path: /somepath
+
+  ## File store is S3 compatible
+  #type: s3
+  ## S3 endpoint - name of server to use
+  #endpoint: localhost:9000
+  ## S3, use SSL?
+  # secure: false
+  ## S3 accesskeyid - change this!
+  #accesskeyid: my_access_key
+  ## S3 secretaccesskey - change this!
+  #secretaccesskey: my_secret_access_key
+  ## S3, bucket name
+  #bucket: gmc
