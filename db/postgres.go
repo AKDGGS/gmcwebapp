@@ -84,12 +84,28 @@ func (pg *Postgres) GetProspect(id int) (map[string]interface{}, error) {
 		prospect["files"] = files
 	}
 
-	spatial, err := pg.queryRows("pg/prospect_spatial.sql", id)
+	geojson, err := pg.queryRow("pg/prospect_geojson.sql", id)
 	if err != nil {
 		return nil, err
 	}
-	if spatial != nil {
-		prospect["spatial"] = spatial
+	if geojson != nil {
+		prospect["geojson"] = geojson["geojson"]
+	}
+
+	mds, err := pg.queryRows("pg/miningdistrict_byprospectid.sql", id)
+	if err != nil {
+		return nil, err
+	}
+	if mds != nil {
+		prospect["mining_districts"] = mds
+	}
+
+	qds, err := pg.queryRows("pg/quadrangle250k_byprospectid.sql", id)
+	if err != nil {
+		return nil, err
+	}
+	if qds != nil {
+		prospect["quadrangles"] = qds
 	}
 
 	return prospect, nil

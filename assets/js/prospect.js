@@ -23,9 +23,7 @@ if (document.getElementById('map')){
 					})
 				}),
 				source: new ol.source.Vector({
-					features: geojsons.map(geojson => {
-						return fmt.readFeature(geojson);
-					})
+					features: fmt.readFeatures(geojson)
 				})
 			})
 		],

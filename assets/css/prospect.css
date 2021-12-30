@@ -3,8 +3,10 @@ fieldset { margin: 8px 8px 0 8px; }
 legend { padding: 0 8px; }
 .apptmpl-content { display: flex; flex-wrap: wrap; }
 .apptmpl-content fieldset { flex-grow: 1; }
-.apptmpl-content table th { text-align: left; vertical-align: top; }
 .fs-map { flex-grow: 10 !important; }
 .fs-detail { min-width: 350px; flex-basis: 0; }
 .flex-break { height: 0; flex-basis: 100%; }
+.tb-fields { border-collapse: separate; border-spacing: 0 16px; }
+.tb-fields th, .tb-fields td { text-align: left; vertical-align: top; }
+.tb-fields th { padding-right: 8px; }
 #map { width: 100%; height: 100%; min-width: 400px; min-height: 400px; }
