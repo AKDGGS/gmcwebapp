@@ -33,7 +33,13 @@ if (document.getElementById('map')){
 			maxZoom: 19
 		}),
 		controls: ol.control.defaults({ attribution: false }).extend([
-			new ol.control.ScaleLine({ units: "us" })
+			new ol.control.ScaleLine({ units: "us" }),
+			new ol.control.MousePosition({
+				projection: 'EPSG:4326',
+				className: 'gmc-mouse-position',
+				placeholder: '',
+				coordinateFormat: ol.coordinate.createStringXY(3)
+			})
 		]),
 		interactions: ol.interaction.defaults({ mouseWheelZoom: false }).extend([
 			new ol.interaction.MouseWheelZoom({
