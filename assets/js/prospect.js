@@ -1,10 +1,17 @@
 if (document.getElementById('map')){
-	var fmt = new ol.format.GeoJSON({
+	let fmt = new ol.format.GeoJSON({
 		dataProjection: 'EPSG:4326',
 		featureProjection: 'EPSG:3857'
 	});
-	var map = new ol.Map({
+	let content = document.getElementById('popup-content');
+	let overlay = new ol.Overlay({
+		element: document.getElementById('popup'),
+		autoPan: true,
+		autoPan: { animation: { duration: 100 }}
+	});
+	let map = new ol.Map({
 		target: 'map',
+		overlays: [overlay],
 		layers: [
 			new ol.layer.Tile({
 				source: new ol.source.OSM()
@@ -14,10 +21,10 @@ if (document.getElementById('map')){
 					image: new ol.style.Circle({
 						radius: 5,
 						fill: new ol.style.Fill({
-							color: 'rgba(44, 126,167, 0.25)'
+							color: 'rgba(44, 126, 167, 0.25)'
 						}),
 						stroke: new ol.style.Stroke({
-							color: 'rgba(44, 126,167, 255)',
+							color: 'rgba(44, 126, 167, 255)',
 							width: 2
 						})
 					})
@@ -46,5 +53,14 @@ if (document.getElementById('map')){
 				condition: ol.events.condition.platformModifierKeyOnly
 			})
 		])
+	});
+	map.on('click', function(e){
+		let fts = map.getFeaturesAtPixel(e.pixel);
+		if (fts.length < 1){
+			overlay.setPosition(undefined);
+			return
+		}
+		overlay.setPosition(e.coordinate);
+		content.innerHTML = fts[0].get('name');
 	});
 }

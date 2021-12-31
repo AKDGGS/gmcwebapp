@@ -2,6 +2,7 @@ package web
 
 import (
 	"bytes"
+	"errors"
 	"fmt"
 	"gmc/assets"
 	"html/template"
@@ -9,6 +10,7 @@ import (
 	"os"
 	"strconv"
 	"strings"
+	"syscall"
 )
 
 func (srv *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
@@ -122,7 +124,8 @@ func (srv *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 		}
 		w.Header().Set("Content-Type", "text/html; charset=utf-8")
 		err = assets.ExecuteTemplate(w, "template.html", params)
-		if err != nil {
+		// Ignore broken pipe errors
+		if err != nil && !errors.Is(err, syscall.EPIPE) {
 			http.Error(
 				w, fmt.Sprintf("Parse error: %s", err.Error()),
 				http.StatusInternalServerError,

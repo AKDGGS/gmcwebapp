@@ -29,7 +29,11 @@ func (srv *Server) Start() error {
 	}
 
 	srv.http = http.Server{Handler: srv}
-	return srv.http.Serve(listen)
+	err = srv.http.Serve(listen)
+	if err == http.ErrServerClosed {
+		return nil
+	}
+	return err
 }
 
 func (srv *Server) Shutdown() {
