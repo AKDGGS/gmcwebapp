@@ -32,6 +32,7 @@ func (pg *Postgres) Shutdown() {
 }
 
 func (pg *Postgres) GetFile(id int, include_private bool) (int, string, time.Time, error) {
+	/*
 	var q string
 	if include_private {
 		q = assets.ReadString("pg/file_all.sql")
@@ -57,6 +58,8 @@ func (pg *Postgres) GetFile(id int, include_private bool) (int, string, time.Tim
 	} else {
 		return 0, "", time.Time{}, nil
 	}
+	*/
+	return 0, "", time.Time{}, nil
 }
 
 func (pg *Postgres) GetProspect(id int) (map[string]interface{}, error) {
@@ -112,9 +115,12 @@ func (pg *Postgres) GetProspect(id int) (map[string]interface{}, error) {
 }
 
 func (pg *Postgres) queryRow(name string, args ...interface{}) (map[string]interface{}, error) {
-	rows, err := pg.pool.Query(
-		context.Background(), assets.ReadString(name), args...,
-	)
+	q, err := assets.ReadString(name)
+	if err != nil {
+		return nil, err
+	}
+
+	rows, err := pg.pool.Query(context.Background(), q, args...)
 	if err != nil {
 		return nil, err
 	}
@@ -137,9 +143,12 @@ func (pg *Postgres) queryRow(name string, args ...interface{}) (map[string]inter
 }
 
 func (pg *Postgres) queryRows(name string, args ...interface{}) ([]map[string]interface{}, error) {
-	rows, err := pg.pool.Query(
-		context.Background(), assets.ReadString(name), args...,
-	)
+	q, err := assets.ReadString(name)
+	if err != nil {
+		return nil, err
+	}
+
+	rows, err := pg.pool.Query(context.Background(), q, args...)
 	if err != nil {
 		return nil, err
 	}

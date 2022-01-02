@@ -14,14 +14,12 @@ type Server struct {
 	Config    *config.Config
 	DB        db.DB
 	FileStore filestore.FileStore
+	AssetPath string
 	http      http.Server
 }
 
 func (srv *Server) Start() error {
-	// Build asset cache
-	if err := assets.Initialize(); err != nil {
-		return err
-	}
+	assets.Initialize(srv.AssetPath)
 
 	listen, err := net.Listen("tcp", srv.Config.ListenAddress)
 	if err != nil {

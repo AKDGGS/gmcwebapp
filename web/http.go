@@ -103,7 +103,7 @@ func (srv *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 		}
 
 		buf := bytes.Buffer{}
-		err = assets.ExecuteTemplate(&buf, "prospect.html", prospect)
+		err = assets.ExecuteTemplate("tmpl/prospect.html", &buf, prospect)
 		if err != nil {
 			http.Error(
 				w, fmt.Sprintf("Parse error: %s", err.Error()),
@@ -123,7 +123,7 @@ func (srv *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 			},
 		}
 		w.Header().Set("Content-Type", "text/html; charset=utf-8")
-		err = assets.ExecuteTemplate(w, "template.html", params)
+		err = assets.ExecuteTemplate("tmpl/template.html", w, params)
 		// Ignore broken pipe errors
 		if err != nil && !errors.Is(err, syscall.EPIPE) {
 			http.Error(

@@ -17,6 +17,7 @@ func startCommand() {
 	cmd.SetOutput(os.Stdout)
 	cpath := cmd.String("conf", "", "path to configuration")
 	autos := cmd.Bool("s", false, "automatic shutdown on executable change")
+	assets := cmd.String("assets", "", "override embedded assets with assets from path")
 	cmd.Parse(os.Args[2:])
 
 	cfg, err := config.Load(*cpath)
@@ -38,6 +39,9 @@ func startCommand() {
 	}
 
 	srv := web.Server{Config: cfg, DB: db, FileStore: stor}
+	if *assets != "" {
+		srv.AssetPath = *assets
+	}
 	if *autos {
 		expath, err := filepath.Abs(os.Args[0])
 		if err != nil {

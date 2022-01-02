@@ -6,7 +6,6 @@ if (document.getElementById('map')){
 	let content = document.getElementById('popup-content');
 	let overlay = new ol.Overlay({
 		element: document.getElementById('popup'),
-		autoPan: true,
 		autoPan: { animation: { duration: 100 }}
 	});
 	let map = new ol.Map({
@@ -60,7 +59,7 @@ if (document.getElementById('map')){
 			overlay.setPosition(undefined);
 			return
 		}
-		overlay.setPosition(e.coordinate);
 		content.innerHTML = fts[0].get('name');
+		overlay.setPosition(e.coordinate);
 	});
 }
