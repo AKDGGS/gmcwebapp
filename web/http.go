@@ -28,6 +28,10 @@ func (srv *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 		assets.ServeStatic("ol/ol-v6.9.0.js", w, r)
 		return
 
+	case "js/mustache.js":
+		assets.ServeStatic("js/mustache-v4.2.0.js", w, r)
+		return
+
 	case "css/template.css", "css/prospect.css", "js/prospect.js":
 		assets.ServeStatic(path, w, r)
 		return
@@ -119,7 +123,8 @@ func (srv *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 				"css/prospect.css", "ol/ol.css",
 			},
 			"scripts": []string{
-				"ol/ol.js", "js/prospect.js",
+				"ol/ol.js", "js/mustache.js",
+				"js/prospect.js",
 			},
 		}
 		w.Header().Set("Content-Type", "text/html; charset=utf-8")

@@ -42,7 +42,6 @@ if (document.getElementById('map')){
 			new ol.control.ScaleLine({ units: "us" }),
 			new ol.control.MousePosition({
 				projection: 'EPSG:4326',
-				className: 'gmc-mouse-position',
 				placeholder: '',
 				coordinateFormat: ol.coordinate.createStringXY(3)
 			})
@@ -59,7 +58,13 @@ if (document.getElementById('map')){
 			overlay.setPosition(undefined);
 			return
 		}
-		content.innerHTML = fts[0].get('name');
+		content.innerHTML = '';
+		for(const ft of fts){
+			content.innerHTML += mustache.render(
+				document.getElementById('tmpl-popup').innerHTML,
+				ft.getProperties(), {}, ['[[', ']]']
+			);
+		}
 		overlay.setPosition(e.coordinate);
 	});
 }

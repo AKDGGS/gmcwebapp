@@ -10,11 +10,16 @@ legend { padding: 0 8px; }
 .tb-fields { border-collapse: separate; border-spacing: 0 16px; }
 .tb-fields th, .tb-fields td { text-align: left; vertical-align: top; }
 .tb-fields th { padding-right: 8px; }
-.gmc-mouse-position:empty { display: none; }
-.gmc-mouse-position {
+.ol-mouse-position:empty { display: none; }
+.ol-mouse-position {
  top: 0;
  right: 0;
  padding: 2px 8px;
  background-color: #ffffff80;
  position: absolute;
 }
+.ol-popup { background-color: #fff; }
+.ol-popup-content { max-height: 300px; min-width: 200px; overflow-y: auto; }
+.ol-popup-content table { border-collapse: collapse; margin: 4px 8px; }
+.ol-popup-content table td { padding: 0 8px; }
+.ol-popup-content table th { text-transform: capitalize; }

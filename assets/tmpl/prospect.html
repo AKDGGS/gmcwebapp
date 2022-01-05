@@ -45,7 +45,7 @@
 				<legend>Geospatial</legend>
 				<div id="map"></div>
 				<div id="popup" class="ol-popup">
-					<div id="popup-content"></div>
+					<div id="popup-content" class="ol-popup-content"></div>
 				</div>
 				<script>
 					var geojson = {{rawjs .geojson}};
@@ -62,3 +62,14 @@
 				{{end}}
 			</fieldset>
 			{{- end}}
+
+			<script id="tmpl-popup" type="x-tmpl-mustache">
+				<table>
+					<tbody>
+						<tr>
+							<th>Borehole</th>
+							<td><a href="../borehole/[[borehole_id]]">[[name]]</a></th>
+						</tr>
+					</tbody>
+				</table>
+			</script>
