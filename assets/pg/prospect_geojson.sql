@@ -6,6 +6,7 @@ SELECT jsonb_build_object(
 			'id', b.borehole_id,
 			'geometry', ST_AsGeoJSON(p.geog, 5, 0)::jsonb,
 			'properties', jsonb_build_object(
+				'borehole_id', b.borehole_id,
 				'name', b.name
 			)
 		))
