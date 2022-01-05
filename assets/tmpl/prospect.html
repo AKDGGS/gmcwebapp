@@ -52,16 +52,6 @@
 				</script>
 			</fieldset>
 			<div class="flex-break"></div>
-			{{- end}}
-		
-			{{- if .files}}
-			<fieldset>
-				<legend>Files</legend>
-				{{range .files}}
-				<div><a href="../file/{{.file_id}}">{{.file_name}}</a> ({{.file_size}})</div>
-				{{end}}
-			</fieldset>
-			{{- end}}
 
 			<script id="tmpl-popup" type="x-tmpl-mustache">
 				<table>
@@ -73,3 +63,13 @@
 					</tbody>
 				</table>
 			</script>
+			{{- end}}
+			{{- if .files}}
+
+			<fieldset>
+				<legend>Files</legend>
+				{{range .files}}
+				<div><a href="../file/{{.file_id}}">{{.file_name}}</a> ({{.file_size}})</div>
+				{{end}}
+			</fieldset>
+			{{- end}}
