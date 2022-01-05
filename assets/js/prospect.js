@@ -52,6 +52,13 @@ if (document.getElementById('map')){
 			})
 		])
 	});
+
+	let closer = document.getElementById('popup-closer');
+	closer.addEventListener("click", function(){
+		overlay.setPosition(undefined);
+		return false;
+	});
+
 	map.on('click', function(e){
 		let fts = map.getFeaturesAtPixel(e.pixel);
 		if (fts.length < 1){

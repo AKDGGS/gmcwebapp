@@ -18,8 +18,17 @@ legend { padding: 0 8px; }
  background-color: #ffffff80;
  position: absolute;
 }
-.ol-popup { background-color: #fff; }
-.ol-popup-content { max-height: 300px; min-width: 200px; overflow-y: auto; }
+.ol-popup { border: 2px solid #999; background-color: #fff; }
+.ol-popup-top {
+	color: #fff;
+	padding: 2px 4px;
+	font-weight: bold;
+	text-align: right;
+	background: linear-gradient(315deg, #276f93 94%, #999 94%);
+	font-size: 20px;
+}
+.ol-popup-content { max-height: 250px; min-width: 200px; overflow-y: auto; }
 .ol-popup-content table { border-collapse: collapse; margin: 4px 8px; }
+.ol-popup-content table:not(:last-of-type) { margin-bottom: 16px; }
 .ol-popup-content table td { padding: 0 8px; }
-.ol-popup-content table th { text-transform: capitalize; }
+#popup-closer { cursor: pointer; }
