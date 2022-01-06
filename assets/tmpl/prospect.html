@@ -46,7 +46,8 @@
 				<div id="map"></div>
 				<div id="popup" class="ol-popup">
 					<div class="ol-popup-top">
-						<span id="popup-closer">&#215;</span>
+						<div class="ol-popup-top-title">Borehole(s)</div>
+						<div id="popup-closer">&#215;</div>
 					</div>
 					<div id="popup-content" class="ol-popup-content"></div>
 				</div>
@@ -60,9 +61,21 @@
 				<table>
 					<tbody>
 						<tr>
-							<th>Borehole</th>
-							<td><a href="../borehole/[[borehole_id]]">[[name]]</a></th>
+							<th>Name</th>
+							<td><a href="../borehole/[[borehole_id]]">[[name]]</a></td>
 						</tr>
+						[[#alt_names]]
+						<tr>
+							<th>Alt. Names</th>
+							<td>[[alt_names]]</td>
+						</tr>
+						[[/alt_names]]
+						[[#completion_date]]
+						<tr>
+							<th>Completion Date</th>
+							<td>[[completion_date]]</td>
+						</tr>
+						[[/completion_date]]
 					</tbody>
 				</table>
 			</script>
