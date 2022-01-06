@@ -87,6 +87,14 @@ func (pg *Postgres) GetProspect(id int) (map[string]interface{}, error) {
 		prospect["files"] = files
 	}
 
+	inventory, err := pg.queryRows("pg/keyword_group_byprospectid.sql", id)
+	if err != nil {
+		return nil, err
+	}
+	if inventory != nil {
+		prospect["inventory"] = inventory
+	}
+
 	geojson, err := pg.queryRow("pg/prospect_geojson.sql", id)
 	if err != nil {
 		return nil, err
