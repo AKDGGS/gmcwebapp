@@ -4,10 +4,11 @@ if (document.getElementById('map')){
 		featureProjection: 'EPSG:3857'
 	});
 	let content = document.getElementById('popup-content');
+	let popup = document.getElementById('popup');
 	let overlay = new ol.Overlay({
-		element: document.getElementById('popup'),
-		autoPan: { animation: { duration: 100 }}
+		element: popup, autoPan: { animation: { duration: 100 }}
 	});
+	popup.style.display = 'block';
 	let map = new ol.Map({
 		target: 'map',
 		overlays: [overlay],
