@@ -2,7 +2,6 @@ package web
 
 import (
 	"bytes"
-	"errors"
 	"fmt"
 	"gmc/assets"
 	"html/template"
@@ -10,7 +9,6 @@ import (
 	"os"
 	"strconv"
 	"strings"
-	"syscall"
 )
 
 func (srv *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
@@ -106,9 +104,8 @@ func (srv *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 
-		buf := bytes.Buffer{}
-		err = assets.ExecuteTemplate("tmpl/prospect.html", &buf, prospect)
-		if err != nil {
+		pbuf := bytes.Buffer{}
+		if err := assets.ExecuteTemplate("tmpl/prospect.html", &pbuf, prospect); err != nil {
 			http.Error(
 				w, fmt.Sprintf("Parse error: %s", err.Error()),
 				http.StatusInternalServerError,
@@ -118,7 +115,7 @@ func (srv *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 
 		params := map[string]interface{}{
 			"title":   "Prospect Detail",
-			"content": template.HTML(buf.String()),
+			"content": template.HTML(pbuf.String()),
 			"stylesheets": []string{
 				"css/prospect.css", "ol/ol.css",
 			},
@@ -127,16 +124,19 @@ func (srv *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 				"js/prospect.js",
 			},
 		}
-		w.Header().Set("Content-Type", "text/html; charset=utf-8")
-		err = assets.ExecuteTemplate("tmpl/template.html", w, params)
-		// Ignore broken pipe errors
-		if err != nil && !errors.Is(err, syscall.EPIPE) {
+
+		tbuf := bytes.Buffer{}
+		if err := assets.ExecuteTemplate("tmpl/template.html", &tbuf, params); err != nil {
 			http.Error(
 				w, fmt.Sprintf("Parse error: %s", err.Error()),
 				http.StatusInternalServerError,
 			)
 			return
 		}
+
+		w.Header().Set("Content-Length", fmt.Sprintf("%d", tbuf.Len()))
+		w.Header().Set("Content-Type", "text/html; charset=utf-8")
+		w.Write(tbuf.Bytes())
 
 	default:
 		http.Error(w, "File not found", http.StatusNotFound)
