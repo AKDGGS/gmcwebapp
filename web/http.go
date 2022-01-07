@@ -90,7 +90,7 @@ func (srv *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 
-		prospect, err := srv.DB.GetProspect(id)
+		prospect, err := srv.DB.GetProspect(id, true)
 		if err != nil {
 			http.Error(
 				w, fmt.Sprintf("Query error: %s", err.Error()),

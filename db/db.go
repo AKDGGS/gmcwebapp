@@ -8,7 +8,7 @@ import (
 )
 
 type DB interface {
-	GetProspect(int) (map[string]interface{}, error)
+	GetProspect(int, bool) (map[string]interface{}, error)
 	GetFile(int, bool) (int, string, time.Time, error)
 	Shutdown()
 }
