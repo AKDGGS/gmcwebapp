@@ -30,7 +30,8 @@ func (srv *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 		assets.ServeStatic("js/mustache-v4.2.0.js", w, r)
 		return
 
-	case "css/template.css", "css/prospect.css", "js/prospect.js":
+	case "css/template.css", "css/prospect.css", "js/prospect.js",
+		"ol/ol-layerswitcher.min.css", "ol/ol-layerswitcher.min.js":
 		assets.ServeStatic(path, w, r)
 		return
 	}
@@ -117,11 +118,12 @@ func (srv *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 			"title":   "Prospect Detail",
 			"content": template.HTML(pbuf.String()),
 			"stylesheets": []string{
-				"css/prospect.css", "ol/ol.css",
+				"ol/ol.css", "ol/ol-layerswitcher.min.css",
+				"css/prospect.css",
 			},
 			"scripts": []string{
-				"ol/ol.js", "js/mustache.js",
-				"js/prospect.js",
+				"ol/ol.js", "ol/ol-layerswitcher.min.js",
+				"js/mustache.js", "js/prospect.js",
 			},
 		}
 
