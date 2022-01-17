@@ -10,7 +10,7 @@ FROM (
 			ON b.borehole_id = ib.borehole_id
 		JOIN inventory AS i
 			ON i.inventory_id = ib.inventory_id
-		WHERE b.prospect_id = $1 AND i.active
+		WHERE b.borehole_id = $1 AND i.active
 			AND (i.can_publish = true OR i.can_publish = $2)
 		GROUP BY i.inventory_id
 	) AS q1
