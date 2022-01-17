@@ -2,14 +2,16 @@
 				<legend>Detail</legend>
 				<table class="tb-fields">
 					<tbody>
+						{{- if .prospect_id}}
 						<tr>
-							<th>Name</th>
-							<td>{{.name}}</td>
+							<th>Prospect Name</th>
+							<td><a href="../prospect/{{.prospect_id}}">{{.prospect_name}}</a></td>
 						</tr>
-						{{- if .alt_names}}
+						{{- end}}
+						{{- if .alt_prospect_names}}
 						<tr>
-							<th>Alternatives Name(s)</th>
-							<td>{{.alt_names}}</td>
+							<th>Alternatives Prospect Name(s)</th>
+							<td>{{.alt_prospect_names}}</td>
 						</tr>
 						{{- end}}
 						{{- if .ardf_number}}
@@ -18,10 +20,14 @@
 							<td><a href="http://mrdata.usgs.gov/ardf/show-ardf.php?ardf_num={{.ardf_number}}">{{.ardf_number}}</a></td>
 						</tr>
 						{{- end}}
-						{{- if .boreholes}}
 						<tr>
-							<th>Boreholes</th>
-							<td>{{range $i, $bh := .boreholes}}{{if ne $i 0}}, {{end}}<a href="../borehole/{{$bh.borehole_id}}">{{$bh.name}}</a>{{end}}</td>
+							<th>Borehole Name</th>
+							<td>{{.name}}</td>
+						</tr>
+						{{- if .completion_date}}
+						<tr>
+							<th>Completion Date</th>
+							<td>{{formattime "1/2/2006" .completion_date}}</td>
 						</tr>
 						{{- end}}
 						{{- if .quadrangles}}
@@ -56,29 +62,6 @@
 				</script>
 			</fieldset>
 			<div class="flex-break"></div>
-
-			<script id="tmpl-popup" type="x-tmpl-mustache">
-				<table>
-					<tbody>
-						<tr>
-							<th>Name</th>
-							<td><a href="../borehole/[[borehole_id]]">[[name]]</a></td>
-						</tr>
-						[[#alt_names]]
-						<tr>
-							<th>Alt. Names</th>
-							<td>[[alt_names]]</td>
-						</tr>
-						[[/alt_names]]
-						[[#completion_date]]
-						<tr>
-							<th>Completion Date</th>
-							<td>[[completion_date]]</td>
-						</tr>
-						[[/completion_date]]
-					</tbody>
-				</table>
-			</script>
 			{{- end}}
 			{{- if .inventory}}
 

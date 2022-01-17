@@ -9,8 +9,8 @@ import (
 	"net/http"
 )
 
-func (srv *Server) ServeProspect(id int, w http.ResponseWriter) {
-	prospect, err := srv.DB.GetProspect(id, db.ALL_NOPRIVATE)
+func (srv *Server) ServeBorehole(id int, w http.ResponseWriter) {
+	borehole, err := srv.DB.GetBorehole(id, db.ALL_NOPRIVATE)
 	if err != nil {
 		http.Error(
 			w, fmt.Sprintf("Query error: %s", err.Error()),
@@ -19,13 +19,13 @@ func (srv *Server) ServeProspect(id int, w http.ResponseWriter) {
 		return
 	}
 	// If no details were returned, throw a 404
-	if prospect == nil {
-		http.Error(w, "Prospect not found", http.StatusNotFound)
+	if borehole == nil {
+		http.Error(w, "Borehole not found", http.StatusNotFound)
 		return
 	}
 
-	pbuf := bytes.Buffer{}
-	if err := assets.ExecuteTemplate("tmpl/prospect.html", &pbuf, prospect); err != nil {
+	buf := bytes.Buffer{}
+	if err := assets.ExecuteTemplate("tmpl/borehole.html", &buf, borehole); err != nil {
 		http.Error(
 			w, fmt.Sprintf("Parse error: %s", err.Error()),
 			http.StatusInternalServerError,
@@ -34,8 +34,8 @@ func (srv *Server) ServeProspect(id int, w http.ResponseWriter) {
 	}
 
 	params := map[string]interface{}{
-		"title":   "Prospect Detail",
-		"content": template.HTML(pbuf.String()),
+		"title":   "Borehole Detail",
+		"content": template.HTML(buf.String()),
 		"stylesheets": []string{
 			"ol/ol.css", "ol/ol-layerswitcher.min.css",
 			"css/view.css",

@@ -15,7 +15,7 @@ const (
 	INVENTORY_SUMMARY
 	MINING_DISTRICTS
 	QUADRANGLES
-	SHOW_PRIVATE
+	PRIVATE
 	GEOJSON
 )
 
@@ -23,11 +23,15 @@ const (
 const ALL int = math.MaxInt
 
 // Option for everything except private items
-const ALL_NOPRIVATE int = math.MaxInt &^ SHOW_PRIVATE
+const ALL_NOPRIVATE int = math.MaxInt &^ PRIVATE
+
+// Option for minimal return
+const MINIMAL int = 0
 
 type DB interface {
 	GetProspect(int, int) (map[string]interface{}, error)
-	GetFile(int, bool) (int, string, time.Time, error)
+	GetBorehole(int, int) (map[string]interface{}, error)
+	GetFile(int, int) (int, string, time.Time, error)
 	Shutdown()
 }
 

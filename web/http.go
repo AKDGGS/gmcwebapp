@@ -3,6 +3,7 @@ package web
 import (
 	"fmt"
 	"gmc/assets"
+	"gmc/db"
 	"net/http"
 	"os"
 	"strconv"
@@ -28,7 +29,7 @@ func (srv *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 		assets.ServeStatic("js/mustache-v4.2.0.js", w, r)
 		return
 
-	case "css/template.css", "css/prospect.css", "js/prospect.js",
+	case "css/template.css", "css/view.css", "js/view.js",
 		"ol/ol-layerswitcher.min.css", "ol/ol-layerswitcher.min.js":
 		assets.ServeStatic(path, w, r)
 		return
@@ -50,7 +51,7 @@ func (srv *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 		}
 
 		// Fetch the file details from the database
-		aid, fname, ftime, err := srv.DB.GetFile(id, false)
+		aid, fname, ftime, err := srv.DB.GetFile(id, db.MINIMAL)
 		if err != nil {
 			http.Error(
 				w, fmt.Sprintf("Query error: %s", err.Error()),
@@ -89,6 +90,15 @@ func (srv *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 		srv.ServeProspect(id, w)
+
+	case "borehole":
+		sid := strings.TrimPrefix(strings.TrimPrefix(path, "borehole"), "/")
+		id, err := strconv.Atoi(sid)
+		if err != nil {
+			http.Error(w, "Invalid Borehole ID", http.StatusBadRequest)
+			return
+		}
+		srv.ServeBorehole(id, w)
 
 	default:
 		http.Error(w, "File not found", http.StatusNotFound)

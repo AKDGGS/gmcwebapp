@@ -8,6 +8,8 @@ if (document.getElementById('map')){
 	let overlay = new ol.Overlay({
 		element: popup, autoPan: { animation: { duration: 100 }}
 	});
+	let template = document.getElementById('tmpl-popup');
+
 	popup.style.display = 'block';
 	let map = new ol.Map({
 		target: 'map',
@@ -156,19 +158,22 @@ if (document.getElementById('map')){
 		return false;
 	});
 
-	map.on('click', function(e){
-		let fts = map.getFeaturesAtPixel(e.pixel);
-		if (fts.length < 1){
-			overlay.setPosition(undefined);
-			return
-		}
-		content.innerHTML = '';
-		for(const ft of fts){
-			content.innerHTML += mustache.render(
-				document.getElementById('tmpl-popup').innerHTML,
-				ft.getProperties(), {}, ['[[', ']]']
-			);
-		}
-		overlay.setPosition(e.coordinate);
-	});
+	// Only enable popups if a template is provided
+	if(template != null){
+		map.on('click', function(e){
+			let fts = map.getFeaturesAtPixel(e.pixel);
+			if (fts.length < 1){
+				overlay.setPosition(undefined);
+				return
+			}
+			content.innerHTML = '';
+			for(const ft of fts){
+				content.innerHTML += mustache.render(
+					template.innerHTML,
+					ft.getProperties(), {}, ['[[', ']]']
+				);
+			}
+			overlay.setPosition(e.coordinate);
+		});
+	}
 }
