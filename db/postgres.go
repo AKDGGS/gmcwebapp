@@ -33,36 +33,36 @@ func (pg *Postgres) Shutdown() {
 
 func (pg *Postgres) GetFile(id int, include_private bool) (int, string, time.Time, error) {
 	/*
-	var q string
-	if include_private {
-		q = assets.ReadString("pg/file_all.sql")
-	} else {
-		q = assets.ReadString("pg/file_public.sql")
-	}
+		var q string
+		if include_private {
+			q = assets.ReadString("pg/file_all.sql")
+		} else {
+			q = assets.ReadString("pg/file_public.sql")
+		}
 
-	rows, err := pg.pool.Query(context.Background(), q, id)
-	if err != nil {
-		return 0, "", time.Time{}, err
-	}
-	defer rows.Close()
-
-	if rows.Next() {
-		var aid int
-		var fname string
-		var ftime time.Time
-		err = rows.Scan(&aid, &fname, &ftime)
+		rows, err := pg.pool.Query(context.Background(), q, id)
 		if err != nil {
 			return 0, "", time.Time{}, err
 		}
-		return aid, fname, ftime, nil
-	} else {
-		return 0, "", time.Time{}, nil
-	}
+		defer rows.Close()
+
+		if rows.Next() {
+			var aid int
+			var fname string
+			var ftime time.Time
+			err = rows.Scan(&aid, &fname, &ftime)
+			if err != nil {
+				return 0, "", time.Time{}, err
+			}
+			return aid, fname, ftime, nil
+		} else {
+			return 0, "", time.Time{}, nil
+		}
 	*/
 	return 0, "", time.Time{}, nil
 }
 
-func (pg *Postgres) GetProspect(id int, hide_private bool) (map[string]interface{}, error) {
+func (pg *Postgres) GetProspect(id int, flags int) (map[string]interface{}, error) {
 	prospect, err := pg.queryRow("pg/prospect_byid.sql", id)
 	if err != nil {
 		return nil, err
@@ -79,46 +79,57 @@ func (pg *Postgres) GetProspect(id int, hide_private bool) (map[string]interface
 		prospect["boreholes"] = boreholes
 	}
 
-	files, err := pg.queryRows("pg/file_byprospectid.sql", id)
-	if err != nil {
-		return nil, err
-	}
-	if files != nil {
-		prospect["files"] = files
-	}
-
-	inventory, err := pg.queryRows(
-		"pg/keyword_group_byprospectid.sql", id, hide_private,
-	)
-	if err != nil {
-		return nil, err
-	}
-	if inventory != nil {
-		prospect["inventory"] = inventory
+	if (flags & FILES) != 0 {
+		files, err := pg.queryRows("pg/file_byprospectid.sql", id)
+		if err != nil {
+			return nil, err
+		}
+		if files != nil {
+			prospect["files"] = files
+		}
 	}
 
-	geojson, err := pg.queryRow("pg/prospect_geojson.sql", id)
-	if err != nil {
-		return nil, err
-	}
-	if geojson != nil {
-		prospect["geojson"] = geojson["geojson"]
-	}
-
-	mds, err := pg.queryRows("pg/miningdistrict_byprospectid.sql", id)
-	if err != nil {
-		return nil, err
-	}
-	if mds != nil {
-		prospect["mining_districts"] = mds
+	if (flags & INVENTORY_SUMMARY) != 0 {
+		inventory, err := pg.queryRows(
+			"pg/keyword_group_byprospectid.sql", id,
+			((flags & SHOW_PRIVATE) == 0),
+		)
+		if err != nil {
+			return nil, err
+		}
+		if inventory != nil {
+			prospect["inventory"] = inventory
+		}
 	}
 
-	qds, err := pg.queryRows("pg/quadrangle250k_byprospectid.sql", id)
-	if err != nil {
-		return nil, err
+	if (flags & GEOJSON) != 0 {
+		geojson, err := pg.queryRow("pg/prospect_geojson.sql", id)
+		if err != nil {
+			return nil, err
+		}
+		if geojson != nil {
+			prospect["geojson"] = geojson["geojson"]
+		}
 	}
-	if qds != nil {
-		prospect["quadrangles"] = qds
+
+	if (flags & MINING_DISTRICTS) != 0 {
+		mds, err := pg.queryRows("pg/miningdistrict_byprospectid.sql", id)
+		if err != nil {
+			return nil, err
+		}
+		if mds != nil {
+			prospect["mining_districts"] = mds
+		}
+	}
+
+	if (flags & QUADRANGLES) != 0 {
+		qds, err := pg.queryRows("pg/quadrangle250k_byprospectid.sql", id)
+		if err != nil {
+			return nil, err
+		}
+		if qds != nil {
+			prospect["quadrangles"] = qds
+		}
 	}
 
 	return prospect, nil
