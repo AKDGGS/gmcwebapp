@@ -37,5 +37,4 @@ func printDefaultUsage() {
 	fmt.Printf(" on a specific command\n")
 	fmt.Printf("valid commands:\n")
 	fmt.Printf("    start    start HTTP server\n")
-	fmt.Printf("    stop     stop running HTTP server\n")
 }
