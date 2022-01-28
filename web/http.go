@@ -1,11 +1,8 @@
 package web
 
 import (
-	"fmt"
 	"gmc/assets"
-	"gmc/db"
 	"net/http"
-	"os"
 	"strconv"
 	"strings"
 )
@@ -43,44 +40,8 @@ func (srv *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 
 	switch action {
 	case "file":
-		sid := strings.TrimPrefix(strings.TrimPrefix(path, "file"), "/")
-		id, err := strconv.Atoi(sid)
-		if err != nil {
-			http.Error(w, "Invalid ID", http.StatusBadRequest)
-			return
-		}
-
-		// Fetch the file details from the database
-		aid, fname, ftime, err := srv.DB.GetFile(id, db.MINIMAL)
-		if err != nil {
-			http.Error(
-				w, fmt.Sprintf("Query error: %s", err.Error()),
-				http.StatusInternalServerError,
-			)
-			return
-		}
-
-		// Fetch the file from S3
-		file, err := srv.FileStore.GetFile(fmt.Sprintf("%d/%s", aid, fname))
-		if err != nil {
-			if _, ok := err.(*os.PathError); ok {
-				http.Error(w, "File not found (FileStore)", http.StatusNotFound)
-			} else {
-				http.Error(
-					w, fmt.Sprintf("file fetch error: %s", err.Error()),
-					http.StatusInternalServerError,
-				)
-			}
-			return
-		}
-		defer file.Close()
-
-		// Suggest filename to the browser
-		w.Header().Set(
-			"Content-Disposition",
-			fmt.Sprintf("inline; filename=\"%s\"", fname),
-		)
-		http.ServeContent(w, r, fname, ftime, file)
+		fn := strings.TrimPrefix(strings.TrimPrefix(path, "file"), "/")
+		srv.ServeFile(fn, w, r)
 
 	case "prospect":
 		sid := strings.TrimPrefix(strings.TrimPrefix(path, "prospect"), "/")

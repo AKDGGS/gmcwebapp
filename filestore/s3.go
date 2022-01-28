@@ -5,7 +5,6 @@ import (
 	"fmt"
 	"github.com/minio/minio-go/v7"
 	"github.com/minio/minio-go/v7/pkg/credentials"
-	"io"
 	"os"
 )
 
@@ -54,7 +53,7 @@ func newS3(cfg map[string]interface{}) (*S3, error) {
 	return s3, nil
 }
 
-func (s3 *S3) GetFile(name string) (io.ReadSeekCloser, error) {
+func (s3 *S3) GetFile(name string) (*File, error) {
 	obj, err := s3.client.GetObject(
 		context.Background(),
 		s3.bucket, name,
@@ -66,7 +65,7 @@ func (s3 *S3) GetFile(name string) (io.ReadSeekCloser, error) {
 
 	// Verify file exists so a proper (and checkable)
 	// error can be returned
-	_, err = obj.Stat()
+	stat, err := obj.Stat()
 	if err != nil {
 		switch v := err.(type) {
 		case minio.ErrorResponse:
@@ -77,7 +76,14 @@ func (s3 *S3) GetFile(name string) (io.ReadSeekCloser, error) {
 		return nil, err
 	}
 
-	return obj, err
+	return &File{
+		Name:         stat.Key,
+		ETag:         stat.ETag,
+		LastModified: stat.LastModified,
+		Size:         stat.Size,
+		ContentType:  stat.ContentType,
+		Content:      obj,
+	}, nil
 }
 
 func (s3 *S3) Shutdown() {

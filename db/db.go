@@ -5,7 +5,6 @@ import (
 	"math"
 	"net/url"
 	"strings"
-	"time"
 )
 
 // Flags used to control how much additional data is pulled
@@ -31,7 +30,6 @@ const MINIMAL int = 0
 type DB interface {
 	GetProspect(int, int) (map[string]interface{}, error)
 	GetBorehole(int, int) (map[string]interface{}, error)
-	GetFile(int, int) (int, string, time.Time, error)
 	Shutdown()
 }
 

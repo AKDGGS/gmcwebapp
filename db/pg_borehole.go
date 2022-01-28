@@ -9,6 +9,16 @@ func (pg *Postgres) GetBorehole(id int, flags int) (map[string]interface{}, erro
 		return nil, nil
 	}
 
+	if (flags & FILES) != 0 {
+		files, err := pg.queryRows("pg/file_byboreholeid.sql", id)
+		if err != nil {
+			return nil, err
+		}
+		if files != nil {
+			borehole["files"] = files
+		}
+	}
+
 	if (flags & INVENTORY_SUMMARY) != 0 {
 		inventory, err := pg.queryRows(
 			"pg/keyword_group_byboreholeid.sql", id,

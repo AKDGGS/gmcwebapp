@@ -2,7 +2,7 @@ package filestore
 
 import (
 	"fmt"
-	"io"
+	"mime"
 	"os"
 	"path/filepath"
 )
@@ -20,12 +20,35 @@ func newDir(cfg map[string]interface{}) (*Dir, error) {
 	return &Dir{path: path}, nil
 }
 
-func (d *Dir) GetFile(name string) (io.ReadSeekCloser, error) {
-	f, err := os.Open(filepath.Join(d.path, name))
+func (d *Dir) GetFile(name string) (*File, error) {
+	fp := filepath.Join(d.path, name)
+	if !filepath.IsAbs(fp) {
+		return nil, os.ErrPermission
+	}
+
+	file, err := os.Open(fp)
 	if err != nil {
 		return nil, err
 	}
-	return f, nil
+
+	stat, err := file.Stat()
+	if err != nil {
+		return nil, err
+	}
+
+	mt := mime.TypeByExtension(filepath.Ext(stat.Name()))
+	if mt == "" {
+		mt = "application/octet-stream"
+	}
+
+	return &File{
+		Name:         stat.Name(),
+		ETag:         "",
+		Size:         stat.Size(),
+		LastModified: stat.ModTime(),
+		ContentType:  mt,
+		Content:      file,
+	}, nil
 }
 
 func (d *Dir) Shutdown() {

@@ -4,11 +4,21 @@ import (
 	"fmt"
 	"gmc/config"
 	"io"
+	"time"
 )
 
 type FileStore interface {
-	GetFile(string) (io.ReadSeekCloser, error)
+	GetFile(string) (*File, error)
 	Shutdown()
+}
+
+type File struct {
+	Name         string
+	ETag         string
+	Size         int64
+	LastModified time.Time
+	ContentType  string
+	Content      io.ReadSeekCloser
 }
 
 func New(cfg config.FileStoreConfig) (FileStore, error) {
