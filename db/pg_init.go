@@ -12,6 +12,15 @@ func (pg *Postgres) Init() error {
 	}
 	defer tx.Rollback(context.Background())
 
+	// Initialize extensions
+	ext, err := assets.ReadString("pg/init/000-extensions.sql")
+	if err != nil {
+		return err
+	}
+	if _, err := tx.Exec(context.Background(), ext); err != nil {
+		return err
+	}
+
 	// Initialize types
 	typ, err := assets.ReadString("pg/init/001-types.sql")
 	if err != nil {

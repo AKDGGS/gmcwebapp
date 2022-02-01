@@ -56,6 +56,8 @@ func databaseCommand(rootcmd string) {
 			os.Exit(1)
 		}
 
+		fmt.Printf("Verification successful.\n")
+
 	case "drop":
 		cmd := flag.NewFlagSet("database drop", flag.ExitOnError)
 		cmd.SetOutput(os.Stdout)
