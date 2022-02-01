@@ -12,9 +12,14 @@ import (
 	"time"
 )
 
-func serverCommand() {
-	cmd := flag.NewFlagSet("server", flag.ExitOnError)
+func serverCommand(rootcmd string) {
+	cmd := flag.NewFlagSet(rootcmd, flag.ExitOnError)
 	cmd.SetOutput(os.Stdout)
+	cmd.Usage = func() {
+		fmt.Printf("Starts web server.\n\n")
+		fmt.Printf("Usage: %s %s [args]\n", os.Args[0], rootcmd)
+		cmd.PrintDefaults()
+	}
 	cpath := cmd.String("conf", "", "path to configuration")
 	autos := cmd.Bool("s", false, "automatic shutdown on executable change")
 	assets := cmd.String("assets", "", "override embedded assets with assets from path")
