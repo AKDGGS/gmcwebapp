@@ -15,8 +15,11 @@ func main() {
 
 	cmd := strings.ToLower(os.Args[1])
 	switch cmd {
-	case "start":
-		startCommand()
+	case "database", "db":
+		databaseCommand()
+
+	case "server", "start":
+		serverCommand()
 
 	case "--help", "help":
 		printDefaultUsage()
@@ -36,5 +39,6 @@ func printDefaultUsage() {
 	fmt.Printf("See '%s <command> --help' for information", os.Args[0])
 	fmt.Printf(" on a specific command\n")
 	fmt.Printf("valid commands:\n")
-	fmt.Printf("    start    start HTTP server\n")
+	fmt.Printf("    start     start HTTP server\n")
+	fmt.Printf("    database  initialize or verify a database\n")
 }

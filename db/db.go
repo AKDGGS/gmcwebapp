@@ -28,6 +28,9 @@ const ALL_NOPRIVATE int = math.MaxInt &^ PRIVATE
 const MINIMAL int = 0
 
 type DB interface {
+	Init() error
+	Verify() error
+	Drop() error
 	GetProspect(int, int) (map[string]interface{}, error)
 	GetBorehole(int, int) (map[string]interface{}, error)
 	Shutdown()

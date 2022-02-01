@@ -12,7 +12,7 @@ import (
 	"time"
 )
 
-func startCommand() {
+func serverCommand() {
 	cmd := flag.NewFlagSet("server", flag.ExitOnError)
 	cmd.SetOutput(os.Stdout)
 	cpath := cmd.String("conf", "", "path to configuration")
