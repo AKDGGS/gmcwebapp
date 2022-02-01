@@ -7,8 +7,8 @@ Configuration requires a database source and a filestore. Neither is checked
 on startup, so fillers may be used for application testing and development.
 
 #### Database
-Currently only PostgreSQL is a supported database. Support for additional
-databases can be added by implementing `gmc/DB/DB`.
+Currently only PostgreSQL (v12+) is a supported database. Support for
+additional databases can be added by implementing `gmc/db/DB`.
 
 #### File Store
 Both S3 and Directory-based file stores are supported. It is highly recommended
