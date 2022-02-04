@@ -4,13 +4,13 @@ import (
 	"bytes"
 	"fmt"
 	"gmc/assets"
-	"gmc/db"
+	dbf "gmc/db/flag"
 	"html/template"
 	"net/http"
 )
 
 func (srv *Server) ServeBorehole(id int, w http.ResponseWriter) {
-	borehole, err := srv.DB.GetBorehole(id, db.ALL_NOPRIVATE)
+	borehole, err := srv.DB.GetBorehole(id, dbf.ALL_NOPRIVATE)
 	if err != nil {
 		http.Error(
 			w, fmt.Sprintf("Query error: %s", err.Error()),

@@ -1,11 +1,11 @@
-package db
+package pg
 
 import (
 	"context"
 	"gmc/assets"
 )
 
-func (pg *Postgres) Drop() error {
+func (pg *Postgres) SchemaDrop() error {
 	tx, err := pg.pool.Begin(context.Background())
 	if err != nil {
 		return err

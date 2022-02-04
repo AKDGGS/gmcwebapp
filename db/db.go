@@ -2,37 +2,31 @@ package db
 
 import (
 	"fmt"
-	"math"
+	"gmc/db/pg"
 	"net/url"
 	"strings"
 )
 
-// Flags used to control how much additional data is pulled
-// in with queries
-const (
-	FILES = 1 << iota
-	INVENTORY_SUMMARY
-	MINING_DISTRICTS
-	QUADRANGLES
-	PRIVATE
-	GEOJSON
-)
-
-// Option for everything
-const ALL int = math.MaxInt
-
-// Option for everything except private items
-const ALL_NOPRIVATE int = math.MaxInt &^ PRIVATE
-
-// Option for minimal return
-const MINIMAL int = 0
-
 type DB interface {
-	Init() error
+	// Fetches the complete details for a Prospect
+	GetProspect(id int, flags int) (map[string]interface{}, error)
+
+	// Fetches the complete details for a Borehole
+	GetBorehole(id int, flags int) (map[string]interface{}, error)
+
+	// Verify the database connection is working.
+	// (usually by performing a simple query)
 	Verify() error
-	Drop() error
-	GetProspect(int, int) (map[string]interface{}, error)
-	GetBorehole(int, int) (map[string]interface{}, error)
+
+	// Initializes schema for a new installation. Throws an error
+	// if the schema already exists, or the initialization fails.
+	SchemaInit() error
+
+	// Removes schema from configured database.
+	// WARNING: This is destructive and intended only for use in development.
+	SchemaDrop() error
+
+	// Shutdown this database connection
 	Shutdown()
 }
 
@@ -48,8 +42,8 @@ func New(su string) (DB, error) {
 
 	var db DB
 	switch strings.ToLower(u.Scheme) {
-	case "postgres", "postgresql":
-		db, err = newPostgres(u)
+	case "pg", "postgres", "postgresql":
+		db, err = pg.New(u)
 		if err != nil {
 			return nil, err
 		}

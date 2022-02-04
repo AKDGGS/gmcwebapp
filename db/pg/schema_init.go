@@ -1,11 +1,11 @@
-package db
+package pg
 
 import (
 	"context"
 	"gmc/assets"
 )
 
-func (pg *Postgres) Init() error {
+func (pg *Postgres) SchemaInit() error {
 	tx, err := pg.pool.Begin(context.Background())
 	if err != nil {
 		return err

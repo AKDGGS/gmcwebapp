@@ -4,13 +4,13 @@ import (
 	"bytes"
 	"fmt"
 	"gmc/assets"
-	"gmc/db"
+	dbf "gmc/db/flag"
 	"html/template"
 	"net/http"
 )
 
 func (srv *Server) ServeProspect(id int, w http.ResponseWriter) {
-	prospect, err := srv.DB.GetProspect(id, db.ALL_NOPRIVATE)
+	prospect, err := srv.DB.GetProspect(id, dbf.ALL_NOPRIVATE)
 	if err != nil {
 		http.Error(
 			w, fmt.Sprintf("Query error: %s", err.Error()),

@@ -91,7 +91,7 @@ func databaseCommand(rootcmd string) {
 			os.Exit(1)
 		}
 
-		if err := db.Drop(); err != nil {
+		if err := db.SchemaDrop(); err != nil {
 			fmt.Fprintf(os.Stderr, "%s: %s\n", os.Args[0], err.Error())
 			os.Exit(1)
 		}
@@ -120,7 +120,7 @@ func databaseCommand(rootcmd string) {
 			os.Exit(1)
 		}
 
-		if err := db.Init(); err != nil {
+		if err := db.SchemaInit(); err != nil {
 			fmt.Fprintf(os.Stderr, "%s: %s\n", os.Args[0], err.Error())
 			os.Exit(1)
 		}

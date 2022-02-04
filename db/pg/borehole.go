@@ -1,4 +1,6 @@
-package db
+package pg
+
+import dbf "gmc/db/flag"
 
 func (pg *Postgres) GetBorehole(id int, flags int) (map[string]interface{}, error) {
 	borehole, err := pg.queryRow("pg/borehole_byid.sql", id)
@@ -9,7 +11,7 @@ func (pg *Postgres) GetBorehole(id int, flags int) (map[string]interface{}, erro
 		return nil, nil
 	}
 
-	if (flags & FILES) != 0 {
+	if (flags & dbf.FILES) != 0 {
 		files, err := pg.queryRows("pg/file_byboreholeid.sql", id)
 		if err != nil {
 			return nil, err
@@ -19,10 +21,10 @@ func (pg *Postgres) GetBorehole(id int, flags int) (map[string]interface{}, erro
 		}
 	}
 
-	if (flags & INVENTORY_SUMMARY) != 0 {
+	if (flags & dbf.INVENTORY_SUMMARY) != 0 {
 		inventory, err := pg.queryRows(
 			"pg/keyword_group_byboreholeid.sql", id,
-			((flags & PRIVATE) == 0),
+			((flags & dbf.PRIVATE) == 0),
 		)
 		if err != nil {
 			return nil, err
@@ -32,7 +34,7 @@ func (pg *Postgres) GetBorehole(id int, flags int) (map[string]interface{}, erro
 		}
 	}
 
-	if (flags & GEOJSON) != 0 {
+	if (flags & dbf.GEOJSON) != 0 {
 		geojson, err := pg.queryRow("pg/borehole_geojson.sql", id)
 		if err != nil {
 			return nil, err
@@ -42,7 +44,7 @@ func (pg *Postgres) GetBorehole(id int, flags int) (map[string]interface{}, erro
 		}
 	}
 
-	if (flags & MINING_DISTRICTS) != 0 {
+	if (flags & dbf.MINING_DISTRICTS) != 0 {
 		mds, err := pg.queryRows("pg/miningdistrict_byboreholeid.sql", id)
 		if err != nil {
 			return nil, err
@@ -52,7 +54,7 @@ func (pg *Postgres) GetBorehole(id int, flags int) (map[string]interface{}, erro
 		}
 	}
 
-	if (flags & QUADRANGLES) != 0 {
+	if (flags & dbf.QUADRANGLES) != 0 {
 		qds, err := pg.queryRows("pg/quadrangle250k_byboreholeid.sql", id)
 		if err != nil {
 			return nil, err
