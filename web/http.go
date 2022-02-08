@@ -61,6 +61,15 @@ func (srv *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 		}
 		srv.ServeBorehole(id, w)
 
+	case "outcrop":
+		sid := strings.TrimPrefix(strings.TrimPrefix(path, "outcrop"), "/")
+		id, err := strconv.Atoi(sid)
+		if err != nil {
+			http.Error(w, "Invalid Outcrop ID", http.StatusBadRequest)
+			return
+		}
+		srv.ServeOutcrop(id, w)
+
 	default:
 		http.Error(w, "File not found", http.StatusNotFound)
 	}
