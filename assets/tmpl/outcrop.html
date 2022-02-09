@@ -2,7 +2,7 @@
 				<legend>Outcrop Detail</legend>
 				<table class="tb-fields">
 					<tbody>
-						{{- if .outcrop_id}}
+						{{- if .name}}
 						<tr>
 							<th>Outcrop Name</th>
 							<td>{{.name}}</td>
@@ -14,19 +14,24 @@
 							<td>{{.outcrop_number}}</td>
 						</tr>
 						{{- end}}
+						{{- if .is_onshore}}
+						<tr>
+							<th>Onshore</th>
+							<td>{{.is_onshore}}</td>
+						</tr>
+						{{- end}}
+						{{- if .year}}
+						<tr>
+							<th>Outcrop Year</th>
+							<td>{{.year}}</td>
+						</tr>
+						{{- end}}
 						{{- if .quadrangles}}
 						<tr>
 							<th>Quadrangle</th>
 							<td>{{range $i, $qd := .quadrangles}}{{if ne $i 0}}, {{end}}<a href="../search#quadrangle_id={{$qd.quadrangle_id}}">{{$qd.name}}</a>{{end}}</td>
 						</tr>
 						{{- end}}
-						{{- if .mining_districts}}
-						<tr>
-							<th>Mining District</th>
-							<td>{{range $i, $md := .mining_districts}}{{if ne $i 0}}, {{end}}<a href="../search#mining_district_id={{$md.mining_district_id}}">{{$md.name}}</a>{{end}}</td>
-						</tr>
-						{{- end}}
-
 					</tbody>
 				</table>
 			</fieldset>

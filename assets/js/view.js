@@ -27,28 +27,28 @@ if (document.getElementById('map')){
 						title: 'ESRI National Geographic',
 						type: 'base',
 						source: new ol.source.XYZ({
-							url: '//server.arcgisonline.com/ArcGIS/rest/services/NatGeo_World_Map/MapServer/tile/{z}/{y}/{x}' 
+							url: '//server.arcgisonline.com/ArcGIS/rest/services/NatGeo_World_Map/MapServer/tile/{z}/{y}/{x}'
 						})
 					}),
 					new ol.layer.Tile({
 						title: 'ESRI DeLorme',
 						type: 'base',
 						source: new ol.source.XYZ({
-							url: '//server.arcgisonline.com/ArcGIS/rest/services/Specialty/DeLorme_World_Base_Map/MapServer/tile/{z}/{y}/{x}' 
+							url: '//server.arcgisonline.com/ArcGIS/rest/services/Specialty/DeLorme_World_Base_Map/MapServer/tile/{z}/{y}/{x}'
 						})
 					}),
 					new ol.layer.Tile({
 						title: 'ESRI Shaded Relief',
 						type: 'base',
 						source: new ol.source.XYZ({
-							url: '//server.arcgisonline.com/ArcGIS/rest/services/World_Shaded_Relief/MapServer/tile/{z}/{y}/{x}' 
+							url: '//server.arcgisonline.com/ArcGIS/rest/services/World_Shaded_Relief/MapServer/tile/{z}/{y}/{x}'
 						})
 					}),
 					new ol.layer.Tile({
 						title: 'ESRI Topographic',
 						type: 'base',
 						source: new ol.source.XYZ({
-							url: '//server.arcgisonline.com/ArcGIS/rest/services/World_Topo_Map/MapServer/tile/{z}/{y}/{x}' 
+							url: '//server.arcgisonline.com/ArcGIS/rest/services/World_Topo_Map/MapServer/tile/{z}/{y}/{x}'
 						})
 					}),
 					new ol.layer.Tile({
@@ -69,7 +69,7 @@ if (document.getElementById('map')){
 						title: 'Open Street Maps Monochrome',
 						type: 'base',
 						source: new ol.source.XYZ({
-							url: '//tiles.wmflabs.org/bw-mapnik/{z}/{x}/{y}.png' 
+							url: '//tiles.wmflabs.org/bw-mapnik/{z}/{x}/{y}.png'
 						})
 					}),
 					new ol.layer.Tile({
@@ -84,7 +84,7 @@ if (document.getElementById('map')){
 				layers: [
 					new ol.layer.Image({
 						title: 'PLSS (BLM)',
-						visible: false,						
+						visible: false,
 						source: new ol.source.ImageWMS({
 							url: 'https://maps.dggs.alaska.gov/arcgis/services/apps/plss/MapServer/WMSServer',
 							params: {
@@ -97,7 +97,7 @@ if (document.getElementById('map')){
 					}),
 					new ol.layer.Image({
 						title: 'Quadrangles',
-						visible: false,						
+						visible: false,
 						source: new ol.source.ImageWMS({
 							url: 'https://maps.dggs.alaska.gov/arcgis/services/apps/Quad_Boundaries/MapServer/WMSServer',
 							params: {
@@ -126,6 +126,20 @@ if (document.getElementById('map')){
 				source: new ol.source.Vector({
 					features: fmt.readFeatures(geojson)
 				})
+			}),
+			new ol.layer.Vector({
+				style: new ol.style.Style({
+				            stroke: new ol.style.Stroke({
+				              color: 'rgba(255, 244, 88, 1)',
+				              width: 2
+				            }),
+				            fill: new ol.style.Fill({
+				              color: 'rgba(255, 255, 180, 0.45)'
+				            })
+				          }),
+				source: new ol.source.Vector({
+	        features: fmt.readFeatures(geojson)
+	      }),
 			})
 		],
 		view: new ol.View({

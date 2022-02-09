@@ -14,7 +14,7 @@ type DB interface {
 	// Fetches the complete details for a Borehole
 	GetBorehole(id int, flags int) (map[string]interface{}, error)
 
-	// Fetches the complete details for a Borehole
+	// Fetches the complete details for a Outcrop
 	GetOutcrop(id int, flags int) (map[string]interface{}, error)
 
 	// Verify the database connection is working.
