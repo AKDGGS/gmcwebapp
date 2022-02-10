@@ -17,9 +17,15 @@
 						{{- if .is_onshore}}
 						<tr>
 							<th>Onshore</th>
-							<td>{{.is_onshore}}</td>
+							<td>Yes</td>
 						</tr>
 						{{- end}}
+						{{- if not .is_onshore }}
+						<tr>
+							<th>Onshore</th>
+							<td>No</td>
+						</tr>
+						{{- end }}
 						{{- if .year}}
 						<tr>
 							<th>Outcrop Year</th>
