@@ -32,6 +32,12 @@
 							<td>{{.year}}</td>
 						</tr>
 						{{- end}}
+						{{- if .geojson.features}}
+						<tr>
+							<th>LonLat</th>
+							<td>{{range $i, $f := .geojson.features}}{{if ne $i 0}}, {{end}}{{$f.geometry.coordinates}}{{end}}</td>
+						</tr>
+						{{- end}}
 						{{- if .quadrangles}}
 						<tr>
 							<th>Quadrangle</th>
