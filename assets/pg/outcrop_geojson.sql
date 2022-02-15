@@ -5,9 +5,8 @@ SELECT jsonb_build_object(
 FROM ((
 	SELECT jsonb_agg(jsonb_build_object(
 			'type', 'Feature',
-			'id', o.outcrop_id,
 			'geometry', ST_AsGeoJSON(p.geog, 5, 0)::jsonb
-		) ORDER BY LOWER(o.name)
+		)
 	) AS features
 	FROM outcrop AS o
 	JOIN outcrop_point AS op ON op.outcrop_id = o.outcrop_id
@@ -19,9 +18,8 @@ FROM ((
 	-- Outcrop PLSS
 	SELECT jsonb_agg(jsonb_build_object(
 			'type', 'Feature',
-			'id', o.outcrop_id,
 			'geometry', ST_AsGeoJSON(p.geog, 5, 0)::jsonb
-		) ORDER BY LOWER(o.name)
+		)
 	) AS features
 	FROM outcrop AS o
 	JOIN outcrop_plss AS op ON op.outcrop_id = o.outcrop_id
@@ -32,9 +30,8 @@ FROM ((
 
 	SELECT jsonb_agg(jsonb_build_object(
 			'type', 'Feature',
-			'id', o.outcrop_id,
 			'geometry', ST_AsGeoJSON(p.geog, 5, 0)::jsonb
-		) ORDER BY LOWER(o.name)
+		)
 	) AS features
 	FROM outcrop AS o
 	JOIN outcrop_place AS op ON op.outcrop_id = o.outcrop_id
@@ -46,9 +43,8 @@ FROM ((
 	-- Outcrop Region
 	SELECT jsonb_agg(jsonb_build_object(
 			'type', 'Feature',
-			'id', o.outcrop_id,
 			'geometry', ST_AsGeoJSON(p.geog, 5, 0)::jsonb
-		) ORDER BY LOWER(o.name)
+		)
 	) AS features
 	FROM outcrop AS o
 	JOIN outcrop_region AS op ON op.outcrop_id = o.outcrop_id
@@ -60,9 +56,8 @@ FROM ((
 	-- Outcrop Quadrangle
 	SELECT jsonb_agg(jsonb_build_object(
 			'type', 'Feature',
-			'id', o.outcrop_id,
 			'geometry', ST_AsGeoJSON(q.geog, 5, 0)::jsonb
-		) ORDER BY LOWER(o.name)
+		)
 	) AS features
 	FROM outcrop AS o
 	JOIN outcrop_quadrangle AS oq ON oq.outcrop_id = o.outcrop_id

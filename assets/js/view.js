@@ -110,6 +110,7 @@ if (document.getElementById('map')){
 					}),
 				]
 			}),
+			//points
 			new ol.layer.Vector({
 				style: new ol.style.Style({
 					image: new ol.style.Circle({
@@ -127,6 +128,7 @@ if (document.getElementById('map')){
 					features: fmt.readFeatures(geojson)
 				})
 			}),
+			//polygons
 			new ol.layer.Vector({
 				style: new ol.style.Style({
 				            stroke: new ol.style.Stroke({
@@ -165,6 +167,31 @@ if (document.getElementById('map')){
 			})
 		])
 	});
+
+console.log(geojson);
+var point_feature = new ol.Feature({ });
+var point_geom = new ol.geom.Point(
+  [ -147.77, 64.83 ]
+);
+
+point_feature.setGeometry(point_geom);
+
+var vector_layer = new ol.layer.Vector({
+	style: new ol.style.Style({
+							stroke: new ol.style.Stroke({
+								color: 'rgba(255, 244, 88, 1)',
+								width: 2
+							}),
+							fill: new ol.style.Fill({
+								color: 'rgba(255, 255, 180, 0.45)'
+							})
+						}),
+  source: new ol.source.Vector({
+    features: [point_feature]
+  })
+})
+map.addLayer(vector_layer);
+
 
 	let closer = document.getElementById('popup-closer');
 	closer.addEventListener("click", function(){

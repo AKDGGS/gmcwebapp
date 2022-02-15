@@ -1,6 +1,8 @@
 package pg
 
-import dbf "gmc/db/flag"
+import (
+	dbf "gmc/db/flag"
+)
 
 func (pg *Postgres) GetOutcrop(id int, flags int) (map[string]interface{}, error) {
 	outcrop, err := pg.queryRow("pg/outcrop_byid.sql", id)
