@@ -1,0 +1,168 @@
+			<fieldset class="fs-detail">
+				<legend>Web Detail</legend>
+				<table class="tb-fields">
+					<tbody>
+						{{- if .name}}
+						<tr>
+							<th>Well Name</th>
+							<td>{{.name}}</td>
+						</tr>
+						{{- end}}
+						{{- if .alt_names}}
+						<tr>
+							<th>Alternative names</th>
+							<td>{{.alt_names}}</td>
+						</tr>
+						{{- end}}
+						{{- if .well_number}}
+						<tr>
+							<th>Well Number</th>
+							<td>{{.well_number}}</td>
+						</tr>
+						{{- end}}
+						{{- if .api_number}}
+						<tr>
+							<th>API Number</th>
+							<td>{{.api_number}}</td>
+						</tr>
+						{{- end}}
+						{{- if .is_onshore}}
+						<tr>
+							<th>Onshore</th>
+							<td>Yes</td>
+						</tr>
+						{{- end}}
+						{{- if not .is_onshore }}
+						<tr>
+							<th>Onshore</th>
+							<td>No</td>
+						</tr>
+						{{- end }}
+						{{- if .is_federal}}
+						<tr>
+							<th>Federal</th>
+							<td>Yes</td>
+						</tr>
+						{{- end}}
+						{{- if not .is_federal }}
+						<tr>
+							<th>Federal</th>
+							<td>No</td>
+						</tr>
+						{{- end }}
+						{{- if .spud_date}}
+						<tr>
+							<th>Spud Date</th>
+							<td>{{.spud_date}}</td>
+						</tr>
+						{{- end}}
+						{{- if .completion_date}}
+						<tr>
+							<th>Completion Date</th>
+							<td>{{.completion_date}}</td>
+						</tr>
+						{{- end}}
+						{{- if .measured_depth}}
+						<tr>
+							<th>Measured Depth</th>
+							<td>{{.measured_depth}}</td>
+						</tr>
+						{{- end}}
+						{{- if .vertical_depth}}
+						<tr>
+							<th>Vertical Depth</th>
+							<td>{{.vertical_depth}}</td>
+						</tr>
+						{{- end}}
+						{{- if .elevation}}
+						<tr>
+							<th>Elevation</th>
+							<td>{{.elevation}}</td>
+						</tr>
+						{{- end}}
+						{{- if .elevation_kb}}
+						<tr>
+							<th>Kelly Bushing Elevation</th>
+							<td>{{.elevation_kb}}</td>
+						</tr>
+						{{- end}}
+						{{- if .permit_status}}
+						<tr>
+							<th>Permit_Status</th>
+							<td>{{.permit_status}}</td>
+						</tr>
+						{{- end}}
+						{{- if .completion_status}}
+						<tr>
+							<th>Completion Status</th>
+							<td>{{.completion_status}}</td>
+						</tr>
+						{{- end}}
+						{{- if .geojson.features}}
+							{{range $i, $f := .geojson.features}}{{if ne $i 0}}, {{end}}{{if (eq $f.geometry.type "Point" )}}
+									<tr>
+										<th>LonLat</th>
+										<td> {{$f.geometry.coordinates}}</td>
+									</tr>
+								{{- end}}
+							{{- end}}
+						{{- end}}
+						{{- if .quadrangles}}
+						<tr>
+							<th>Quadrangle</th>
+							<td>{{range $i, $qd := .quadrangles}}{{if ne $i 0}}, {{end}}<a href="../search#quadrangle_id={{$qd.quadrangle_id}}">{{$qd.name}}</a>{{end}}</td>
+						</tr>
+						{{- end}}
+					</tbody>
+				</table>
+			</fieldset>
+			{{- if .geojson}}
+
+			<fieldset class="fs-map" >
+				<legend>Geospatial</legend>
+				<div id="map" style=" height:500px width: 500px"></div>
+				<div id="popup" class="ol-popup" >
+					<div class="ol-popup-top">
+						<div class="ol-popup-top-title">Well(s)</div>
+						<div id="popup-closer">&#215;</div>
+					</div>
+					<div id="popup-content" class="ol-popup-content" ></div>
+				</div>
+				<script>
+					var geojson = {{rawjs .geojson}};
+				</script>
+			</fieldset>
+			<div class="flex-break"></div>
+			{{- end}}
+			{{- if .inventory}}
+
+			<fieldset>
+				<legend>Inventory</legend>
+				{{- $well_id := .well_id }}
+				<table class="tb-fields">
+					<thead>
+						<tr>
+							<th>Keywords</th>
+							<th>Count</th>
+						</tr>
+					</thead>
+					<tbody>
+						{{- range .inventory}}
+						<tr>
+							<td><a href="../search#well_id={{$well_id}}{{range .keywords}}&keyword={{.}}{{end}}">{{range $i, $kw := .keywords}}{{if ne $i 0}} &gt; {{end}}{{$kw}}{{end}}</a></td>
+							<td>{{.count}}</td>
+						</tr>
+						{{- end}}
+					</tbody>
+				</table>
+			</fieldset>
+			{{- end}}
+			{{- if .files}}
+
+			<fieldset class="files">
+				<legend>Files</legend>
+				{{- range .files}}
+				<div><a href="../file/{{.file_id}}/{{.file_name}}">{{.file_name}}</a> ({{.file_size}})</div>
+				{{- end}}
+			</fieldset>
+			{{- end}}

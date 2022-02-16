@@ -70,6 +70,15 @@ func (srv *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 		}
 		srv.ServeOutcrop(id, w)
 
+	case "well":
+		sid := strings.TrimPrefix(strings.TrimPrefix(path, "well"), "/")
+		id, err := strconv.Atoi(sid)
+		if err != nil {
+			http.Error(w, "Invalid Well ID", http.StatusBadRequest)
+			return
+		}
+		srv.ServeWell(id, w)
+
 	default:
 		http.Error(w, "File not found", http.StatusNotFound)
 	}
