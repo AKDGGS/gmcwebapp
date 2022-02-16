@@ -30,6 +30,12 @@
 							<td>{{formattime "1/2/2006" .completion_date}}</td>
 						</tr>
 						{{- end}}
+						{{- if .measured_depth}}
+						<tr>
+							<th>Measured Depth</th>
+							<td>{{.measured_depth}}{{.measured_depth_unit}}</td>
+						</tr>
+						{{- end}}
 						{{- if .quadrangles}}
 						<tr>
 							<th>Quadrangle</th>
