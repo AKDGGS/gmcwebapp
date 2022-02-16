@@ -3,6 +3,7 @@ SELECT jsonb_build_object(
 	'features', q.features
 ) AS geojson
 FROM ((
+	-- Outcrop Point
 	SELECT jsonb_agg(jsonb_build_object(
 			'type', 'Feature',
 			'geometry', ST_AsGeoJSON(p.geog, 5, 0)::jsonb

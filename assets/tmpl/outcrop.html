@@ -14,6 +14,12 @@
 							<td>{{.outcrop_number}}</td>
 						</tr>
 						{{- end}}
+						{{- if .year}}
+						<tr>
+							<th>Outcrop Year</th>
+							<td>{{.year}}</td>
+						</tr>
+						{{- end}}
 						{{- if .is_onshore}}
 						<tr>
 							<th>Onshore</th>
@@ -26,17 +32,14 @@
 							<td>No</td>
 						</tr>
 						{{- end }}
-						{{- if .year}}
-						<tr>
-							<th>Outcrop Year</th>
-							<td>{{.year}}</td>
-						</tr>
-						{{- end}}
 						{{- if .geojson.features}}
-						<tr>
-							<th>LonLat</th>
-							<td>{{range $i, $f := .geojson.features}}{{if ne $i 0}}, {{end}}{{$f.geometry.coordinates}}{{end}}</td>
-						</tr>
+							{{range $i, $f := .geojson.features}}{{if ne $i 0}}, {{end}}{{if (eq $f.geometry.type "Point" )}}
+									<tr>
+										<th>LonLat</th>
+										<td> {{$f.geometry.coordinates}}</td>
+									</tr>
+								{{- end}}
+							{{- end}}
 						{{- end}}
 						{{- if .quadrangles}}
 						<tr>

@@ -46,16 +46,6 @@ func (pg *Postgres) GetOutcrop(id int, flags int) (map[string]interface{}, error
 		}
 	}
 
-	if (flags & dbf.MINING_DISTRICTS) != 0 {
-		mds, err := pg.queryRows("pg/miningdistrict_byoutcropid.sql", id)
-		if err != nil {
-			return nil, err
-		}
-		if mds != nil {
-			outcrop["mining_districts"] = mds
-		}
-	}
-
 	if (flags & dbf.QUADRANGLES) != 0 {
 		qds, err := pg.queryRows("pg/quadrangle250k_byoutcropid.sql", id)
 		if err != nil {
