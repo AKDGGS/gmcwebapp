@@ -8,7 +8,7 @@
 						</tr>
 						{{- if .alt_names}}
 						<tr>
-							<th>Alternatives Name(s)</th>
+							<th>Alternative Name(s)</th>
 							<td>{{.alt_names}}</td>
 						</tr>
 						{{- end}}
@@ -103,8 +103,8 @@
 				</table>
 			</fieldset>
 			{{- end}}
-			{{- if .files}}
 
+			{{- if .files}}
 			<fieldset class="files">
 				<legend>Files</legend>
 				{{- range .files}}
