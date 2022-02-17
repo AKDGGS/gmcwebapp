@@ -79,6 +79,15 @@ func (srv *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 		}
 		srv.ServeWell(id, w)
 
+	case "shotline":
+		sid := strings.TrimPrefix(strings.TrimPrefix(path, "shotline"), "/")
+		id, err := strconv.Atoi(sid)
+		if err != nil {
+			http.Error(w, "Invalid Shotline ID", http.StatusBadRequest)
+			return
+		}
+		srv.ServeShotline(id, w)
+
 	default:
 		http.Error(w, "File not found", http.StatusNotFound)
 	}

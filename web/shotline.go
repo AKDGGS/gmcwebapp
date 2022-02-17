@@ -1,0 +1,61 @@
+package web
+
+import (
+	"bytes"
+	"fmt"
+	"gmc/assets"
+	dbf "gmc/db/flag"
+	"html/template"
+	"net/http"
+)
+
+func (srv *Server) ServeShotline(id int, w http.ResponseWriter) {
+	shotline, err := srv.DB.GetShotline(id, dbf.ALL_NOPRIVATE)
+	if err != nil {
+		http.Error(
+			w, fmt.Sprintf("Query error: %s", err.Error()),
+			http.StatusInternalServerError,
+		)
+		return
+	}
+	// If no details were returned, throw a 404
+	if shotline == nil {
+		http.Error(w, "Shotline not found", http.StatusNotFound)
+		return
+	}
+
+	buf := bytes.Buffer{}
+	if err := assets.ExecuteTemplate("tmpl/shotline.html", &buf, shotline); err != nil {
+		http.Error(
+			w, fmt.Sprintf("Parse error: %s", err.Error()),
+			http.StatusInternalServerError,
+		)
+		return
+	}
+
+	params := map[string]interface{}{
+		"title":   "Shotline Detail",
+		"content": template.HTML(buf.String()),
+		"stylesheets": []string{
+			"ol/ol.css", "ol/ol-layerswitcher.min.css",
+			"css/view.css",
+		},
+		"scripts": []string{
+			"ol/ol.js", "ol/ol-layerswitcher.min.js",
+			"js/mustache.js", "js/view.js",
+		},
+	}
+
+	tbuf := bytes.Buffer{}
+	if err := assets.ExecuteTemplate("tmpl/template.html", &tbuf, params); err != nil {
+		http.Error(
+			w, fmt.Sprintf("Parse error: %s", err.Error()),
+			http.StatusInternalServerError,
+		)
+		return
+	}
+
+	w.Header().Set("Content-Length", fmt.Sprintf("%d", tbuf.Len()))
+	w.Header().Set("Content-Type", "text/html; charset=utf-8")
+	w.Write(tbuf.Bytes())
+}

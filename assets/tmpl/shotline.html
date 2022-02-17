@@ -1,0 +1,95 @@
+			<fieldset class="fs-detail">
+				<legend>Shotline Detail</legend>
+				<table class="tb-fields">
+					<tbody>
+						{{- if .name}}
+						<tr>
+							<th>Name</th>
+							<td>{{.name}}</td>
+						</tr>
+						{{- end}}
+						{{- if .alt_names}}
+						<tr>
+							<th>Alternative Name(s)</th>
+							<td>{{.alt_names}}</td>
+						</tr>
+						{{- end}}
+						{{- if .year}}
+						<tr>
+							<th>Year</th>
+							<td>{{.year}}</td>
+						</tr>
+						{{- end}}
+						{{- if .remark}}
+						<tr>
+							<th>Remark</th>
+							<td>{{.remark}}</td>
+						</tr>
+						{{- end}}
+						{{- if .shotpoint_min}}
+						<tr>
+							<th>Shotpoints</th>
+							<td>{{.shotpoint_min}}
+								{{- if .shotpoint_max}}
+									- {{.shotpoint_max}}
+								{{end}}
+							</td>
+						</tr>
+						{{- end}}
+						{{- if .quadrangles}}
+						<tr>
+							<th>Quadrangle</th>
+							<td>{{range $i, $qd := .quadrangles}}{{if ne $i 0}}, {{end}}<a href="../search#quadrangle_id={{$qd.quadrangle_id}}">{{$qd.name}}</a>{{end}}</td>
+						</tr>
+						{{- end}}
+					</tbody>
+				</table>
+			</fieldset>
+
+			{{- if .geojson}}
+			<fieldset class="fs-map">
+				<legend>Geospatial</legend>
+				<div id="map"></div>
+				<div id="popup" class="ol-popup">
+					<div class="ol-popup-top">
+						<div class="ol-popup-top-title">Shotline(s)</div>
+						<div id="popup-closer">&#215;</div>
+					</div>
+					<div id="popup-content" class="ol-popup-content"></div>
+				</div>
+				<script>
+					var geojson = {{rawjs .geojson}};
+				</script>
+			</fieldset>
+			<div class="flex-break"></div>
+			{{- end}}
+			{{- if .inventory}}
+			<fieldset>
+				<legend>Inventory</legend>
+				{{- $shotline_id := .shotline_id }}
+				<table class="tb-fields">
+					<thead>
+						<tr>
+							<th>Keywords</th>
+							<th>Count</th>
+						</tr>
+					</thead>
+					<tbody>
+						{{- range .inventory}}
+						<tr>
+							<td><a href="../search#shotline_id={{$shotline_id}}{{range .keywords}}&keyword={{.}}{{end}}">{{range $i, $kw := .keywords}}{{if ne $i 0}} &gt; {{end}}{{$kw}}{{end}}</a></td>
+							<td>{{.count}}</td>
+						</tr>
+						{{- end}}
+					</tbody>
+				</table>
+			</fieldset>
+			{{- end}}
+			{{- if .files}}
+			<fieldset class="files">
+				<legend>Files</legend>
+				{{- range .files}}
+				<div><a href="../file/{{.file_id}}/{{.file_name}}">{{.file_name}}</a> ({{.file_size}})</div>
+				{{- end}}
+			</fieldset>
+			{{- end}}

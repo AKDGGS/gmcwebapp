@@ -20,6 +20,9 @@ type DB interface {
 	// Fetches the complete details for a Well
 	GetWell(id int, flags int) (map[string]interface{}, error)
 
+	// Fetches the complete details for a Shotline
+	GetShotline(id int, flags int) (map[string]interface{}, error)
+
 	// Verify the database connection is working.
 	// (usually by performing a simple query)
 	Verify() error
