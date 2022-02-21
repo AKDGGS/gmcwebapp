@@ -1,10 +1,11 @@
-package filestore
+package s3
 
 import (
 	"context"
 	"fmt"
 	"github.com/minio/minio-go/v7"
 	"github.com/minio/minio-go/v7/pkg/credentials"
+	fsutil "gmc/filestore/util"
 	"os"
 )
 
@@ -13,7 +14,7 @@ type S3 struct {
 	bucket string
 }
 
-func newS3(cfg map[string]interface{}) (*S3, error) {
+func New(cfg map[string]interface{}) (*S3, error) {
 	endpoint, ok := cfg["endpoint"].(string)
 	if !ok {
 		return nil, fmt.Errorf("s3 endpoint must exist and be a string")
@@ -53,7 +54,7 @@ func newS3(cfg map[string]interface{}) (*S3, error) {
 	return s3, nil
 }
 
-func (s3 *S3) GetFile(name string) (*File, error) {
+func (s3 *S3) GetFile(name string) (*fsutil.File, error) {
 	obj, err := s3.client.GetObject(
 		context.Background(),
 		s3.bucket, name,
@@ -76,7 +77,7 @@ func (s3 *S3) GetFile(name string) (*File, error) {
 		return nil, err
 	}
 
-	return &File{
+	return &fsutil.File{
 		Name:         stat.Key,
 		ETag:         stat.ETag,
 		LastModified: stat.LastModified,

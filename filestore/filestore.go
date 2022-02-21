@@ -3,22 +3,14 @@ package filestore
 import (
 	"fmt"
 	"gmc/config"
-	"io"
-	"time"
+	"gmc/filestore/dir"
+	"gmc/filestore/s3"
+	fsutil "gmc/filestore/util"
 )
 
 type FileStore interface {
-	GetFile(string) (*File, error)
+	GetFile(string) (*fsutil.File, error)
 	Shutdown()
-}
-
-type File struct {
-	Name         string
-	ETag         string
-	Size         int64
-	LastModified time.Time
-	ContentType  string
-	Content      io.ReadSeekCloser
 }
 
 func New(cfg config.FileStoreConfig) (FileStore, error) {
@@ -26,12 +18,12 @@ func New(cfg config.FileStoreConfig) (FileStore, error) {
 	var err error
 	switch cfg.Type {
 	case "s3", "minio":
-		stor, err = newS3(cfg.Attrs)
+		stor, err = s3.New(cfg.Attrs)
 		if err != nil {
 			return nil, err
 		}
 	case "dir", "directory":
-		stor, err = newDir(cfg.Attrs)
+		stor, err = dir.New(cfg.Attrs)
 		if err != nil {
 			return nil, err
 		}
