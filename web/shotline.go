@@ -9,8 +9,22 @@ import (
 	"net/http"
 )
 
-func (srv *Server) ServeShotline(id int, w http.ResponseWriter) {
-	shotline, err := srv.DB.GetShotline(id, dbf.ALL_NOPRIVATE)
+func (srv *Server) ServeShotline(id int, w http.ResponseWriter, r *http.Request) {
+	user, err := srv.AuthOptional(w, r)
+	if err != nil {
+		http.Error(
+			w, fmt.Sprintf("Authentication error: %s", err.Error()),
+			http.StatusBadRequest,
+		)
+		return
+	}
+
+	flags := dbf.ALL
+	if user == nil {
+		flags = dbf.ALL_NOPRIVATE
+	}
+
+	shotline, err := srv.DB.GetShotline(id, flags)
 	if err != nil {
 		http.Error(
 			w, fmt.Sprintf("Query error: %s", err.Error()),

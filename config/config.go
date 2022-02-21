@@ -11,9 +11,15 @@ type Config struct {
 	DatabaseURL   string          `yaml:"database_url"`
 	BasePath      string          `yaml:"base_path"`
 	FileStore     FileStoreConfig `yaml:"file_store"`
+	Auths         []AuthConfig    `yaml:"authentication"`
 }
 
 type FileStoreConfig struct {
+	Type  string                 `yaml:"type"`
+	Attrs map[string]interface{} `yaml:",inline"`
+}
+
+type AuthConfig struct {
 	Type  string                 `yaml:"type"`
 	Attrs map[string]interface{} `yaml:",inline"`
 }

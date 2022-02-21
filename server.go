@@ -3,6 +3,7 @@ package main
 import (
 	"flag"
 	"fmt"
+	"gmc/auth"
 	"gmc/config"
 	"gmc/db"
 	"gmc/filestore"
@@ -37,13 +38,22 @@ func serverCommand(rootcmd string) {
 		os.Exit(1)
 	}
 
+	auths := make([]auth.Auth, len(cfg.Auths))
+	for i, v := range cfg.Auths {
+		auths[i], err = auth.New(v)
+		if err != nil {
+			fmt.Fprintf(os.Stderr, "%s: %s\n", os.Args[0], err.Error())
+			os.Exit(1)
+		}
+	}
+
 	stor, err := filestore.New(cfg.FileStore)
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "%s: %s\n", os.Args[0], err.Error())
 		os.Exit(1)
 	}
 
-	srv := web.Server{Config: cfg, DB: db, FileStore: stor}
+	srv := web.Server{Config: cfg, DB: db, FileStore: stor, Auths: auths}
 	if *assets != "" {
 		srv.AssetPath = *assets
 	}

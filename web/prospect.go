@@ -9,8 +9,22 @@ import (
 	"net/http"
 )
 
-func (srv *Server) ServeProspect(id int, w http.ResponseWriter) {
-	prospect, err := srv.DB.GetProspect(id, dbf.ALL_NOPRIVATE)
+func (srv *Server) ServeProspect(id int, w http.ResponseWriter, r *http.Request) {
+	user, err := srv.AuthOptional(w, r)
+	if err != nil {
+		http.Error(
+			w, fmt.Sprintf("Authentication error: %s", err.Error()),
+			http.StatusBadRequest,
+		)
+		return
+	}
+
+	flags := dbf.ALL
+	if user == nil {
+		flags = dbf.ALL_NOPRIVATE
+	}
+
+	prospect, err := srv.DB.GetProspect(id, flags)
 	if err != nil {
 		http.Error(
 			w, fmt.Sprintf("Query error: %s", err.Error()),

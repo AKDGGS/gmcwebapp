@@ -50,7 +50,8 @@ func (srv *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 			http.Error(w, "Invalid Prospect ID", http.StatusBadRequest)
 			return
 		}
-		srv.ServeProspect(id, w)
+
+		srv.ServeProspect(id, w, r)
 
 	case "borehole":
 		sid := strings.TrimPrefix(strings.TrimPrefix(path, "borehole"), "/")
@@ -59,7 +60,7 @@ func (srv *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 			http.Error(w, "Invalid Borehole ID", http.StatusBadRequest)
 			return
 		}
-		srv.ServeBorehole(id, w)
+		srv.ServeBorehole(id, w, r)
 
 	case "outcrop":
 		sid := strings.TrimPrefix(strings.TrimPrefix(path, "outcrop"), "/")
@@ -68,7 +69,7 @@ func (srv *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 			http.Error(w, "Invalid Outcrop ID", http.StatusBadRequest)
 			return
 		}
-		srv.ServeOutcrop(id, w)
+		srv.ServeOutcrop(id, w, r)
 
 	case "well":
 		sid := strings.TrimPrefix(strings.TrimPrefix(path, "well"), "/")
@@ -77,7 +78,7 @@ func (srv *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 			http.Error(w, "Invalid Well ID", http.StatusBadRequest)
 			return
 		}
-		srv.ServeWell(id, w)
+		srv.ServeWell(id, w, r)
 
 	case "shotline":
 		sid := strings.TrimPrefix(strings.TrimPrefix(path, "shotline"), "/")
@@ -86,7 +87,7 @@ func (srv *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 			http.Error(w, "Invalid Shotline ID", http.StatusBadRequest)
 			return
 		}
-		srv.ServeShotline(id, w)
+		srv.ServeShotline(id, w, r)
 
 	default:
 		http.Error(w, "File not found", http.StatusNotFound)
