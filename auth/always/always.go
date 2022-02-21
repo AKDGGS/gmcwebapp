@@ -2,7 +2,7 @@ package always
 
 import (
 	"fmt"
-	"gmc/auth/user"
+	authu "gmc/auth/util"
 	"net/http"
 )
 
@@ -19,10 +19,10 @@ func New(cfg map[string]interface{}) (*Always, error) {
 	return &Always{user: user}, nil
 }
 
-func (al *Always) AuthOptional(w http.ResponseWriter, r *http.Request) (*user.User, error) {
-	return &user.User{Username: al.user}, nil
+func (al *Always) Optional(w http.ResponseWriter, r *http.Request) (*authu.User, error) {
+	return &authu.User{Username: al.user}, nil
 }
 
-func (al *Always) AuthRequired(w http.ResponseWriter, r *http.Request) (*user.User, error) {
-	return &user.User{Username: al.user}, nil
+func (al *Always) Required(w http.ResponseWriter, r *http.Request) (*authu.User, error) {
+	return &authu.User{Username: al.user}, nil
 }

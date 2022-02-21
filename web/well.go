@@ -10,7 +10,7 @@ import (
 )
 
 func (srv *Server) ServeWell(id int, w http.ResponseWriter, r *http.Request) {
-	user, err := srv.AuthOptional(w, r)
+	user, err := srv.Auths.Optional(w, r)
 	if err != nil {
 		http.Error(
 			w, fmt.Sprintf("Authentication error: %s", err.Error()),

@@ -38,13 +38,10 @@ func serverCommand(rootcmd string) {
 		os.Exit(1)
 	}
 
-	auths := make([]auth.Auth, len(cfg.Auths))
-	for i, v := range cfg.Auths {
-		auths[i], err = auth.New(v)
-		if err != nil {
-			fmt.Fprintf(os.Stderr, "%s: %s\n", os.Args[0], err.Error())
-			os.Exit(1)
-		}
+	auths, err := auth.NewAuths(cfg.Auths)
+	if err != nil {
+		fmt.Fprintf(os.Stderr, "%s: %s\n", os.Args[0], err.Error())
+		os.Exit(1)
 	}
 
 	stor, err := filestore.New(cfg.FileStore)
