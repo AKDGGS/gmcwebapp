@@ -30,6 +30,10 @@ func (srv *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 		"ol/ol-layerswitcher.min.css", "ol/ol-layerswitcher.min.js":
 		assets.ServeStatic(path, w, r)
 		return
+
+	case "login":
+		srv.ServeLogin(w, r)
+		return
 	}
 
 	sidx := strings.Index(path, "/")

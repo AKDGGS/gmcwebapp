@@ -15,7 +15,7 @@ type Server struct {
 	Config    *config.Config
 	DB        db.DB
 	FileStore filestore.FileStore
-	Auths     auth.Auths
+	Auths     *auth.Auths
 	AssetPath string
 	http      http.Server
 }

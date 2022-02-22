@@ -38,7 +38,7 @@ func serverCommand(rootcmd string) {
 		os.Exit(1)
 	}
 
-	auths, err := auth.NewAuths(cfg.Auths)
+	auths, err := auth.NewAuths(cfg.SessionKeyBytes(), cfg.Auths)
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "%s: %s\n", os.Args[0], err.Error())
 		os.Exit(1)

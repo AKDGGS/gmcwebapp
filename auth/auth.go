@@ -3,19 +3,18 @@ package auth
 import (
 	"fmt"
 	"gmc/auth/always"
+	"gmc/auth/file"
 	authu "gmc/auth/util"
 	"gmc/config"
-	"net/http"
 )
 
 type Auth interface {
-	// Authentication is optional - accept authentication cookies
-	// and return user if available
-	Optional(http.ResponseWriter, *http.Request) (*authu.User, error)
+	Name() string
 
-	// Authentication is required - hard stop and prompt for
-	// username/password if authentication cookie is not present
-	Required(http.ResponseWriter, *http.Request) (*authu.User, error)
+	// Uses this auth to check a username/password pair.
+	// Authentication failures (such as bad usernames or passwords)
+	// result in nil, nil.
+	Check(string, string) (*authu.User, error)
 }
 
 func NewAuth(cfg config.AuthConfig) (Auth, error) {
@@ -27,6 +26,11 @@ func NewAuth(cfg config.AuthConfig) (Auth, error) {
 		if err != nil {
 			return nil, err
 		}
+	case "file":
+		auth, err = file.New(cfg.Attrs)
+		if err != nil {
+			return nil, err
+		}
 	case "":
 		return nil, fmt.Errorf("authentication type cannot be empty")
 	default:
@@ -35,13 +39,17 @@ func NewAuth(cfg config.AuthConfig) (Auth, error) {
 	return auth, nil
 }
 
-type Auths []Auth
+type Auths struct {
+	key   []byte
+	auths []Auth
+}
 
-func NewAuths(cfgs []config.AuthConfig) (Auths, error) {
+func NewAuths(key []byte, cfgs []config.AuthConfig) (*Auths, error) {
+	auths := &Auths{key: key, auths: make([]Auth, len(cfgs))}
+
 	var err error
-	auths := make(Auths, len(cfgs))
 	for i, v := range cfgs {
-		auths[i], err = NewAuth(v)
+		auths.auths[i], err = NewAuth(v)
 		if err != nil {
 			return nil, err
 		}
@@ -49,22 +57,9 @@ func NewAuths(cfgs []config.AuthConfig) (Auths, error) {
 	return auths, nil
 }
 
-func (auths Auths) Required(w http.ResponseWriter, r *http.Request) (*authu.User, error) {
-	for _, auth := range auths {
-		user, err := auth.Required(w, r)
-		if err != nil {
-			return nil, err
-		}
-		if user != nil {
-			return user, nil
-		}
-	}
-	return nil, nil
-}
-
-func (auths Auths) Optional(w http.ResponseWriter, r *http.Request) (*authu.User, error) {
-	for _, auth := range auths {
-		user, err := auth.Optional(w, r)
+func (auths *Auths) Check(u string, p string) (*authu.User, error) {
+	for _, auth := range auths.auths {
+		user, err := auth.Check(u, p)
 		if err != nil {
 			return nil, err
 		}
