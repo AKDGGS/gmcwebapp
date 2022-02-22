@@ -10,10 +10,14 @@ type User struct {
 }
 
 func UnmarshalUser(u []byte) (*User, error) {
-	var user User
+	user := &User{}
 	err := json.Unmarshal(u, user)
 	if err != nil {
 		return nil, err
 	}
-	return &user, nil
+	return user, nil
+}
+
+func MarshalUser(u *User) ([]byte, error) {
+	return json.Marshal(u)
 }

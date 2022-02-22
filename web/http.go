@@ -1,6 +1,7 @@
 package web
 
 import (
+	"fmt"
 	"gmc/assets"
 	"net/http"
 	"strconv"
@@ -32,7 +33,13 @@ func (srv *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 		return
 
 	case "login":
-		srv.ServeLogin(w, r)
+		err := srv.Auths.CheckForm(w, r)
+		if err != nil {
+			http.Error(
+				w, fmt.Sprintf("error: %s", err.Error()),
+				http.StatusInternalServerError,
+			)
+		}
 		return
 	}
 
