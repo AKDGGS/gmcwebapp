@@ -9,6 +9,20 @@ import (
 	"net/http"
 )
 
+func (auths *Auths) Logout(w http.ResponseWriter, r *http.Request) error {
+	cookie, err := securecookie.New(
+		"session", auths.key,
+		securecookie.Params{MaxAge: 86400, Secure: false},
+	)
+	if err != nil {
+		return err
+	}
+
+	cookie.Delete(w)
+	http.Redirect(w, r, ".", http.StatusFound)
+	return nil
+}
+
 func (auths *Auths) CheckRequest(r *http.Request) (*authu.User, error) {
 	// Try to authenticate the user with a secure cookie
 	cookie, err := securecookie.New(

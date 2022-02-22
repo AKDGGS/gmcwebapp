@@ -41,6 +41,16 @@ func (srv *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 			)
 		}
 		return
+
+	case "logout":
+		err := srv.Auths.Logout(w, r)
+		if err != nil {
+			http.Error(
+				w, fmt.Sprintf("error: %s", err.Error()),
+				http.StatusInternalServerError,
+			)
+		}
+		return
 	}
 
 	sidx := strings.Index(path, "/")
@@ -61,7 +71,6 @@ func (srv *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 			http.Error(w, "Invalid Prospect ID", http.StatusBadRequest)
 			return
 		}
-
 		srv.ServeProspect(id, w, r)
 
 	case "borehole":

@@ -16,6 +16,11 @@
 				<a class="soa-apptmpl-logo" title="The Great State of Alaska" href="http://alaska.gov"></a>
 				<a class="soa-apptmpl-logo-dggs" title="The Division of Geological &amp; Geophysical Surveys" href="http://dggs.alaska.gov"></a>
 				<div class="soa-apptmpl-header-nav">
+					{{- if .user }}
+					<a href="../logout">Logout</a>
+					{{- else }}
+					<a href="../login">Login</a>
+					{{- end }}
 					<a href="../help">Help/Contact</a>
 				</div>
 			</div>
