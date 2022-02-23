@@ -4,7 +4,7 @@
 					<tbody>
 						{{- if .name}}
 						<tr>
-							<th>Well Name</th>
+							<th>Name</th>
 							<td>{{.name}}</td>
 						</tr>
 						{{- end}}
@@ -101,7 +101,7 @@
 						{{- if .geojson}}
 							{{range $i, $f := .geojson.features}}{{if ne $i 0}}, {{end}}{{if (eq $f.geometry.type "Point" )}}
 									<tr>
-										<th>LonLat</th>
+										<th>Lon/Lat</th>
 										<td> {{$f.geometry.coordinates}}</td>
 									</tr>
 								{{- end}}
