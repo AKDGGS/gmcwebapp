@@ -9,8 +9,22 @@ import (
 	"net/http"
 )
 
-func (srv *Server) ServeBorehole(id int, w http.ResponseWriter) {
-	borehole, err := srv.DB.GetBorehole(id, dbf.ALL_NOPRIVATE)
+func (srv *Server) ServeBorehole(id int, w http.ResponseWriter, r *http.Request) {
+	user, err := srv.Auths.CheckRequest(r)
+	if err != nil {
+		http.Error(
+			w, fmt.Sprintf("Authentication error: %s", err.Error()),
+			http.StatusBadRequest,
+		)
+		return
+	}
+
+	flags := dbf.ALL
+	if user == nil {
+		flags = dbf.ALL_NOPRIVATE
+	}
+
+	borehole, err := srv.DB.GetBorehole(id, flags)
 	if err != nil {
 		http.Error(
 			w, fmt.Sprintf("Query error: %s", err.Error()),
@@ -44,6 +58,7 @@ func (srv *Server) ServeBorehole(id int, w http.ResponseWriter) {
 			"ol/ol.js", "ol/ol-layerswitcher.min.js",
 			"js/mustache.js", "js/view.js",
 		},
+		"user": user,
 	}
 
 	tbuf := bytes.Buffer{}

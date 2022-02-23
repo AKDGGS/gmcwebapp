@@ -17,7 +17,7 @@ const (
 const ALL int = math.MaxInt
 
 // Option for everything except private items
-const ALL_NOPRIVATE int = math.MaxInt &^ PRIVATE
+const ALL_NOPRIVATE int = ALL &^ PRIVATE
 
 // Option for minimal return
 const MINIMAL int = 0

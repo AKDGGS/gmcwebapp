@@ -1,7 +1,8 @@
-package filestore
+package dir
 
 import (
 	"fmt"
+	fsutil "gmc/filestore/util"
 	"mime"
 	"os"
 	"path/filepath"
@@ -11,7 +12,7 @@ type Dir struct {
 	path string
 }
 
-func newDir(cfg map[string]interface{}) (*Dir, error) {
+func New(cfg map[string]interface{}) (*Dir, error) {
 	path, ok := cfg["path"].(string)
 	if !ok {
 		return nil, fmt.Errorf("directory path must exist and be a string")
@@ -20,7 +21,7 @@ func newDir(cfg map[string]interface{}) (*Dir, error) {
 	return &Dir{path: path}, nil
 }
 
-func (d *Dir) GetFile(name string) (*File, error) {
+func (d *Dir) GetFile(name string) (*fsutil.File, error) {
 	fp := filepath.Join(d.path, name)
 	if !filepath.IsAbs(fp) {
 		return nil, os.ErrPermission
@@ -41,7 +42,7 @@ func (d *Dir) GetFile(name string) (*File, error) {
 		mt = "application/octet-stream"
 	}
 
-	return &File{
+	return &fsutil.File{
 		Name:         stat.Name(),
 		ETag:         "",
 		Size:         stat.Size(),

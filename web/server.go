@@ -3,6 +3,7 @@ package web
 import (
 	"context"
 	"gmc/assets"
+	"gmc/auth"
 	"gmc/config"
 	"gmc/db"
 	"gmc/filestore"
@@ -14,6 +15,7 @@ type Server struct {
 	Config    *config.Config
 	DB        db.DB
 	FileStore filestore.FileStore
+	Auths     *auth.Auths
 	AssetPath string
 	http      http.Server
 }

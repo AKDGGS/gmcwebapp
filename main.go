@@ -21,6 +21,9 @@ func main() {
 	case "server", "start":
 		serverCommand(cmd)
 
+	case "genkey", "keygen":
+		genkeyCommand(cmd)
+
 	case "--help", "help":
 		printDefaultUsage()
 		os.Exit(0)
@@ -41,4 +44,5 @@ func printDefaultUsage() {
 	fmt.Printf("valid commands:\n")
 	fmt.Printf("    start, server    start HTTP server\n")
 	fmt.Printf("    db, database     initialize or verify a database\n")
+	fmt.Printf("    genkey, keygen   generate a random session key\n")
 }
