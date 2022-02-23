@@ -71,6 +71,8 @@ func (auths *Auths) CheckForm(w http.ResponseWriter, r *http.Request) error {
 		}
 	}
 
+	// If the user can't be authenticate with a secure cookie,
+	// try to read a POSTed username and password to authenticate with
 	err = r.ParseForm()
 	if err != nil {
 		return err
@@ -79,7 +81,11 @@ func (auths *Auths) CheckForm(w http.ResponseWriter, r *http.Request) error {
 	username := r.FormValue("username")
 	password := r.FormValue("password")
 
+	params := map[string]interface{}{}
+
 	if username != "" && password != "" {
+		params["username"] = username
+
 		user, err := auths.Check(username, password)
 		if err != nil {
 			return err
@@ -99,10 +105,14 @@ func (auths *Auths) CheckForm(w http.ResponseWriter, r *http.Request) error {
 			http.Redirect(w, r, ".", http.StatusFound)
 			return nil
 		}
+
+		params["error"] = "Invalid username or password."
 	}
 
+	// If there's no secure cookie, and no POSTed credentials,
+	// serve up the login page
 	buf := bytes.Buffer{}
-	if err := assets.ExecuteTemplate("tmpl/login.html", &buf, nil); err != nil {
+	if err := assets.ExecuteTemplate("tmpl/login.html", &buf, params); err != nil {
 		http.Error(
 			w, fmt.Sprintf("parse error: %s", err.Error()),
 			http.StatusInternalServerError,
