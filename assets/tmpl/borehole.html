@@ -20,10 +20,18 @@
 							<td><a href="http://mrdata.usgs.gov/ardf/show-ardf.php?ardf_num={{.ardf_number}}">{{.ardf_number}}</a></td>
 						</tr>
 						{{- end}}
+						{{- if .name}}
 						<tr>
 							<th>Borehole Name</th>
 							<td>{{.name}}</td>
 						</tr>
+						{{- end}}
+						{{- if .alt_names}}
+						<tr>
+							<th>Alternatives Borehole Name(s)</th>
+							<td>{{.alt_names}}</td>
+						</tr>
+						{{- end}}
 						{{- if .completion_date}}
 						<tr>
 							<th>Completion Date</th>
@@ -35,6 +43,21 @@
 							<th>Measured Depth</th>
 							<td>{{.measured_depth}}{{.measured_depth_unit}}</td>
 						</tr>
+						{{- end}}
+						{{- if .elevation}}
+						<tr>
+							<th>Elevation</th>
+							<td>{{.elevation}}{{.elevation_unit}}</td>
+						</tr>
+						{{- end}}
+						{{- if .geojson}}
+							{{range $i, $f := .geojson.features}}{{if ne $i 0}}, {{end}}{{if (eq $f.geometry.type "Point" )}}
+									<tr>
+										<th>Lon/Lat</th>
+										<td> {{$f.geometry.coordinates}}</td>
+									</tr>
+								{{- end}}
+							{{- end}}
 						{{- end}}
 						{{- if .quadrangles}}
 						<tr>
@@ -48,6 +71,18 @@
 							<td>{{range $i, $md := .mining_districts}}{{if ne $i 0}}, {{end}}<a href="../search#mining_district_id={{$md.mining_district_id}}">{{$md.name}}</a>{{end}}</td>
 						</tr>
 						{{- end}}
+						{{- if .is_onshore}}
+						<tr>
+							<th>Onshore</th>
+							<td>Yes</td>
+						</tr>
+						{{- end}}
+						{{- if not .is_onshore }}
+						<tr>
+							<th>Onshore</th>
+							<td>No</td>
+						</tr>
+						{{- end }}
 					</tbody>
 				</table>
 			</fieldset>
