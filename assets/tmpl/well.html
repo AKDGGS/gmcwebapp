@@ -99,13 +99,13 @@
 						</tr>
 						{{- end}}
 						{{- if .geojson}}
-							{{range $i, $f := .geojson.features}}{{if ne $i 0}}, {{end}}{{if (eq $f.geometry.type "Point" )}}
-									<tr>
-										<th>Lon/Lat</th>
-										<td> {{$f.geometry.coordinates}}</td>
-									</tr>
-								{{- end}}
-							{{- end}}
+						{{range $i, $f := .geojson.features}}{{if ne $i 0}}, {{end}}{{if (eq $f.geometry.type "Point" )}}
+						<tr>
+							<th>Lon/Lat</th>
+							<td> {{$f.geometry.coordinates}}</td>
+						</tr>
+						{{- end}}
+						{{- end}}
 						{{- end}}
 						{{- if .quadrangles}}
 						<tr>
@@ -117,18 +117,22 @@
 				</table>
 			</fieldset>
 			{{- if .geojson}}
-			<fieldset class="fs-map" >
+			<fieldset class="fs-map">
 				<legend>Geospatial</legend>
 				<div id="map" style=" height:500px width: 500px"></div>
-				<div id="popup" class="ol-popup" >
+				<div id="popup" class="ol-popup">
 					<div class="ol-popup-top">
 						<div class="ol-popup-top-title">Well(s)</div>
 						<div id="popup-closer">&#215;</div>
 					</div>
-					<div id="popup-content" class="ol-popup-content" ></div>
+					<div id="popup-content" class="ol-popup-content"></div>
 				</div>
 				<script>
-					var geojson = {{rawjs .geojson}};
+					var geojson = {
+						{
+							rawjs.geojson
+						}
+					};
 				</script>
 			</fieldset>
 			<div class="flex-break"></div>
@@ -161,5 +165,45 @@
 				{{- range .files}}
 				<div><a href="../file/{{.file_id}}/{{.file_name}}">{{.file_name}}</a> ({{.file_size}})</div>
 				{{- end}}
+			</fieldset>
+			{{- end}}
+			{{- if .operators}}
+			<fieldset>
+				<legend>Operators</legend>
+				<table class="tb-fields">
+					<thead>
+						<tr>
+							<th>Current Operator</th>
+							<th> Type</th>
+						</tr>
+					</thead>
+					<tbody>
+						{{- range .operators}}
+						{{- if .is_current}}
+						<tr>
+							<td>{{.name}}</td>
+							<td>{{.operator_type}}</td>
+						</tr>
+						<tr class="spacer"></tr>
+					</tbody>
+					{{- end}}
+					{{- end}}
+					<thead>
+						<tr>
+							<th>Previous Operator(s)</th>
+							<th> Type</th>
+						</tr>
+					</thead>
+					<tbody>
+						{{- range .operators}}
+						{{- if not .is_current}}
+						<tr>
+							<td>{{.name}}</td>
+							<td>{{.operator_type}}</td>
+						</tr>
+						{{- end}}
+						{{- end}}
+					</tbody>
+				</table>
 			</fieldset>
 			{{- end}}

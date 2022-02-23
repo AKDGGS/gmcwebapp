@@ -1,6 +1,8 @@
 package pg
 
-import dbf "gmc/db/flag"
+import (
+	dbf "gmc/db/flag"
+)
 
 func (pg *Postgres) GetWell(id int, flags int) (map[string]interface{}, error) {
 	well, err := pg.queryRow("pg/well_byid.sql", id)
@@ -31,6 +33,16 @@ func (pg *Postgres) GetWell(id int, flags int) (map[string]interface{}, error) {
 		}
 		if inventory != nil {
 			well["inventory"] = inventory
+		}
+	}
+
+	if (flags & dbf.ORGANIZATION) != 0 {
+		operators, err := pg.queryRows("pg/organization_bywellid.sql", id)
+		if err != nil {
+			return nil, err
+		}
+		if operators != nil {
+			well["operators"] = operators
 		}
 	}
 

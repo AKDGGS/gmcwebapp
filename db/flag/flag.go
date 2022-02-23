@@ -11,6 +11,7 @@ const (
 	QUADRANGLES
 	PRIVATE
 	GEOJSON
+	ORGANIZATION
 )
 
 // Option for everything
