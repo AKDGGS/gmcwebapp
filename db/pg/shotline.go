@@ -23,6 +23,15 @@ func (pg *Postgres) GetShotline(id int, flags int) (map[string]interface{}, erro
 			shotline["inventory"] = inventory
 		}
 	}
+	if (flags & dbf.URLS) != 0 {
+		urls, err := pg.queryRows("pg/url_byshotlineid.sql", id)
+		if err != nil {
+			return nil, err
+		}
+		if urls != nil {
+			shotline["urls"] = urls
+		}
+	}
 
 	if (flags & dbf.GEOJSON) != 0 {
 		geojson, err := pg.queryRow("pg/shotline_geojson.sql", id)

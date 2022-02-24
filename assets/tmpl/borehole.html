@@ -41,13 +41,13 @@
 						{{- if .measured_depth}}
 						<tr>
 							<th>Measured Depth</th>
-							<td>{{.measured_depth}}{{.measured_depth_unit}}</td>
+							<td>{{.measured_depth}} {{.measured_depth_unit}}</td>
 						</tr>
 						{{- end}}
 						{{- if .elevation}}
 						<tr>
 							<th>Elevation</th>
-							<td>{{.elevation}}{{.elevation_unit}}</td>
+							<td>{{.elevation}} {{.elevation_unit}}</td>
 						</tr>
 						{{- end}}
 						{{- if .geojson}}
@@ -128,11 +128,40 @@
 			</fieldset>
 			{{- end}}
 			{{- if .files}}
-
 			<fieldset class="files">
 				<legend>Files</legend>
 				{{- range .files}}
 				<div><a href="../file/{{.file_id}}/{{.file_name}}">{{.file_name}}</a> ({{.file_size}})</div>
+				{{- end}}
+			</fieldset>
+			{{- end}}
+			{{- if .organizations}}
+			<fieldset>
+				<legend>Organizations</legend>
+				<table class="tb-fields">
+					<thead>
+						<tr>
+							<th>Organization</th>
+							<th> Type</th>
+						</tr>
+					</thead>
+					<tbody>
+						{{- range .organizations}}
+						<tr>
+							<td>{{.name}}</td>
+							<td>{{.organization_type}}</td>
+						</tr>
+					</tbody>
+					{{- end}}
+				</table>
+			</fieldset>
+			{{- end}}
+
+			{{- if .urls}}
+			<fieldset class="urls">
+				<legend>URLs</legend>
+				{{- range .urls}}
+				<div style="margin: 5px;"><a href="{{.url}}">{{.description}}</a> ({{.url_type}})</div>
 				{{- end}}
 			</fieldset>
 			{{- end}}

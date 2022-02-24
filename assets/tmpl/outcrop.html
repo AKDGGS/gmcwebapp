@@ -100,3 +100,33 @@
 				{{- end}}
 			</fieldset>
 			{{- end}}
+			{{- if .organizations}}
+			<fieldset>
+				<legend>Organizations</legend>
+				<table class="tb-fields">
+					<thead>
+						<tr>
+							<th>Organization</th>
+							<th> Type</th>
+						</tr>
+					</thead>
+					<tbody>
+						{{- range .organizations}}
+						<tr>
+							<td>{{.name}}</td>
+							<td>{{.organization_type}}</td>
+						</tr>
+					</tbody>
+					{{- end}}
+				</table>
+			</fieldset>
+			{{- end}}
+
+			{{- if .urls}}
+			<fieldset class="urls">
+				<legend>URLs</legend>
+				{{- range .urls}}
+				<div style="margin: 5px;"><a href="{{.url}}">{{.description}}</a> ({{.url_type}})</div>
+				{{- end}}
+			</fieldset>
+			{{- end}}

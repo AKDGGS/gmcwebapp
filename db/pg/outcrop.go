@@ -36,6 +36,26 @@ func (pg *Postgres) GetOutcrop(id int, flags int) (map[string]interface{}, error
 		}
 	}
 
+	if (flags & dbf.ORGANIZATION) != 0 {
+		organizations, err := pg.queryRows("pg/organization_byoutcropid.sql", id)
+		if err != nil {
+			return nil, err
+		}
+		if organizations != nil {
+			outcrop["organizations"] = organizations
+		}
+	}
+
+	if (flags & dbf.URLS) != 0 {
+		urls, err := pg.queryRows("pg/url_byoutcropid.sql", id)
+		if err != nil {
+			return nil, err
+		}
+		if urls != nil {
+			outcrop["urls"] = urls
+		}
+	}
+
 	if (flags & dbf.GEOJSON) != 0 {
 		geojson, err := pg.queryRow("pg/outcrop_geojson.sql", id)
 		if err != nil {

@@ -34,6 +34,26 @@ func (pg *Postgres) GetBorehole(id int, flags int) (map[string]interface{}, erro
 		}
 	}
 
+	if (flags & dbf.ORGANIZATION) != 0 {
+		organizations, err := pg.queryRows("pg/organization_byboreholeid.sql", id)
+		if err != nil {
+			return nil, err
+		}
+		if organizations != nil {
+			borehole["organizations"] = organizations
+		}
+	}
+
+	if (flags & dbf.URLS) != 0 {
+		urls, err := pg.queryRows("pg/url_byboreholeid.sql", id)
+		if err != nil {
+			return nil, err
+		}
+		if urls != nil {
+			borehole["urls"] = urls
+		}
+	}
+
 	if (flags & dbf.GEOJSON) != 0 {
 		geojson, err := pg.queryRow("pg/borehole_geojson.sql", id)
 		if err != nil {
