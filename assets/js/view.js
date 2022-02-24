@@ -66,13 +66,6 @@ if (document.getElementById('map')){
 						})
 					}),
 					new ol.layer.Tile({
-						title: 'Open Street Maps Monochrome',
-						type: 'base',
-						source: new ol.source.XYZ({
-							url: '//tiles.wmflabs.org/bw-mapnik/{z}/{x}/{y}.png'
-						})
-					}),
-					new ol.layer.Tile({
 						title: 'Open Street Maps',
 						type: 'base',
 						source: new ol.source.OSM()
