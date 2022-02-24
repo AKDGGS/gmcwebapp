@@ -10,7 +10,7 @@ import (
 )
 
 func (srv *Server) ServeShotline(id int, w http.ResponseWriter, r *http.Request) {
-	user, err := srv.Auths.CheckRequest(r)
+	user, err := srv.Auths.CheckRequest(w, r)
 	if err != nil {
 		http.Error(
 			w, fmt.Sprintf("Authentication error: %s", err.Error()),

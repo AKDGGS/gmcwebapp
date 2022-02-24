@@ -23,7 +23,7 @@ func (auths *Auths) Logout(w http.ResponseWriter, r *http.Request) error {
 	return nil
 }
 
-func (auths *Auths) CheckRequest(r *http.Request) (*authu.User, error) {
+func (auths *Auths) CheckRequest(w http.ResponseWriter, r *http.Request) (*authu.User, error) {
 	// Try to authenticate the user with a secure cookie
 	cookie, err := securecookie.New(
 		"session", auths.key,
@@ -41,6 +41,9 @@ func (auths *Auths) CheckRequest(r *http.Request) (*authu.User, error) {
 		}
 
 		if user != nil {
+			// Refresh the cookie, extending the timeout
+			// and ignore any failures.
+			cookie.SetValue(w, uj)
 			return user, nil
 		}
 	}
@@ -66,6 +69,10 @@ func (auths *Auths) CheckForm(w http.ResponseWriter, r *http.Request) error {
 		}
 
 		if user != nil {
+			// Refresh the cookie, extending the timeout
+			// and ignore any failures.
+			cookie.SetValue(w, uj)
+
 			http.Redirect(w, r, ".", http.StatusFound)
 			return nil
 		}
