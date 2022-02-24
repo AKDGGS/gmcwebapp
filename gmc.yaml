@@ -15,6 +15,11 @@ base_path: /
 #
 # session_key: 0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f
 
+# length of time before logins timeout from inactivity (in seconds)
+# defaults to 86400 - 24 hours
+#
+# session_max_age: 86400
+
 file_store:
   ## File store is a directory
   #type: dir

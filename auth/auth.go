@@ -40,12 +40,16 @@ func NewAuth(cfg config.AuthConfig) (Auth, error) {
 }
 
 type Auths struct {
-	key   []byte
-	auths []Auth
+	maxage int
+	key    []byte
+	auths  []Auth
 }
 
-func NewAuths(key []byte, cfgs []config.AuthConfig) (*Auths, error) {
-	auths := &Auths{key: key, auths: make([]Auth, len(cfgs))}
+func NewAuths(key []byte, maxage int, cfgs []config.AuthConfig) (*Auths, error) {
+	auths := &Auths{
+		key: key, maxage: maxage,
+		auths: make([]Auth, len(cfgs)),
+	}
 
 	var err error
 	for i, v := range cfgs {

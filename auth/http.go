@@ -12,7 +12,7 @@ import (
 func (auths *Auths) Logout(w http.ResponseWriter, r *http.Request) error {
 	cookie, err := securecookie.New(
 		"session", auths.key,
-		securecookie.Params{MaxAge: 86400, Secure: false},
+		securecookie.Params{MaxAge: auths.maxage, Secure: false},
 	)
 	if err != nil {
 		return err
@@ -27,7 +27,7 @@ func (auths *Auths) CheckRequest(r *http.Request) (*authu.User, error) {
 	// Try to authenticate the user with a secure cookie
 	cookie, err := securecookie.New(
 		"session", auths.key,
-		securecookie.Params{MaxAge: 86400, Secure: false},
+		securecookie.Params{MaxAge: auths.maxage, Secure: false},
 	)
 	if err != nil {
 		return nil, err
@@ -52,7 +52,7 @@ func (auths *Auths) CheckForm(w http.ResponseWriter, r *http.Request) error {
 	// Try to authenticate the user with a secure cookie
 	cookie, err := securecookie.New(
 		"session", auths.key,
-		securecookie.Params{MaxAge: 86400, Secure: false},
+		securecookie.Params{MaxAge: auths.maxage, Secure: false},
 	)
 	if err != nil {
 		return err

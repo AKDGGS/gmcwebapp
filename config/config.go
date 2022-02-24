@@ -16,6 +16,7 @@ type Config struct {
 	FileStore     FileStoreConfig `yaml:"file_store"`
 	SessionKey    string          `yaml:"session_key"`
 	keybytes      []byte          `yaml:"-"`
+	MaxAge        int             `yaml:"session_max_age"`
 	Auths         []AuthConfig    `yaml:"authentication"`
 }
 
@@ -38,6 +39,7 @@ func New() (*Config, error) {
 		ListenAddress: "127.0.0.1:8080",
 		DatabaseURL:   "postgres://localhost",
 		BasePath:      "/",
+		MaxAge:        86400, // Default of 24 hours
 	}
 
 	cfg.keybytes = make([]byte, 32)
