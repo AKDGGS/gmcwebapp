@@ -12,6 +12,7 @@ const (
 	PRIVATE
 	GEOJSON
 	ORGANIZATION
+	URLS
 )
 
 // Option for everything

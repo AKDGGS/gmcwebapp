@@ -117,26 +117,24 @@
 				</table>
 			</fieldset>
 			{{- if .geojson}}
+
 			<fieldset class="fs-map">
 				<legend>Geospatial</legend>
-				<div id="map" style=" height:500px width: 500px"></div>
+				<div id="map"></div>
 				<div id="popup" class="ol-popup">
 					<div class="ol-popup-top">
-						<div class="ol-popup-top-title">Well(s)</div>
+						<div class="ol-popup-top-title">Borehole(s)</div>
 						<div id="popup-closer">&#215;</div>
 					</div>
 					<div id="popup-content" class="ol-popup-content"></div>
 				</div>
 				<script>
-					var geojson = {
-						{
-							rawjs.geojson
-						}
-					};
+					var geojson = {{rawjs .geojson}};
 				</script>
 			</fieldset>
 			<div class="flex-break"></div>
 			{{- end}}
+
 			{{- if .inventory}}
 			<fieldset>
 				<legend>Inventory</legend>
@@ -205,5 +203,15 @@
 						{{- end}}
 					</tbody>
 				</table>
+			</fieldset>
+			{{- end}}
+
+
+			{{- if .urls}}
+			<fieldset class="urls">
+				<legend>URLs</legend>
+				{{- range .urls}}
+				<div style="margin: 5px;"><a href="{{.url}}">{{.description}}</a> ({{.url_type}})</div>
+				{{- end}}
 			</fieldset>
 			{{- end}}

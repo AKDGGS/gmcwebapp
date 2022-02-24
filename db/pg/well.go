@@ -46,6 +46,16 @@ func (pg *Postgres) GetWell(id int, flags int) (map[string]interface{}, error) {
 		}
 	}
 
+	if (flags & dbf.URLS) != 0 {
+		urls, err := pg.queryRows("pg/url_bywellid.sql", id)
+		if err != nil {
+			return nil, err
+		}
+		if urls != nil {
+			well["urls"] = urls
+		}
+	}
+
 	if (flags & dbf.GEOJSON) != 0 {
 		geojson, err := pg.queryRow("pg/well_geojson.sql", id)
 		if err != nil {
