@@ -73,8 +73,9 @@
 			{{- if .error }}
 			<div class="err">{{.error}}</div>
 			{{- end }}
-			<input type="text" name="username" placeholder="Username" value="{{ .username }}" required {{if not .username }}autofocus{{end}}>
-			<input type="password" name="password" placeholder="Password" required {{if .username}}autofocus{{end}}>
+			<input type="text" name="username" placeholder="Username" value="{{ .username }}" required{{if not .username }} autofocus{{end}}>
+			<input type="password" name="password" placeholder="Password" required{{if .username}} autofocus{{end}}>
+			{{ if .redirect }}<input type="hidden" name="redirect" value="{{ .redirect }}">{{end}}
 			<button type="submit">Sign in</button>
 		</form>
 	</body>

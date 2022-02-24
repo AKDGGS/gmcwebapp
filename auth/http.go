@@ -22,7 +22,12 @@ func (auths *Auths) Logout(w http.ResponseWriter, r *http.Request) error {
 	}
 
 	cookie.Delete(w)
-	http.Redirect(w, r, ".", http.StatusFound)
+
+	redirect := r.URL.Query().Get("redirect")
+	if redirect == "" {
+		redirect = "."
+	}
+	http.Redirect(w, r, redirect, http.StatusFound)
 	return nil
 }
 
@@ -70,6 +75,7 @@ func (auths *Auths) CheckForm(w http.ResponseWriter, r *http.Request) error {
 		return err
 	}
 
+
 	uj, err := cookie.GetValue(nil, r)
 	if err == nil {
 		user, err := authu.UnmarshalUser(uj)
@@ -97,8 +103,15 @@ func (auths *Auths) CheckForm(w http.ResponseWriter, r *http.Request) error {
 	username := r.FormValue("username")
 	password := r.FormValue("password")
 
-	params := map[string]interface{}{}
+	redirect := r.FormValue("redirect")
+	if redirect == "" {
+		redirect = r.URL.Query().Get("redirect")
+	}
 
+	params := map[string]interface{}{}
+	if redirect != "" {
+		params["redirect"] = redirect
+	}
 	if username != "" && password != "" {
 		params["username"] = username
 
@@ -118,7 +131,10 @@ func (auths *Auths) CheckForm(w http.ResponseWriter, r *http.Request) error {
 				return err
 			}
 
-			http.Redirect(w, r, ".", http.StatusFound)
+			if redirect == "" {
+				redirect = "."
+			}
+			http.Redirect(w, r, redirect, http.StatusFound)
 			return nil
 		}
 
