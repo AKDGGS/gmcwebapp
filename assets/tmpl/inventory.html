@@ -277,77 +277,25 @@
 			{{- end}}
 		</tbody>
 	</table>
-
-	{{- if .user}}
-	<button id="stash-link" type="submit">Show Stash</button>
-	<div id="stash-dd"></div>
-	{{- end}}
 </fieldset>
 
-{{- if .user}}
-{{- if .inv.publications}}
-<fieldset>
-	<legend>Publication(s)</legend>
-	<table class="tb-fields" style="max-width:600px;">
-		<tbody>
-			{{- range .inv.publications}}
-			{{- if .title}}
-			<tr>
-				<th>Title</th>
-				<td>{{ .title }}
-				<td>
-			</tr>
-			{{- end}}
-			{{- if .year}}
-			<tr>
-				<th>Year</th>
-				<td>{{ .year }}
-				<td>
-			</tr>
-			{{- end}}
-			{{- if .publication_type}}
-			<tr>
-				<th>Type</th>
-				<td>{{ .publication_type }}
-				<td>
-			</tr>
-			{{- end}}
-			{{- if .publication_number}}
-			<tr>
-				<th>Number</th>
-				<td>{{ .publication_number }}
-				<td>
-			</tr>
-			{{- end}}
-			{{- if .publication_series}}
-			<tr>
-				<th>Series</th>
-				<td>{{ .publication_series }}
-				<td>
-			</tr>
-			{{- end}}
-			{{- if .description}}
-			<tr>
-				<th>Description</th>
-				<td>{{ .description }}
-				<td>
-			</tr>
-			{{- end}}
-			{{- if .can_publish}}
-			<tr>
-				<th>Publish</th>
-				<td>{{- if .can_publish}} yes {{- end}} {{- if not .can_publish}} no {{- end}}
-				<td>
-			</tr>
-			{{- end}}
-			<tr class="horizontal-spacer">
-				<td></td>
-			</tr>
-			{{- end}}
-		</tbody>
-	</table>
+{{- if .inv.geojson}}
+
+<fieldset class="fs-map">
+	<legend>Geospatial</legend>
+	<div id="map"></div>
+	<div id="popup" class="ol-popup">
+		<div class="ol-popup-top">
+			<div class="ol-popup-top-title">Borehole(s)</div>
+			<div id="popup-closer">&#215;</div>
+		</div>
+		<div id="popup-content" class="ol-popup-content"></div>
+	</div>
+	<script>
+		var geojson = {{rawjs .inv.geojson}};
+	</script>
 </fieldset>
-{{- end}}
+<div class="flex-break"></div>
 {{- end}}
 
 {{- if .inv.boreholes}}
@@ -535,6 +483,72 @@
 {{- end}}
 
 {{- if .user}}
+{{- if .inv.publications}}
+<fieldset>
+	<legend>Publication(s)</legend>
+	<table class="tb-fields" style="max-width:600px;">
+		<tbody>
+			{{- range .inv.publications}}
+			{{- if .title}}
+			<tr>
+				<th>Title</th>
+				<td>{{ .title }}
+				<td>
+			</tr>
+			{{- end}}
+			{{- if .year}}
+			<tr>
+				<th>Year</th>
+				<td>{{ .year }}
+				<td>
+			</tr>
+			{{- end}}
+			{{- if .publication_type}}
+			<tr>
+				<th>Type</th>
+				<td>{{ .publication_type }}
+				<td>
+			</tr>
+			{{- end}}
+			{{- if .publication_number}}
+			<tr>
+				<th>Number</th>
+				<td>{{ .publication_number }}
+				<td>
+			</tr>
+			{{- end}}
+			{{- if .publication_series}}
+			<tr>
+				<th>Series</th>
+				<td>{{ .publication_series }}
+				<td>
+			</tr>
+			{{- end}}
+			{{- if .description}}
+			<tr>
+				<th>Description</th>
+				<td>{{ .description }}
+				<td>
+			</tr>
+			{{- end}}
+			{{- if .can_publish}}
+			<tr>
+				<th>Publish</th>
+				<td>{{- if .can_publish}} yes {{- end}} {{- if not .can_publish}} no {{- end}}
+				<td>
+			</tr>
+			{{- end}}
+			<tr class="horizontal-spacer">
+				<td></td>
+			</tr>
+			{{- end}}
+		</tbody>
+	</table>
+</fieldset>
+{{- end}}
+{{- end}}
+
+{{- if .user}}
 {{- if .inv.notes}}
 <fieldset>
 	<legend>Notes</legend>
@@ -617,6 +631,14 @@
 {{- end}}
 {{- end}}
 
+{{- if .user}}
+<fieldset>
+	<legend>Stash</legend>
+	<button id="stash-link" type="submit">Show Stash</button>
+		<div id="stash-dd"></div>
+</fieldset>
+{{- end}}
+
 <script src="../js/utility.js"></script>
 <script type="text/javascript">
 	var stash = document.getElementById('stash-link');
@@ -626,7 +648,7 @@
 				if(this.innerHTML === 'Show Stash'){
 					var xhr = (window.ActiveXObject ? new ActiveXObject('Microsoft.XMLHTTP') : new XMLHttpRequest());
 					xhr.onreadystatechange = function(){
-						if(xhr.readyState === 4 && xhr.status === 201){
+						if(xhr.readyState === 4 && xhr.status === 200){
 							var json = JSON.parse(xhr.responseText);
 							var el = JSONToElement(json.stash);
 							document.getElementById('stash-dd').appendChild(el);

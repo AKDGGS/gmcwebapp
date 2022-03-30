@@ -193,5 +193,16 @@ func (pg *Postgres) GetInventory(id int, flags int) (map[string]interface{}, err
 		}
 	}
 
+	if (flags & dbf.GEOJSON) != 0 {
+		geojson, err := pg.queryRow("pg/inventory_geojson.sql", id)
+		if err != nil {
+			return nil, err
+		}
+
+		if geojson != nil {
+			inventory["geojson"] = geojson["geojson"]
+		}
+	}
+
 	return inventory, nil
 }
