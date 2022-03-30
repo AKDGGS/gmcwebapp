@@ -1,4 +1,4 @@
-<fieldset class="fs-detail">
+<fieldset class="fs-detail inventory_boxes">
 	<legend>Inventory Detail</legend>
 	<table class="tb-fields">
 		<tbody>
@@ -217,7 +217,7 @@
 			{{- if .inv.keywords}}
 			<tr>
 				<th>Keywords</th>
-				<td><a href="../search#keyword=${keyword}">{{.inv.keywords}}</a>
+				<td><a href="../search#keyword={{.inv.keywords}}">{{.inv.keywords}}</a>
 			</tr>
 			{{- end}}
 
@@ -345,7 +345,7 @@
 			{{- if .well_name}}
 			<tr>
 				<th>Well Name</th>
-				<td><a href="../well/${well_id}">{{.well_name}}</a>
+				<td><a href="../well/{{.well_id}}">{{.well_name}}</a>
 				<td>
 			</tr>
 			{{- end}}
@@ -388,7 +388,6 @@
 	</table>
 </fieldset>
 {{- end}}
-
 
 {{- if .inv.shotlines}}
 <fieldset>
@@ -616,7 +615,7 @@
 
 {{- if .user}}
 {{- if .inv.containerlog}}
-<fieldset>
+<fieldset class = "inventory_boxes">
 	<legend>Tracking</legend>
 	<table class="tb-fields" style="max-width:600px;">
 		<tbody>
@@ -632,7 +631,7 @@
 {{- end}}
 
 {{- if .user}}
-<fieldset>
+<fieldset class = "inventory_boxes">
 	<legend>Stash</legend>
 	<button id="stash-link" type="submit">Show Stash</button>
 		<div id="stash-dd"></div>
@@ -664,7 +663,6 @@
 						while(dd.lastChild) dd.removeChild(dd.lastChild);
 					}
 				}
-
 				var e = evt === undefined ? window.event : evt;
 				if('preventDefault' in e) e.preventDefault();
 				return false;
