@@ -54,6 +54,13 @@ func (pg *Postgres) GetInventory(id int, flags int) (map[string]interface{}, err
 		inventory["weight"] = &ift
 	}
 
+	t, ok := inventory["tray"].(int16)
+	if !ok {
+		delete(inventory, "tray")
+	} else {
+		inventory["tray"] = &t
+	}
+
 	if inventory["keywords"] != nil {
 		kw, _ := inventory["keywords"]
 		s := strings.Replace(fmt.Sprintf("%v", kw), " ", ", ", -1)
@@ -203,6 +210,5 @@ func (pg *Postgres) GetInventory(id int, flags int) (map[string]interface{}, err
 			inventory["geojson"] = geojson["geojson"]
 		}
 	}
-
 	return inventory, nil
 }

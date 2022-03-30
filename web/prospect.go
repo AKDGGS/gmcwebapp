@@ -38,13 +38,10 @@ func (srv *Server) ServeProspect(id int, w http.ResponseWriter, r *http.Request)
 		return
 	}
 
-	prospect_params := map[string]interface{}{
-		"prospect": prospect,
-		"user":     user,
-	}
+	prospect["_user"] = user
 
 	pbuf := bytes.Buffer{}
-	if err := assets.ExecuteTemplate("tmpl/prospect.html", &pbuf, prospect_params); err != nil {
+	if err := assets.ExecuteTemplate("tmpl/prospect.html", &pbuf, prospect); err != nil {
 		http.Error(
 			w, fmt.Sprintf("Parse error: %s", err.Error()),
 			http.StatusInternalServerError,

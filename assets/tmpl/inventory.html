@@ -2,234 +2,234 @@
 	<legend>Inventory Detail</legend>
 	<table class="tb-fields">
 		<tbody>
-			{{- if .inv.inventory_id }}
+			{{- if .inventory_id }}
 			<tr>
 				<th>ID</th>
-				<td>{{ .inv.inventory_id }}</td>
+				<td>{{ .inventory_id }}</td>
 			</tr>
 			{{- end}}
-			{{- if .user}}
-			{{- if .inv.container_path_cache }}
+			{{- if ._user}}
+			{{- if .container_path_cache }}
 			<tr>
 				<th>Location</th>
-				<td>{{ .inv.container_path_cache }}</td>
+				<td>{{ .container_path_cache }}</td>
 			</tr>
 			{{- end }}
-			{{- if .inv.barcode }}
+			{{- if .barcode }}
 			<tr>
 				<th>Barcode</th>
-				<td>{{ .inv.barcode }}</td>
+				<td>{{ .barcode }}</td>
 			</tr>
 			{{- end }}
-			{{- if .inv.container_alt_barcode }}
+			{{- if .container_alt_barcode }}
 			<tr>
 				<th>Alt. Barcode</th>
-				<td>{{ .inv.container_alt_barcode }}</td>
+				<td>{{ .container_alt_barcode }}</td>
 			</tr>
 			{{- end }}
 			{{- end}}
-			{{- if .inv.dggs_sample_id }}
+			{{- if .dggs_sample_id }}
 			<tr>
 				<th>DGGS Sample ID</th>
-				<td>{{ .inv.dggs_sample_id }}</td>
+				<td>{{ .dggs_sample_id }}</td>
 			</tr>
 			{{- end }}
-			{{- if .inv.sample_number }}
+			{{- if .sample_number }}
 			<tr>
 				<th>Sample Number</th>
-				<td>{{ .inv.sample_number }}</td>
+				<td>{{ .sample_number }}</td>
 			</tr>
 			{{- end }}
-			{{- if .inv.sample_number_prefix }}
+			{{- if .sample_number_prefix }}
 			<tr>
 				<th>Sample Number Prefix</th>
-				<td>{{.inv.sample_number_prefix}}</td>
+				<td>{{.sample_number_prefix}}</td>
 			</tr>
 			{{- end}}
-			{{- if .inv.alt_sample_number}}
+			{{- if .alt_sample_number}}
 			<tr>
 				<th>Alternative Sample Number</th>
-				<td>{{.inv.alt_sample_number}}</td>
+				<td>{{.alt_sample_number}}</td>
 			</tr>
 			{{- end}}
-			{{- if .inv.published_sample_number}}
+			{{- if .published_sample_number}}
 			<tr>
 				<th>Published Sample No.</th>
-				<td>{{.inv.published_sample_number}} {{.inv.published_number_has_suffix}}</td>
+				<td>{{.published_sample_number}} {{.published_number_has_suffix}}</td>
 			</tr>
 			{{- end}}
-			{{- if .inv.collection_name}}
+			{{- if .collection_name}}
 			<tr>
 				<th>Collection</th>
-				<td>{{.inv.collection_name}}</td>
+				<td>{{.collection_name}}</td>
 			</tr>
 			{{- end}}
-			{{- if .inv.state_number}}</tr>
+			{{- if .state_number}}</tr>
 				<th>State Number</th>
-				<td>{{.inv.state_number}}</td>
+				<td>{{.state_number}}</td>
 			</tr>
 			{{- end}}
-			{{- if .inv.box_number}}
+			{{- if .box_number}}
 			<tr>
 				<th>Box Number</th>
-				<td>{{.inv.box_number}}</td>
+				<td>{{.box_number}}</td>
 			</tr>
 			{{- end}}
-			{{- if .inv.set_number}}
+			{{- if .set_number}}
 			<tr>
 				<th>Set Number</th>
-				<td>{{.inv.set_number}}</td>
+				<td>{{.set_number}}</td>
 			</tr>
 			{{- end}}
-			{{- if .inv.split_number}}
+			{{- if .split_number}}
 			<tr>
 				<th>Split Number</th>
-				<td>{{.inv.split_number}}</td>
+				<td>{{.split_number}}</td>
 			</tr>
 			{{- end}}
-			{{- if .inv.slide_number}}
+			{{- if .slide_number}}
 			<tr>
 				<th>Slide Number</th>
-				<td>{{.inv.slide_number}}</td>
+				<td>{{.slide_number}}</td>
 			</tr>
 			{{- end}}
-			{{- if .inv.slip_number}}
+			{{- if .slip_number}}
 			<tr>
 				<th>slip_number</th>
-				<td>{{.inv.slip_number}}</td>
+				<td>{{.slip_number}}</td>
 			</tr>
 			{{- end}}
-			{{- if .inv.lab_number}}
+			{{- if .lab_number}}
 			<tr>
 				<th>Lab Number</th>
-				<td>{{.inv.lab_number}}</td>
+				<td>{{.lab_number}}</td>
 			</tr>
 			{{- end}}
-			{{- if .inv.lab_report_id}}
+			{{- if .lab_report_id}}
 			<tr>
 				<th>Lab Report ID</th>
-				<td>{{.inv.lab_report_id}}</td>
+				<td>{{.lab_report_id}}</td>
 			</tr>
 			{{- end}}
-			{{- if .inv.core_number}}
+			{{- if .core_number}}
 			<tr>
 				<th>Core Number</th>
-				<td>{{.inv.core_number}}</td>
+				<td>{{.core_number}}</td>
 			</tr>
 			{{- end}}
-			{{- if .inv.core_diameter}}
+			{{- if .core_diameter}}
 			<tr>
 				<th>Core Diameter</th>
-				<td>{{.inv.core_diameter}} {{.inv.unit}}
-					{{- if .inv.core_diameter_name}} ({{.inv.core_diameter_name}}){{- end}}</td>
+				<td>{{.core_diameter}} {{.unit}}
+					{{- if .core_diameter_name}} ({{.core_diameter_name}}){{- end}}</td>
 			</tr>
 			{{- end}}
-			{{- if .inv.interval_top}}
+			{{- if .interval_top}}
 			<tr>
 				<th>Interval Top</th>
-				<td>{{.inv.interval_top}} {{.inv.interval_unit}}</td>
+				<td>{{.interval_top}} {{.interval_unit}}</td>
 			</tr>
 			{{- end}}
-			{{- if .inv.interval_bottom}}
+			{{- if .interval_bottom}}
 			<tr>
 				<th>Interval Bottom</th>
-				<td>{{.inv.interval_bottom}} {{.inv.interval_unit}}</td>
+				<td>{{.interval_bottom}} {{.interval_unit}}</td>
 			</tr>
 			{{- end}}
-			{{- if .inv.description}}
+			{{- if .description}}
 			<tr>
 				<th>Description</th>
-				<td>{{.inv.description}}</td>
+				<td>{{.description}}</td>
 			</tr>
 			{{- end}}
-			{{- if .inv.remark}}
+			{{- if .remark}}
 			<tr>
 				<th>Remark</th>
-				<td>{{.inv.remark}}</td>
+				<td>{{.remark}}</td>
 			</tr>
 			{{- end}}
-			{{- if .user}}
-			{{- if .inv.tray}}
+			{{- if ._user}}
+			{{- if .tray}}
 			<tr>
 				<th>Tray</th>
-				<td>{{.inv.tray}}</td>
+				<td>{{.tray}}</td>
 			</tr>
 			{{- end}}
 			{{- end}}
-			{{- if .inv.weight}}
+			{{- if .weight}}
 			<tr>
 				<th>Weight</th>
-				<td>{{.inv.weight}} {{.inv.weight_unit}}</td>
+				<td>{{.weight}} {{.weight_unit}}</td>
 			</tr>
 			{{- end}}
-			{{- if .inv.sample_frequency}}
+			{{- if .sample_frequency}}
 			<tr>
 				<th>Sample Frequency</th>
-				<td>{{.inv.sample_frequency}}</td>
+				<td>{{.sample_frequency}}</td>
 			</tr>
 			{{- end}}
-			{{- if .inv.recovery}}
+			{{- if .recovery}}
 			<tr>
 				<th>Recovery</th>
-				<td>{{.inv.recovery}}</td>
+				<td>{{.recovery}}</td>
 			</tr>
 			{{- end}}
-			{{- if .inv.radiation_msvh}}
+			{{- if .radiation_msvh}}
 			<tr>
 				<th>Radiation</th>
-				<td>{{.inv.radiation_msvh}}</td>
+				<td>{{.radiation_msvh}}</td>
 			</tr>
 			{{- end}}
-			{{- if .inv.keywords}}
+			{{- if .keywords}}
 			<tr>
 				<th>Keywords</th>
-				<td><a href="../search#keyword={{.inv.keywords}}">{{.inv.keywords}}</a></td>
+				<td><a href="../search#keyword={{.keywords}}">{{.keywords}}</a></td>
 			</tr>
 			{{- end}}
-			{{- if .user}}
-			{{- if .inv.received_date}}
+			{{- if ._user}}
+			{{- if .received_date}}
 			<tr>
 				<th>Received Date</th>
-				<td>{{formattime "1/2/2006" .inv.received_date}}</td>
+				<td>{{formattime "1/2/2006" .received_date}}</td>
 			</tr>
 			{{- end}}
-			{{- if .inv.entered_date}}
+			{{- if .entered_date}}
 			<tr>
 				<th>Entered Date</th>
-				<td>{{formattime "1/2/2006" .inv.entered_date}}</td>
+				<td>{{formattime "1/2/2006" .entered_date}}</td>
 			</tr>
 			{{- end}}
-			{{- if .inv.modified_user}}
+			{{- if .modified_user}}
 			<tr>
 				<th>Last Modified By</th>
-				<td>{{.inv.modified_user}}</td>
+				<td>{{.modified_user}}</td>
 			</tr>
 			{{- end}}
-			{{- if .inv.modified_date}}
+			{{- if .modified_date}}
 			<tr>
 				<th>Modified Date</th>
-				<td>{{formattime "1/2/2006" .inv.modified_date}}</td>
+				<td>{{formattime "1/2/2006" .modified_date}}</td>
 			</tr>
 			{{- end}}
-			{{- if .inv.can_publish}}
+			{{- if .can_publish}}
 			<tr>
 				<th>Publish</th>
 				<td>Yes</td>
 			</tr>
 			{{- end}}
-			{{- if not .inv.can_publish }}
+			{{- if not .can_publish }}
 			<tr>
 				<th>Publish</th>
 				<td>No</td>
 			</tr>
 			{{- end }}
-			{{- if .inv.active}}
+			{{- if .active}}
 			<tr>
 				<th>Active</th>
 				<td>Yes</td>
 			</tr>
 			{{- end}}
-			{{- if not .inv.active }}
+			{{- if not .active }}
 			<tr>
 				<th>Active</th>
 				<td>No</td>
@@ -240,7 +240,7 @@
 	</table>
 </fieldset>
 
-{{- if .inv.geojson}}
+{{- if .geojson}}
 
 <fieldset class="fs-map">
 	<legend>Geospatial</legend>
@@ -253,18 +253,18 @@
 		<div id="popup-content" class="ol-popup-content"></div>
 	</div>
 	<script>
-		var geojson = {{rawjs .inv.geojson}};
+		var geojson = {{rawjs .geojson}};
 	</script>
 </fieldset>
 <div class="flex-break"></div>
 {{- end}}
 
-{{- if .inv.boreholes}}
+{{- if .boreholes}}
 <fieldset>
 	<legend>Prospect(s)</legend>
 	<table class="tb-fields">
 		<tbody>
-			{{- range .inv.boreholes}}
+			{{- range .boreholes}}
 			{{- if .prospect_name}}
 			<tr>
 				<th>Prospect Name</th>
@@ -274,7 +274,7 @@
 			{{- if .ardf_number}}
 			<tr>
 				<th>Prospect ARDF</th>
-				<td><a href="http://mrdata.usgs.gov/ardf/show.php?labno={{.ardf_numer}}">{{.ardf_number}}</a></td>
+				<td><a href="http://mrdata.usgs.gov/ardf/show.php?labno={{.ardf_number}}">{{.ardf_number}}</a></td>
 			</tr>
 			{{- end}}
 			{{- if .borehole_name}}
@@ -295,12 +295,12 @@
 </fieldset>
 {{- end}}
 
-{{- if .inv.wells}}
+{{- if .wells}}
 <fieldset>
 	<legend>Well(s)</legend>
 	<table class="tb-fields">
 		<tbody>
-			{{- range .inv.wells}}
+			{{- range .wells}}
 			{{- if .is_current}}
 			{{- if .well_name}}
 			<tr>
@@ -348,12 +348,12 @@
 </fieldset>
 {{- end}}
 
-{{- if .inv.shotlines}}
+{{- if .shotlines}}
 <fieldset>
 	<legend>Shotline(s)</legend>
 	<table class="tb-fields">
 		<tbody>
-			{{- range .inv.shotlines}}
+			{{- range .shotlines}}
 			{{- if .name}}
 			<tr>
 				<th>Shotline Name</th>
@@ -387,12 +387,12 @@
 </fieldset>
 {{- end}}
 
-{{- if .inv.outcrops}}
+{{- if .outcrops}}
 <fieldset>
 	<legend>Outcrop(s)</legend>
 	<table class="tb-fields">
 		<tbody>
-			{{- range .inv.outcrops}}
+			{{- range .outcrops}}
 			{{- if .name}}
 			<tr>
 				<th>Outcrop Name</th>
@@ -420,31 +420,31 @@
 </fieldset>
 {{- end}}
 
-{{- if .inv.urls}}
+{{- if .urls}}
 <fieldset class="urls">
 	<legend>URLs</legend>
-	{{- range .inv.urls}}
+	{{- range .urls}}
 	<div style="margin: 5px;"><a href="{{.url}}">{{.description}}</a> ({{.url_type}})</div>
 	{{- end}}
 </fieldset>
 {{- end}}
 
-{{- if .inv.files}}
+{{- if .files}}
 <fieldset class="files">
 	<legend>Files</legend>
-	{{- range .inv.files}}
+	{{- range .files}}
 	<div><a href="../file/{{.file_id}}/{{.file_name}}">{{.file_name}}</a> ({{.file_size}})</div>
 	{{- end}}
 </fieldset>
 {{- end}}
 
-{{- if .user}}
-{{- if .inv.publications}}
+{{- if ._user}}
+{{- if .publications}}
 <fieldset>
 	<legend>Publication(s)</legend>
 	<table class="tb-fields" style="max-width:600px;">
 		<tbody>
-			{{- range .inv.publications}}
+			{{- range .publications}}
 			{{- if .title}}
 			<tr>
 				<th>Title</th>
@@ -497,8 +497,8 @@
 {{- end}}
 {{- end}}
 
-{{- if .user}}
-{{- if .inv.notes}}
+{{- if ._user}}
+{{- if .notes}}
 <fieldset>
 	<legend>Notes</legend>
 	<table class="tb-fields" style="max-width:600px;">
@@ -511,7 +511,7 @@
 			</tr>
 		</thead>
 		<tbody>
-			{{- range .inv.notes}}
+			{{- range .notes}}
 			<tr>
 				<td>{{formattime "1/2/2006" .note_date}}</td>
 				<td>{{.username}}</td>
@@ -526,8 +526,8 @@
 {{- end}}
 
 
-{{- if .user}}
-{{- if .inv.qualities}}
+{{- if ._user}}
+{{- if .qualities}}
 <fieldset>
 	<legend>QA</legend>
 	<table class="tb-fields" style="max-width:600px;">
@@ -540,7 +540,7 @@
 			</tr>
 		</thead>
 		<tbody>
-			{{- range .inv.qualities}}
+			{{- range .qualities}}
 			<tr>
 				<td>{{formattime "1/2/2006" .check_date}}</td>
 				<td>{{.username}}</td>
@@ -554,13 +554,13 @@
 {{- end}}
 {{- end}}
 
-{{- if .user}}
-{{- if .inv.containerlog}}
+{{- if ._user}}
+{{- if .containerlog}}
 <fieldset class="inventory_boxes">
 	<legend>Tracking</legend>
 	<table class="tb-fields" style="max-width:600px;">
 		<tbody>
-			{{- range .inv.containerlog}}
+			{{- range .containerlog}}
 			<tr>
 				<td>{{formattime "1/2/2006" .log_date}} <strong>{{.destination}}</strong></td>
 			</tr>
@@ -571,7 +571,7 @@
 {{- end}}
 {{- end}}
 
-{{- if .user}}
+{{- if ._user}}
 <fieldset class="inventory_boxes">
 	<legend>Stash</legend>
 	<button id="stash-link" type="submit">Show Stash</button>
@@ -595,7 +595,7 @@
 						anchor.innerHTML = 'Hide Stash';
 					}
 				};
-				xhr.open('GET', 'http://127.0.0.1:8080/stash/' + {{ .inv.inventory_id }}, true);
+				xhr.open('GET', 'http://127.0.0.1:8080/stash/' + {{ .inventory_id }}, true);
 				xhr.send();
 			} else {
 				anchor.innerHTML = 'Show Stash';

@@ -43,18 +43,15 @@ func (srv *Server) ServeInventory(id int, w http.ResponseWriter, r *http.Request
 	}
 
 	// If can_publish is false, throw a 403
-	if inventory["can_publish"] == false {
+	if user == nil && inventory["can_publish"] == false {
 		http.Error(w, "Access denied.", http.StatusForbidden)
 		return
 	}
 
-	inventory_params := map[string]interface{}{
-		"inv":  inventory,
-		"user": user,
-	}
+	inventory["_user"] = user
 
 	buf := bytes.Buffer{}
-	if err := assets.ExecuteTemplate("tmpl/inventory.html", &buf, inventory_params); err != nil {
+	if err := assets.ExecuteTemplate("tmpl/inventory.html", &buf, inventory); err != nil {
 		http.Error(
 			w, fmt.Sprintf("Parse error: %s", err.Error()),
 			http.StatusInternalServerError,

@@ -2,55 +2,55 @@
 				<legend>Borehole Detail</legend>
 				<table class="tb-fields">
 					<tbody>
-						{{- if .borehole.prospect_id}}
+						{{- if .prospect_id}}
 						<tr>
 							<th>Prospect Name</th>
-							<td><a href="../prospect/{{.borehole.prospect_id}}">{{.borehole.prospect_name}}</a></td>
+							<td><a href="../prospect/{{.prospect_id}}">{{.prospect_name}}</a></td>
 						</tr>
 						{{- end}}
-						{{- if .borehole.alt_prospect_names}}
+						{{- if .alt_prospect_names}}
 						<tr>
 							<th>Alternatives Prospect Name(s)</th>
-							<td>{{.borehole.alt_prospect_names}}</td>
+							<td>{{.alt_prospect_names}}</td>
 						</tr>
 						{{- end}}
-						{{- if .borehole.ardf_number}}
+						{{- if .ardf_number}}
 						<tr>
 							<th>ARDF Number</th>
 							<td>
-								<a href="http://mrdata.usgs.gov/ardf/show-ardf.php?ardf_num={{.borehole.ardf_number}}">
-									{{.borehole.ardf_number}}</a>
+								<a href="http://mrdata.usgs.gov/ardf/show-ardf.php?ardf_num={{.ardf_number}}">
+									{{.ardf_number}}</a>
 							</td>
 						</tr>
 						{{- end}}
-						{{- if .borehole.borehole.name}}
+						{{- if .name}}
 						<tr>
 							<th>Borehole Name</th>
-							<td>{{.borehole.borehole.name}}</td>
+							<td>{{.name}}</td>
 						</tr>
 						{{- end}}
-						{{- if .borehole.alt_names}}
+						{{- if .alt_names}}
 						<tr>
 							<th>Alternatives Borehole Name(s)</th>
-							<td>{{.borehole.alt_names}}</td>
+							<td>{{.alt_names}}</td>
 						</tr>
 						{{- end}}
-						{{- if .borehole.completion_date}}
+						{{- if .completion_date}}
 						<tr>
 							<th>Completion Date</th>
-							<td>{{formattime "1/2/2006" .borehole.completion_date}}</td>
+							<td>{{formattime "1/2/2006" .completion_date}}</td>
 						</tr>
 						{{- end}}
-						{{- if .borehole.measured_depth}}
+						{{- if .measured_depth}}
 						<tr>
 							<th>Measured Depth</th>
-							<td>{{.borehole.measured_depth}} {{.borehole.measured_depth_unit}}</td>
+							<td>{{.measured_depth}} {{.measured_depth_unit}}</td>
 						</tr>
 						{{- end}}
-						{{- if .borehole.elevation}}
+						{{- if .elevation}}
 						<tr>
 							<th>Elevation</th>
-							<td>{{.borehole.elevation}} {{.borehole.elevation_unit}}</td>
+							<td>{{.elevation}} {{.elevation_unit}}</td>
 						</tr>
 						{{- end}}
 						{{- if .geojson}}
@@ -63,27 +63,27 @@
 						{{- end}}
 						{{- end}}
 						{{- end}}
-						{{- if .borehole.quadrangles}}
+						{{- if .quadrangles}}
 						<tr>
 							<th>Quadrangle</th>
-							<td>{{range $i, $qd := .borehole.quadrangles}}{{if ne $i 0}}, {{end}}
+							<td>{{range $i, $qd := .quadrangles}}{{if ne $i 0}}, {{end}}
 								<a href="../search#quadrangle_id={{$qd.quadrangle_id}}">{{$qd.name}}</a>{{end}}</td>
 						</tr>
 						{{- end}}
-						{{- if .borehole.mining_districts}}
+						{{- if .mining_districts}}
 						<tr>
 							<th>Mining District</th>
-							<td>{{range $i, $md := .borehole.mining_districts}}{{if ne $i 0}}, {{end}}
+							<td>{{range $i, $md := .mining_districts}}{{if ne $i 0}}, {{end}}
 								<a href="../search#mining_district_id={{$md.mining_district_id}}">{{$md.name}}</a>{{end}}</td>
 						</tr>
 						{{- end}}
-						{{- if .borehole.is_onshore}}
+						{{- if .is_onshore}}
 						<tr>
 							<th>Onshore</th>
 							<td>Yes</td>
 						</tr>
 						{{- end}}
-						{{- if not .borehole.is_onshore }}
+						{{- if not .is_onshore }}
 						<tr>
 							<th>Onshore</th>
 							<td>No</td>
@@ -92,7 +92,7 @@
 					</tbody>
 				</table>
 			</fieldset>
-			{{- if .borehole.geojson}}
+			{{- if .geojson}}
 
 			<fieldset class="fs-map">
 				<legend>Geospatial</legend>
@@ -105,20 +105,16 @@
 					<div id="popup-content" class="ol-popup-content"></div>
 				</div>
 				<script>
-					var geojson = {
-						{
-							rawjs.borehole.geojson
-						}
-					};
+					var geojson = {{ rawjs .geojson }};
 				</script>
 			</fieldset>
 			<div class="flex-break"></div>
 			{{- end}}
 
-			{{- if .borehole.inventory}}
+			{{- if .inventory}}
 			<fieldset>
 				<legend>Inventory</legend>
-				{{- $prospect_id := .borehole.prospect_id }}
+				{{- $prospect_id := .prospect_id }}
 				<table class="tb-fields">
 					<thead>
 						<tr>
@@ -127,7 +123,7 @@
 						</tr>
 					</thead>
 					<tbody>
-						{{- range .borehole.inventory}}
+						{{- range .inventory}}
 						<tr>
 							<td><a href="../search#prospect_id={{$prospect_id}}{{range .keywords}}&keyword={{.}}{{end}}">
 									{{range $i, $kw := .keywords}}{{if ne $i 0}} &gt; {{end}}{{$kw}}{{end}}</a></td>
@@ -138,15 +134,15 @@
 				</table>
 			</fieldset>
 			{{- end}}
-			{{- if .borehole.files}}
+			{{- if .files}}
 			<fieldset class="files">
 				<legend>Files</legend>
-				{{- range .borehole.files}}
+				{{- range .files}}
 				<div><a href="../file/{{.file_id}}/{{.file_name}}">{{.file_name}}</a> ({{.file_size}})</div>
 				{{- end}}
 			</fieldset>
 			{{- end}}
-			{{- if .borehole.organizations}}
+			{{- if .organizations}}
 			<fieldset>
 				<legend>Organizations</legend>
 				<table class="tb-fields">
@@ -157,7 +153,7 @@
 						</tr>
 					</thead>
 					<tbody>
-						{{- range .borehole.organizations}}
+						{{- range .organizations}}
 						<tr>
 							<td>{{.name}}</td>
 							<td>{{.organization_type}}</td>
@@ -168,10 +164,10 @@
 			</fieldset>
 			{{- end}}
 
-			{{- if .borehole.urls}}
+			{{- if .urls}}
 			<fieldset class="urls">
 				<legend>URLs</legend>
-				{{- range .borehole.urls}}
+				{{- range .urls}}
 				<div style="margin: 5px;"><a href="{{.url}}">{{.description}}</a> ({{.url_type}})</div>
 				{{- end}}
 			</fieldset>
