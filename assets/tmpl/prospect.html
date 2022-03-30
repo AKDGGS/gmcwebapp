@@ -52,7 +52,11 @@
 					<div id="popup-content" class="ol-popup-content"></div>
 				</div>
 				<script>
-					var geojson = {{rawjs .prospect.geojson}};
+					var geojson = {
+						{
+							rawjs.prospect.geojson
+						}
+					};
 				</script>
 			</fieldset>
 			<div class="flex-break"></div>

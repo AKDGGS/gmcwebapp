@@ -5,244 +5,210 @@
 			{{- if .inv.inventory_id }}
 			<tr>
 				<th>ID</th>
-				<td>{{ .inv.inventory_id }}
-				<td>
+				<td>{{ .inv.inventory_id }}</td>
 			</tr>
 			{{- end}}
 			{{- if .user}}
 			{{- if .inv.container_path_cache }}
 			<tr>
 				<th>Location</th>
-				<td>{{ .inv.container_path_cache }}
-				<td>
+				<td>{{ .inv.container_path_cache }}</td>
 			</tr>
 			{{- end }}
 			{{- if .inv.barcode }}
 			<tr>
 				<th>Barcode</th>
-				<td>{{ .inv.barcode }}
-				<td>
+				<td>{{ .inv.barcode }}</td>
 			</tr>
 			{{- end }}
 			{{- if .inv.container_alt_barcode }}
 			<tr>
 				<th>Alt. Barcode</th>
-				<td>{{ .inv.container_alt_barcode }}
-				<td>
+				<td>{{ .inv.container_alt_barcode }}</td>
 			</tr>
 			{{- end }}
 			{{- end}}
 			{{- if .inv.dggs_sample_id }}
 			<tr>
 				<th>DGGS Sample ID</th>
-				<td>{{ .inv.dggs_sample_id }}
-				<td>
+				<td>{{ .inv.dggs_sample_id }}</td>
 			</tr>
 			{{- end }}
 			{{- if .inv.sample_number }}
 			<tr>
 				<th>Sample Number</th>
-				<td>{{ .inv.sample_number }}
-				<td>
+				<td>{{ .inv.sample_number }}</td>
 			</tr>
 			{{- end }}
 			{{- if .inv.sample_number_prefix }}
 			<tr>
 				<th>Sample Number Prefix</th>
-				<td>{{.inv.sample_number_prefix}}
-				<td>
+				<td>{{.inv.sample_number_prefix}}</td>
 			</tr>
 			{{- end}}
 			{{- if .inv.alt_sample_number}}
 			<tr>
 				<th>Alternative Sample Number</th>
-				<td>{{.inv.alt_sample_number}}
-				<td>
+				<td>{{.inv.alt_sample_number}}</td>
 			</tr>
 			{{- end}}
 			{{- if .inv.published_sample_number}}
 			<tr>
 				<th>Published Sample No.</th>
-				<td>{{.inv.published_sample_number}} {{.inv.published_number_has_suffix}}
-				<td>
+				<td>{{.inv.published_sample_number}} {{.inv.published_number_has_suffix}}</td>
 			</tr>
 			{{- end}}
 			{{- if .inv.collection_name}}
 			<tr>
 				<th>Collection</th>
-				<td>{{.inv.collection_name}}
-				<td>
+				<td>{{.inv.collection_name}}</td>
 			</tr>
 			{{- end}}
-			{{- if .inv.state_number}}
-			<tr>
+			{{- if .inv.state_number}}</tr>
 				<th>State Number</th>
-				<td>{{.inv.state_number}}
-				<td>
+				<td>{{.inv.state_number}}</td>
 			</tr>
 			{{- end}}
 			{{- if .inv.box_number}}
 			<tr>
 				<th>Box Number</th>
-				<td>{{.inv.box_number}}
-				<td>
+				<td>{{.inv.box_number}}</td>
 			</tr>
 			{{- end}}
 			{{- if .inv.set_number}}
 			<tr>
 				<th>Set Number</th>
-				<td>{{.inv.set_number}}
-				<td>
+				<td>{{.inv.set_number}}</td>
 			</tr>
 			{{- end}}
 			{{- if .inv.split_number}}
 			<tr>
 				<th>Split Number</th>
-				<td>{{.inv.split_number}}
-				<td>
+				<td>{{.inv.split_number}}</td>
 			</tr>
 			{{- end}}
 			{{- if .inv.slide_number}}
 			<tr>
 				<th>Slide Number</th>
-				<td>{{.inv.slide_number}}
-				<td>
+				<td>{{.inv.slide_number}}</td>
 			</tr>
 			{{- end}}
 			{{- if .inv.slip_number}}
 			<tr>
 				<th>slip_number</th>
-				<td>{{.inv.slip_number}}
-				<td>
+				<td>{{.inv.slip_number}}</td>
 			</tr>
 			{{- end}}
 			{{- if .inv.lab_number}}
 			<tr>
 				<th>Lab Number</th>
-				<td>{{.inv.lab_number}}
-				<td>
+				<td>{{.inv.lab_number}}</td>
 			</tr>
 			{{- end}}
 			{{- if .inv.lab_report_id}}
 			<tr>
 				<th>Lab Report ID</th>
-				<td>{{.inv.lab_report_id}}
-				<td>
+				<td>{{.inv.lab_report_id}}</td>
 			</tr>
 			{{- end}}
 			{{- if .inv.core_number}}
 			<tr>
 				<th>Core Number</th>
-				<td>{{.inv.core_number}}
-				<td>
+				<td>{{.inv.core_number}}</td>
 			</tr>
 			{{- end}}
 			{{- if .inv.core_diameter}}
 			<tr>
 				<th>Core Diameter</th>
 				<td>{{.inv.core_diameter}} {{.inv.unit}}
-					{{- if .inv.core_diameter_name}} ({{.inv.core_diameter_name}}){{- end}}
-				<td>
+					{{- if .inv.core_diameter_name}} ({{.inv.core_diameter_name}}){{- end}}</td>
 			</tr>
 			{{- end}}
 			{{- if .inv.interval_top}}
 			<tr>
 				<th>Interval Top</th>
-				<td>{{.inv.interval_top}} {{.inv.interval_unit}}
-				<td>
+				<td>{{.inv.interval_top}} {{.inv.interval_unit}}</td>
 			</tr>
 			{{- end}}
 			{{- if .inv.interval_bottom}}
 			<tr>
 				<th>Interval Bottom</th>
-				<td>{{.inv.interval_bottom}} {{.inv.interval_unit}}
-				<td>
+				<td>{{.inv.interval_bottom}} {{.inv.interval_unit}}</td>
 			</tr>
 			{{- end}}
 			{{- if .inv.description}}
 			<tr>
 				<th>Description</th>
-				<td>{{.inv.description}}
-				<td>
+				<td>{{.inv.description}}</td>
 			</tr>
 			{{- end}}
 			{{- if .inv.remark}}
 			<tr>
 				<th>Remark</th>
-				<td>{{.inv.remark}}
-				<td>
+				<td>{{.inv.remark}}</td>
 			</tr>
 			{{- end}}
 			{{- if .user}}
 			{{- if .inv.tray}}
 			<tr>
 				<th>Tray</th>
-				<td>{{.inv.tray}}
-				<td>
+				<td>{{.inv.tray}}</td>
 			</tr>
 			{{- end}}
 			{{- end}}
 			{{- if .inv.weight}}
 			<tr>
 				<th>Weight</th>
-				<td>{{.inv.weight}} {{.inv.weight_unit}}
-				<td>
+				<td>{{.inv.weight}} {{.inv.weight_unit}}</td>
 			</tr>
 			{{- end}}
 			{{- if .inv.sample_frequency}}
 			<tr>
 				<th>Sample Frequency</th>
-				<td>{{.inv.sample_frequency}}
-				<td>
+				<td>{{.inv.sample_frequency}}</td>
 			</tr>
 			{{- end}}
 			{{- if .inv.recovery}}
 			<tr>
 				<th>Recovery</th>
-				<td>{{.inv.recovery}}
-				<td>
+				<td>{{.inv.recovery}}</td>
 			</tr>
 			{{- end}}
 			{{- if .inv.radiation_msvh}}
 			<tr>
 				<th>Radiation</th>
-				<td>{{.inv.radiation_msvh}}
-				<td>
+				<td>{{.inv.radiation_msvh}}</td>
 			</tr>
 			{{- end}}
 			{{- if .inv.keywords}}
 			<tr>
 				<th>Keywords</th>
-				<td><a href="../search#keyword={{.inv.keywords}}">{{.inv.keywords}}</a>
+				<td><a href="../search#keyword={{.inv.keywords}}">{{.inv.keywords}}</a></td>
 			</tr>
 			{{- end}}
 			{{- if .user}}
 			{{- if .inv.received_date}}
 			<tr>
 				<th>Received Date</th>
-				<td>{{formattime "1/2/2006" .inv.received_date}}
-				<td>
+				<td>{{formattime "1/2/2006" .inv.received_date}}</td>
 			</tr>
 			{{- end}}
 			{{- if .inv.entered_date}}
 			<tr>
 				<th>Entered Date</th>
-				<td>{{formattime "1/2/2006" .inv.entered_date}}
-				<td>
+				<td>{{formattime "1/2/2006" .inv.entered_date}}</td>
 			</tr>
 			{{- end}}
 			{{- if .inv.modified_user}}
 			<tr>
 				<th>Last Modified By</th>
-				<td>{{.inv.modified_user}}
-				<td>
+				<td>{{.inv.modified_user}}</td>
 			</tr>
 			{{- end}}
 			{{- if .inv.modified_date}}
 			<tr>
 				<th>Modified Date</th>
-				<td>{{formattime "1/2/2006" .inv.modified_date}}
-				<td>
+				<td>{{formattime "1/2/2006" .inv.modified_date}}</td>
 			</tr>
 			{{- end}}
 			{{- if .inv.can_publish}}
@@ -302,20 +268,19 @@
 			{{- if .prospect_name}}
 			<tr>
 				<th>Prospect Name</th>
-				<td><a href="../prospect/{{.prospect_id}}">{{.prospect_name}}</a>
-				<td>
+				<td><a href="../prospect/{{.prospect_id}}">{{.prospect_name}}</a></td>
 			</tr>
 			{{- end}}
 			{{- if .ardf_number}}
 			<tr>
 				<th>Prospect ARDF</th>
-				<td><a href="http://mrdata.usgs.gov/ardf/show.php?labno={{.ardf_numer}}">{{.ardf_number}}</td>
+				<td><a href="http://mrdata.usgs.gov/ardf/show.php?labno={{.ardf_numer}}">{{.ardf_number}}</a></td>
 			</tr>
 			{{- end}}
 			{{- if .borehole_name}}
 			<tr>
 				<th>Borehole Name</th>
-				<td><a href="../borehole/{{.borehole_id}}">{{.borehole_name}}</td>
+				<td><a href="../borehole/{{.borehole_id}}">{{.borehole_name}}</a></td>
 			</tr>
 			{{- end}}
 			{{- if .alt_names}}
@@ -340,8 +305,7 @@
 			{{- if .well_name}}
 			<tr>
 				<th>Well Name</th>
-				<td><a href="../well/{{.well_id}}">{{.well_name}}</a>
-				<td>
+				<td><a href="../well/{{.well_id}}">{{.well_name}}</a></td>
 			</tr>
 			{{- end}}
 			{{- if .alt_names}}
@@ -393,8 +357,7 @@
 			{{- if .name}}
 			<tr>
 				<th>Shotline Name</th>
-				<td><a href="../shotline/{{.shotline_id}}">{{.name}}</a>
-				<td>
+				<td><a href="../shotline/{{.shotline_id}}">{{.name}}</a></td>
 			</tr>
 			{{- end}}
 			{{- if .alt_names}}
@@ -433,8 +396,7 @@
 			{{- if .name}}
 			<tr>
 				<th>Outcrop Name</th>
-				<td><a href="../outcrop/{{.outcrop_id}}">{{.name}}</a>
-				<td>
+				<td><a href="../outcrop/{{.outcrop_id}}">{{.name}}</a></td>
 			</tr>
 			{{- end}}
 			{{- if .outcrop_number}}
@@ -486,50 +448,43 @@
 			{{- if .title}}
 			<tr>
 				<th>Title</th>
-				<td>{{ .title }}
-				<td>
+				<td>{{ .title }}</td>
 			</tr>
 			{{- end}}
 			{{- if .year}}
 			<tr>
 				<th>Year</th>
-				<td>{{ .year }}
-				<td>
+				<td>{{ .year }}</td>
 			</tr>
 			{{- end}}
 			{{- if .publication_type}}
 			<tr>
 				<th>Type</th>
-				<td>{{ .publication_type }}
-				<td>
+				<td>{{ .publication_type }}</td>
 			</tr>
 			{{- end}}
 			{{- if .publication_number}}
 			<tr>
 				<th>Number</th>
-				<td>{{ .publication_number }}
-				<td>
+				<td>{{ .publication_number }}</td>
 			</tr>
 			{{- end}}
 			{{- if .publication_series}}
 			<tr>
 				<th>Series</th>
-				<td>{{ .publication_series }}
-				<td>
+				<td>{{ .publication_series }}</td>
 			</tr>
 			{{- end}}
 			{{- if .description}}
 			<tr>
 				<th>Description</th>
-				<td>{{ .description }}
-				<td>
+				<td>{{ .description }}</td>
 			</tr>
 			{{- end}}
 			{{- if .can_publish}}
 			<tr>
 				<th>Publish</th>
-				<td>{{- if .can_publish}} yes {{- end}} {{- if not .can_publish}} no {{- end}}
-				<td>
+				<td>{{- if .can_publish}} yes {{- end}} {{- if not .can_publish}} no {{- end}}</td>
 			</tr>
 			{{- end}}
 			<tr class="horizontal-spacer">
@@ -549,10 +504,10 @@
 	<table class="tb-fields" style="max-width:600px;">
 		<thead>
 			<tr>
-				<th style="padding-right: 10px">Date</th>
-				<th style="padding-right: 10px">User</th>
-				<th style="padding-right: 10px">Public</th>
-				<th style="padding-right: 10px;">Note</th>
+				<th style="padding-right: 50px">Date</th>
+				<th style="padding-right: 50px">User</th>
+				<th style="padding-right: 50px">Public</th>
+				<th>Note</th>
 			</tr>
 		</thead>
 		<tbody>
@@ -570,37 +525,28 @@
 {{- end}}
 {{- end}}
 
+
 {{- if .user}}
 {{- if .inv.qualities}}
 <fieldset>
 	<legend>QA</legend>
 	<table class="tb-fields" style="max-width:600px;">
+		<thead>
+			<tr>
+				<th style="padding-right: 50px">Date</th>
+				<th style="padding-right: 50px">User</th>
+				<th style="padding-right: 50px">Issue(s)</th>
+				<th>Remark</th>
+			</tr>
+		</thead>
 		<tbody>
 			{{- range .inv.qualities}}
-			{{- if .check_date}}
 			<tr>
-				<th>Date</th>
 				<td>{{formattime "1/2/2006" .check_date}}</td>
-			</tr>
-			{{- end}}
-			{{- if .username}}
-			<tr>
-				<th>User</th>
 				<td>{{.username}}</td>
-			</tr>
-			{{- end}}
-			{{- if .issues}}
-			<tr>
-				<th>Issues</th>
 				<td>{{.issues}}</td>
-			</tr>
-			{{- end}}
-			{{- if .remark}}
-			<tr>
-				<th>Remark</th>
 				<td>{{.remark}}</td>
 			</tr>
-			{{- end}}
 		</tbody>
 		{{- end}}
 	</table>
@@ -610,7 +556,7 @@
 
 {{- if .user}}
 {{- if .inv.containerlog}}
-<fieldset class = "inventory_boxes">
+<fieldset class="inventory_boxes">
 	<legend>Tracking</legend>
 	<table class="tb-fields" style="max-width:600px;">
 		<tbody>
@@ -626,41 +572,41 @@
 {{- end}}
 
 {{- if .user}}
-<fieldset class = "inventory_boxes">
+<fieldset class="inventory_boxes">
 	<legend>Stash</legend>
 	<button id="stash-link" type="submit">Show Stash</button>
-		<div id="stash-dd"></div>
+	<div id="stash-dd"></div>
 </fieldset>
 {{- end}}
 
 <script src="../js/utility.js"></script>
 <script type="text/javascript">
 	var stash = document.getElementById('stash-link');
-		if(stash !== null){
-			stash.onclick = function(evt){
-				var anchor = this;
-				if(this.innerHTML === 'Show Stash'){
-					var xhr = (window.ActiveXObject ? new ActiveXObject('Microsoft.XMLHTTP') : new XMLHttpRequest());
-					xhr.onreadystatechange = function(){
-						if(xhr.readyState === 4 && xhr.status === 200){
-							var json = JSON.parse(xhr.responseText);
-							var el = JSONToElement(json.stash);
-							document.getElementById('stash-dd').appendChild(el);
-							anchor.innerHTML = 'Hide Stash';
-						}
-					};
-					xhr.open('GET', 'http://127.0.0.1:8080/stash/'+ {{.inv.inventory_id}}, true);
-					xhr.send();
-				} else {
-					anchor.innerHTML = 'Show Stash';
-					var dd = document.getElementById('stash-dd');
-					if(dd !== null){
-						while(dd.lastChild) dd.removeChild(dd.lastChild);
+	if (stash !== null) {
+		stash.onclick = function(evt) {
+			var anchor = this;
+			if (this.innerHTML === 'Show Stash') {
+				var xhr = (window.ActiveXObject ? new ActiveXObject('Microsoft.XMLHTTP') : new XMLHttpRequest());
+				xhr.onreadystatechange = function() {
+					if (xhr.readyState === 4 && xhr.status === 200) {
+						var json = JSON.parse(xhr.responseText);
+						var el = JSONToElement(json.stash);
+						document.getElementById('stash-dd').appendChild(el);
+						anchor.innerHTML = 'Hide Stash';
 					}
+				};
+				xhr.open('GET', 'http://127.0.0.1:8080/stash/' + {{ .inv.inventory_id }}, true);
+				xhr.send();
+			} else {
+				anchor.innerHTML = 'Show Stash';
+				var dd = document.getElementById('stash-dd');
+				if (dd !== null) {
+					while (dd.lastChild) dd.removeChild(dd.lastChild);
 				}
-				var e = evt === undefined ? window.event : evt;
-				if('preventDefault' in e) e.preventDefault();
-				return false;
-			};
-		}
+			}
+			var e = evt === undefined ? window.event : evt;
+			if ('preventDefault' in e) e.preventDefault();
+			return false;
+		};
+	}
 </script>

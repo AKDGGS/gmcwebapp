@@ -20,7 +20,7 @@
 							<td>
 								<a href="http://mrdata.usgs.gov/ardf/show-ardf.php?ardf_num={{.borehole.ardf_number}}">
 									{{.borehole.ardf_number}}</a>
-								</td>
+							</td>
 						</tr>
 						{{- end}}
 						{{- if .borehole.borehole.name}}
@@ -54,14 +54,14 @@
 						</tr>
 						{{- end}}
 						{{- if .geojson}}
-							{{range $i, $f := .geojson.features}}{{if ne $i 0}}, {{end}}
-							{{if (eq $f.geometry.type "Point" )}}
-									<tr>
-										<th>Lon/Lat</th>
-										<td> {{$f.geometry.coordinates}}</td>
-									</tr>
-								{{- end}}
-							{{- end}}
+						{{range $i, $f := .geojson.features}}{{if ne $i 0}}, {{end}}
+						{{if (eq $f.geometry.type "Point" )}}
+						<tr>
+							<th>Lon/Lat</th>
+							<td> {{$f.geometry.coordinates}}</td>
+						</tr>
+						{{- end}}
+						{{- end}}
 						{{- end}}
 						{{- if .borehole.quadrangles}}
 						<tr>
@@ -105,7 +105,11 @@
 					<div id="popup-content" class="ol-popup-content"></div>
 				</div>
 				<script>
-					var geojson = {{rawjs .borehole.geojson}};
+					var geojson = {
+						{
+							rawjs.borehole.geojson
+						}
+					};
 				</script>
 			</fieldset>
 			<div class="flex-break"></div>
@@ -126,7 +130,7 @@
 						{{- range .borehole.inventory}}
 						<tr>
 							<td><a href="../search#prospect_id={{$prospect_id}}{{range .keywords}}&keyword={{.}}{{end}}">
-								{{range $i, $kw := .keywords}}{{if ne $i 0}} &gt; {{end}}{{$kw}}{{end}}</a></td>
+									{{range $i, $kw := .keywords}}{{if ne $i 0}} &gt; {{end}}{{$kw}}{{end}}</a></td>
 							<td>{{.count}}</td>
 						</tr>
 						{{- end}}

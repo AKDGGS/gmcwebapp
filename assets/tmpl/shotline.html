@@ -31,7 +31,7 @@
 							<th>Shotpoints</th>
 							<td>{{ .shotline.shotpoint_min }}
 								{{- if .shotline.shotpoint_max }}
-									- {{.shotline.shotpoint_max }}
+								- {{.shotline.shotpoint_max }}
 								{{- end }}
 							</td>
 						</tr>
@@ -58,7 +58,11 @@
 					<div id="popup-content" class="ol-popup-content"></div>
 				</div>
 				<script>
-					var geojson = {{rawjs .shotline.geojson}};
+					var geojson = {
+						{
+							rawjs.shotline.geojson
+						}
+					};
 				</script>
 			</fieldset>
 			<div class="flex-break"></div>

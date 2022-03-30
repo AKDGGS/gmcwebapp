@@ -33,13 +33,13 @@
 						</tr>
 						{{- end }}
 						{{- if .outcrop.geojson}}
-									<tr>
-										<th>Lon/Lat</th>
-										{{- range $i, $f := .outcrop.geojson.features}}{{- if ne $i 0}}, {{end}}{{- if (eq $f.geometry.type "Point" )}}
-										<td>{{$f.geometry.coordinates}}</td>
-										{{- end}}
-									</tr>
+						<tr>
+							<th>Lon/Lat</th>
+							{{- range $i, $f := .outcrop.geojson.features}}{{- if ne $i 0}}, {{end}}{{- if (eq $f.geometry.type "Point" )}}
+							<td>{{$f.geometry.coordinates}}</td>
 							{{- end}}
+						</tr>
+						{{- end}}
 						{{- end}}
 						{{- if .outcrop.quadrangles}}
 						<tr>
@@ -52,18 +52,22 @@
 			</fieldset>
 			{{- if .outcrop.geojson}}
 
-			<fieldset class="fs-map" >
+			<fieldset class="fs-map">
 				<legend>Geospatial</legend>
 				<div id="map" style=" height:500px width: 500px"></div>
-				<div id="popup" class="ol-popup" >
+				<div id="popup" class="ol-popup">
 					<div class="ol-popup-top">
 						<div class="ol-popup-top-title">Outcrop(s)</div>
 						<div id="popup-closer">&#215;</div>
 					</div>
-					<div id="popup-content" class="ol-popup-content" ></div>
+					<div id="popup-content" class="ol-popup-content"></div>
 				</div>
 				<script>
-					var geojson = {{rawjs .outcrop.geojson}};
+					var geojson = {
+						{
+							rawjs.outcrop.geojson
+						}
+					};
 				</script>
 			</fieldset>
 			<div class="flex-break"></div>
