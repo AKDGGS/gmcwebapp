@@ -19,6 +19,8 @@ const (
 	BOREHOLE
 	WELL
 	SHOTLINE
+	OUTCROP
+	QUALITY
 )
 
 // Option for everything

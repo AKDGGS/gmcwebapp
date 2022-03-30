@@ -1,7 +1,9 @@
 package pg
 
 import (
+	"fmt"
 	dbf "gmc/db/flag"
+	"strings"
 
 	"github.com/jackc/pgtype"
 )
@@ -52,15 +54,14 @@ func (pg *Postgres) GetInventory(id int, flags int) (map[string]interface{}, err
 		inventory["weight"] = &ift
 	}
 
-	// kw, ok := inventory["keywords"].(pgtype.TextArray)
-	// if !ok {
-	// 	delete(inventory, "keywords")
-	// } else {
-	// 	var kws []string
-	// 	kw.AssignTo(&kws)
-	// 	s := strings.Join(kws[:], ", ")
-	// 	inventory["keywords"] = &s
-	// }
+	if inventory["keywords"] != nil {
+		kw, _ := inventory["keywords"]
+		s := strings.Replace(fmt.Sprintf("%v", kw), " ", ", ", -1)
+		if len(s) > 0 && s[len(s)-1] == ']' && s[0] == '[' {
+			s = s[1 : len(s)-1]
+		}
+		inventory["keywords"] = &s
+	}
 
 	if (flags & dbf.FILES) != 0 {
 		files, err := pg.queryRows("pg/file_byinventoryid.sql", id)
@@ -128,57 +129,55 @@ func (pg *Postgres) GetInventory(id int, flags int) (map[string]interface{}, err
 			return nil, err
 		}
 		if shotlines != nil {
+			for _, m := range shotlines {
+				for k, v := range m {
+					if k == "shotpoint_number" {
+						sp, ok := v.(pgtype.Numeric)
+						fmt.Println(sp, ok)
+						var ift float64
+						sp.AssignTo(&ift)
+						m["shotpoint_number"] = &ift
+					}
+				}
+			}
 			inventory["shotlines"] = shotlines
 		}
 	}
 
-	// 	//Boreholes
-	// 	bores, err := pg.queryRows("pg/borehole_byinventoryid.sql", id)
-	// 	if err != nil {
-	// 		return nil, err
-	// 	}
-	// 	if bores != nil {
-	// 		related["bores"] = bores
-	// 	}
-	//
-	// 	//Wells
-	// 	wells, err := pg.queryRows("pg/well_byinventoryid.sql", id)
-	// 	if err != nil {
-	// 		return nil, err
-	// 	}
-	//
-	// 	if wells != nil {
-	// 		for k := range wells {
-	// 			well_id := wells[k]["well_id"]
-	// 			operators, errOrg := pg.queryRows("pg/organization_bywellid.sql", well_id)
-	// 			wells[k]["operators"] = operators
-	// 			if errOrg != nil {
-	// 				return nil, errOrg
-	// 			}
-	// 		}
-	// 		related["wells"] = wells
-	// 	}
-	//
-	// 	//Shotline
-	// 	shotlines, err := pg.queryRows("pg/shotline_byinventoryid.sql", id)
-	// 	if err != nil {
-	// 		return nil, err
-	// 	}
-	// 	for k := range shotlines {
-	// 		sp, ok := shotlines[k]["shotpoint_number"].(pgtype.Numeric)
-	// 		if !ok {
-	// 			delete(shotlines[k], "shotpoint_number")
-	// 		} else {
-	// 			var isp float64
-	// 			sp.AssignTo(&isp)
-	// 			shotlines[k]["shotpoint_number"] = &isp
-	// 		}
-	// 	}
-	// 	if shotlines != nil {
-	// 		related["shotlines"] = shotlines
-	// 	}
-	// 	inventory["related"] = related
-	// }
-	// fmt.Println(inventory)
+	if (flags & dbf.OUTCROP) != 0 {
+		outcrops, err := pg.queryRows("pg/outcrop_byinventoryid.sql", id)
+		if err != nil {
+			return nil, err
+		}
+		if outcrops != nil {
+			inventory["outcrops"] = outcrops
+		}
+	}
+
+	if (flags & dbf.QUALITY) != 0 {
+		qualities, err := pg.queryRows("pg/quality_byinventoryid.sql", id)
+		if err != nil {
+			return nil, err
+		}
+		if qualities != nil {
+			var issuesStr *string
+			for _, m := range qualities {
+				for k, v := range m {
+					if k == "issues" {
+						s := strings.Replace(fmt.Sprintf("%v", v), " ", ", ", -1)
+						s = strings.Replace(s, "_", " ", -1)
+						if len(s) > 0 && s[len(s)-1] == ']' && s[0] == '[' {
+							s = s[1 : len(s)-1]
+						}
+						issuesStr = &s
+						if issuesStr != nil {
+							m["issues"] = *issuesStr
+						}
+					}
+				}
+			}
+			inventory["qualities"] = qualities
+		}
+	}
 	return inventory, nil
 }
