@@ -18,6 +18,7 @@ const (
 	PUBLICATION
 	BOREHOLE
 	WELL
+	SHOTLINE
 )
 
 // Option for everything

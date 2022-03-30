@@ -122,6 +122,16 @@ func (pg *Postgres) GetInventory(id int, flags int) (map[string]interface{}, err
 		}
 	}
 
+	if (flags & dbf.SHOTLINE) != 0 {
+		shotlines, err := pg.queryRows("pg/shotline_byinventoryid.sql", id)
+		if err != nil {
+			return nil, err
+		}
+		if shotlines != nil {
+			inventory["shotlines"] = shotlines
+		}
+	}
+
 	// 	//Boreholes
 	// 	bores, err := pg.queryRows("pg/borehole_byinventoryid.sql", id)
 	// 	if err != nil {

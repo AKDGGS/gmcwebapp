@@ -490,7 +490,6 @@
 			</fieldset>
 			{{- end}}
 
-
 			{{- if .inv.wells}}
 			<fieldset>
 				<legend>Well(s)</legend>
@@ -538,6 +537,46 @@
 							<td></td>
 						</tr>
 					{{- end}}
+					{{- end}}
+					</tbody>
+				</table>
+			</fieldset>
+			{{- end}}
+
+
+			{{- if .inv.shotlines}}
+			<fieldset>
+				<legend>Shotline(s)</legend>
+				<table class="tb-fields">
+					<tbody>
+					{{- range .inv.shotlines}}
+						{{- if .name}}
+							<tr>
+								<th>Shotline Name</th>
+								<td><a href="../well/${well_id}">{{.name}}</a><td>
+							</tr>
+						{{- end}}
+						{{- if .alt_names}}
+							<tr>
+							<th>Shotline Alt. Name</th>
+							<td>{{.alt_names}}</td>
+							</tr>
+						{{- end}}
+						{{- if .year}}
+						<tr>
+							<th>Shotline Year</th>
+							<td>{{.year}}</td>
+						</tr>
+						{{- end}}
+						{{- if .shotpoint_number}}
+						<tr>
+							<th>Shotpoint</th>
+							<td>{{.shotpoint_number}}</td>
+						</tr>
+						{{- end}}
+						<tr class="horizontal-spacer">
+							<td></td>
+						</tr>
 					{{- end}}
 					</tbody>
 				</table>
@@ -652,82 +691,5 @@
 						<tr class="spacer"></tr>
 					</tbody>
 				</table>
-			</fieldset>
-			{{- end}} -->
-
-
-
-
-
-
-
-
-
-
-
-
-			<!-- {{- if .inv.related}}
-			<fieldset>
-				<legend>Related</legend>
-				{{- if .inv.related.pubs}}
-				<table class="tb-fields">
-					<thead>
-						<tr>
-							<th>Publication(s)</th>
-							<tr>
-								<th style="padding-right: 10px">Title</th>
-								<th style="padding-right: 10px">Year</th>
-								<th style="padding-right: 10px">Type</th>
-								<th style="padding-right: 10px">Number</th>
-								<th style="padding-right: 10px">Series</th>
-								<th style="padding-right: 10px">Description</th>
-								<th style="padding-right: 10px">Publish</th>
-							</tr>
-						</tr>
-					</thead>
-					<tbody>
-						{{- range .inv.related.pubs}}
-						<tr>
-							<td>{{.title}}</td>
-							<td>{{.year}}</td>
-							<td>{{.publication_type}}</td>
-							<td>{{.publication_number}}</td>
-							<td>{{.publication_series}}</td>
-							<td>{{.description}}</td>
-							<td>{{- if .can_publish}} yes {{- end}} {{- if not .can_publish}} no {{- end}}</td>
-						</tr>
-						<tr class="spacer"></tr>
-					</tbody>
-					{{- end}}
-				</table>
-				{{- end}}
-
-				{{- if .inv.related.bores}}
-				<table class="tb-fields">
-					<thead>
-						<tr>
-							<th>Prospect(s)</th>
-							<tr>
-								<th style="padding-right: 10px">Prospect Name</th>
-								<th style="padding-right: 10px">Prospect ARDF</th>
-								<th style="padding-right: 10px">Borehole Name</th>
-								<th style="padding-right: 10px">Borehole Alt. Name(s)</th>
-							</tr>
-						</tr>
-					</thead>
-					<tbody>
-						{{- range .inv.related.bores}}
-						<tr>
-							<td><a href="../prospect/${borehole.prospect_id}">{{.prospect_name}}</a></td>
-							<td>{{.ardf_number}}</td>
-							<td><a href="../borehole/${borehole_id}">{{.borehole_name}}</td>
-							<td>{{.alt_names}}</td>
-						</tr>
-						<tr class="spacer"></tr>
-					</tbody>
-					{{- end}}
-				</table>
-				{{- end}}
-
 			</fieldset>
 			{{- end}} -->
