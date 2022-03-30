@@ -118,6 +118,15 @@ func (srv *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 		}
 		srv.ServeInventory(id, w, r)
 
+	case "stash":
+		sid := strings.TrimPrefix(strings.TrimPrefix(path, "stash"), "/")
+		id, err := strconv.Atoi(sid)
+		if err != nil {
+			http.Error(w, "Invalid Inventory ID", http.StatusBadRequest)
+			return
+		}
+		srv.ServeStash(id, w, r)
+
 	default:
 		http.Error(w, "File not found", http.StatusNotFound)
 	}

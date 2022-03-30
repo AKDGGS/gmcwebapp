@@ -133,10 +133,13 @@ func (pg *Postgres) GetInventory(id int, flags int) (map[string]interface{}, err
 				for k, v := range m {
 					if k == "shotpoint_number" {
 						sp, ok := v.(pgtype.Numeric)
-						fmt.Println(sp, ok)
-						var ift float64
-						sp.AssignTo(&ift)
-						m["shotpoint_number"] = &ift
+						if !ok {
+							delete(inventory, "weight")
+						} else {
+							var ift float64
+							sp.AssignTo(&ift)
+							m["shotpoint_number"] = &ift
+						}
 					}
 				}
 			}
@@ -179,5 +182,16 @@ func (pg *Postgres) GetInventory(id int, flags int) (map[string]interface{}, err
 			inventory["qualities"] = qualities
 		}
 	}
+
+	if (flags & dbf.TRACKING) != 0 {
+		containerlog, err := pg.queryRows("pg/containerlog_byinventoryid.sql", id)
+		if err != nil {
+			return nil, err
+		}
+		if containerlog != nil {
+			inventory["containerlog"] = containerlog
+		}
+	}
+
 	return inventory, nil
 }

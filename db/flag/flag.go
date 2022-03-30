@@ -21,6 +21,7 @@ const (
 	SHOTLINE
 	OUTCROP
 	QUALITY
+	TRACKING
 )
 
 // Option for everything

@@ -9,6 +9,10 @@ import (
 	"net/http"
 )
 
+func (srv *Server) Callme(fn, w http.ResponseWriter, r *http.Request) {
+	fmt.Fprintln(w, "You called me!")
+}
+
 func (srv *Server) ServeInventory(id int, w http.ResponseWriter, r *http.Request) {
 	user, err := srv.Auths.CheckRequest(w, r)
 	if err != nil {

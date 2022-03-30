@@ -27,6 +27,13 @@ legend { padding: 0 8px; }
 	height: 1em;
 }
 
+#stash-dd table { border-collapse: collapse; font-size: 12px; font-family: Tahoma, Geneva, sans-serif; }
+#stash-dd table th { text-align: left; }
+#stash-dd table th, #stash-dd table td { border: 1px solid #bbb; padding: 4px 8px; }
+#stash-dd table tr:nth-child(odd){ background-color: #eee; }
+
+
+
 .ol-mouse-position:empty { display: none; }
 .ol-mouse-position {
 	top: 8px; right: 8px;
