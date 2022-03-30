@@ -277,6 +277,11 @@
 			{{- end}}
 		</tbody>
 	</table>
+
+	{{- if .user}}
+	<button id="stash-link" type="submit">Show Stash</button>
+	<div id="stash-dd"></div>
+	{{- end}}
 </fieldset>
 
 {{- if .user}}
@@ -612,20 +617,35 @@
 {{- end}}
 {{- end}}
 
-<button id="callGo" type="submit">Call Go Code</button>
-<div id="response"></div>
-
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+<script src="../js/utility.js"></script>
 <script type="text/javascript">
-	$(document).ready(function() {
-		$("#callGo").on('click', function() {
-			$.ajax({
-				url: "http://127.0.0.1:8080/stash/1",
-				method: "GET",
-				success: function(data) {
-					$("#response").html(data);
-				},
-			});
-		});
-	});
+	var stash = document.getElementById('stash-link');
+		if(stash !== null){
+			stash.onclick = function(evt){
+				var anchor = this;
+				if(this.innerHTML === 'Show Stash'){
+					var xhr = (window.ActiveXObject ? new ActiveXObject('Microsoft.XMLHTTP') : new XMLHttpRequest());
+					xhr.onreadystatechange = function(){
+						if(xhr.readyState === 4 && xhr.status === 201){
+							var json = JSON.parse(xhr.responseText);
+							var el = JSONToElement(json.stash);
+							document.getElementById('stash-dd').appendChild(el);
+							anchor.innerHTML = 'Hide Stash';
+						}
+					};
+					xhr.open('GET', 'http://127.0.0.1:8080/stash/'+ {{.inv.inventory_id}}, true);
+					xhr.send();
+				} else {
+					anchor.innerHTML = 'Show Stash';
+					var dd = document.getElementById('stash-dd');
+					if(dd !== null){
+						while(dd.lastChild) dd.removeChild(dd.lastChild);
+					}
+				}
+
+				var e = evt === undefined ? window.event : evt;
+				if('preventDefault' in e) e.preventDefault();
+				return false;
+			};
+		}
 </script>

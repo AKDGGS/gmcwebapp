@@ -1,10 +1,10 @@
 package web
 
 import (
-	"bytes"
+	"encoding/json"
 	"fmt"
-	"gmc/assets"
 	dbf "gmc/db/flag"
+	"log"
 	"net/http"
 )
 
@@ -37,45 +37,14 @@ func (srv *Server) ServeStash(id int, w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	stash_params := map[string]interface{}{
-		"stash": stash,
-		"user":  user,
+	w.WriteHeader(http.StatusCreated)
+	w.Header().Set("Content-Type", "application/json")
+	resp := make(map[string]string)
+	resp["message"] = "Status Created"
+	jsonResp, err := json.Marshal(stash)
+	if err != nil {
+		log.Fatalf("Error happened in JSON marshal. Err: %s", err)
 	}
 
-	buf := bytes.Buffer{}
-	if err := assets.ExecuteTemplate("tmpl/stash.html", &buf, stash_params); err != nil {
-		http.Error(
-			w, fmt.Sprintf("Parse error: %s", err.Error()),
-			http.StatusInternalServerError,
-		)
-		return
-	}
-
-	// params := map[string]interface{}{
-	// 	"title":   "Borehole Detail",
-	// 	"content": template.HTML(buf.String()),
-	// 	"stylesheets": []string{
-	// 		"ol/ol.css", "ol/ol-layerswitcher.min.css",
-	// 		"css/view.css",
-	// 	},
-	// 	"scripts": []string{
-	// 		"ol/ol.js", "ol/ol-layerswitcher.min.js",
-	// 		"js/mustache.js", "js/view.js",
-	// 	},
-	// 	"redirect": fmt.Sprintf("borehole/%d", id),
-	// 	"user":     user,
-	// }
-	//
-	// tbuf := bytes.Buffer{}
-	// if err := assets.ExecuteTemplate("tmpl/template.html", &tbuf, params); err != nil {
-	// 	http.Error(
-	// 		w, fmt.Sprintf("Parse error: %s", err.Error()),
-	// 		http.StatusInternalServerError,
-	// 	)
-	// 	return
-	// }
-
-	w.Header().Set("Content-Length", fmt.Sprintf("%d", buf.Len()))
-	w.Header().Set("Content-Type", "text/html; charset=utf-8")
-	w.Write(buf.Bytes())
+	w.Write(jsonResp)
 }
