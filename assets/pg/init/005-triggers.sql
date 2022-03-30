@@ -1,8 +1,10 @@
--- Create function to populate path cache
-CREATE OR REPLACE FUNCTION container_path_cache_fn()
+-- If the container parent_id changed, update the path_cache
+CREATE OR REPLACE FUNCTION container_parent_path_cache_fn()
 RETURNS TRIGGER AS $$
 BEGIN
-	IF NEW.parent_container_id IS NOT NULL THEN
+	IF NEW.parent_container_id IS NULL THEN
+		NEW.path_cache := NEW.name;
+	ELSIF NEW.parent_container_id <> OLD.parent_container_id THEN
 		NEW.path_cache := (
 			WITH RECURSIVE t AS ((
 				SELECT 0 AS depth, c.name, c.container_id,
@@ -20,18 +22,44 @@ BEGIN
 			FROM t
 			GROUP BY container_id
 		) || '/' || NEW.name;
-	ELSE
-		NEW.path_cache := NEW.name;
 	END IF;
 	RETURN NEW;
 END; $$ LANGUAGE 'plpgsql';
 
--- Set trigger to populate path cache
-DROP TRIGGER IF EXISTS container_path_cache_tr ON container;
-CREATE TRIGGER container_path_cache_tr
+DROP TRIGGER IF EXISTS container_parent_path_cache_tr ON container;
+CREATE TRIGGER container_parent_path_cache_tr
 BEFORE INSERT OR UPDATE ON container
-FOR EACH ROW EXECUTE PROCEDURE container_path_cache_fn();
+FOR EACH ROW EXECUTE PROCEDURE container_parent_path_cache_fn();
 
+-- If the container parent_container_id changes, or the name changes
+-- update all the container's children with the new path
+CREATE OR REPLACE FUNCTION container_children_path_cache_fn()
+RETURNS TRIGGER AS $$
+BEGIN
+	IF (NEW.parent_container_id <> OLD.parent_container_id) OR (NEW.name <> OLD.name) THEN
+		WITH RECURSIVE t AS ((
+			SELECT 0 AS depth, c.container_id, c.name::text
+			FROM container AS c
+			WHERE c.parent_container_id = NEW.container_id
+		) UNION ALL (
+			SELECT depth +1 AS depth, c.container_id,
+				(t.name || '/' || c.name)::text AS name
+			FROM container AS c
+			JOIN t ON c.parent_container_id = t.container_id
+			WHERE depth <= 20
+		))
+		UPDATE container SET
+			path_cache = NEW.path_cache || '/' || t.name
+		FROM t
+		WHERE t.container_id = container.container_id;
+	END IF;
+	RETURN NEW;
+END; $$ LANGUAGE 'plpgsql';
+
+DROP TRIGGER IF EXISTS container_children_path_cache_tr ON container;
+CREATE TRIGGER container_children_path_cache_tr
+AFTER INSERT OR UPDATE ON container
+FOR EACH ROW EXECUTE PROCEDURE container_children_path_cache_fn();
 
 -- Create function/trigger for inventory change logging
 CREATE OR REPLACE FUNCTION inventory_container_log_fn()
@@ -59,9 +87,9 @@ BEGIN
 				)
 			);
 		END IF;
-  END IF;
+	END IF;
 
-  RETURN NEW;
+	RETURN NEW;
 END; $$ LANGUAGE 'plpgsql';
 
 DROP TRIGGER IF EXISTS inventory_container_log_tr ON inventory;
@@ -96,9 +124,9 @@ BEGIN
 				)
 			);
 		END IF;
-  END IF;
+	END IF;
 
-  RETURN NEW;
+	RETURN NEW;
 END; $$ LANGUAGE 'plpgsql';
 
 DROP TRIGGER IF EXISTS container_log_tr ON container;
