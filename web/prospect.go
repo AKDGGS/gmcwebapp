@@ -38,8 +38,13 @@ func (srv *Server) ServeProspect(id int, w http.ResponseWriter, r *http.Request)
 		return
 	}
 
+	prospect_params := map[string]interface{}{
+		"prospect": prospect,
+		"user":     user,
+	}
+
 	pbuf := bytes.Buffer{}
-	if err := assets.ExecuteTemplate("tmpl/prospect.html", &pbuf, prospect); err != nil {
+	if err := assets.ExecuteTemplate("tmpl/prospect.html", &pbuf, prospect_params); err != nil {
 		http.Error(
 			w, fmt.Sprintf("Parse error: %s", err.Error()),
 			http.StatusInternalServerError,
@@ -59,7 +64,7 @@ func (srv *Server) ServeProspect(id int, w http.ResponseWriter, r *http.Request)
 			"js/mustache.js", "js/view.js",
 		},
 		"redirect": fmt.Sprintf("prospect/%d", id),
-		"user": user,
+		"user":     user,
 	}
 
 	tbuf := bytes.Buffer{}

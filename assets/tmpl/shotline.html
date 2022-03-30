@@ -2,51 +2,51 @@
 				<legend>Shotline Detail</legend>
 				<table class="tb-fields">
 					<tbody>
-						{{- if .name}}
+						{{- if .shotline.name}}
 						<tr>
 							<th>Shotline Name</th>
-							<td>{{.name}}</td>
+							<td>{{.shotline.name}}</td>
 						</tr>
 						{{- end}}
-						{{- if .alt_names}}
+						{{- if .shotline.alt_names}}
 						<tr>
 							<th>Alternative Shotline Name(s)</th>
-							<td>{{.alt_names}}</td>
+							<td>{{.shotline.alt_names}}</td>
 						</tr>
 						{{- end}}
-						{{- if .year}}
+						{{- if .shotline.year}}
 						<tr>
 							<th>Year</th>
-							<td>{{.year}}</td>
+							<td>{{.shotline.year}}</td>
 						</tr>
 						{{- end}}
-						{{- if .remark}}
+						{{- if .shotline.remark}}
 						<tr>
 							<th>Remarks</th>
-							<td>{{.remark}}</td>
+							<td>{{.shotline.remark}}</td>
 						</tr>
 						{{- end}}
-						{{- if .shotpoint_min}}
+						{{- if .shotline.shotpoint_min}}
 						<tr>
 							<th>Shotpoints</th>
-							<td>{{.shotpoint_min}}
-								{{- if .shotpoint_max}}
-									- {{.shotpoint_max}}
-								{{end}}
+							<td>{{ .shotline.shotpoint_min }}
+								{{- if .shotline.shotpoint_max }}
+									- {{.shotline.shotpoint_max }}
+								{{- end }}
 							</td>
 						</tr>
 						{{- end}}
-						{{- if .quadrangles}}
+						{{- if .shotline.quadrangles}}
 						<tr>
 							<th>Quadrangle</th>
-							<td>{{range $i, $qd := .quadrangles}}{{if ne $i 0}}, {{end}}<a href="../search#quadrangle_id={{$qd.quadrangle_id}}">{{$qd.name}}</a>{{end}}</td>
+							<td>{{range $i, $qd := .shotline.quadrangles}}{{if ne $i 0}}, {{end}}<a href="../search#quadrangle_id={{$qd.quadrangle_id}}">{{$qd.name}}</a>{{end}}</td>
 						</tr>
 						{{- end}}
 					</tbody>
 				</table>
 			</fieldset>
 
-			{{- if .geojson}}
+			{{- if .shotline.geojson}}
 			<fieldset class="fs-map">
 				<legend>Geospatial</legend>
 				<div id="map"></div>
@@ -58,15 +58,15 @@
 					<div id="popup-content" class="ol-popup-content"></div>
 				</div>
 				<script>
-					var geojson = {{rawjs .geojson}};
+					var geojson = {{rawjs .shotline.geojson}};
 				</script>
 			</fieldset>
 			<div class="flex-break"></div>
 			{{- end}}
-			{{- if .inventory}}
+			{{- if .shotline.inventory}}
 			<fieldset>
 				<legend>Inventory</legend>
-				{{- $shotline_id := .shotline_id }}
+				{{- $shotline_id := .shotline.shotline_id }}
 				<table class="tb-fields">
 					<thead>
 						<tr>
@@ -75,7 +75,7 @@
 						</tr>
 					</thead>
 					<tbody>
-						{{- range .inventory}}
+						{{- range .shotline.inventory}}
 						<tr>
 							<td><a href="../search#shotline_id={{$shotline_id}}{{range .keywords}}&keyword={{.}}{{end}}">{{range $i, $kw := .keywords}}{{if ne $i 0}} &gt; {{end}}{{$kw}}{{end}}</a></td>
 							<td>{{.count}}</td>
@@ -85,18 +85,18 @@
 				</table>
 			</fieldset>
 			{{- end}}
-			{{- if .files}}
+			{{- if .shotline.files}}
 			<fieldset class="files">
 				<legend>Files</legend>
-				{{- range .files}}
+				{{- range .shotline.files}}
 				<div><a href="../file/{{.file_id}}/{{.file_name}}">{{.file_name}}</a> ({{.file_size}})</div>
 				{{- end}}
 			</fieldset>
 			{{- end}}
-			{{- if .urls}}
+			{{- if .shotline.urls}}
 			<fieldset class="urls">
 				<legend>URLs</legend>
-				{{- range .urls}}
+				{{- range .shotline.urls}}
 				<div style="margin: 5px;"><a href="{{.url}}">{{.description}}</a> ({{.url_type}})</div>
 				{{- end}}
 			</fieldset>

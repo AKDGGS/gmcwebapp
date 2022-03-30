@@ -38,8 +38,13 @@ func (srv *Server) ServeOutcrop(id int, w http.ResponseWriter, r *http.Request) 
 		return
 	}
 
+	outcrop_params := map[string]interface{}{
+		"outcrop": outcrop,
+		"user":    user,
+	}
+
 	buf := bytes.Buffer{}
-	if err := assets.ExecuteTemplate("tmpl/outcrop.html", &buf, outcrop); err != nil {
+	if err := assets.ExecuteTemplate("tmpl/outcrop.html", &buf, outcrop_params); err != nil {
 		http.Error(
 			w, fmt.Sprintf("Parse error: %s", err.Error()),
 			http.StatusInternalServerError,
@@ -59,7 +64,7 @@ func (srv *Server) ServeOutcrop(id int, w http.ResponseWriter, r *http.Request) 
 			"js/mustache.js", "js/view.js",
 		},
 		"redirect": fmt.Sprintf("outcrop/%d", id),
-		"user": user,
+		"user":     user,
 	}
 
 	tbuf := bytes.Buffer{}

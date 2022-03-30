@@ -9,7 +9,7 @@ import (
 	"net/http"
 )
 
-func (srv *Server) ServeShotline(id int, w http.ResponseWriter, r *http.Request) {
+func (srv *Server) ServeInventory(id int, w http.ResponseWriter, r *http.Request) {
 	user, err := srv.Auths.CheckRequest(w, r)
 	if err != nil {
 		http.Error(
@@ -24,7 +24,7 @@ func (srv *Server) ServeShotline(id int, w http.ResponseWriter, r *http.Request)
 		flags = dbf.ALL_NOPRIVATE
 	}
 
-	shotline, err := srv.DB.GetShotline(id, flags)
+	inventory, err := srv.DB.GetInventory(id, flags)
 	if err != nil {
 		http.Error(
 			w, fmt.Sprintf("Query error: %s", err.Error()),
@@ -33,18 +33,24 @@ func (srv *Server) ServeShotline(id int, w http.ResponseWriter, r *http.Request)
 		return
 	}
 	// If no details were returned, throw a 404
-	if shotline == nil {
-		http.Error(w, "Shotline not found", http.StatusNotFound)
+	if inventory == nil {
+		http.Error(w, "Inventory not found", http.StatusNotFound)
 		return
 	}
 
-	shotline_params := map[string]interface{}{
-		"shotline": shotline,
-		"user":     user,
+	// If can_publish is false, throw a 403
+	if inventory["can_publish"] == false {
+		http.Error(w, "Access denied.", http.StatusForbidden)
+		return
+	}
+
+	inventory_params := map[string]interface{}{
+		"inv":  inventory,
+		"user": user,
 	}
 
 	buf := bytes.Buffer{}
-	if err := assets.ExecuteTemplate("tmpl/shotline.html", &buf, shotline_params); err != nil {
+	if err := assets.ExecuteTemplate("tmpl/inventory.html", &buf, inventory_params); err != nil {
 		http.Error(
 			w, fmt.Sprintf("Parse error: %s", err.Error()),
 			http.StatusInternalServerError,
@@ -53,7 +59,7 @@ func (srv *Server) ServeShotline(id int, w http.ResponseWriter, r *http.Request)
 	}
 
 	params := map[string]interface{}{
-		"title":   "Shotline Detail",
+		"title":   "Inventory Detail",
 		"content": template.HTML(buf.String()),
 		"stylesheets": []string{
 			"ol/ol.css", "ol/ol-layerswitcher.min.css",
@@ -63,7 +69,7 @@ func (srv *Server) ServeShotline(id int, w http.ResponseWriter, r *http.Request)
 			"ol/ol.js", "ol/ol-layerswitcher.min.js",
 			"js/mustache.js", "js/view.js",
 		},
-		"redirect": fmt.Sprintf("shotline/%d", id),
+		"redirect": fmt.Sprintf("inventory/%d", id),
 		"user":     user,
 	}
 

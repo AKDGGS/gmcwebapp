@@ -109,6 +109,15 @@ func (srv *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 		}
 		srv.ServeShotline(id, w, r)
 
+	case "inventory":
+		sid := strings.TrimPrefix(strings.TrimPrefix(path, "inventory"), "/")
+		id, err := strconv.Atoi(sid)
+		if err != nil {
+			http.Error(w, "Invalid Inventory ID", http.StatusBadRequest)
+			return
+		}
+		srv.ServeInventory(id, w, r)
+
 	default:
 		http.Error(w, "File not found", http.StatusNotFound)
 	}

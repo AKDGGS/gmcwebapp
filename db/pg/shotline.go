@@ -1,6 +1,10 @@
 package pg
 
-import dbf "gmc/db/flag"
+import (
+	dbf "gmc/db/flag"
+
+	"github.com/jackc/pgtype"
+)
 
 func (pg *Postgres) GetShotline(id int, flags int) (map[string]interface{}, error) {
 	shotline, err := pg.queryRow("pg/shotline_byid.sql", id)
@@ -9,6 +13,24 @@ func (pg *Postgres) GetShotline(id int, flags int) (map[string]interface{}, erro
 	}
 	if shotline == nil {
 		return nil, nil
+	}
+
+	ptmin, ok := shotline["shotpoint_min"].(pgtype.Numeric)
+	if !ok {
+		delete(shotline, "shotpoint_min")
+	} else {
+		var ift float64
+		ptmin.AssignTo(&ift)
+		shotline["shotpoint_min"] = &ift
+	}
+
+	ptmax, ok := shotline["shotpoint_max"].(pgtype.Numeric)
+	if !ok {
+		delete(shotline, "shotpoint_max")
+	} else {
+		var ift float64
+		ptmax.AssignTo(&ift)
+		shotline["shotpoint_max"] = &ift
 	}
 
 	if (flags & dbf.INVENTORY_SUMMARY) != 0 {

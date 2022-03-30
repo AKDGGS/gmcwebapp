@@ -38,8 +38,13 @@ func (srv *Server) ServeBorehole(id int, w http.ResponseWriter, r *http.Request)
 		return
 	}
 
+	borehole_params := map[string]interface{}{
+		"borehole": borehole,
+		"user":     user,
+	}
+
 	buf := bytes.Buffer{}
-	if err := assets.ExecuteTemplate("tmpl/borehole.html", &buf, borehole); err != nil {
+	if err := assets.ExecuteTemplate("tmpl/borehole.html", &buf, borehole_params); err != nil {
 		http.Error(
 			w, fmt.Sprintf("Parse error: %s", err.Error()),
 			http.StatusInternalServerError,
@@ -59,7 +64,7 @@ func (srv *Server) ServeBorehole(id int, w http.ResponseWriter, r *http.Request)
 			"js/mustache.js", "js/view.js",
 		},
 		"redirect": fmt.Sprintf("borehole/%d", id),
-		"user": user,
+		"user":     user,
 	}
 
 	tbuf := bytes.Buffer{}

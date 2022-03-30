@@ -13,6 +13,9 @@ const (
 	GEOJSON
 	ORGANIZATION
 	URLS
+	INVENTORY
+	NOTE
+	RELATED
 )
 
 // Option for everything

@@ -1,0 +1,598 @@
+
+			<fieldset class="fs-detail">
+				<legend>Inventory Detail</legend>
+				<table class="tb-fields">
+					<tbody>
+						{{- if .inv.inventory_id }}
+						<tr>
+							<th>ID</th>
+							<td>{{ .inv.inventory_id }}<td>
+						</tr>
+						{{- end}}
+
+						{{- if .user}}
+						{{- if .inv.container_path_cache }}
+						<tr>
+							<th>Location</th>
+							<td>{{ .inv.container_path_cache }}<td>
+						</tr>
+						{{- end }}
+						{{- if .inv.barcode }}
+						<tr>
+							<th>Barcode</th>
+							<td>{{ .inv.barcode }}<td>
+						</tr>
+						{{- end }}
+						{{- if .inv.container_alt_barcode }}
+						<tr>
+							<th>Alt. Barcode</th>
+							<td>{{ .inv.container_alt_barcode }}<td>
+						</tr>
+						{{- end }}
+						{{- end}}
+
+						{{- if .inv.dggs_sample_id }}
+						<tr>
+							<th>DGGS Sample ID</th>
+							<td>{{ .inv.dggs_sample_id }}<td>
+						</tr>
+						{{- end }}
+						{{- if .inv.sample_number }}
+						<tr>
+							<th>Sample Number</th>
+							<td>{{ .inv.sample_number }}<td>
+						</tr>
+						{{- end }}
+						{{- if .inv.sample_number_prefix }}
+						<tr>
+							<th>Sample Number Prefix</th>
+							<td>{{.inv.sample_number_prefix}}<td>
+						</tr>
+						{{- end}}
+						{{- if .inv.alt_sample_number}}
+						<tr>
+							<th>Alternative Sample Number</th>
+							<td>{{.inv.alt_sample_number}}<td>
+						</tr>
+						{{- end}}
+						{{- if .inv.published_sample_number}}
+						<tr>
+							<th>Published Sample Number</th>
+							<td>{{.inv.published_sample_number}} {{.inv.published_number_has_suffix}}<td>
+						</tr>
+						{{- end}}
+						{{- if .inv.collection_name}}
+						<tr>
+							<th>Collection</th>
+							<td>{{.inv.collection_name}}<td>
+						</tr>
+						{{- end}}
+						{{- if .inv.state_number}}
+						<tr>
+							<th>State Number</th>
+							<td>{{.inv.state_number}}<td>
+						</tr>
+						{{- end}}
+						{{- if .inv.box_number}}
+						<tr>
+							<th>Box Number</th>
+							<td>{{.inv.box_number}}<td>
+						</tr>
+						{{- end}}
+						{{- if .inv.set_number}}
+						<tr>
+							<th>Set Number</th>
+							<td>{{.inv.set_number}}<td>
+						</tr>
+						{{- end}}
+						{{- if .inv.split_number}}
+						<tr>
+							<th>Split Number</th>
+							<td>{{.inv.split_number}}<td>
+						</tr>
+						{{- end}}
+						{{- if .inv.slide_number}}
+						<tr>
+							<th>Slide Number</th>
+							<td>{{.inv.slide_number}}<td>
+						</tr>
+						{{- end}}
+						{{- if .inv.slip_number}}
+						<tr>
+							<th>slip_number</th>
+							<td>{{.inv.slip_number}}<td>
+						</tr>
+						{{- end}}
+						{{- if .inv.lab_number}}
+						<tr>
+							<th>Lab Number</th>
+							<td>{{.inv.lab_number}}<td>
+						</tr>
+						{{- end}}
+						{{- if .inv.lab_report_id}}
+						<tr>
+							<th>Lab Report ID</th>
+							<td>{{.inv.lab_report_id}}<td>
+						</tr>
+						{{- end}}
+						{{- if .inv.core_number}}
+						<tr>
+							<th>Core Number</th>
+							<td>{{.inv.core_number}}<td>
+						</tr>
+						{{- end}}
+						{{- if .inv.core_diameter}}
+						<tr>
+							<th>Core Diameter</th>
+							<td>{{.inv.core_diameter}} {{.inv.unit}}
+								{{- if .inv.core_diameter_name}} ({{.inv.core_diameter_name}}){{- end}}<td>
+						</tr>
+						{{- end}}
+						{{- if .inv.interval_top}}
+						<tr>
+							<th>Interval Top</th>
+							<td>{{.inv.interval_top}} {{.inv.interval_unit}}<td>
+						</tr>
+						{{- end}}
+						{{- if .inv.interval_bottom}}
+						<tr>
+							<th>Interval Bottom</th>
+							<td>{{.inv.interval_bottom}} {{.inv.interval_unit}}<td>
+						</tr>
+						{{- end}}
+						{{- if .inv.description}}
+						<tr>
+							<th>Inventory Description</th>
+							<td>{{.inv.description}}<td>
+						</tr>
+						{{- end}}
+						{{- if .inv.remark}}
+						<tr>
+							<th>Inventory Remark</th>
+							<td>{{.inv.remark}}<td>
+						</tr>
+						{{- end}}
+
+						{{- if .user}}
+						{{- if .inv.tray}}
+						<tr>
+							<th>Tray</th>
+							<td>{{.inv.tray}}<td>
+						</tr>
+						{{- end}}
+						{{- end}}
+
+						{{- if .inv.weight}}
+						<tr>
+							<th>Weight</th>
+							<td>{{.inv.weight}}<td>
+						</tr>
+						{{- end}}
+						{{- if .inv.sample_frequency}}
+						<tr>
+							<th>Sample Frequency</th>
+							<td>{{.inv.sample_frequency}}<td>
+						</tr>
+						{{- end}}
+						{{- if .inv.recovery}}
+						<tr>
+							<th>Recovery</th>
+							<td>{{.inv.recovery}}<td>
+						</tr>
+						{{- end}}
+						{{- if .inv.radiation_msvh}}
+						<tr>
+							<th>Radiation</th>
+							<td>{{.inv.radiation_msvh}}<td>
+						</tr>
+						{{- end}}
+						{{- if .inv.keywords}}
+						<tr>
+							<th>Keywords</th>
+							<td><a href="../search#keyword=${keyword}">{{.inv.keywords}}</a>
+						</tr>
+						{{- end}}
+
+						{{- if .user}}
+						{{- if .inv.received_date}}
+						<tr>
+							<th>Received Date</th>
+							<td>{{formattime "1/2/2006" .inv.received_date}}<td>
+						</tr>
+						{{- end}}
+						{{- if .inv.entered_date}}
+						<tr>
+							<th>Entered Date</th>
+							<td>{{formattime "1/2/2006" .inv.entered_date}}<td>
+						</tr>
+						{{- end}}
+						{{- if .inv.modified_user}}
+						<tr>
+							<th>Last Modified By</th>
+							<td>{{.inv.modified_user}}<td>
+						</tr>
+						{{- end}}
+						{{- if .inv.modified_date}}
+						<tr>
+							<th>Modified Date</th>
+							<td>{{formattime "1/2/2006" .inv.modified_date}}<td>
+						</tr>
+						{{- end}}
+						{{- if .inv.can_publish}}
+						<tr>
+							<th>Publish</th>
+							<td>Yes</td>
+						</tr>
+						{{- end}}
+						{{- if not .inv.can_publish }}
+						<tr>
+							<th>Publish</th>
+							<td>No</td>
+						</tr>
+						{{- end }}
+						{{- if .inv.active}}
+						<tr>
+							<th>Active</th>
+							<td>Yes</td>
+						</tr>
+						{{- end}}
+						{{- if not .inv.active }}
+						<tr>
+							<th>Active</th>
+							<td>No</td>
+						</tr>
+						{{- end }}
+						{{- end}}
+
+						{{- if .inv.geojson}}
+						{{range $i, $f := .inv.geojson.features}}{{if ne $i 0}}, {{end}}{{if (eq $f.geometry.type "Point" )}}
+						<tr>
+							<th>Lon/Lat</th>
+							<td> {{$f.geometry.coordinates}}</td>
+						</tr>
+						{{- end}}
+						{{- end}}
+						{{- end}}
+						{{- if .inv.quadrangles}}
+						<tr>
+							<th>Quadrangle</th>
+							<td>{{range $i, $qd := .inv.quadrangles}}{{if ne $i 0}}, {{end}}<a href="../search#quadrangle_id={{$qd.quadrangle_id}}">{{$qd.name}}</a>{{end}}</td>
+						</tr>
+						{{- end}}
+					</tbody>
+				</table>
+			</fieldset>
+			{{- if .inv.geojson}}
+
+			<fieldset class="fs-map">
+				<legend>Geospatial</legend>
+				<div id="map"></div>
+				<div id="popup" class="ol-popup">
+					<div class="ol-popup-top">
+						<div class="ol-popup-top-title">Inventory</div>
+						<div id="popup-closer">&#215;</div>
+					</div>
+					<div id="popup-content" class="ol-popup-content"></div>
+				</div>
+				<script>
+					var geojson = {{rawjs .inv.geojson}};
+				</script>
+			</fieldset>
+			<div class="flex-break"></div>
+			{{- end}}
+
+			{{- if .inv.files}}
+			<fieldset class="files">
+				<legend>Files</legend>
+				{{- range .inv.files}}
+				<div><a href="../file/{{.file_id}}/{{.file_name}}">{{.file_name}}</a> ({{.file_size}})</div>
+				{{- end}}
+			</fieldset>
+			{{- end}}
+
+			{{- if .inv.operators}}
+			<fieldset>
+				<legend>Operators</legend>
+				<table class="tb-fields">
+					<thead>
+						<tr>
+							<th>Current Operator</th>
+							<th> Type</th>
+						</tr>
+					</thead>
+					<tbody>
+						{{- range .inv.operators}}
+						{{- if .is_current}}
+						<tr>
+							<td>{{.name}}</td>
+							<td>{{.operator_type}}</td>
+						</tr>
+						<tr class="spacer"></tr>
+					</tbody>
+					{{- end}}
+					{{- end}}
+					<thead>
+						<tr>
+							<th>Previous Operator(s)</th>
+							<th> Type</th>
+						</tr>
+					</thead>
+					<tbody>
+						{{- range .inv.operators}}
+						{{- if not .is_current}}
+						<tr>
+							<td>{{.name}}</td>
+							<td>{{.operator_type}}</td>
+						</tr>
+						{{- end}}
+						{{- end}}
+					</tbody>
+				</table>
+			</fieldset>
+			{{- end}}
+
+			{{- if .inv.urls}}
+			<fieldset class="urls">
+				<legend>URLs</legend>
+				{{- range .inv.urls}}
+				<div style="margin: 5px;"><a href="{{.url}}">{{.description}}</a> ({{.url_type}})</div>
+				{{- end}}
+			</fieldset>
+			{{- end}}
+
+			{{- if .inv.notes}}
+			<fieldset>
+				<legend>Notes</legend>
+				<table class="tb-fields">
+					<thead>
+						<tr>
+							<th style="padding-right: 10px">Date</th>
+							<th style="padding-right: 10px">User</th>
+							<th style="padding-right: 10px">Public</th>
+							<th style="padding-right: 10px">Note</th>
+						</tr>
+					</thead>
+					<tbody>
+						{{- range .inv.notes}}
+						<tr>
+							<td>{{formattime "1/2/2006" .note_date}}</td>
+							<td>{{.username}}</td>
+							<td>{{- if .is_public}} yes {{- end}} {{- if not .is_public}} no {{- end}}</td>
+							<td>{{.note}}</td>
+						</tr>
+					</tbody>
+					{{- end}}
+				</table>
+			</fieldset>
+			{{- end}}
+
+			{{- if .inv.related.pubs}}
+			<fieldset>
+				<legend>Related</legend>
+				<table class="tb-fields">
+					<thead>
+						<tr>
+							<th>Publication(s)</th>
+							<tr>
+								<th style="padding-right: 10px">Title</th>
+								<th style="padding-right: 10px">Year</th>
+								<th style="padding-right: 10px">Type</th>
+								<th style="padding-right: 10px">Number</th>
+								<th style="padding-right: 10px">Series</th>
+								<th style="padding-right: 10px">Description</th>
+								<th style="padding-right: 10px">Publish</th>
+							</tr>
+						</tr>
+					</thead>
+					<tbody>
+						{{- range .inv.related.pubs}}
+						<tr>
+							<td>{{.title}}</td>
+							<td>{{.year}}</td>
+							<td>{{.publication_type}}</td>
+							<td>{{.publication_number}}</td>
+							<td>{{.publication_series}}</td>
+							<td>{{.description}}</td>
+							<td>{{- if .can_publish}} yes {{- end}} {{- if not .can_publish}} no {{- end}}</td>
+						</tr>
+						<tr class="spacer"></tr>
+					</tbody>
+					{{- end}}
+				</table>
+			</fieldset>
+			{{- end}}
+
+			{{- if .inv.related.bores}}
+			<fieldset>
+				<legend>Related</legend>
+				<table class="tb-fields">
+					<thead>
+						<tr>
+							<th>Prospect(s)</th>
+							<tr>
+								<th style="padding-right: 10px">Prospect Name</th>
+								<th style="padding-right: 10px">Prospect ARDF</th>
+								<th style="padding-right: 10px">Borehole Name</th>
+								<th style="padding-right: 10px">Borehole Alt. Name(s)</th>
+							</tr>
+						</tr>
+					</thead>
+					<tbody>
+						{{- range .inv.related.bores}}
+						<tr>
+							<td><a href="../prospect/${borehole.prospect_id}">{{.prospect_name}}</a></td>
+							<td>{{.ardf_number}}</td>
+							<td><a href="../borehole/${borehole_id}">{{.borehole_name}}</td>
+							<td>{{.alt_names}}</td>
+						</tr>
+						<tr class="spacer"></tr>
+					</tbody>
+					{{- end}}
+				</table>
+			</fieldset>
+			{{- end}}
+
+
+			{{- if .inv.related.wells}}
+			<fieldset>
+				<legend>Related</legend>
+				<table class="tb-fields">
+					<thead>
+						<tr>
+							<th>Well(s)</th>
+							<tr>
+								<th style="padding-right: 10px">Well Name</th>
+								<th style="padding-right: 10px">Well Alt. Name</th>
+								<th style="padding-right: 10px">Well Number</th>
+								<th style="padding-right: 10px">API Number</th>
+								<th style="padding-right: 10px">Well Operator</th>
+								<th style="padding-right: 10px">Current</th>
+								<th style="padding-right: 10px">Operator Type</th>
+							</tr>
+						</tr>
+					</thead>
+					<tbody>
+						{{- range .inv.related.wells}}
+						<tr>
+						<td><a href="../well/${well_id}">{{.name}}</a></td>
+						<td>{{.alt_names}}</td>
+						<td>{{.well_number}}</td>
+						<td>{{.api_number}}</td>
+						{{- range .operators}}
+							{{- if .is_current}}
+								<td>{{.name}}</td>
+								<td>{{.is_current}}</td>
+								<td>{{.operator_type}}</td>
+							{{- end}}
+						{{- end}}
+						</tr>
+							{{- range .operators}}
+								{{- if not .is_current}}
+								<tr>
+								<td colspan="4"></td>
+								<td>{{.name}}</td>
+								<td>{{.is_current}}</td>
+								<td>{{.operator_type}}</td>
+								</tr>
+								{{- end}}
+							{{- end}}
+						{{- end}}
+						<tr class="spacer"></tr>
+					</tbody>
+				</table>
+			</fieldset>
+			{{- end}}
+
+			{{- if .inv.related.shotlines}}
+			<fieldset>
+				<legend>Related</legend>
+				<table class="tb-fields">
+					<thead>
+						<tr>
+							<th>Shotline(s)</th>
+							<tr>
+								<th style="padding-right: 10px">Shotline Name</th>
+								<th style="padding-right: 10px">Shotline Alt. Name</th>
+								<th style="padding-right: 10px">Shotline Year</th>
+								<th style="padding-right: 10px">Shotpoint(s)</th>
+							</tr>
+						</tr>
+					</thead>
+					<tbody>
+						{{- range .inv.related.shotlines}}
+						<tr>
+						<td><a href="../shotline/${shotline.ID}">{{.name}}</a></td>
+						<td>{{.alt_names}}</td>
+						<td>{{.year}}</td>
+						<td>{{.shotpoint_number}}</td>
+						<!-- {{- range .operators}}
+							{{- if .is_current}}
+								<td>{{.name}}</td>
+								<td>{{.is_current}}</td>
+								<td>{{.operator_type}}</td>
+							{{- end}}
+						{{- end}} -->
+						</tr>
+						{{- end}}
+						<tr class="spacer"></tr>
+					</tbody>
+				</table>
+			</fieldset>
+			{{- end}}
+
+
+
+
+
+
+
+
+
+
+
+
+			<!-- {{- if .inv.related}}
+			<fieldset>
+				<legend>Related</legend>
+				{{- if .inv.related.pubs}}
+				<table class="tb-fields">
+					<thead>
+						<tr>
+							<th>Publication(s)</th>
+							<tr>
+								<th style="padding-right: 10px">Title</th>
+								<th style="padding-right: 10px">Year</th>
+								<th style="padding-right: 10px">Type</th>
+								<th style="padding-right: 10px">Number</th>
+								<th style="padding-right: 10px">Series</th>
+								<th style="padding-right: 10px">Description</th>
+								<th style="padding-right: 10px">Publish</th>
+							</tr>
+						</tr>
+					</thead>
+					<tbody>
+						{{- range .inv.related.pubs}}
+						<tr>
+							<td>{{.title}}</td>
+							<td>{{.year}}</td>
+							<td>{{.publication_type}}</td>
+							<td>{{.publication_number}}</td>
+							<td>{{.publication_series}}</td>
+							<td>{{.description}}</td>
+							<td>{{- if .can_publish}} yes {{- end}} {{- if not .can_publish}} no {{- end}}</td>
+						</tr>
+						<tr class="spacer"></tr>
+					</tbody>
+					{{- end}}
+				</table>
+				{{- end}}
+
+				{{- if .inv.related.bores}}
+				<table class="tb-fields">
+					<thead>
+						<tr>
+							<th>Prospect(s)</th>
+							<tr>
+								<th style="padding-right: 10px">Prospect Name</th>
+								<th style="padding-right: 10px">Prospect ARDF</th>
+								<th style="padding-right: 10px">Borehole Name</th>
+								<th style="padding-right: 10px">Borehole Alt. Name(s)</th>
+							</tr>
+						</tr>
+					</thead>
+					<tbody>
+						{{- range .inv.related.bores}}
+						<tr>
+							<td><a href="../prospect/${borehole.prospect_id}">{{.prospect_name}}</a></td>
+							<td>{{.ardf_number}}</td>
+							<td><a href="../borehole/${borehole_id}">{{.borehole_name}}</td>
+							<td>{{.alt_names}}</td>
+						</tr>
+						<tr class="spacer"></tr>
+					</tbody>
+					{{- end}}
+				</table>
+				{{- end}}
+
+			</fieldset>
+			{{- end}} -->
