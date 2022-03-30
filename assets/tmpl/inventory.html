@@ -343,13 +343,13 @@
 			{{- if .inv.notes}}
 			<fieldset>
 				<legend>Notes</legend>
-				<table class="tb-fields">
+				<table class="tb-fields" style="max-width:600px;">
 					<thead>
 						<tr>
 							<th style="padding-right: 10px">Date</th>
 							<th style="padding-right: 10px">User</th>
 							<th style="padding-right: 10px">Public</th>
-							<th style="padding-right: 10px">Note</th>
+							<th style="padding-right: 10px;">Note</th>
 						</tr>
 					</thead>
 					<tbody>
@@ -366,7 +366,58 @@
 			</fieldset>
 			{{- end}}
 
-			{{- if .inv.related.pubs}}
+			{{- if .inv.publications}}
+			<fieldset>
+				<legend>Publication(s)</legend>
+				<table class="tb-fields" style="max-width:600px;">
+					<tbody>
+					{{- range .inv.publications}}
+						{{- if .title}}
+							<tr>
+								<th>Title</th>
+								<td>{{ .title }}<td>
+							</tr>
+						{{- end}}
+						{{- if .year}}
+							<tr>
+								<th>Year</th>
+								<td>{{ .year }}<td>
+							</tr>
+						{{- end}}
+						{{- if .publication_type}}
+							<tr>
+								<th>Type</th>
+								<td>{{ .publication_type }}<td>
+							</tr>
+						{{- end}}
+						{{- if .publication_number}}
+							<tr>
+								<th>Number</th>
+								<td>{{ .publication_number }}<td>
+							</tr>
+						{{- end}}
+						{{- if .publication_series}}
+							<tr>
+								<th>Series</th>
+								<td>{{ .publication_series }}<td>
+							</tr>
+						{{- end}}
+						{{- if .description}}
+							<tr>
+								<th>Description</th>
+								<td>{{ .description }}<td>
+							</tr>
+						{{- end}}
+						<tr class="horizontal-spacer">
+							<td></td>
+						</tr>
+					{{- end}}
+					</tbody>
+				</table>
+			</fieldset>
+			{{- end}}
+
+			<!-- {{- if .inv.related.pubs}}
 			<fieldset>
 				<legend>Related</legend>
 				<table class="tb-fields">
@@ -400,9 +451,100 @@
 					{{- end}}
 				</table>
 			</fieldset>
+			{{- end}} -->
+
+
+			{{- if .inv.boreholes}}
+			<fieldset>
+				<legend>Prospect(s)</legend>
+				<table class="tb-fields">
+					<tbody>
+					{{- range .inv.boreholes}}
+						{{- if .prospect_name}}
+							<tr>
+								<th>Prospect Name</th>
+								<td><a href="../prospect/${borehole.prospect_id}">{{.prospect_name}}</a><td>
+							</tr>
+						{{- end}}
+						{{- if .ardf_number}}
+							<tr>
+							<th>Prospect ARDF</th>
+							<td>{{.ardf_number}}</td>
+							</tr>
+						{{- end}}
+						{{- if .borehole_name}}
+						<tr>
+							<th>Borehole Name</th>
+							<td><a href="../borehole/${borehole_id}">{{.borehole_name}}</td>
+						</tr>
+						{{- end}}
+						{{- if .alt_names}}
+						<tr>
+							<th>Borehole Alt. Name(s)</th>
+							<td>{{.alt_names}}</td>
+						</tr>
+						{{- end}}
+					{{- end}}
+					</tbody>
+				</table>
+			</fieldset>
 			{{- end}}
 
-			{{- if .inv.related.bores}}
+
+			{{- if .inv.wells}}
+			<fieldset>
+				<legend>Well(s)</legend>
+				<table class="tb-fields">
+					<tbody>
+					{{- range .inv.wells}}
+					{{- if .is_current}}
+						{{- if .well_name}}
+							<tr>
+								<th>Well Name</th>
+								<td><a href="../well/${well_id}">{{.well_name}}</a><td>
+							</tr>
+						{{- end}}
+						{{- if .alt_names}}
+							<tr>
+							<th>Well Alt. Name</th>
+							<td>{{.alt_names}}</td>
+							</tr>
+						{{- end}}
+						{{- if .well_number}}
+						<tr>
+							<th>Well Number</th>
+							<td>{{.well_number}}</td>
+						</tr>
+						{{- end}}
+						{{- if .api_number}}
+						<tr>
+							<th>API Number</th>
+							<td>{{.api_number}}</td>
+						</tr>
+						{{- end}}
+						{{- if .operator_name}}
+						<tr>
+							<th>Current Operator</th>
+							<td>{{.operator_name}}</td>
+						</tr>
+						{{- end}}
+						{{- if .operator_type}}
+						<tr>
+							<th>Operator Type</th>
+							<td>{{.operator_type}}</td>
+						</tr>
+						{{- end}}
+						<tr class="horizontal-spacer">
+							<td></td>
+						</tr>
+					{{- end}}
+					{{- end}}
+					</tbody>
+				</table>
+			</fieldset>
+			{{- end}}
+
+			<!-- {{- if .inv.related.bores}}
 			<fieldset>
 				<legend>Related</legend>
 				<table class="tb-fields">
@@ -430,10 +572,10 @@
 					{{- end}}
 				</table>
 			</fieldset>
-			{{- end}}
+			{{- end}} -->
 
 
-			{{- if .inv.related.wells}}
+			<!-- {{- if .inv.related.wells}}
 			<fieldset>
 				<legend>Related</legend>
 				<table class="tb-fields">
@@ -505,20 +647,13 @@
 						<td>{{.alt_names}}</td>
 						<td>{{.year}}</td>
 						<td>{{.shotpoint_number}}</td>
-						<!-- {{- range .operators}}
-							{{- if .is_current}}
-								<td>{{.name}}</td>
-								<td>{{.is_current}}</td>
-								<td>{{.operator_type}}</td>
-							{{- end}}
-						{{- end}} -->
 						</tr>
 						{{- end}}
 						<tr class="spacer"></tr>
 					</tbody>
 				</table>
 			</fieldset>
-			{{- end}}
+			{{- end}} -->
 
 
 

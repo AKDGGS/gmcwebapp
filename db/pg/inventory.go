@@ -1,9 +1,7 @@
 package pg
 
 import (
-	"fmt"
 	dbf "gmc/db/flag"
-	"strings"
 
 	"github.com/jackc/pgtype"
 )
@@ -54,15 +52,15 @@ func (pg *Postgres) GetInventory(id int, flags int) (map[string]interface{}, err
 		inventory["weight"] = &ift
 	}
 
-	kw, ok := inventory["keywords"].(pgtype.TextArray)
-	if !ok {
-		delete(inventory, "keywords")
-	} else {
-		var kws []string
-		kw.AssignTo(&kws)
-		s := strings.Join(kws[:], ", ")
-		inventory["keywords"] = &s
-	}
+	// kw, ok := inventory["keywords"].(pgtype.TextArray)
+	// if !ok {
+	// 	delete(inventory, "keywords")
+	// } else {
+	// 	var kws []string
+	// 	kw.AssignTo(&kws)
+	// 	s := strings.Join(kws[:], ", ")
+	// 	inventory["keywords"] = &s
+	// }
 
 	if (flags & dbf.FILES) != 0 {
 		files, err := pg.queryRows("pg/file_byinventoryid.sql", id)
@@ -94,67 +92,83 @@ func (pg *Postgres) GetInventory(id int, flags int) (map[string]interface{}, err
 		}
 	}
 
-	if (flags & dbf.RELATED) != 0 {
-		type Any interface{}
-		related := map[string]Any{}
-
-		//Publications
-		pubs, err := pg.queryRows("pg/publication_byinventoryid.sql", id)
+	if (flags & dbf.PUBLICATION) != 0 {
+		publications, err := pg.queryRows("pg/publication_byinventoryid.sql", id)
 		if err != nil {
 			return nil, err
 		}
-		if pubs != nil {
-			related["pubs"] = pubs
-
+		if publications != nil {
+			inventory["publications"] = publications
 		}
+	}
 
-		//Boreholes
-		bores, err := pg.queryRows("pg/borehole_byinventoryid.sql", id)
+	if (flags & dbf.BOREHOLE) != 0 {
+		boreholes, err := pg.queryRows("pg/borehole_byinventoryid.sql", id)
 		if err != nil {
 			return nil, err
 		}
-		if bores != nil {
-			related["bores"] = bores
+		if boreholes != nil {
+			inventory["boreholes"] = boreholes
 		}
+	}
 
-		//Wells
+	if (flags & dbf.WELL) != 0 {
 		wells, err := pg.queryRows("pg/well_byinventoryid.sql", id)
 		if err != nil {
 			return nil, err
 		}
-
 		if wells != nil {
-			for k := range wells {
-				well_id := wells[k]["well_id"]
-				operators, errOrg := pg.queryRows("pg/organization_bywellid.sql", well_id)
-				wells[k]["operators"] = operators
-				if errOrg != nil {
-					return nil, errOrg
-				}
-			}
-			related["wells"] = wells
+			inventory["wells"] = wells
 		}
-
-		//Shotline
-		shotlines, err := pg.queryRows("pg/shotline_byinventoryid.sql", id)
-		if err != nil {
-			return nil, err
-		}
-		for k := range shotlines {
-			sp, ok := shotlines[k]["shotpoint_number"].(pgtype.Numeric)
-			if !ok {
-				delete(shotlines[k], "shotpoint_number")
-			} else {
-				var isp float64
-				sp.AssignTo(&isp)
-				shotlines[k]["shotpoint_number"] = &isp
-			}
-		}
-		if shotlines != nil {
-			related["shotlines"] = shotlines
-		}
-		inventory["related"] = related
 	}
-	fmt.Println(inventory)
+
+	// 	//Boreholes
+	// 	bores, err := pg.queryRows("pg/borehole_byinventoryid.sql", id)
+	// 	if err != nil {
+	// 		return nil, err
+	// 	}
+	// 	if bores != nil {
+	// 		related["bores"] = bores
+	// 	}
+	//
+	// 	//Wells
+	// 	wells, err := pg.queryRows("pg/well_byinventoryid.sql", id)
+	// 	if err != nil {
+	// 		return nil, err
+	// 	}
+	//
+	// 	if wells != nil {
+	// 		for k := range wells {
+	// 			well_id := wells[k]["well_id"]
+	// 			operators, errOrg := pg.queryRows("pg/organization_bywellid.sql", well_id)
+	// 			wells[k]["operators"] = operators
+	// 			if errOrg != nil {
+	// 				return nil, errOrg
+	// 			}
+	// 		}
+	// 		related["wells"] = wells
+	// 	}
+	//
+	// 	//Shotline
+	// 	shotlines, err := pg.queryRows("pg/shotline_byinventoryid.sql", id)
+	// 	if err != nil {
+	// 		return nil, err
+	// 	}
+	// 	for k := range shotlines {
+	// 		sp, ok := shotlines[k]["shotpoint_number"].(pgtype.Numeric)
+	// 		if !ok {
+	// 			delete(shotlines[k], "shotpoint_number")
+	// 		} else {
+	// 			var isp float64
+	// 			sp.AssignTo(&isp)
+	// 			shotlines[k]["shotpoint_number"] = &isp
+	// 		}
+	// 	}
+	// 	if shotlines != nil {
+	// 		related["shotlines"] = shotlines
+	// 	}
+	// 	inventory["related"] = related
+	// }
+	// fmt.Println(inventory)
 	return inventory, nil
 }

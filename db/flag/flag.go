@@ -15,7 +15,9 @@ const (
 	URLS
 	INVENTORY
 	NOTE
-	RELATED
+	PUBLICATION
+	BOREHOLE
+	WELL
 )
 
 // Option for everything

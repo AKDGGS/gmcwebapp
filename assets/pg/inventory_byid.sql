@@ -34,7 +34,7 @@ SELECT iv.inventory_id,
 			iv.tray,
 			iv.interval_top,
 			iv.interval_bottom,
-			iv.keywords::text[],
+			ARRAY_TO_JSON(iv.keywords) AS keywords,
 			COALESCE(iv.interval_unit::text, 'ft') AS interval_unit,
 			iv.core_number,
 
