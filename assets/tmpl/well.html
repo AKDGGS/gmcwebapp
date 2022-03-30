@@ -194,12 +194,17 @@
 					</tbody>
 					{{- end}}
 					{{- end}}
-					<thead>
-						<tr>
-							<th>Previous Operator(s)</th>
-							<th> Type</th>
-						</tr>
-					</thead>
+					<!-- Displays Previous Operator header only if there are at least two
+					operators listed. -->
+						{{range $i, $f := .well.operators}}{{if eq $i 1}}
+						<thead>
+							<tr>
+								<th>Previous Operator(s)</th>
+								<th> Type</th>
+							</tr>
+						</thead>
+						{{end}}
+						{{- end}}
 					<tbody>
 						{{- range .well.operators}}
 						{{- if not .is_current}}
