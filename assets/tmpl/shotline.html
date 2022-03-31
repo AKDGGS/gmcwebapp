@@ -30,9 +30,9 @@
 						<tr>
 							<th>Shotpoints</th>
 							<td>{{ .shotpoint_min }}
-								{{- if .shotpoint_max }}
-								- {{.shotpoint_max }}
-								{{- end }}
+							{{- if .shotpoint_max }}
+							- {{.shotpoint_max }}
+							{{- end }}
 							</td>
 						</tr>
 						{{- end}}
@@ -45,8 +45,8 @@
 					</tbody>
 				</table>
 			</fieldset>
-
 			{{- if .geojson}}
+
 			<fieldset class="fs-map">
 				<legend>Geospatial</legend>
 				<div id="map"></div>
@@ -64,6 +64,7 @@
 			<div class="flex-break"></div>
 			{{- end}}
 			{{- if .inventory}}
+
 			<fieldset>
 				<legend>Inventory</legend>
 				{{- $shotline_id := .shotline_id }}
@@ -86,6 +87,7 @@
 			</fieldset>
 			{{- end}}
 			{{- if .files}}
+
 			<fieldset class="files">
 				<legend>Files</legend>
 				{{- range .files}}
@@ -100,4 +102,32 @@
 				<div style="margin: 5px;"><a href="{{.url}}">{{.description}}</a> ({{.url_type}})</div>
 				{{- end}}
 			</fieldset>
+			{{- end}}
+			{{- if ._user}}
+			{{- if .notes}}
+
+				<fieldset>
+					<legend>Notes</legend>
+					<table class="tb-fields" style="max-width:600px;">
+						<thead>
+							<tr>
+								<th style="padding-right: 50px">Date</th>
+								<th style="padding-right: 50px">User</th>
+								<th style="padding-right: 50px">Public</th>
+								<th>Note</th>
+							</tr>
+						</thead>
+						<tbody>
+							{{- range .notes}}
+							<tr>
+								<td>{{formattime "1/2/2006" .note_date}}</td>
+								<td>{{.username}}</td>
+								<td>{{- if .is_public}} Yes {{ else }} No {{- end}}</td>
+								<td>{{.note}}</td>
+							</tr>
+						{{- end}}
+						</tbody>
+					</table>
+				</fieldset>
+			{{- end}}
 			{{- end}}

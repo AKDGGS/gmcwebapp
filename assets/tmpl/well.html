@@ -31,8 +31,7 @@
 							<th>Onshore</th>
 							<td>Yes</td>
 						</tr>
-						{{- end}}
-						{{- if not .is_onshore }}
+						{{ else }}
 						<tr>
 							<th>Onshore</th>
 							<td>No</td>
@@ -43,8 +42,7 @@
 							<th>Federal</th>
 							<td>Yes</td>
 						</tr>
-						{{- end}}
-						{{- if not .is_federal }}
+						{{ else }}
 						<tr>
 							<th>Federal</th>
 							<td>No</td>
@@ -99,6 +97,7 @@
 						</tr>
 						{{- end}}
 						{{- if .geojson}}
+
 						{{range $i, $f := .geojson.features}}{{if ne $i 0}}, {{end}}{{if (eq $f.geometry.type "Point" )}}
 						<tr>
 							<th>Lon/Lat</th>
@@ -108,6 +107,7 @@
 						{{- end}}
 						{{- end}}
 						{{- if .quadrangles}}
+
 						<tr>
 							<th>Quadrangle</th>
 							<td>{{range $i, $qd := .quadrangles}}{{if ne $i 0}}, {{end}}<a href="../search#quadrangle_id={{$qd.quadrangle_id}}">{{$qd.name}}</a>{{end}}</td>
@@ -116,7 +116,6 @@
 					</tbody>
 				</table>
 			</fieldset>
-
 			{{- if .geojson}}
 
 			<fieldset class="fs-map">
@@ -135,8 +134,8 @@
 			</fieldset>
 			<div class="flex-break"></div>
 			{{- end}}
-
 			{{- if .inventory}}
+
 			<fieldset>
 				<legend>Inventory</legend>
 				{{- $well_id := .well_id }}
@@ -159,6 +158,7 @@
 			</fieldset>
 			{{- end}}
 			{{- if .files}}
+
 			<fieldset class="files">
 				<legend>Files</legend>
 				{{- range .files}}
@@ -167,6 +167,7 @@
 			</fieldset>
 			{{- end}}
 			{{- if .operators}}
+
 			<fieldset>
 				<legend>Operators</legend>
 				<table class="tb-fields">
@@ -179,14 +180,14 @@
 					<tbody>
 						{{- range .operators}}
 						{{- if .is_current}}
-						<tr>
-							<td>{{.name}}</td>
-							<td>{{.operator_type}}</td>
-						</tr>
-						<tr class="spacer"></tr>
+							<tr>
+								<td>{{.name}}</td>
+								<td>{{.operator_type}}</td>
+							</tr>
+							<tr class="spacer"></tr>
+						{{- end}}
+						{{- end}}
 					</tbody>
-					{{- end}}
-					{{- end}}
 					{{range $i, $f := .operators}}{{if eq $i 1}}
 					<thead>
 						<tr>
@@ -210,10 +211,39 @@
 			</fieldset>
 			{{- end}}
 			{{- if .urls}}
+
 			<fieldset class="urls">
-				<legend>URLs</legend>
-				{{- range .urls}}
+			<legend>URLs</legend>
+			{{- range .urls}}
 				<div style="margin: 5px;"><a href="{{.url}}">{{.description}}</a> ({{.url_type}})</div>
-				{{- end}}
+			{{- end}}
 			</fieldset>
+			{{- end}}
+			{{- if ._user}}
+			{{- if .notes}}
+
+			<fieldset>
+				<legend>Notes</legend>
+				<table class="tb-fields" style="max-width:600px;">
+					<thead>
+						<tr>
+							<th style="padding-right: 50px">Date</th>
+							<th style="padding-right: 50px">User</th>
+							<th style="padding-right: 50px">Public</th>
+							<th>Note</th>
+						</tr>
+					</thead>
+					<tbody>
+					{{- range .notes}}
+						<tr>
+							<td>{{ formattime "1/2/2006" .note_date }}</td>
+							<td>{{.username}}</td>
+							<td>{{- if .is_public }} yes {{ else }} no {{- end }} </td>
+							<td>{{ .note }}</td>
+						</tr>
+					{{- end}}
+					</tbody>
+				</table>
+			</fieldset>
+			{{- end}}
 			{{- end}}

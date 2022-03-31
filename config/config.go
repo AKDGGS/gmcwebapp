@@ -4,9 +4,10 @@ import (
 	"crypto/rand"
 	"encoding/hex"
 	"fmt"
-	yaml "gopkg.in/yaml.v2"
 	"io"
 	"os"
+
+	yaml "gopkg.in/yaml.v2"
 )
 
 type Config struct {

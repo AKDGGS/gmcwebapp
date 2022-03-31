@@ -55,6 +55,16 @@ func (pg *Postgres) GetShotline(id int, flags int) (map[string]interface{}, erro
 		}
 	}
 
+	if (flags & dbf.NOTE) != 0 {
+		notes, err := pg.queryRows("pg/note_byshotlineid.sql", id)
+		if err != nil {
+			return nil, err
+		}
+		if notes != nil {
+			shotline["notes"] = notes
+		}
+	}
+
 	if (flags & dbf.GEOJSON) != 0 {
 		geojson, err := pg.queryRow("pg/shotline_geojson.sql", id)
 		if err != nil {

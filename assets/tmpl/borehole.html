@@ -56,10 +56,10 @@
 						{{- if .geojson}}
 						{{range $i, $f := .geojson.features}}{{if ne $i 0}}, {{end}}
 						{{if (eq $f.geometry.type "Point" )}}
-						<tr>
-							<th>Lon/Lat</th>
-							<td> {{$f.geometry.coordinates}}</td>
-						</tr>
+							<tr>
+								<th>Lon/Lat</th>
+								<td> {{$f.geometry.coordinates}}</td>
+							</tr>
 						{{- end}}
 						{{- end}}
 						{{- end}}
@@ -82,8 +82,7 @@
 							<th>Onshore</th>
 							<td>Yes</td>
 						</tr>
-						{{- end}}
-						{{- if not .is_onshore }}
+						{{ else }}
 						<tr>
 							<th>Onshore</th>
 							<td>No</td>
@@ -110,8 +109,8 @@
 			</fieldset>
 			<div class="flex-break"></div>
 			{{- end}}
-
 			{{- if .inventory}}
+
 			<fieldset>
 				<legend>Inventory</legend>
 				{{- $prospect_id := .prospect_id }}
@@ -135,6 +134,7 @@
 			</fieldset>
 			{{- end}}
 			{{- if .files}}
+
 			<fieldset class="files">
 				<legend>Files</legend>
 				{{- range .files}}
@@ -163,12 +163,40 @@
 				</table>
 			</fieldset>
 			{{- end}}
-
 			{{- if .urls}}
+
 			<fieldset class="urls">
 				<legend>URLs</legend>
 				{{- range .urls}}
 				<div style="margin: 5px;"><a href="{{.url}}">{{.description}}</a> ({{.url_type}})</div>
 				{{- end}}
 			</fieldset>
+			{{- end}}
+			{{- if ._user}}
+			{{- if .notes}}
+
+			<fieldset>
+				<legend>Notes</legend>
+				<table class="tb-fields" style="max-width:600px;">
+					<thead>
+						<tr>
+							<th style="padding-right: 50px">Date</th>
+							<th style="padding-right: 50px">User</th>
+							<th style="padding-right: 50px">Public</th>
+							<th>Note</th>
+						</tr>
+					</thead>
+					<tbody>
+						{{- range .notes}}
+						<tr>
+							<td>{{formattime "1/2/2006" .note_date}}</td>
+							<td>{{.username}}</td>
+							<td>{{- if .is_public}} Yes {{ else }} No {{- end}} </td>
+							<td>{{.note}}</td>
+						</tr>
+					</tbody>
+					{{- end}}
+				</table>
+			</fieldset>
+			{{- end}}
 			{{- end}}

@@ -210,5 +210,6 @@ func (pg *Postgres) GetInventory(id int, flags int) (map[string]interface{}, err
 			inventory["geojson"] = geojson["geojson"]
 		}
 	}
+
 	return inventory, nil
 }

@@ -25,8 +25,7 @@
 							<th>Onshore</th>
 							<td>Yes</td>
 						</tr>
-						{{- end}}
-						{{- if not .is_onshore }}
+						{{ else }}
 						<tr>
 							<th>Onshore</th>
 							<td>No</td>
@@ -34,10 +33,10 @@
 						{{- end }}
 						{{- if .geojson}}
 						<tr>
+							{{range $i, $f := .geojson.features}}{{if ne $i 0}}{{end}}{{- if (eq $f.geometry.type "Point" )}}
 							<th>Lon/Lat</th>
-							{{- range $i, $f := .geojson.features}}{{- if ne $i 0}}, {{end}}{{- if (eq $f.geometry.type "Point" )}}
-							<td>{{$f.geometry.coordinates}}</td>
-							{{- end}}
+							<td>{{ $f.geometry.coordinates -}}</td>
+							{{ end }}
 						</tr>
 						{{- end}}
 						{{- end}}
@@ -129,4 +128,32 @@
 				<div style="margin: 5px;"><a href="{{.url}}">{{.description}}</a> ({{.url_type}})</div>
 				{{- end}}
 			</fieldset>
+			{{- end}}
+			{{- if ._user}}
+			{{- if .notes}}
+
+				<fieldset>
+					<legend>Notes</legend>
+					<table class="tb-fields" style="max-width:600px;">
+						<thead>
+							<tr>
+								<th style="padding-right: 50px">Date</th>
+								<th style="padding-right: 50px">User</th>
+								<th style="padding-right: 50px">Public</th>
+								<th>Note</th>
+							</tr>
+						</thead>
+						<tbody>
+							{{- range .notes}}
+							<tr>
+								<td>{{formattime "1/2/2006" .note_date}}</td>
+								<td>{{.username}}</td>
+								<td>{{- if .is_public}} Yes {{ else }} No {{- end}} </td>
+								<td>{{.note}}</td>
+							</tr>
+							{{- end}}
+						</tbody>
+					</table>
+				</fieldset>
+			{{- end}}
 			{{- end}}

@@ -1,612 +1,614 @@
-<fieldset class="fs-detail inventory_boxes">
-	<legend>Inventory Detail</legend>
-	<table class="tb-fields">
-		<tbody>
-			{{- if .inventory_id }}
-			<tr>
-				<th>ID</th>
-				<td>{{ .inventory_id }}</td>
-			</tr>
+			<fieldset class="fs-detail inventory_boxes">
+				<legend>Inventory Detail</legend>
+				<table class="tb-fields">
+					<tbody>
+						{{- if .inventory_id }}
+						<tr>
+							<th>ID</th>
+							<td>{{ .inventory_id }}</td>
+						</tr>
+						{{- end}}
+						{{- if ._user}}
+						{{- if .container_path_cache }}
+						<tr>
+							<th>Location</th>
+							<td>{{ .container_path_cache }}</td>
+						</tr>
+						{{- end }}
+						{{- if .barcode }}
+						<tr>
+							<th>Barcode</th>
+							<td>{{ .barcode }}</td>
+						</tr>
+						{{- end }}
+						{{- if .container_alt_barcode }}
+						<tr>
+							<th>Alt. Barcode</th>
+							<td>{{ .container_alt_barcode }}</td>
+						</tr>
+						{{- end }}
+						{{- end}}
+						{{- if .dggs_sample_id }}
+						<tr>
+							<th>DGGS Sample ID</th>
+							<td>{{ .dggs_sample_id }}</td>
+						</tr>
+						{{- end }}
+						{{- if .sample_number }}
+						<tr>
+							<th>Sample Number</th>
+							<td>{{ .sample_number }}</td>
+						</tr>
+						{{- end }}
+						{{- if .sample_number_prefix }}
+						<tr>
+							<th>Sample Number Prefix</th>
+							<td>{{.sample_number_prefix}}</td>
+						</tr>
+						{{- end}}
+						{{- if .alt_sample_number}}
+						<tr>
+							<th>Alternative Sample Number</th>
+							<td>{{.alt_sample_number}}</td>
+						</tr>
+						{{- end}}
+						{{- if .published_sample_number}}
+						<tr>
+							<th>Published Sample No.</th>
+							<td>{{.published_sample_number}} {{.published_number_has_suffix}}</td>
+						</tr>
+						{{- end}}
+						{{- if .collection_name}}
+						<tr>
+							<th>Collection</th>
+							<td>{{.collection_name}}</td>
+						</tr>
+						{{- end}}
+						{{- if .state_number}}
+						<tr>
+							<th>State Number</th>
+							<td>{{.state_number}}</td>
+						</tr>
+						{{- end}}
+						{{- if .box_number}}
+						<tr>
+							<th>Box Number</th>
+							<td>{{.box_number}}</td>
+						</tr>
+						{{- end}}
+						{{- if .set_number}}
+						<tr>
+							<th>Set Number</th>
+							<td>{{.set_number}}</td>
+						</tr>
+						{{- end}}
+						{{- if .split_number}}
+						<tr>
+							<th>Split Number</th>
+							<td>{{.split_number}}</td>
+						</tr>
+						{{- end}}
+						{{- if .slide_number}}
+						<tr>
+							<th>Slide Number</th>
+							<td>{{.slide_number}}</td>
+						</tr>
+						{{- end}}
+						{{- if .slip_number}}
+						<tr>
+							<th>slip_number</th>
+							<td>{{.slip_number}}</td>
+						</tr>
+						{{- end}}
+						{{- if .lab_number}}
+						<tr>
+							<th>Lab Number</th>
+							<td>{{.lab_number}}</td>
+						</tr>
+						{{- end}}
+						{{- if .lab_report_id}}
+						<tr>
+							<th>Lab Report ID</th>
+							<td>{{.lab_report_id}}</td>
+						</tr>
+						{{- end}}
+						{{- if .core_number}}
+						<tr>
+							<th>Core Number</th>
+							<td>{{.core_number}}</td>
+						</tr>
+						{{- end}}
+						{{- if .core_diameter}}
+						<tr>
+							<th>Core Diameter</th>
+							<td>{{.core_diameter}} {{.unit}}
+								{{- if .core_diameter_name}} ({{.core_diameter_name}}){{- end}}</td>
+						</tr>
+						{{- end}}
+						{{- if .interval_top}}
+						<tr>
+							<th>Interval Top</th>
+							<td>{{.interval_top}} {{.interval_unit}}</td>
+						</tr>
+						{{- end}}
+						{{- if .interval_bottom}}
+						<tr>
+							<th>Interval Bottom</th>
+							<td>{{.interval_bottom}} {{.interval_unit}}</td>
+						</tr>
+						{{- end}}
+						{{- if .description}}
+						<tr>
+							<th>Description</th>
+							<td>{{.description}}</td>
+						</tr>
+						{{- end}}
+						{{- if .remark}}
+						<tr>
+							<th>Remark</th>
+							<td>{{.remark}}</td>
+						</tr>
+						{{- end}}
+						{{- if ._user}}
+						{{- if .tray}}
+						<tr>
+							<th>Tray</th>
+							<td>{{.tray}}</td>
+						</tr>
+						{{- end}}
+						{{- end}}
+						{{- if .weight}}
+						<tr>
+							<th>Weight</th>
+							<td>{{.weight}} {{.weight_unit}}</td>
+						</tr>
+						{{- end}}
+						{{- if .sample_frequency}}
+						<tr>
+							<th>Sample Frequency</th>
+							<td>{{.sample_frequency}}</td>
+						</tr>
+						{{- end}}
+						{{- if .recovery}}
+						<tr>
+							<th>Recovery</th>
+							<td>{{.recovery}}</td>
+						</tr>
+						{{- end}}
+						{{- if .radiation_msvh}}
+						<tr>
+							<th>Radiation</th>
+							<td>{{.radiation_msvh}}</td>
+						</tr>
+						{{- end}}
+						{{- if .keywords}}
+						<tr>
+							<th>Keywords</th>
+							<td><a href="../search#keyword={{.keywords}}">{{.keywords}}</a></td>
+						</tr>
+						{{- end}}
+						{{- if ._user}}
+						{{- if .received_date}}
+						<tr>
+							<th>Received Date</th>
+							<td>{{formattime "1/2/2006" .received_date}}</td>
+						</tr>
+						{{- end}}
+						{{- if .entered_date}}
+						<tr>
+							<th>Entered Date</th>
+							<td>{{formattime "1/2/2006" .entered_date}}</td>
+						</tr>
+						{{- end}}
+						{{- if .modified_user}}
+						<tr>
+							<th>Last Modified By</th>
+							<td>{{.modified_user}}</td>
+						</tr>
+						{{- end}}
+						{{- if .modified_date}}
+						<tr>
+							<th>Modified Date</th>
+							<td>{{formattime "1/2/2006" .modified_date}}</td>
+						</tr>
+						{{- end}}
+						{{- if .can_publish}}
+						<tr>
+							<th>Publish</th>
+							<td>Yes</td>
+						</tr>
+						{{ else }}
+						<tr>
+							<th>Publish</th>
+							<td>No</td>
+						</tr>
+						{{- end }}
+						{{- if .active}}
+						<tr>
+							<th>Active</th>
+							<td>Yes</td>
+						</tr>
+						{{ else }}
+						<tr>
+							<th>Active</th>
+							<td>No</td>
+						</tr>
+						{{- end }}
+						{{- end}}
+					</tbody>
+				</table>
+			</fieldset>
+			{{- if .geojson}}
+
+			<fieldset class="fs-map">
+				<legend>Geospatial</legend>
+				<div id="map"></div>
+				<div id="popup" class="ol-popup">
+					<div class="ol-popup-top">
+						<div class="ol-popup-top-title">Borehole(s)</div>
+						<div id="popup-closer">&#215;</div>
+					</div>
+					<div id="popup-content" class="ol-popup-content"></div>
+				</div>
+				<script>
+					var geojson = {{rawjs .geojson}};
+				</script>
+			</fieldset>
+			<div class="flex-break"></div>
+			{{- end}}
+			{{- if .boreholes}}
+
+			<fieldset>
+				<legend>Prospect(s)</legend>
+				<table class="tb-fields">
+					<tbody>
+						{{- range .boreholes}}
+						{{- if .prospect_name}}
+						<tr>
+							<th>Prospect Name</th>
+							<td><a href="../prospect/{{.prospect_id}}">{{.prospect_name}}</a></td>
+						</tr>
+						{{- end}}
+						{{- if .ardf_number}}
+						<tr>
+							<th>Prospect ARDF</th>
+							<td><a href="http://mrdata.usgs.gov/ardf/show.php?labno={{.ardf_number}}">{{.ardf_number}}</a></td>
+						</tr>
+						{{- end}}
+						{{- if .borehole_name}}
+						<tr>
+							<th>Borehole Name</th>
+							<td><a href="../borehole/{{.borehole_id}}">{{.borehole_name}}</a></td>
+						</tr>
+						{{- end}}
+						{{- if .alt_names}}
+						<tr>
+							<th>Borehole Alt. Name(s)</th>
+							<td>{{.alt_names}}</td>
+						</tr>
+						{{- end}}
+						{{- end}}
+					</tbody>
+				</table>
+			</fieldset>
+			{{- end}}
+			{{- if .wells}}
+
+			<fieldset>
+				<legend>Well(s)</legend>
+				<table class="tb-fields">
+					<tbody>
+						{{- range .wells}}
+						{{- if .is_current}}
+						{{- if .well_name}}
+						<tr>
+							<th>Well Name</th>
+							<td><a href="../well/{{.well_id}}">{{.well_name}}</a></td>
+						</tr>
+						{{- end}}
+						{{- if .alt_names}}
+						<tr>
+							<th>Well Alt. Name</th>
+							<td>{{.alt_names}}</td>
+						</tr>
+						{{- end}}
+						{{- if .well_number}}
+						<tr>
+							<th>Well Number</th>
+							<td>{{.well_number}}</td>
+						</tr>
+						{{- end}}
+						{{- if .api_number}}
+						<tr>
+							<th>API Number</th>
+							<td>{{.api_number}}</td>
+						</tr>
+						{{- end}}
+						{{- if .operator_name}}
+						<tr>
+							<th>Current Operator</th>
+							<td>{{.operator_name}}</td>
+						</tr>
+						{{- end}}
+						{{- if .operator_type}}
+						<tr>
+							<th>Operator Type</th>
+							<td>{{.operator_type}}</td>
+						</tr>
+						{{- end}}
+						<tr class="horizontal-spacer">
+							<td></td>
+						</tr>
+						{{- end}}
+						{{- end}}
+					</tbody>
+				</table>
+			</fieldset>
+			{{- end}}
+			{{- if .shotlines}}
+
+			<fieldset>
+				<legend>Shotline(s)</legend>
+				<table class="tb-fields">
+					<tbody>
+						{{- range .shotlines}}
+						{{- if .name}}
+						<tr>
+							<th>Shotline Name</th>
+							<td><a href="../shotline/{{.shotline_id}}">{{.name}}</a></td>
+						</tr>
+						{{- end}}
+						{{- if .alt_names}}
+						<tr>
+							<th>Shotline Alt. Name</th>
+							<td>{{.alt_names}}</td>
+						</tr>
+						{{- end}}
+						{{- if .year}}
+						<tr>
+							<th>Shotline Year</th>
+							<td>{{.year}}</td>
+						</tr>
+						{{- end}}
+						{{- if .shotpoint_number}}
+						<tr>
+							<th>Shotpoint</th>
+							<td>{{.shotpoint_number}}</td>
+						</tr>
+						{{- end}}
+						<tr class="horizontal-spacer">
+							<td></td>
+						</tr>
+						{{- end}}
+					</tbody>
+				</table>
+			</fieldset>
+			{{- end}}
+			{{- if .outcrops}}
+
+			<fieldset>
+				<legend>Outcrop(s)</legend>
+				<table class="tb-fields">
+					<tbody>
+						{{- range .outcrops}}
+						{{- if .name}}
+						<tr>
+							<th>Outcrop Name</th>
+							<td><a href="../outcrop/{{.outcrop_id}}">{{.name}}</a></td>
+						</tr>
+						{{- end}}
+						{{- if .outcrop_number}}
+						<tr>
+							<th>Outcrop Number</th>
+							<td>{{.outcrop_number}}</td>
+						</tr>
+						{{- end}}
+						{{- if .year}}
+						<tr>
+							<th>Outcrop Year</th>
+							<td>{{.year}}</td>
+						</tr>
+						{{- end}}
+						<tr class="horizontal-spacer">
+							<td></td>
+						</tr>
+						{{- end}}
+					</tbody>
+				</table>
+			</fieldset>
+			{{- end}}
+			{{- if .urls}}
+
+			<fieldset class="urls">
+				<legend>URLs</legend>
+				{{- range .urls}}
+				<div style="margin: 5px;"><a href="{{.url}}">{{.description}}</a> ({{.url_type}})</div>
+				{{- end}}
+			</fieldset>
+			{{- end}}
+			{{- if .files}}
+
+			<fieldset class="files">
+				<legend>Files</legend>
+				{{- range .files}}
+				<div><a href="../file/{{.file_id}}/{{.file_name}}">{{.file_name}}</a> ({{.file_size}})</div>
+				{{- end}}
+			</fieldset>
 			{{- end}}
 			{{- if ._user}}
-			{{- if .container_path_cache }}
-			<tr>
-				<th>Location</th>
-				<td>{{ .container_path_cache }}</td>
-			</tr>
-			{{- end }}
-			{{- if .barcode }}
-			<tr>
-				<th>Barcode</th>
-				<td>{{ .barcode }}</td>
-			</tr>
-			{{- end }}
-			{{- if .container_alt_barcode }}
-			<tr>
-				<th>Alt. Barcode</th>
-				<td>{{ .container_alt_barcode }}</td>
-			</tr>
-			{{- end }}
+				{{- if .publications}}
+
+				<fieldset>
+					<legend>Publication(s)</legend>
+					<table class="tb-fields" style="max-width:600px;">
+						<tbody>
+							{{- range .publications}}
+							{{- if .title}}
+							<tr>
+								<th>Title</th>
+								<td>{{ .title }}</td>
+							</tr>
+							{{- end}}
+							{{- if .year}}
+							<tr>
+								<th>Year</th>
+								<td>{{ .year }}</td>
+							</tr>
+							{{- end}}
+							{{- if .publication_type}}
+							<tr>
+								<th>Type</th>
+								<td>{{ .publication_type }}</td>
+							</tr>
+							{{- end}}
+							{{- if .publication_number}}
+							<tr>
+								<th>Number</th>
+								<td>{{ .publication_number }}</td>
+							</tr>
+							{{- end}}
+							{{- if .publication_series}}
+							<tr>
+								<th>Series</th>
+								<td>{{ .publication_series }}</td>
+							</tr>
+							{{- end}}
+							{{- if .description}}
+							<tr>
+								<th>Description</th>
+								<td>{{ .description }}</td>
+							</tr>
+							{{- end}}
+							{{- if .can_publish}}
+							<tr>
+								<th>Publish</th>
+								<td>Yes</td>
+							</tr>
+							{{ else }}
+							<tr>
+								 <th>Publish</th>
+								 <td>No</td>
+							</tr>
+							{{- end}}
+							<tr class="horizontal-spacer">
+								<td></td>
+							</tr>
+							{{- end}}
+						</tbody>
+					</table>
+				</fieldset>
 			{{- end}}
-			{{- if .dggs_sample_id }}
-			<tr>
-				<th>DGGS Sample ID</th>
-				<td>{{ .dggs_sample_id }}</td>
-			</tr>
-			{{- end }}
-			{{- if .sample_number }}
-			<tr>
-				<th>Sample Number</th>
-				<td>{{ .sample_number }}</td>
-			</tr>
-			{{- end }}
-			{{- if .sample_number_prefix }}
-			<tr>
-				<th>Sample Number Prefix</th>
-				<td>{{.sample_number_prefix}}</td>
-			</tr>
-			{{- end}}
-			{{- if .alt_sample_number}}
-			<tr>
-				<th>Alternative Sample Number</th>
-				<td>{{.alt_sample_number}}</td>
-			</tr>
-			{{- end}}
-			{{- if .published_sample_number}}
-			<tr>
-				<th>Published Sample No.</th>
-				<td>{{.published_sample_number}} {{.published_number_has_suffix}}</td>
-			</tr>
-			{{- end}}
-			{{- if .collection_name}}
-			<tr>
-				<th>Collection</th>
-				<td>{{.collection_name}}</td>
-			</tr>
-			{{- end}}
-			{{- if .state_number}}</tr>
-				<th>State Number</th>
-				<td>{{.state_number}}</td>
-			</tr>
-			{{- end}}
-			{{- if .box_number}}
-			<tr>
-				<th>Box Number</th>
-				<td>{{.box_number}}</td>
-			</tr>
-			{{- end}}
-			{{- if .set_number}}
-			<tr>
-				<th>Set Number</th>
-				<td>{{.set_number}}</td>
-			</tr>
-			{{- end}}
-			{{- if .split_number}}
-			<tr>
-				<th>Split Number</th>
-				<td>{{.split_number}}</td>
-			</tr>
-			{{- end}}
-			{{- if .slide_number}}
-			<tr>
-				<th>Slide Number</th>
-				<td>{{.slide_number}}</td>
-			</tr>
-			{{- end}}
-			{{- if .slip_number}}
-			<tr>
-				<th>slip_number</th>
-				<td>{{.slip_number}}</td>
-			</tr>
-			{{- end}}
-			{{- if .lab_number}}
-			<tr>
-				<th>Lab Number</th>
-				<td>{{.lab_number}}</td>
-			</tr>
-			{{- end}}
-			{{- if .lab_report_id}}
-			<tr>
-				<th>Lab Report ID</th>
-				<td>{{.lab_report_id}}</td>
-			</tr>
-			{{- end}}
-			{{- if .core_number}}
-			<tr>
-				<th>Core Number</th>
-				<td>{{.core_number}}</td>
-			</tr>
-			{{- end}}
-			{{- if .core_diameter}}
-			<tr>
-				<th>Core Diameter</th>
-				<td>{{.core_diameter}} {{.unit}}
-					{{- if .core_diameter_name}} ({{.core_diameter_name}}){{- end}}</td>
-			</tr>
-			{{- end}}
-			{{- if .interval_top}}
-			<tr>
-				<th>Interval Top</th>
-				<td>{{.interval_top}} {{.interval_unit}}</td>
-			</tr>
-			{{- end}}
-			{{- if .interval_bottom}}
-			<tr>
-				<th>Interval Bottom</th>
-				<td>{{.interval_bottom}} {{.interval_unit}}</td>
-			</tr>
-			{{- end}}
-			{{- if .description}}
-			<tr>
-				<th>Description</th>
-				<td>{{.description}}</td>
-			</tr>
-			{{- end}}
-			{{- if .remark}}
-			<tr>
-				<th>Remark</th>
-				<td>{{.remark}}</td>
-			</tr>
 			{{- end}}
 			{{- if ._user}}
-			{{- if .tray}}
-			<tr>
-				<th>Tray</th>
-				<td>{{.tray}}</td>
-			</tr>
+			{{- if .notes}}
+
+				<fieldset>
+					<legend>Notes</legend>
+					<table class="tb-fields" style="max-width:600px;">
+						<thead>
+							<tr>
+								<th style="padding-right: 50px">Date</th>
+								<th style="padding-right: 50px">User</th>
+								<th style="padding-right: 50px">Public</th>
+								<th>Note</th>
+							</tr>
+						</thead>
+						<tbody>
+							{{- range .notes}}
+							<tr>
+								<td>{{formattime "1/2/2006" .note_date}}</td>
+								<td>{{.username}}</td>
+								<td>{{- if .is_public}} Yes {{ else }} No {{- end}}</td>
+								<td>{{.note}}</td>
+							</tr>
+							{{- end}}
+						</tbody>
+					</table>
+				</fieldset>
 			{{- end}}
-			{{- end}}
-			{{- if .weight}}
-			<tr>
-				<th>Weight</th>
-				<td>{{.weight}} {{.weight_unit}}</td>
-			</tr>
-			{{- end}}
-			{{- if .sample_frequency}}
-			<tr>
-				<th>Sample Frequency</th>
-				<td>{{.sample_frequency}}</td>
-			</tr>
-			{{- end}}
-			{{- if .recovery}}
-			<tr>
-				<th>Recovery</th>
-				<td>{{.recovery}}</td>
-			</tr>
-			{{- end}}
-			{{- if .radiation_msvh}}
-			<tr>
-				<th>Radiation</th>
-				<td>{{.radiation_msvh}}</td>
-			</tr>
-			{{- end}}
-			{{- if .keywords}}
-			<tr>
-				<th>Keywords</th>
-				<td><a href="../search#keyword={{.keywords}}">{{.keywords}}</a></td>
-			</tr>
 			{{- end}}
 			{{- if ._user}}
-			{{- if .received_date}}
-			<tr>
-				<th>Received Date</th>
-				<td>{{formattime "1/2/2006" .received_date}}</td>
-			</tr>
-			{{- end}}
-			{{- if .entered_date}}
-			<tr>
-				<th>Entered Date</th>
-				<td>{{formattime "1/2/2006" .entered_date}}</td>
-			</tr>
-			{{- end}}
-			{{- if .modified_user}}
-			<tr>
-				<th>Last Modified By</th>
-				<td>{{.modified_user}}</td>
-			</tr>
-			{{- end}}
-			{{- if .modified_date}}
-			<tr>
-				<th>Modified Date</th>
-				<td>{{formattime "1/2/2006" .modified_date}}</td>
-			</tr>
-			{{- end}}
-			{{- if .can_publish}}
-			<tr>
-				<th>Publish</th>
-				<td>Yes</td>
-			</tr>
-			{{- end}}
-			{{- if not .can_publish }}
-			<tr>
-				<th>Publish</th>
-				<td>No</td>
-			</tr>
-			{{- end }}
-			{{- if .active}}
-			<tr>
-				<th>Active</th>
-				<td>Yes</td>
-			</tr>
-			{{- end}}
-			{{- if not .active }}
-			<tr>
-				<th>Active</th>
-				<td>No</td>
-			</tr>
-			{{- end }}
-			{{- end}}
-		</tbody>
-	</table>
-</fieldset>
+			{{- if .qualities}}
 
-{{- if .geojson}}
+				<fieldset>
+					<legend>QA</legend>
+					<table class="tb-fields" style="max-width:600px;">
+						<thead>
+							<tr>
+								<th style="padding-right: 50px">Date</th>
+								<th style="padding-right: 50px">User</th>
+								<th style="padding-right: 50px">Issue(s)</th>
+								<th>Remark</th>
+							</tr>
+						</thead>
+						<tbody>
+							{{- range .qualities}}
+							<tr>
+								<td>{{formattime "1/2/2006" .check_date}}</td>
+								<td>{{.username}}</td>
+								<td>{{.issues}}</td>
+								<td>{{.remark}}</td>
+							</tr>
+						</tbody>
+						{{- end}}
+					</table>
+				</fieldset>
+			{{- end}}
+			{{- end}}
+			{{- if ._user}}
+			{{- if .containerlog}}
 
-<fieldset class="fs-map">
-	<legend>Geospatial</legend>
-	<div id="map"></div>
-	<div id="popup" class="ol-popup">
-		<div class="ol-popup-top">
-			<div class="ol-popup-top-title">Borehole(s)</div>
-			<div id="popup-closer">&#215;</div>
-		</div>
-		<div id="popup-content" class="ol-popup-content"></div>
-	</div>
-	<script>
-		var geojson = {{rawjs .geojson}};
-	</script>
-</fieldset>
-<div class="flex-break"></div>
-{{- end}}
+			<fieldset class="inventory_boxes">
+				<legend>Tracking</legend>
+				<table class="tb-fields" style="max-width:600px;">
+					<tbody>
+						{{- range .containerlog}}
+						<tr>
+							<td>{{formattime "1/2/2006" .log_date}} <strong>{{.destination}}</strong></td>
+						</tr>
+					{{- end}}
+					</tbody>
+				</table>
+			</fieldset>
+			{{- end}}
+			{{- end}}
+			{{- if ._user}}
 
-{{- if .boreholes}}
-<fieldset>
-	<legend>Prospect(s)</legend>
-	<table class="tb-fields">
-		<tbody>
-			{{- range .boreholes}}
-			{{- if .prospect_name}}
-			<tr>
-				<th>Prospect Name</th>
-				<td><a href="../prospect/{{.prospect_id}}">{{.prospect_name}}</a></td>
-			</tr>
+			<fieldset class="inventory_boxes">
+				<legend>Stash</legend>
+				<button id="stash-link" type="submit">Show Stash</button>
+				<div id="stash-dd"></div>
+			</fieldset>
 			{{- end}}
-			{{- if .ardf_number}}
-			<tr>
-				<th>Prospect ARDF</th>
-				<td><a href="http://mrdata.usgs.gov/ardf/show.php?labno={{.ardf_number}}">{{.ardf_number}}</a></td>
-			</tr>
-			{{- end}}
-			{{- if .borehole_name}}
-			<tr>
-				<th>Borehole Name</th>
-				<td><a href="../borehole/{{.borehole_id}}">{{.borehole_name}}</a></td>
-			</tr>
-			{{- end}}
-			{{- if .alt_names}}
-			<tr>
-				<th>Borehole Alt. Name(s)</th>
-				<td>{{.alt_names}}</td>
-			</tr>
-			{{- end}}
-			{{- end}}
-		</tbody>
-	</table>
-</fieldset>
-{{- end}}
 
-{{- if .wells}}
-<fieldset>
-	<legend>Well(s)</legend>
-	<table class="tb-fields">
-		<tbody>
-			{{- range .wells}}
-			{{- if .is_current}}
-			{{- if .well_name}}
-			<tr>
-				<th>Well Name</th>
-				<td><a href="../well/{{.well_id}}">{{.well_name}}</a></td>
-			</tr>
-			{{- end}}
-			{{- if .alt_names}}
-			<tr>
-				<th>Well Alt. Name</th>
-				<td>{{.alt_names}}</td>
-			</tr>
-			{{- end}}
-			{{- if .well_number}}
-			<tr>
-				<th>Well Number</th>
-				<td>{{.well_number}}</td>
-			</tr>
-			{{- end}}
-			{{- if .api_number}}
-			<tr>
-				<th>API Number</th>
-				<td>{{.api_number}}</td>
-			</tr>
-			{{- end}}
-			{{- if .operator_name}}
-			<tr>
-				<th>Current Operator</th>
-				<td>{{.operator_name}}</td>
-			</tr>
-			{{- end}}
-			{{- if .operator_type}}
-			<tr>
-				<th>Operator Type</th>
-				<td>{{.operator_type}}</td>
-			</tr>
-			{{- end}}
-			<tr class="horizontal-spacer">
-				<td></td>
-			</tr>
-			{{- end}}
-			{{- end}}
-		</tbody>
-	</table>
-</fieldset>
-{{- end}}
-
-{{- if .shotlines}}
-<fieldset>
-	<legend>Shotline(s)</legend>
-	<table class="tb-fields">
-		<tbody>
-			{{- range .shotlines}}
-			{{- if .name}}
-			<tr>
-				<th>Shotline Name</th>
-				<td><a href="../shotline/{{.shotline_id}}">{{.name}}</a></td>
-			</tr>
-			{{- end}}
-			{{- if .alt_names}}
-			<tr>
-				<th>Shotline Alt. Name</th>
-				<td>{{.alt_names}}</td>
-			</tr>
-			{{- end}}
-			{{- if .year}}
-			<tr>
-				<th>Shotline Year</th>
-				<td>{{.year}}</td>
-			</tr>
-			{{- end}}
-			{{- if .shotpoint_number}}
-			<tr>
-				<th>Shotpoint</th>
-				<td>{{.shotpoint_number}}</td>
-			</tr>
-			{{- end}}
-			<tr class="horizontal-spacer">
-				<td></td>
-			</tr>
-			{{- end}}
-		</tbody>
-	</table>
-</fieldset>
-{{- end}}
-
-{{- if .outcrops}}
-<fieldset>
-	<legend>Outcrop(s)</legend>
-	<table class="tb-fields">
-		<tbody>
-			{{- range .outcrops}}
-			{{- if .name}}
-			<tr>
-				<th>Outcrop Name</th>
-				<td><a href="../outcrop/{{.outcrop_id}}">{{.name}}</a></td>
-			</tr>
-			{{- end}}
-			{{- if .outcrop_number}}
-			<tr>
-				<th>Outcrop Number</th>
-				<td>{{.outcrop_number}}</td>
-			</tr>
-			{{- end}}
-			{{- if .year}}
-			<tr>
-				<th>Outcrop Year</th>
-				<td>{{.year}}</td>
-			</tr>
-			{{- end}}
-			<tr class="horizontal-spacer">
-				<td></td>
-			</tr>
-			{{- end}}
-		</tbody>
-	</table>
-</fieldset>
-{{- end}}
-
-{{- if .urls}}
-<fieldset class="urls">
-	<legend>URLs</legend>
-	{{- range .urls}}
-	<div style="margin: 5px;"><a href="{{.url}}">{{.description}}</a> ({{.url_type}})</div>
-	{{- end}}
-</fieldset>
-{{- end}}
-
-{{- if .files}}
-<fieldset class="files">
-	<legend>Files</legend>
-	{{- range .files}}
-	<div><a href="../file/{{.file_id}}/{{.file_name}}">{{.file_name}}</a> ({{.file_size}})</div>
-	{{- end}}
-</fieldset>
-{{- end}}
-
-{{- if ._user}}
-{{- if .publications}}
-<fieldset>
-	<legend>Publication(s)</legend>
-	<table class="tb-fields" style="max-width:600px;">
-		<tbody>
-			{{- range .publications}}
-			{{- if .title}}
-			<tr>
-				<th>Title</th>
-				<td>{{ .title }}</td>
-			</tr>
-			{{- end}}
-			{{- if .year}}
-			<tr>
-				<th>Year</th>
-				<td>{{ .year }}</td>
-			</tr>
-			{{- end}}
-			{{- if .publication_type}}
-			<tr>
-				<th>Type</th>
-				<td>{{ .publication_type }}</td>
-			</tr>
-			{{- end}}
-			{{- if .publication_number}}
-			<tr>
-				<th>Number</th>
-				<td>{{ .publication_number }}</td>
-			</tr>
-			{{- end}}
-			{{- if .publication_series}}
-			<tr>
-				<th>Series</th>
-				<td>{{ .publication_series }}</td>
-			</tr>
-			{{- end}}
-			{{- if .description}}
-			<tr>
-				<th>Description</th>
-				<td>{{ .description }}</td>
-			</tr>
-			{{- end}}
-			{{- if .can_publish}}
-			<tr>
-				<th>Publish</th>
-				<td>{{- if .can_publish}} yes {{- end}} {{- if not .can_publish}} no {{- end}}</td>
-			</tr>
-			{{- end}}
-			<tr class="horizontal-spacer">
-				<td></td>
-			</tr>
-			{{- end}}
-		</tbody>
-	</table>
-</fieldset>
-{{- end}}
-{{- end}}
-
-{{- if ._user}}
-{{- if .notes}}
-<fieldset>
-	<legend>Notes</legend>
-	<table class="tb-fields" style="max-width:600px;">
-		<thead>
-			<tr>
-				<th style="padding-right: 50px">Date</th>
-				<th style="padding-right: 50px">User</th>
-				<th style="padding-right: 50px">Public</th>
-				<th>Note</th>
-			</tr>
-		</thead>
-		<tbody>
-			{{- range .notes}}
-			<tr>
-				<td>{{formattime "1/2/2006" .note_date}}</td>
-				<td>{{.username}}</td>
-				<td>{{- if .is_public}} yes {{- end}} {{- if not .is_public}} no {{- end}}</td>
-				<td>{{.note}}</td>
-			</tr>
-		</tbody>
-		{{- end}}
-	</table>
-</fieldset>
-{{- end}}
-{{- end}}
-
-
-{{- if ._user}}
-{{- if .qualities}}
-<fieldset>
-	<legend>QA</legend>
-	<table class="tb-fields" style="max-width:600px;">
-		<thead>
-			<tr>
-				<th style="padding-right: 50px">Date</th>
-				<th style="padding-right: 50px">User</th>
-				<th style="padding-right: 50px">Issue(s)</th>
-				<th>Remark</th>
-			</tr>
-		</thead>
-		<tbody>
-			{{- range .qualities}}
-			<tr>
-				<td>{{formattime "1/2/2006" .check_date}}</td>
-				<td>{{.username}}</td>
-				<td>{{.issues}}</td>
-				<td>{{.remark}}</td>
-			</tr>
-		</tbody>
-		{{- end}}
-	</table>
-</fieldset>
-{{- end}}
-{{- end}}
-
-{{- if ._user}}
-{{- if .containerlog}}
-<fieldset class="inventory_boxes">
-	<legend>Tracking</legend>
-	<table class="tb-fields" style="max-width:600px;">
-		<tbody>
-			{{- range .containerlog}}
-			<tr>
-				<td>{{formattime "1/2/2006" .log_date}} <strong>{{.destination}}</strong></td>
-			</tr>
-		</tbody>
-		{{- end}}
-	</table>
-</fieldset>
-{{- end}}
-{{- end}}
-
-{{- if ._user}}
-<fieldset class="inventory_boxes">
-	<legend>Stash</legend>
-	<button id="stash-link" type="submit">Show Stash</button>
-	<div id="stash-dd"></div>
-</fieldset>
-{{- end}}
-
-<script src="../js/utility.js"></script>
-<script type="text/javascript">
-	var stash = document.getElementById('stash-link');
-	if (stash !== null) {
-		stash.onclick = function(evt) {
-			var anchor = this;
-			if (this.innerHTML === 'Show Stash') {
-				var xhr = (window.ActiveXObject ? new ActiveXObject('Microsoft.XMLHTTP') : new XMLHttpRequest());
-				xhr.onreadystatechange = function() {
-					if (xhr.readyState === 4 && xhr.status === 200) {
-						var json = JSON.parse(xhr.responseText);
-						var el = JSONToElement(json.stash);
-						document.getElementById('stash-dd').appendChild(el);
-						anchor.innerHTML = 'Hide Stash';
-					}
-				};
-				xhr.open('GET', 'http://127.0.0.1:8080/stash/' + {{ .inventory_id }}, true);
-				xhr.send();
-			} else {
-				anchor.innerHTML = 'Show Stash';
-				var dd = document.getElementById('stash-dd');
-				if (dd !== null) {
-					while (dd.lastChild) dd.removeChild(dd.lastChild);
+			<script src="../js/utility.js"></script>
+			<script type="text/javascript">
+				var stash = document.getElementById('stash-link');
+				if (stash !== null) {
+					stash.onclick = function(evt) {
+						var anchor = this;
+						if (this.innerHTML === 'Show Stash') {
+							var xhr = (window.ActiveXObject ? new ActiveXObject('Microsoft.XMLHTTP') : new XMLHttpRequest());
+							xhr.onreadystatechange = function() {
+								if (xhr.readyState === 4 && xhr.status === 200) {
+									var json = JSON.parse(xhr.responseText);
+									var el = JSONToElement(json.stash);
+									document.getElementById('stash-dd').appendChild(el);
+									anchor.innerHTML = 'Hide Stash';
+								}
+							};
+							xhr.open('GET', 'http://127.0.0.1:8080/stash/' + {{ .inventory_id }}, true);
+							xhr.send();
+						} else {
+							anchor.innerHTML = 'Show Stash';
+							var dd = document.getElementById('stash-dd');
+							if (dd !== null) {
+								while (dd.lastChild) dd.removeChild(dd.lastChild);
+							}
+						}
+						var e = evt === undefined ? window.event : evt;
+						if ('preventDefault' in e) e.preventDefault();
+						return false;
+					};
 				}
-			}
-			var e = evt === undefined ? window.event : evt;
-			if ('preventDefault' in e) e.preventDefault();
-			return false;
-		};
-	}
-</script>
+			</script>
