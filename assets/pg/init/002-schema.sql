@@ -622,7 +622,7 @@ CREATE TABLE container_file (
 CREATE TABLE container_log (
 	container_log_id SERIAL PRIMARY KEY,
 	container_id INT REFERENCES container(container_id) NOT NULL,
-	destination TEXT NOT NULL,
+	destination TEXT NULL,
 	log_date TIMESTAMP WITHOUT TIME ZONE NOT NULL DEFAULT NOW()
 );
 
@@ -692,7 +692,7 @@ CREATE TABLE inventory (
 CREATE TABLE inventory_container_log (
 	inventory_container_log_id SERIAL PRIMARY KEY,
 	inventory_id INT REFERENCES inventory(inventory_id) NOT NULL,
-	destination TEXT NOT NULL,
+	destination TEXT NULL,
 	log_date TIMESTAMP WITHOUT TIME ZONE NOT NULL DEFAULT NOW()
 );
 
