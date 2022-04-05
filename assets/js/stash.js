@@ -60,3 +60,33 @@ function JSONToElement(obj){
 			return document.createTextNode('Unknown - ' + type);
 	}
 }
+
+
+var stash = document.getElementById('stash-link');
+if (stash !== null) {
+  stash.onclick = function(evt) {
+    var anchor = this;
+    if (this.innerHTML === 'Show Stash') {
+      var xhr = (window.ActiveXObject ? new ActiveXObject('Microsoft.XMLHTTP') : new XMLHttpRequest());
+      xhr.onreadystatechange = function() {
+        if (xhr.readyState === 4 && xhr.status === 200) {
+          var json = JSON.parse(xhr.responseText);
+          var el = JSONToElement(json.stash);
+          document.getElementById('stash-dd').appendChild(el);
+          anchor.innerHTML = 'Hide Stash';
+        }
+      };
+      xhr.open('GET', '../stash/' + _inv_id, true);
+      xhr.send();
+    } else {
+      anchor.innerHTML = 'Show Stash';
+      var dd = document.getElementById('stash-dd');
+      if (dd !== null) {
+        while (dd.lastChild) dd.removeChild(dd.lastChild);
+      }
+    }
+    var e = evt === undefined ? window.event : evt;
+    if ('preventDefault' in e) e.preventDefault();
+    return false;
+  };
+}

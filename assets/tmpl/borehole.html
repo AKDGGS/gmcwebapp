@@ -172,8 +172,7 @@
 				{{- end}}
 			</fieldset>
 			{{- end}}
-			{{- if ._user}}
-			{{- if .notes}}
+			{{- if and ._user .notes}}
 
 			<fieldset>
 				<legend>Notes</legend>
@@ -198,5 +197,4 @@
 					{{- end}}
 				</table>
 			</fieldset>
-			{{- end}}
 			{{- end}}

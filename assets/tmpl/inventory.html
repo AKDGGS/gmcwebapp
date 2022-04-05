@@ -149,13 +149,11 @@
 							<td>{{.remark}}</td>
 						</tr>
 						{{- end}}
-						{{- if ._user}}
-						{{- if .tray}}
+						{{- if and ._user .tray}}
 						<tr>
 							<th>Tray</th>
 							<td>{{.tray}}</td>
 						</tr>
-						{{- end}}
 						{{- end}}
 						{{- if .weight}}
 						<tr>
@@ -233,7 +231,7 @@
 							<th>Active</th>
 							<td>No</td>
 						</tr>
-						{{- end }}
+						{{- end}}
 						{{- end}}
 					</tbody>
 				</table>
@@ -435,128 +433,121 @@
 				{{- end}}
 			</fieldset>
 			{{- end}}
-			{{- if ._user}}
-				{{- if .publications}}
+			{{- if and ._user .publications}}
 
-				<fieldset>
-					<legend>Publication(s)</legend>
-					<table class="tb-fields" style="max-width:600px;">
-						<tbody>
-							{{- range .publications}}
-							{{- if .title}}
-							<tr>
-								<th>Title</th>
-								<td>{{ .title }}</td>
-							</tr>
-							{{- end}}
-							{{- if .year}}
-							<tr>
-								<th>Year</th>
-								<td>{{ .year }}</td>
-							</tr>
-							{{- end}}
-							{{- if .publication_type}}
-							<tr>
-								<th>Type</th>
-								<td>{{ .publication_type }}</td>
-							</tr>
-							{{- end}}
-							{{- if .publication_number}}
-							<tr>
-								<th>Number</th>
-								<td>{{ .publication_number }}</td>
-							</tr>
-							{{- end}}
-							{{- if .publication_series}}
-							<tr>
-								<th>Series</th>
-								<td>{{ .publication_series }}</td>
-							</tr>
-							{{- end}}
-							{{- if .description}}
-							<tr>
-								<th>Description</th>
-								<td>{{ .description }}</td>
-							</tr>
-							{{- end}}
-							{{- if .can_publish}}
-							<tr>
-								<th>Publish</th>
-								<td>Yes</td>
-							</tr>
-							{{ else }}
-							<tr>
-								 <th>Publish</th>
-								 <td>No</td>
-							</tr>
-							{{- end}}
-							<tr class="horizontal-spacer">
-								<td></td>
-							</tr>
-							{{- end}}
-						</tbody>
-					</table>
-				</fieldset>
-			{{- end}}
-			{{- end}}
-			{{- if ._user}}
-			{{- if .notes}}
-
-				<fieldset>
-					<legend>Notes</legend>
-					<table class="tb-fields" style="max-width:600px;">
-						<thead>
-							<tr>
-								<th style="padding-right: 50px">Date</th>
-								<th style="padding-right: 50px">User</th>
-								<th style="padding-right: 50px">Public</th>
-								<th>Note</th>
-							</tr>
-						</thead>
-						<tbody>
-							{{- range .notes}}
-							<tr>
-								<td>{{formattime "1/2/2006" .note_date}}</td>
-								<td>{{.username}}</td>
-								<td>{{- if .is_public}} Yes {{ else }} No {{- end}}</td>
-								<td>{{.note}}</td>
-							</tr>
-							{{- end}}
-						</tbody>
-					</table>
-				</fieldset>
-			{{- end}}
-			{{- end}}
-			{{- if ._user}}
-			{{- if .qualities}}
-
-				<fieldset>
-					<legend>QA</legend>
-					<table class="tb-fields" style="max-width:600px;">
-						<thead>
-							<tr>
-								<th style="padding-right: 50px">Date</th>
-								<th style="padding-right: 50px">User</th>
-								<th style="padding-right: 50px">Issue(s)</th>
-								<th>Remark</th>
-							</tr>
-						</thead>
-						<tbody>
-							{{- range .qualities}}
-							<tr>
-								<td>{{formattime "1/2/2006" .check_date}}</td>
-								<td>{{.username}}</td>
-								<td>{{.issues}}</td>
-								<td>{{.remark}}</td>
-							</tr>
-						</tbody>
+			<fieldset>
+				<legend>Publication(s)</legend>
+				<table class="tb-fields" style="max-width:600px;">
+					<tbody>
+						{{- range .publications}}
+						{{- if .title}}
+						<tr>
+							<th>Title</th>
+							<td>{{ .title }}</td>
+						</tr>
 						{{- end}}
-					</table>
-				</fieldset>
+						{{- if .year}}
+						<tr>
+							<th>Year</th>
+							<td>{{ .year }}</td>
+						</tr>
+						{{- end}}
+						{{- if .publication_type}}
+						<tr>
+							<th>Type</th>
+							<td>{{ .publication_type }}</td>
+						</tr>
+						{{- end}}
+						{{- if .publication_number}}
+						<tr>
+							<th>Number</th>
+							<td>{{ .publication_number }}</td>
+						</tr>
+						{{- end}}
+						{{- if .publication_series}}
+						<tr>
+							<th>Series</th>
+							<td>{{ .publication_series }}</td>
+						</tr>
+						{{- end}}
+						{{- if .description}}
+						<tr>
+							<th>Description</th>
+							<td>{{ .description }}</td>
+						</tr>
+						{{- end}}
+						{{- if .can_publish}}
+						<tr>
+							<th>Publish</th>
+							<td>Yes</td>
+						</tr>
+						{{ else }}
+						<tr>
+							 <th>Publish</th>
+							 <td>No</td>
+						</tr>
+						{{- end}}
+						<tr class="horizontal-spacer">
+							<td></td>
+						</tr>
+						{{- end}}
+					</tbody>
+				</table>
+			</fieldset>
 			{{- end}}
+			{{- if and ._user .notes}}
+
+			<fieldset>
+				<legend>Notes</legend>
+				<table class="tb-fields" style="max-width:600px;">
+					<thead>
+						<tr>
+							<th style="padding-right: 50px">Date</th>
+							<th style="padding-right: 50px">User</th>
+							<th style="padding-right: 50px">Public</th>
+							<th>Note</th>
+						</tr>
+					</thead>
+					<tbody>
+						{{- range .notes}}
+						<tr>
+							<td>{{formattime "1/2/2006" .note_date}}</td>
+							<td>{{.username}}</td>
+							<td>{{- if .is_public}} Yes {{ else }} No {{- end}}</td>
+							<td>{{.note}}</td>
+						</tr>
+						{{- end}}
+					</tbody>
+				</table>
+			</fieldset>
 			{{- end}}
-			{{- if ._user}}
-			{{- if .containerlog}}
+			{{- if and ._user .qualities}}
+
+			<fieldset>
+				<legend>QA</legend>
+				<table class="tb-fields" style="max-width:600px;">
+					<thead>
+						<tr>
+							<th style="padding-right: 50px">Date</th>
+							<th style="padding-right: 50px">User</th>
+							<th style="padding-right: 50px">Issue(s)</th>
+							<th>Remark</th>
+						</tr>
+					</thead>
+					<tbody>
+						{{- range .qualities}}
+						<tr>
+							<td>{{formattime "1/2/2006" .check_date}}</td>
+							<td>{{.username}}</td>
+							<td>{{.issues}}</td>
+							<td>{{.remark}}</td>
+						</tr>
+					</tbody>
+					{{- end}}
+				</table>
+			</fieldset>
+			{{- end}}
+			{{- if and ._user .containerlog}}
 
 			<fieldset class="inventory_boxes">
 				<legend>Tracking</legend>
@@ -571,7 +562,6 @@
 				</table>
 			</fieldset>
 			{{- end}}
-			{{- end}}
 			{{- if ._user}}
 
 			<fieldset class="inventory_boxes">
@@ -581,34 +571,6 @@
 			</fieldset>
 			{{- end}}
 
-			<script src="../js/utility.js"></script>
-			<script type="text/javascript">
-				var stash = document.getElementById('stash-link');
-				if (stash !== null) {
-					stash.onclick = function(evt) {
-						var anchor = this;
-						if (this.innerHTML === 'Show Stash') {
-							var xhr = (window.ActiveXObject ? new ActiveXObject('Microsoft.XMLHTTP') : new XMLHttpRequest());
-							xhr.onreadystatechange = function() {
-								if (xhr.readyState === 4 && xhr.status === 200) {
-									var json = JSON.parse(xhr.responseText);
-									var el = JSONToElement(json.stash);
-									document.getElementById('stash-dd').appendChild(el);
-									anchor.innerHTML = 'Hide Stash';
-								}
-							};
-							xhr.open('GET', 'http://127.0.0.1:8080/stash/' + {{ .inventory_id }}, true);
-							xhr.send();
-						} else {
-							anchor.innerHTML = 'Show Stash';
-							var dd = document.getElementById('stash-dd');
-							if (dd !== null) {
-								while (dd.lastChild) dd.removeChild(dd.lastChild);
-							}
-						}
-						var e = evt === undefined ? window.event : evt;
-						if ('preventDefault' in e) e.preventDefault();
-						return false;
-					};
-				}
+			<script>
+				var _inv_id = {{ .inventory_id }};
 			</script>

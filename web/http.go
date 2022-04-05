@@ -27,11 +27,7 @@ func (srv *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 		assets.ServeStatic("js/mustache-v4.2.0.js", w, r)
 		return
 
-	case "js/utility.js":
-		assets.ServeStatic("js/utility.js", w, r)
-		return
-
-	case "css/template.css", "css/view.css", "js/view.js",
+	case "css/template.css", "css/view.css", "js/view.js", "js/stash.js",
 		"ol/ol-layerswitcher.min.css", "ol/ol-layerswitcher.min.js":
 		assets.ServeStatic(path, w, r)
 		return
