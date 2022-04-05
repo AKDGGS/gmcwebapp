@@ -76,7 +76,8 @@ if (stash !== null) {
           anchor.innerHTML = 'Hide Stash';
         }
       };
-      xhr.open('GET', '../stash/' + _inv_id, true);
+			var inv_id = window.location.href.substr(window.location.href.lastIndexOf("/")+1);
+      xhr.open('GET', '../stash/' + inv_id, true);
       xhr.send();
     } else {
       anchor.innerHTML = 'Show Stash';
