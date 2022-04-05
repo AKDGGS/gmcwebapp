@@ -2,103 +2,103 @@
 				<legend>Web Detail</legend>
 				<table class="tb-fields">
 					<tbody>
-						{{- if .name}}
+						{{- if .name -}}
 						<tr>
 							<th>Name</th>
 							<td>{{.name}}</td>
 						</tr>
 						{{- end}}
-						{{- if .alt_names}}
+						{{- if .alt_names -}}
 						<tr>
 							<th>Alternative names</th>
 							<td>{{.alt_names}}</td>
 						</tr>
 						{{- end}}
-						{{- if .well_number}}
+						{{- if .well_number -}}
 						<tr>
 							<th>Well Number</th>
 							<td>{{ .well_number }}</td>
 						</tr>
 						{{- end }}
-						{{- if .api_number }}
+						{{- if .api_number -}}
 						<tr>
 							<th>API Number</th>
 							<td>{{ .api_number }}</td>
 						</tr>
 						{{- end}}
-						{{- if .is_onshore }}
+						{{- if .is_onshore -}}
 						<tr>
 							<th>Onshore</th>
 							<td>Yes</td>
 						</tr>
-						{{ else }}
+						{{- else -}}
 						<tr>
 							<th>Onshore</th>
 							<td>No</td>
 						</tr>
 						{{- end }}
-						{{- if .is_federal}}
+						{{- if .is_federal -}}
 						<tr>
 							<th>Federal</th>
 							<td>Yes</td>
 						</tr>
-						{{ else }}
+						{{- else -}}
 						<tr>
 							<th>Federal</th>
 							<td>No</td>
 						</tr>
 						{{- end }}
-						{{- if .spud_date }}
+						{{- if .spud_date -}}
 						<tr>
 							<th>Spud Date</th>
 							<td>{{ formattime "1/2/2006" .spud_date }}</td>
 						</tr>
 						{{- end}}
-						{{- if .completion_date }}
+						{{- if .completion_date -}}
 						<tr>
 							<th>Completion Date</th>
 							<td>{{ formattime "1/2/2006" .completion_date }}</td>
 						</tr>
 						{{- end}}
-						{{- if .measured_depth}}
+						{{- if .measured_depth -}}
 						<tr>
 							<th>Measured Depth</th>
 							<td>{{ .measured_depth }} {{ .unit }}</td>
 						</tr>
 						{{- end}}
-						{{- if .vertical_depth }}
+						{{- if .vertical_depth -}}
 						<tr>
 							<th>Vertical Depth</th>
 							<td>{{ .vertical_depth }} {{ .unit }}</td>
 						</tr>
 						{{- end }}
-						{{- if .elevation }}
+						{{- if .elevation -}}
 						<tr>
 							<th>Elevation</th>
 							<td>{{ .elevation }} {{ .unit }}</td>
 						</tr>
 						{{- end}}
-						{{- if .elevation_kb }}
+						{{- if .elevation_kb -}}
 						<tr>
 							<th>Kelly Bushing Elevation</th>
 							<td>{{ .elevation_kb }} {{ .unit }}</td>
 						</tr>
 						{{- end }}
-						{{- if .permit_status }}
+						{{- if .permit_status -}}
 						<tr>
 							<th>Permit_Status</th>
 							<td>{{ .permit_status }}</td>
 						</tr>
 						{{- end }}
-						{{- if .completion_status }}
+						{{- if .completion_status -}}
 						<tr>
 							<th>Completion Status</th>
 							<td>{{ .completion_status }}</td>
 						</tr>
 						{{- end}}
-						{{- if .geojson}}
+						{{- if .geojson -}}
 
-						{{range $i, $f := .geojson.features}}{{if ne $i 0}}, {{end}}{{if (eq $f.geometry.type "Point" )}}
+						{{range $i, $f := .geojson.features}}{{- if ne $i 0 -}}, {{end}}{{- if (eq $f.geometry.type "Point" ) -}}
 						<tr>
 							<th>Lon/Lat</th>
 							<td> {{$f.geometry.coordinates}}</td>
@@ -106,7 +106,7 @@
 						{{- end}}
 						{{- end}}
 						{{- end}}
-						{{- if .quadrangles}}
+						{{- if .quadrangles -}}
 
 						<tr>
 							<th>Quadrangle</th>
@@ -239,7 +239,7 @@
 						<tr>
 							<td>{{ formattime "1/2/2006" .note_date }}</td>
 							<td>{{.username}}</td>
-							<td>{{- if .is_public }} yes {{ else }} no {{- end }} </td>
+							<td>{{- if .is_public }} yes {{- else -}} no {{- end }} </td>
 							<td>{{ .note }}</td>
 						</tr>
 					{{- end}}
