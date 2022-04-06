@@ -144,12 +144,12 @@
 					</thead>
 					<tbody>
 						{{- range .notes}}
-							<tr>
-								<td>{{formattime "1/2/2006" .note_date}}</td>
-								<td>{{.username}}</td>
-								<td>{{- if .is_public}} Yes {{- else -}}No{{- end}} </td>
-								<td>{{.note}}</td>
-							</tr>
+						<tr>
+							<td>{{formattime "1/2/2006" .note_date}}</td>
+							<td>{{.username}}</td>
+							<td>{{- if .is_public}} Yes {{- else -}}No{{- end}} </td>
+							<td>{{.note}}</td>
+						</tr>
 						{{- end}}
 					</tbody>
 				</table>
