@@ -210,28 +210,14 @@
 							<td>{{formattime "1/2/2006" .modified_date}}</td>
 						</tr>
 						{{- end}}
-						{{- if .can_publish}}
 						<tr>
 							<th>Publish</th>
-							<td>Yes</td>
+							<td>{{- if .is_public}}Yes{{- else}}No{{- end}}</td>
 						</tr>
-						{{- else}}
-						<tr>
-							<th>Publish</th>
-							<td>No</td>
-						</tr>
-						{{- end}}
-						{{- if .active}}
 						<tr>
 							<th>Active</th>
-							<td>Yes</td>
+							<td>{{- if .active}}Yes{{- else}}No{{- end}}</td>
 						</tr>
-						{{- else}}
-						<tr>
-							<th>Active</th>
-							<td>No</td>
-						</tr>
-						{{- end}}
 						{{- end}}
 					</tbody>
 				</table>
@@ -330,13 +316,10 @@
 						{{- end}}
 						{{- if .operator_type}}
 						<tr>
-							<th>Operator Type</th>
+							<th style="padding-bottom:50px">Operator Type</th>
 							<td>{{.operator_type}}</td>
 						</tr>
 						{{- end}}
-						<tr class="horizontal-spacer">
-							<td></td>
-						</tr>
 						{{- end}}
 						{{- end}}
 					</tbody>
@@ -476,17 +459,10 @@
 							<td>{{.description}}</td>
 						</tr>
 						{{- end}}
-						{{- if .can_publish}}
 						<tr>
 							<th>Publish</th>
-							<td>Yes</td>
+							<td>{{- if .can_publish}}Yes{{- else}}No{{- end}}</td>
 						</tr>
-						{{- else}}
-						<tr>
-							<th>Publish</th>
-							<td>No</td>
-						</tr>
-						{{- end}}
 						<tr class="horizontal-spacer">
 							<td></td>
 						</tr>

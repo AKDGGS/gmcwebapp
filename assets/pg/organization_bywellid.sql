@@ -5,3 +5,4 @@ JOIN organization_type AS ot
 JOIN well_operator AS wo
     ON o.organization_id = wo.organization_id
 WHERE wo.well_id = $1
+ORDER BY wo.is_current DESC;

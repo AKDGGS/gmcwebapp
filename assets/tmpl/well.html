@@ -26,28 +26,14 @@
 							<td>{{.api_number}}</td>
 						</tr>
 						{{- end}}
-						{{- if .is_onshore}}
 						<tr>
 							<th>Onshore</th>
-							<td>Yes</td>
+							<td>{{- if .is_onshore}}Yes{{- else}}No{{- end}}</td>
 						</tr>
-						{{- else}}
-						<tr>
-							<th>Onshore</th>
-							<td>No</td>
-						</tr>
-						{{- end}}
-						{{- if .is_federal}}
 						<tr>
 							<th>Federal</th>
-							<td>Yes</td>
+							<td>{{- if .is_federal}}Yes{{- else}}No{{- end}}</td>
 						</tr>
-						{{- else}}
-						<tr>
-							<th>Federal</th>
-							<td>No</td>
-						</tr>
-						{{- end}}
 						{{- if .spud_date}}
 						<tr>
 							<th>Spud Date</th>
@@ -97,7 +83,6 @@
 						</tr>
 						{{- end}}
 						{{- if .geojson}}
-
 						{{- range $i, $f := .geojson.features}}{{- if ne $i 0}}, {{- end}}{{- if (eq $f.geometry.type "Point" )}}
 						<tr>
 							<th>Lon/Lat</th>
@@ -107,12 +92,9 @@
 						{{- end}}
 						{{- end}}
 						{{- if .quadrangles}}
-
 						<tr>
 							<th>Quadrangle</th>
-							<td>{{- range $i, $qd := .quadrangles}}{{- if ne $i 0}}, {{- end}}
-								<a href="../search#quadrangle_id={{$qd.quadrangle_id}}">{{$qd.name}}</a>{{end}}
-							</td>
+							<td>{{- range $i, $qd := .quadrangles}}{{- if ne $i 0}}, {{- end}}<a href="../search#quadrangle_id={{$qd.quadrangle_id}}">{{$qd.name}}</a>{{- end}}</td>
 						</tr>
 						{{- end}}
 					</tbody>
@@ -151,7 +133,7 @@
 					<tbody>
 						{{- range .inventory}}
 						<tr>
-							<td><a href="../search#well_id={{$well_id}}{{range .keywords}}&keyword={{.}}{{end}}">{{range $i, $kw := .keywords}}{{if ne $i 0}} &gt; {{end}}{{$kw}}{{end}}</a></td>
+							<td><a href="../search#well_id={{$well_id}}{{range .keywords}}&keyword={{.}}{{- end}}">{{range $i, $kw := .keywords}}{{if ne $i 0}} &gt; {{- end}}{{$kw}}{{- end}}</a></td>
 							<td>{{.count}}</td>
 						</tr>
 						{{- end}}
@@ -173,31 +155,25 @@
 			<fieldset>
 				<legend>Operators</legend>
 				<table class="tb-fields">
-					<thead>
+					<tbody>
+						{{- range $i, $f := .operators}}
+						{{- if .is_current}}
 						<tr>
 							<th>Current Operator</th>
 							<th>Type</th>
 						</tr>
-					</thead>
-					<tbody>
-						{{- range .operators}}
-						{{- if .is_current}}
 						<tr>
 							<td>{{.name}}</td>
 							<td>{{.operator_type}}</td>
 						</tr>
 						<tr class="spacer"></tr>
-						{{- end}}
-						{{- end}}
-						{{range $i, $f := .operators}}{{if eq $i 1}}
+						{{- else}}
+						{{- if eq $i 1}}
 						<tr>
 							<th>Previous Operator(s)</th>
 							<th>Type</th>
 						</tr>
-						{{end}}
 						{{- end}}
-						{{- range .operators}}
-						{{- if not .is_current}}
 						<tr>
 							<td>{{.name}}</td>
 							<td>{{.operator_type}}</td>

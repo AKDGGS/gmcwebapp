@@ -35,9 +35,7 @@
 						{{- if .quadrangles}}
 						<tr>
 							<th>Quadrangle</th>
-							<td>{{range $i, $qd := .quadrangles}}{{if ne $i 0}}, {{end}}
-								<a href="../search#quadrangle_id={{$qd.quadrangle_id}}">{{$qd.name}}</a>{{end}}
-							</td>
+							<td>{{range $i, $qd := .quadrangles}}{{if ne $i 0}}, {{- end}}<a href="../search#quadrangle_id={{$qd.quadrangle_id}}">{{$qd.name}}</a>{{- end}}</td>
 						</tr>
 						{{- end}}
 					</tbody>
@@ -76,7 +74,7 @@
 					<tbody>
 						{{- range .inventory}}
 						<tr>
-							<td><a href="../search#shotline_id={{$shotline_id}}{{range .keywords}}&keyword={{.}}{{end}}">{{range $i, $kw := .keywords}}{{if ne $i 0}} &gt; {{end}}{{$kw}}{{end}}</a></td>
+							<td><a href="../search#shotline_id={{$shotline_id}}{{range .keywords}}&keyword={{.}}{{- end}}">{{range $i, $kw := .keywords}}{{if ne $i 0}} &gt; {{- end}}{{$kw}}{{- end}}</a></td>
 							<td>{{.count}}</td>
 						</tr>
 						{{- end}}

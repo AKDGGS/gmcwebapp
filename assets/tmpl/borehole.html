@@ -75,17 +75,10 @@
 							</td>
 						</tr>
 						{{- end}}
-						{{- if .is_onshore}}
 						<tr>
 							<th>Onshore</th>
-							<td>Yes</td>
+							<td>{{- if .is_onshore}}Yes{{- else}}No{{- end}}</td>
 						</tr>
-						{{- else}}
-						<tr>
-							<th>Onshore</th>
-							<td>No</td>
-						</tr>
-						{{- end}}
 					</tbody>
 				</table>
 			</fieldset>
@@ -122,7 +115,7 @@
 					<tbody>
 						{{- range .inventory}}
 						<tr>
-							<td><a href="../search#prospect_id={{$prospect_id}}{{range .keywords}}&keyword={{.}}{{end}}">{{- range $i, $kw := .keywords}}{{- if ne $i 0}} &gt; {{- end}}{{$kw}}{{- end}}</a></td>
+							<td><a href="../search#prospect_id={{$prospect_id}}{{range .keywords}}&keyword={{.}}{{- end}}">{{- range $i, $kw := .keywords}}{{- if ne $i 0}} &gt; {{- end}}{{$kw}}{{- end}}</a></td>
 							<td>{{.count}}</td>
 						</tr>
 						{{- end}}
