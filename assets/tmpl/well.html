@@ -181,18 +181,18 @@
 					<tbody>
 						{{- range .operators}}
 						{{- if .is_current}}
-							<tr>
-								<td>{{.name}}</td>
-								<td>{{.operator_type}}</td>
-							</tr>
-							<tr class="spacer"></tr>
+						<tr>
+							<td>{{.name}}</td>
+							<td>{{.operator_type}}</td>
+						</tr>
+						<tr class="spacer"></tr>
 						{{- end}}
 						{{- end}}
 						{{range $i, $f := .operators}}{{if eq $i 1}}
-							<tr>
-								<th>Previous Operator(s)</th>
-								<th>Type</th>
-							</tr>
+						<tr>
+							<th>Previous Operator(s)</th>
+							<th>Type</th>
+						</tr>
 						{{end}}
 						{{- end}}
 						{{- range .operators}}
