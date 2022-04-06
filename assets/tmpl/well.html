@@ -110,7 +110,7 @@
 
 						<tr>
 							<th>Quadrangle</th>
-							<td>{{range $i, $qd := .quadrangles}}{{if ne $i 0}}, {{end}}
+							<td>{{- range $i, $qd := .quadrangles}}{{- if ne $i 0}}, {{- end}}
 								<a href="../search#quadrangle_id={{$qd.quadrangle_id}}">{{$qd.name}}</a>{{end}}
 							</td>
 						</tr>
