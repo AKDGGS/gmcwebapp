@@ -25,7 +25,7 @@
 							<th>Onshore</th>
 							<td>Yes</td>
 						</tr>
-						{{ else }}
+						{{- else -}}
 						<tr>
 							<th>Onshore</th>
 							<td>No</td>
@@ -147,7 +147,7 @@
 							<tr>
 								<td>{{formattime "1/2/2006" .note_date}}</td>
 								<td>{{.username}}</td>
-								<td>{{- if .is_public}} Yes {{ else }}No{{- end}} </td>
+								<td>{{- if .is_public}} Yes {{- else -}}No{{- end}} </td>
 								<td>{{.note}}</td>
 							</tr>
 						{{- end}}

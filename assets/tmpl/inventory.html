@@ -2,45 +2,45 @@
 				<legend>Inventory Detail</legend>
 				<table class="tb-fields">
 					<tbody>
-						{{- if .inventory_id }}
+						{{- if .inventory_id}}
 						<tr>
 							<th>ID</th>
-							<td>{{ .inventory_id }}</td>
+							<td>{{.inventory_id}}</td>
 						</tr>
 						{{- end}}
 						{{- if ._user}}
-						{{- if .container_path_cache }}
+						{{- if .container_path_cache}}
 						<tr>
 							<th>Location</th>
-							<td>{{ .container_path_cache }}</td>
+							<td>{{.container_path_cache}}</td>
 						</tr>
-						{{- end }}
-						{{- if .barcode }}
+						{{- end}}
+						{{- if .barcode}}
 						<tr>
 							<th>Barcode</th>
-							<td>{{ .barcode }}</td>
+							<td>{{.barcode}}</td>
 						</tr>
-						{{- end }}
-						{{- if .container_alt_barcode }}
+						{{- end}}
+						{{- if .container_alt_barcode}}
 						<tr>
 							<th>Alt. Barcode</th>
-							<td>{{ .container_alt_barcode }}</td>
+							<td>{{.container_alt_barcode}}</td>
 						</tr>
-						{{- end }}
 						{{- end}}
-						{{- if .dggs_sample_id }}
+						{{- end}}
+						{{- if .dggs_sample_id}}
 						<tr>
 							<th>DGGS Sample ID</th>
-							<td>{{ .dggs_sample_id }}</td>
+							<td>{{.dggs_sample_id}}</td>
 						</tr>
-						{{- end }}
-						{{- if .sample_number }}
+						{{- end}}
+						{{- if .sample_number}}
 						<tr>
 							<th>Sample Number</th>
-							<td>{{ .sample_number }}</td>
+							<td>{{.sample_number}}</td>
 						</tr>
-						{{- end }}
-						{{- if .sample_number_prefix }}
+						{{- end}}
+						{{- if .sample_number_prefix}}
 						<tr>
 							<th>Sample Number Prefix</th>
 							<td>{{.sample_number_prefix}}</td>
@@ -215,18 +215,18 @@
 							<th>Publish</th>
 							<td>Yes</td>
 						</tr>
-						{{ else }}
+						{{- else}}
 						<tr>
 							<th>Publish</th>
 							<td>No</td>
 						</tr>
-						{{- end }}
+						{{- end}}
 						{{- if .active}}
 						<tr>
 							<th>Active</th>
 							<td>Yes</td>
 						</tr>
-						{{ else }}
+						{{- else}}
 						<tr>
 							<th>Active</th>
 							<td>No</td>
@@ -443,37 +443,37 @@
 						{{- if .title}}
 						<tr>
 							<th>Title</th>
-							<td>{{ .title }}</td>
+							<td>{{.title}}</td>
 						</tr>
 						{{- end}}
 						{{- if .year}}
 						<tr>
 							<th>Year</th>
-							<td>{{ .year }}</td>
+							<td>{{.year}}</td>
 						</tr>
 						{{- end}}
 						{{- if .publication_type}}
 						<tr>
 							<th>Type</th>
-							<td>{{ .publication_type }}</td>
+							<td>{{.publication_type}}</td>
 						</tr>
 						{{- end}}
 						{{- if .publication_number}}
 						<tr>
 							<th>Number</th>
-							<td>{{ .publication_number }}</td>
+							<td>{{.publication_number}}</td>
 						</tr>
 						{{- end}}
 						{{- if .publication_series}}
 						<tr>
 							<th>Series</th>
-							<td>{{ .publication_series }}</td>
+							<td>{{.publication_series}}</td>
 						</tr>
 						{{- end}}
 						{{- if .description}}
 						<tr>
 							<th>Description</th>
-							<td>{{ .description }}</td>
+							<td>{{.description}}</td>
 						</tr>
 						{{- end}}
 						{{- if .can_publish}}
@@ -481,10 +481,10 @@
 							<th>Publish</th>
 							<td>Yes</td>
 						</tr>
-						{{ else }}
+						{{- else}}
 						<tr>
-							 <th>Publish</th>
-							 <td>No</td>
+							<th>Publish</th>
+							<td>No</td>
 						</tr>
 						{{- end}}
 						<tr class="horizontal-spacer">
@@ -513,7 +513,7 @@
 						<tr>
 							<td>{{formattime "1/2/2006" .note_date}}</td>
 							<td>{{.username}}</td>
-							<td>{{- if .is_public}} Yes {{ else }} No {{- end}}</td>
+							<td>{{- if .is_public}}Yes{{- else}}No{{- end}}</td>
 							<td>{{.note}}</td>
 						</tr>
 						{{- end}}

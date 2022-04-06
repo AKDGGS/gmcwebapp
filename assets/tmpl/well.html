@@ -17,47 +17,47 @@
 						{{- if .well_number}}
 						<tr>
 							<th>Well Number</th>
-							<td>{{ .well_number }}</td>
-						</tr>
-						{{- end }}
-						{{- if .api_number }}
-						<tr>
-							<th>API Number</th>
-							<td>{{ .api_number }}</td>
+							<td>{{.well_number}}</td>
 						</tr>
 						{{- end}}
-						{{- if .is_onshore }}
+						{{- if .api_number}}
+						<tr>
+							<th>API Number</th>
+							<td>{{.api_number}}</td>
+						</tr>
+						{{- end}}
+						{{- if .is_onshore}}
 						<tr>
 							<th>Onshore</th>
 							<td>Yes</td>
 						</tr>
-						{{- else }}
+						{{- else}}
 						<tr>
 							<th>Onshore</th>
 							<td>No</td>
 						</tr>
-						{{- end }}
+						{{- end}}
 						{{- if .is_federal}}
 						<tr>
 							<th>Federal</th>
 							<td>Yes</td>
 						</tr>
-						{{- else }}
+						{{- else}}
 						<tr>
 							<th>Federal</th>
 							<td>No</td>
 						</tr>
-						{{- end }}
-						{{- if .spud_date }}
+						{{- end}}
+						{{- if .spud_date}}
 						<tr>
 							<th>Spud Date</th>
-							<td>{{ formattime "1/2/2006" .spud_date }}</td>
+							<td>{{formattime "1/2/2006" .spud_date}}</td>
 						</tr>
 						{{- end}}
-						{{- if .completion_date }}
+						{{- if .completion_date}}
 						<tr>
 							<th>Completion Date</th>
-							<td>{{ formattime "1/2/2006" .completion_date }}</td>
+							<td>{{formattime "1/2/2006" .completion_date}}</td>
 						</tr>
 						{{- end}}
 						{{- if .measured_depth}}
@@ -66,41 +66,41 @@
 							<td>{{.measured_depth}} {{.unit}}</td>
 						</tr>
 						{{- end}}
-						{{- if .vertical_depth }}
+						{{- if .vertical_depth}}
 						<tr>
 							<th>Vertical Depth</th>
-							<td>{{ .vertical_depth }} {{ .unit }}</td>
-						</tr>
-						{{- end }}
-						{{- if .elevation }}
-						<tr>
-							<th>Elevation</th>
-							<td>{{ .elevation }} {{ .unit }}</td>
+							<td>{{.vertical_depth}} {{.unit}}</td>
 						</tr>
 						{{- end}}
-						{{- if .elevation_kb }}
+						{{- if .elevation}}
+						<tr>
+							<th>Elevation</th>
+							<td>{{.elevation}} {{.unit}}</td>
+						</tr>
+						{{- end}}
+						{{- if .elevation_kb}}
 						<tr>
 							<th>Kelly Bushing Elevation</th>
-							<td>{{ .elevation_kb }} {{ .unit }}</td>
+							<td>{{.elevation_kb}} {{.unit}}</td>
 						</tr>
-						{{- end }}
-						{{- if .permit_status }}
+						{{- end}}
+						{{- if .permit_status}}
 						<tr>
 							<th>Permit_Status</th>
-							<td>{{ .permit_status }}</td>
+							<td>{{.permit_status}}</td>
 						</tr>
-						{{- end }}
-						{{- if .completion_status }}
+						{{- end}}
+						{{- if .completion_status}}
 						<tr>
 							<th>Completion Status</th>
 							<td>{{.completion_status}}</td>
 						</tr>
 						{{- end}}
 						{{- if .geojson}}
-						{{- range $i, $f := .geojson.features}}{{- if ne $i 0}}, {{end}}{{- if (eq $f.geometry.type "Point" )}}
+						{{- range $i, $f := .geojson.features}}{{- if ne $i 0}}, {{- end}}{{- if (eq $f.geometry.type "Point" )}}
 						<tr>
 							<th>Lon/Lat</th>
-							<td> {{$f.geometry.coordinates}}</td>
+							<td>{{$f.geometry.coordinates}}</td>
 						</tr>
 						{{- end}}
 						{{- end}}
@@ -109,7 +109,9 @@
 
 						<tr>
 							<th>Quadrangle</th>
-							<td>{{range $i, $qd := .quadrangles}}{{if ne $i 0}}, {{end}}<a href="../search#quadrangle_id={{$qd.quadrangle_id}}">{{$qd.name}}</a>{{end}}</td>
+							<td>{{range $i, $qd := .quadrangles}}{{if ne $i 0}}, {{end}}
+								<a href="../search#quadrangle_id={{$qd.quadrangle_id}}">{{$qd.name}}</a>{{end}}
+							</td>
 						</tr>
 						{{- end}}
 					</tbody>
@@ -128,7 +130,7 @@
 					<div id="popup-content" class="ol-popup-content"></div>
 				</div>
 				<script>
-					var geojson = {{ rawjs .geojson }};
+					var geojson = {{rawjs .geojson}};
 				</script>
 			</fieldset>
 			<div class="flex-break"></div>
@@ -137,7 +139,7 @@
 
 			<fieldset>
 				<legend>Inventory</legend>
-				{{- $well_id := .well_id }}
+				{{- $well_id := .well_id}}
 				<table class="tb-fields">
 					<thead>
 						<tr>
@@ -149,7 +151,7 @@
 						{{- range .inventory}}
 						<tr>
 							<td><a href="../search#well_id={{$well_id}}{{range .keywords}}&keyword={{.}}{{end}}">{{range $i, $kw := .keywords}}{{if ne $i 0}} &gt; {{end}}{{$kw}}{{end}}</a></td>
-							<td>{{ .count}}</td>
+							<td>{{.count}}</td>
 						</tr>
 						{{- end}}
 					</tbody>
@@ -173,7 +175,7 @@
 					<thead>
 						<tr>
 							<th>Current Operator</th>
-							<th> Type</th>
+							<th>Type</th>
 						</tr>
 					</thead>
 					<tbody>
@@ -186,19 +188,13 @@
 							<tr class="spacer"></tr>
 						{{- end}}
 						{{- end}}
-					</tbody>
-				</table>
-				<table class="tb-fields">
-					{{range $i, $f := .operators}}{{if eq $i 1}}
-					<thead>
-						<tr>
-							<th>Previous Operator(s)</th>
-							<th> Type</th>
-						</tr>
-					</thead>
-					{{end}}
-					{{- end}}
-					<tbody>
+						{{range $i, $f := .operators}}{{if eq $i 1}}
+							<tr>
+								<th>Previous Operator(s)</th>
+								<th>Type</th>
+							</tr>
+						{{end}}
+						{{- end}}
 						{{- range .operators}}
 						{{- if not .is_current}}
 						<tr>
@@ -236,10 +232,10 @@
 					<tbody>
 					{{- range .notes}}
 						<tr>
-							<td>{{ formattime "1/2/2006" .note_date }}</td>
+							<td>{{formattime "1/2/2006" .note_date}}</td>
 							<td>{{.username}}</td>
-							<td>{{- if .is_public }} yes {{- else }} no {{- end }} </td>
-							<td>{{ .note }}</td>
+							<td>{{- if .is_public}}Yes{{- else}}No{{- end}}</td>
+							<td>{{.note}}</td>
 						</tr>
 					{{- end}}
 					</tbody>
