@@ -97,6 +97,7 @@
 						</tr>
 						{{- end}}
 						{{- if .geojson}}
+
 						{{- range $i, $f := .geojson.features}}{{- if ne $i 0}}, {{- end}}{{- if (eq $f.geometry.type "Point" )}}
 						<tr>
 							<th>Lon/Lat</th>
