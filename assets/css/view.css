@@ -23,16 +23,14 @@ legend { padding: 0 8px; }
 }
 .tb-fields tr:not(:last-of-type) td { padding-bottom: 8px;}
 
-.tb-fields tr.horizontal-spacer>td {
-	height: 1em;
-}
-
 #stash-dd table { border-collapse: collapse; font-size: 12px; font-family: Tahoma, Geneva, sans-serif; }
 #stash-dd table th { text-align: left; }
 #stash-dd table th, #stash-dd table td { border: 1px solid #bbb; padding: 4px 8px; }
 #stash-dd table tr:nth-child(odd){ background-color: #eee; }
 
-
+.max-width-600 {max-width: 600px};
+.rt-padding-50 {padding-right: 50px;}
+.tb-fields tr:not(:last-of-type) th.separator-50 {padding-bottom:50px;}
 
 .ol-mouse-position:empty { display: none; }
 .ol-mouse-position {

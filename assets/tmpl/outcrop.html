@@ -46,7 +46,7 @@
 
 			<fieldset class="fs-map">
 				<legend>Geospatial</legend>
-				<div id="map" style=" height:500px width: 500px"></div>
+				<div id="map"></div>
 				<div id="popup" class="ol-popup">
 					<div class="ol-popup-top">
 						<div class="ol-popup-top-title">Outcrop(s)</div>
@@ -119,7 +119,7 @@
 			<fieldset class="urls">
 				<legend>URLs</legend>
 				{{- range .urls}}
-				<div style="margin: 5px;"><a href="{{.url}}">{{.description}}</a> ({{.url_type}})</div>
+				<div><a href="{{.url}}">{{.description}}</a> ({{.url_type}})</div>
 				{{- end}}
 			</fieldset>
 			{{- end}}
@@ -127,12 +127,12 @@
 
 			<fieldset>
 				<legend>Notes</legend>
-				<table class="tb-fields" style="max-width:600px;">
+				<table class="tb-fields max-width-600">
 					<thead>
 						<tr>
-							<th style="padding-right: 50px">Date</th>
-							<th style="padding-right: 50px">User</th>
-							<th style="padding-right: 50px">Public</th>
+							<th class="rt-padding-50">Date</th>
+							<th class="rt-padding-50">User</th>
+							<th class="rt-padding-50">Public</th>
 							<th>Note</th>
 						</tr>
 					</thead>

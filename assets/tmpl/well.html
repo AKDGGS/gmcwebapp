@@ -151,35 +151,23 @@
 			</fieldset>
 			{{- end}}
 			{{- if .operators}}
-
 			<fieldset>
 				<legend>Operators</legend>
 				<table class="tb-fields">
 					<tbody>
 						{{- range $i, $f := .operators}}
-						{{- if .is_current}}
 						<tr>
-							<th>Current Operator</th>
+							{{- if eq $i 0}}<th>Current{{- else if eq $i 1}}<th>Previous Operator</th>{{- end}}
+							{{- if eq $i 0 1}}
 							<th>Type</th>
+							{{- end}}
 						</tr>
 						<tr>
 							<td>{{.name}}</td>
 							<td>{{.operator_type}}</td>
 						</tr>
+						{{- end}}
 						<tr class="spacer"></tr>
-						{{- else}}
-						{{- if eq $i 1}}
-						<tr>
-							<th>Previous Operator(s)</th>
-							<th>Type</th>
-						</tr>
-						{{- end}}
-						<tr>
-							<td>{{.name}}</td>
-							<td>{{.operator_type}}</td>
-						</tr>
-						{{- end}}
-						{{- end}}
 					</tbody>
 				</table>
 			</fieldset>
@@ -189,7 +177,7 @@
 			<fieldset class="urls">
 			<legend>URLs</legend>
 			{{- range .urls}}
-				<div style="margin: 5px;"><a href="{{.url}}">{{.description}}</a> ({{.url_type}})</div>
+				<div><a href="{{.url}}">{{.description}}</a> ({{.url_type}})</div>
 			{{- end}}
 			</fieldset>
 			{{- end}}
@@ -197,12 +185,12 @@
 
 			<fieldset>
 				<legend>Notes</legend>
-				<table class="tb-fields" style="max-width:600px;">
+				<table class="tb-fields max-width-600">
 					<thead>
 						<tr>
-							<th style="padding-right: 50px">Date</th>
-							<th style="padding-right: 50px">User</th>
-							<th style="padding-right: 50px">Public</th>
+							<th class="rt-padding-50">Date</th>
+							<th class="rt-padding-50">User</th>
+							<th class="rt-padding-50">Public</th>
 							<th>Note</th>
 						</tr>
 					</thead>

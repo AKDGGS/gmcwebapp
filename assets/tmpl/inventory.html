@@ -316,7 +316,7 @@
 						{{- end}}
 						{{- if .operator_type}}
 						<tr>
-							<th style="padding-bottom:50px">Operator Type</th>
+							<th>Operator Type</th>
 							<td>{{.operator_type}}</td>
 						</tr>
 						{{- end}}
@@ -357,9 +357,7 @@
 							<td>{{.shotpoint_number}}</td>
 						</tr>
 						{{- end}}
-						<tr class="horizontal-spacer">
-							<td></td>
-						</tr>
+						<tr class="spacer"></tr>
 						{{- end}}
 					</tbody>
 				</table>
@@ -390,7 +388,7 @@
 							<td>{{.year}}</td>
 						</tr>
 						{{- end}}
-						<tr class="horizontal-spacer">
+						<tr class="spacer">
 							<td></td>
 						</tr>
 						{{- end}}
@@ -403,7 +401,7 @@
 			<fieldset class="urls">
 				<legend>URLs</legend>
 				{{- range .urls}}
-				<div style="margin: 5px;"><a href="{{.url}}">{{.description}}</a> ({{.url_type}})</div>
+				<div><a href="{{.url}}">{{.description}}</a> ({{.url_type}})</div>
 				{{- end}}
 			</fieldset>
 			{{- end}}
@@ -420,7 +418,7 @@
 
 			<fieldset>
 				<legend>Publication(s)</legend>
-				<table class="tb-fields" style="max-width:600px;">
+				<table class="tb-fields max-width-600">
 					<tbody>
 						{{- range .publications}}
 						{{- if .title}}
@@ -460,11 +458,8 @@
 						</tr>
 						{{- end}}
 						<tr>
-							<th>Publish</th>
+							<th class="separator-50">Publish</th>
 							<td>{{- if .can_publish}}Yes{{- else}}No{{- end}}</td>
-						</tr>
-						<tr class="horizontal-spacer">
-							<td></td>
 						</tr>
 						{{- end}}
 					</tbody>
@@ -475,12 +470,12 @@
 
 			<fieldset>
 				<legend>Notes</legend>
-				<table class="tb-fields" style="max-width:600px;">
+				<table class="tb-fields max-width-600">
 					<thead>
 						<tr>
-							<th style="padding-right: 50px">Date</th>
-							<th style="padding-right: 50px">User</th>
-							<th style="padding-right: 50px">Public</th>
+							<th class="rt-padding-50">Date</th>
+							<th class="rt-padding-50">User</th>
+							<th class="rt-padding-50">Public</th>
 							<th>Note</th>
 						</tr>
 					</thead>
@@ -501,12 +496,12 @@
 
 			<fieldset>
 				<legend>QA</legend>
-				<table class="tb-fields" style="max-width:600px;">
+				<table class="tb-fields max-width-600">
 					<thead>
 						<tr>
-							<th style="padding-right: 50px">Date</th>
-							<th style="padding-right: 50px">User</th>
-							<th style="padding-right: 50px">Issue(s)</th>
+							<th class="rt-padding-50">Date</th>
+							<th class="rt-padding-50">User</th>
+							<th class="rt-padding-50">Issue(s)</th>
 							<th>Remark</th>
 						</tr>
 					</thead>
@@ -527,7 +522,7 @@
 
 			<fieldset class="inventory_boxes">
 				<legend>Tracking</legend>
-				<table class="tb-fields" style="max-width:600px;">
+				<table class="tb-fields max-width-600">
 					<tbody>
 						{{- range .containerlog}}
 						<tr>
