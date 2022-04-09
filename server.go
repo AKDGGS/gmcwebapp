@@ -3,14 +3,15 @@ package main
 import (
 	"flag"
 	"fmt"
+	"os"
+	"path/filepath"
+	"time"
+
 	"gmc/auth"
 	"gmc/config"
 	"gmc/db"
 	"gmc/filestore"
 	"gmc/web"
-	"os"
-	"path/filepath"
-	"time"
 )
 
 func serverCommand(rootcmd string) {

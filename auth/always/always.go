@@ -2,6 +2,7 @@ package always
 
 import (
 	"fmt"
+
 	authu "gmc/auth/util"
 )
 
@@ -13,7 +14,7 @@ type Always struct {
 func New(cfg map[string]interface{}) (*Always, error) {
 	name, ok := cfg["name"].(string)
 	if !ok {
-		return nil, fmt.Errorf("auth always user must exist and be a string")
+		name = "always"
 	}
 
 	user, ok := cfg["user"].(string)

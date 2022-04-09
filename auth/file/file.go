@@ -5,9 +5,10 @@ import (
 	"bytes"
 	"errors"
 	"fmt"
+	"os"
+
 	authu "gmc/auth/util"
 	"golang.org/x/crypto/bcrypt"
-	"os"
 )
 
 type PasswordFile struct {
