@@ -2,7 +2,6 @@ SELECT bh.borehole_id,
 	bh.name AS borehole_name,
 	bh.alt_names AS alt_borehole_names,
 	bh.is_onshore, bh.completion_date,
-
 	bh.measured_depth,
 	bh.measured_depth_unit::text,
 	bh.elevation,

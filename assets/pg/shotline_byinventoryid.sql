@@ -5,10 +5,10 @@ SELECT sl.shotline_id,
   sl.remark,
   sp.shotpoint_id,
   sp.shotpoint_number
-FROM shotline AS sl
+FROM inventory_shotpoint AS isp
 JOIN shotpoint AS sp
-  ON sp.shotline_id = sl.shotline_id
-JOIN inventory_shotpoint AS isp
-  ON isp.shotpoint_id = sp.shotpoint_id
+  ON sp.shotpoint_id = isp.shotpoint_id
+LEFT OUTER JOIN shotline AS sl
+  ON sl.shotline_id = sp.shotline_id
 WHERE isp.inventory_id = $1
 ORDER BY sl.shotline_id, sp.shotpoint_number

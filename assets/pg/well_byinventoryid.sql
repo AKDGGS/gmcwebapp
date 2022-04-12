@@ -10,10 +10,10 @@ SELECT w.well_id, w.name AS well_name, w.alt_names,
   FROM well AS w
   LEFT OUTER JOIN well_operator AS wo
   	ON wo.well_id = w.well_id
-  JOIN organization AS o
+  LEFT OUTER JOIN organization AS o
   	ON wo.organization_id = o.organization_id
-  JOIN organization_type AS ot
+  LEFT OUTER JOIN organization_type AS ot
   	ON o.organization_type_id= ot.organization_type_id
-  JOIN inventory_well AS iw
+  LEFT OUTER JOIN inventory_well AS iw
     ON iw.well_id = w.well_id
   WHERE iw.inventory_id = $1
