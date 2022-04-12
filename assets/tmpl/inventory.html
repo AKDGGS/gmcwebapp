@@ -265,10 +265,10 @@
 							<td><a href="../borehole/{{.borehole_id}}">{{.borehole_name}}</a></td>
 						</tr>
 						{{- end}}
-						{{- if .alt_names}}
+						{{- if .alt_borehole_names}}
 						<tr>
 							<th>Borehole Alt. Name(s)</th>
-							<td>{{.alt_names}}</td>
+							<td>{{.alt_borehole_names}}</td>
 						</tr>
 						{{- end}}
 						{{- end}}
@@ -283,7 +283,7 @@
 				<table class="tb-fields">
 					<tbody>
 						{{- range .wells}}
-						{{- if .is_current}}
+						{{- if or (.is_current) (eq .is_current nil)}}
 						{{- if .well_name}}
 						<tr>
 							<th>Well Name</th>
@@ -332,11 +332,16 @@
 				<legend>Shotline(s)</legend>
 				<table class="tb-fields">
 					<tbody>
-						{{- range .shotlines}}
+						{{- range $i, $f := .shotlines}}
 						{{- if .name}}
 						<tr>
+							{{- if eq $i 0}}
 							<th>Shotline Name</th>
 							<td><a href="../shotline/{{.shotline_id}}">{{.name}}</a></td>
+							{{- else}}
+							<th class="separator-20-before">Shotline Name</th>
+							<td class="separator-20-before"><a href="../shotline/{{.shotline_id}}">{{.name}}</a></td>
+							{{- end}}
 						</tr>
 						{{- end}}
 						{{- if .alt_names}}
@@ -357,7 +362,6 @@
 							<td>{{.shotpoint_number}}</td>
 						</tr>
 						{{- end}}
-						<tr class="spacer"></tr>
 						{{- end}}
 					</tbody>
 				</table>
@@ -455,7 +459,7 @@
 						</tr>
 						{{- end}}
 						<tr>
-							<th class="separator-50">Publish</th>
+							<th class="separator-50-after">Publish</th>
 							<td>{{- if .can_publish}}Yes{{- else}}No{{- end}}</td>
 						</tr>
 						{{- end}}

@@ -150,23 +150,26 @@
 			</fieldset>
 			{{- end}}
 			{{- if .operators}}
+
 			<fieldset>
 				<legend>Operators</legend>
 				<table class="tb-fields">
 					<tbody>
 						{{- range $i, $f := .operators}}
+						{{- if eq $i 0}}
 						<tr>
-							{{- if eq $i 0}}<th>Current{{- else if eq $i 1}}<th>Previous Operator</th>{{- end}}
-							{{- if eq $i 0 1}}
+							<th>Current Operator</th>
 							<th>Type</th>
-							{{- end}}
+							{{- else if eq $i 1}}
+							<th class="separator-20-before">Previous Operator(s)</th>
+							<th class="separator-20-before">Type</th>
 						</tr>
+						{{- end}}
 						<tr>
 							<td>{{.name}}</td>
 							<td>{{.operator_type}}</td>
 						</tr>
 						{{- end}}
-						<tr class="spacer"></tr>
 					</tbody>
 				</table>
 			</fieldset>
