@@ -14,7 +14,7 @@ type DB interface {
 	// Fetches the complete details for a Borehole
 	GetBorehole(id int, flags int) (map[string]interface{}, error)
 
-	// Fetches the complete details for a Outcrop
+	// Fetches the complete details for an Outcrop
 	GetOutcrop(id int, flags int) (map[string]interface{}, error)
 
 	// Fetches the complete details for a Well
@@ -22,6 +22,12 @@ type DB interface {
 
 	// Fetches the complete details for a Shotline
 	GetShotline(id int, flags int) (map[string]interface{}, error)
+
+	// Fetches the complete details for an Inventory
+	GetInventory(id int, flags int) (map[string]interface{}, error)
+
+	// Fetches the complete details for an Inventory
+	GetStash(id int, flags int) (map[string]interface{}, error)
 
 	// Verify the database connection is working.
 	// (usually by performing a simple query)

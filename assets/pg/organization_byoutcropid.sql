@@ -5,3 +5,4 @@ JOIN organization_type AS ot
 JOIN outcrop_organization AS oo
     ON o.organization_id = oo.organization_id
 WHERE oo.outcrop_id = $1
+ORDER BY o.name

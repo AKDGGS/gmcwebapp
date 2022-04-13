@@ -9,7 +9,7 @@ import (
 	"net/http"
 )
 
-func (srv *Server) ServeProspect(id int, w http.ResponseWriter, r *http.Request) {
+func (srv *Server) ServeInventory(id int, w http.ResponseWriter, r *http.Request) {
 	user, err := srv.Auths.CheckRequest(w, r)
 	if err != nil {
 		http.Error(
@@ -24,7 +24,7 @@ func (srv *Server) ServeProspect(id int, w http.ResponseWriter, r *http.Request)
 		flags = dbf.ALL_NOPRIVATE
 	}
 
-	prospect, err := srv.DB.GetProspect(id, flags)
+	inventory, err := srv.DB.GetInventory(id, flags)
 	if err != nil {
 		http.Error(
 			w, fmt.Sprintf("Query error: %s", err.Error()),
@@ -33,15 +33,21 @@ func (srv *Server) ServeProspect(id int, w http.ResponseWriter, r *http.Request)
 		return
 	}
 	// If no details were returned, throw a 404
-	if prospect == nil {
-		http.Error(w, "Prospect not found", http.StatusNotFound)
+	if inventory == nil {
+		http.Error(w, "Inventory not found", http.StatusNotFound)
 		return
 	}
 
-	prospect["_user"] = user
+	// If can_publish is false, throw a 403
+	if user == nil && inventory["can_publish"] == false {
+		http.Error(w, "Access denied.", http.StatusForbidden)
+		return
+	}
 
-	pbuf := bytes.Buffer{}
-	if err := assets.ExecuteTemplate("tmpl/prospect.html", &pbuf, prospect); err != nil {
+	inventory["_user"] = user
+
+	buf := bytes.Buffer{}
+	if err := assets.ExecuteTemplate("tmpl/inventory.html", &buf, inventory); err != nil {
 		http.Error(
 			w, fmt.Sprintf("Parse error: %s", err.Error()),
 			http.StatusInternalServerError,
@@ -50,17 +56,17 @@ func (srv *Server) ServeProspect(id int, w http.ResponseWriter, r *http.Request)
 	}
 
 	params := map[string]interface{}{
-		"title":   "Prospect Detail",
-		"content": template.HTML(pbuf.String()),
+		"title":   "Inventory Detail",
+		"content": template.HTML(buf.String()),
 		"stylesheets": []string{
 			"ol/ol.css", "ol/ol-layerswitcher.min.css",
 			"css/view.css",
 		},
 		"scripts": []string{
 			"ol/ol.js", "ol/ol-layerswitcher.min.js",
-			"js/mustache.js", "js/view.js",
+			"js/mustache.js", "js/view.js", "js/stash.js",
 		},
-		"redirect": fmt.Sprintf("prospect/%d", id),
+		"redirect": fmt.Sprintf("inventory/%d", id),
 		"user":     user,
 	}
 

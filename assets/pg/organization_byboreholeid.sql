@@ -5,3 +5,4 @@ JOIN organization_type AS ot
 JOIN borehole_organization AS bo
     ON o.organization_id = bo.organization_id
 WHERE bo.borehole_id = $1
+ORDER BY o.name

@@ -38,6 +38,8 @@ func (srv *Server) ServeBorehole(id int, w http.ResponseWriter, r *http.Request)
 		return
 	}
 
+	borehole["_user"] = user
+
 	buf := bytes.Buffer{}
 	if err := assets.ExecuteTemplate("tmpl/borehole.html", &buf, borehole); err != nil {
 		http.Error(
@@ -59,7 +61,7 @@ func (srv *Server) ServeBorehole(id int, w http.ResponseWriter, r *http.Request)
 			"js/mustache.js", "js/view.js",
 		},
 		"redirect": fmt.Sprintf("borehole/%d", id),
-		"user": user,
+		"user":     user,
 	}
 
 	tbuf := bytes.Buffer{}

@@ -20,31 +20,24 @@
 							<td>{{.year}}</td>
 						</tr>
 						{{- end}}
-						{{- if .is_onshore}}
 						<tr>
 							<th>Onshore</th>
-							<td>Yes</td>
+							<td>{{- if .is_public}}Yes{{- else}}No{{- end}}</td>
 						</tr>
-						{{- end}}
-						{{- if not .is_onshore }}
-						<tr>
-							<th>Onshore</th>
-							<td>No</td>
-						</tr>
-						{{- end }}
 						{{- if .geojson}}
-							{{range $i, $f := .geojson.features}}{{if ne $i 0}}, {{end}}{{if (eq $f.geometry.type "Point" )}}
-									<tr>
-										<th>Lon/Lat</th>
-										<td> {{$f.geometry.coordinates}}</td>
-									</tr>
-								{{- end}}
+
+							{{- range $i, $f := .geojson.features}}{{- if ne $i 0}}{{- end}}{{- if (eq $f.geometry.type "Point" )}}
+							<tr>
+								<th>Lon/Lat</th>
+								<td>{{$f.geometry.coordinates}}</td>
+							</tr>
 							{{- end}}
+						{{- end}}
 						{{- end}}
 						{{- if .quadrangles}}
 						<tr>
 							<th>Quadrangle</th>
-							<td>{{range $i, $qd := .quadrangles}}{{if ne $i 0}}, {{end}}<a href="../search#quadrangle_id={{$qd.quadrangle_id}}">{{$qd.name}}</a>{{end}}</td>
+							<td>{{range $i, $qd := .quadrangles}}{{if ne $i 0}}, {{- end}}<a href="../search#quadrangle_id={{$qd.quadrangle_id}}">{{$qd.name}}</a>{{- end}}</td>
 						</tr>
 						{{- end}}
 					</tbody>
@@ -52,18 +45,18 @@
 			</fieldset>
 			{{- if .geojson}}
 
-			<fieldset class="fs-map" >
+			<fieldset class="fs-map">
 				<legend>Geospatial</legend>
-				<div id="map" style=" height:500px width: 500px"></div>
-				<div id="popup" class="ol-popup" >
+				<div id="map"></div>
+				<div id="popup" class="ol-popup">
 					<div class="ol-popup-top">
 						<div class="ol-popup-top-title">Outcrop(s)</div>
 						<div id="popup-closer">&#215;</div>
 					</div>
-					<div id="popup-content" class="ol-popup-content" ></div>
+					<div id="popup-content" class="ol-popup-content"></div>
 				</div>
 				<script>
-					var geojson = {{rawjs .geojson}};
+					var geojson = {{ rawjs .geojson }};
 				</script>
 			</fieldset>
 			<div class="flex-break"></div>
@@ -72,7 +65,6 @@
 
 			<fieldset>
 				<legend>Inventory</legend>
-				{{- $outcrop_id := .outcrop_id }}
 				<table class="tb-fields">
 					<thead>
 						<tr>
@@ -83,7 +75,7 @@
 					<tbody>
 						{{- range .inventory}}
 						<tr>
-							<td><a href="../search#outcrop_id={{$outcrop_id}}{{range .keywords}}&keyword={{.}}{{end}}">{{range $i, $kw := .keywords}}{{if ne $i 0}} &gt; {{end}}{{$kw}}{{end}}</a></td>
+							<td><a href="../search#outcrop_id={{$.outcrop_id}}{{range .keywords}}&keyword={{.}}{{- end}}">{{range $i, $kw := .keywords}}{{if ne $i 0}} &gt; {{- end}}{{$kw}}{{- end}}</a></td>
 							<td>{{.count}}</td>
 						</tr>
 						{{- end}}
@@ -101,6 +93,7 @@
 			</fieldset>
 			{{- end}}
 			{{- if .organizations}}
+
 			<fieldset>
 				<legend>Organizations</legend>
 				<table class="tb-fields">
@@ -121,12 +114,38 @@
 				</table>
 			</fieldset>
 			{{- end}}
-
 			{{- if .urls}}
-			<fieldset class="urls">
+
+			<fieldset>
 				<legend>URLs</legend>
 				{{- range .urls}}
-				<div style="margin: 5px;"><a href="{{.url}}">{{.description}}</a> ({{.url_type}})</div>
+				<div><a href="{{.url}}">{{.description}}</a> ({{.url_type}})</div>
 				{{- end}}
+			</fieldset>
+			{{- end}}
+			{{- if and ._user .notes}}
+
+			<fieldset>
+				<legend>Notes</legend>
+				<table class="tb-fields tb-columns">
+					<thead>
+						<tr>
+							<th>Date</th>
+							<th>User</th>
+							<th>Public</th>
+							<th>Note</th>
+						</tr>
+					</thead>
+					<tbody>
+						{{- range .notes}}
+						<tr>
+							<td>{{formattime "1/2/2006" .note_date}}</td>
+							<td>{{.username}}</td>
+							<td>{{- if .is_public}} Yes {{- else -}}No{{- end}} </td>
+							<td>{{.note}}</td>
+						</tr>
+						{{- end}}
+					</tbody>
+				</table>
 			</fieldset>
 			{{- end}}

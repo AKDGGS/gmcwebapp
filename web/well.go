@@ -38,6 +38,8 @@ func (srv *Server) ServeWell(id int, w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	well["_user"] = user
+
 	buf := bytes.Buffer{}
 	if err := assets.ExecuteTemplate("tmpl/well.html", &buf, well); err != nil {
 		http.Error(
@@ -59,7 +61,7 @@ func (srv *Server) ServeWell(id int, w http.ResponseWriter, r *http.Request) {
 			"js/mustache.js", "js/view.js",
 		},
 		"redirect": fmt.Sprintf("well/%d", id),
-		"user": user,
+		"user":     user,
 	}
 
 	tbuf := bytes.Buffer{}

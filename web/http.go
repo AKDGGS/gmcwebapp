@@ -27,7 +27,7 @@ func (srv *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 		assets.ServeStatic("js/mustache-v4.2.0.js", w, r)
 		return
 
-	case "css/template.css", "css/view.css", "js/view.js",
+	case "css/template.css", "css/view.css", "js/view.js", "js/stash.js",
 		"ol/ol-layerswitcher.min.css", "ol/ol-layerswitcher.min.js":
 		assets.ServeStatic(path, w, r)
 		return
@@ -108,6 +108,24 @@ func (srv *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 		srv.ServeShotline(id, w, r)
+
+	case "inventory":
+		sid := strings.TrimPrefix(strings.TrimPrefix(path, "inventory"), "/")
+		id, err := strconv.Atoi(sid)
+		if err != nil {
+			http.Error(w, "Invalid Inventory ID", http.StatusBadRequest)
+			return
+		}
+		srv.ServeInventory(id, w, r)
+
+	case "stash":
+		sid := strings.TrimPrefix(strings.TrimPrefix(path, "stash"), "/")
+		id, err := strconv.Atoi(sid)
+		if err != nil {
+			http.Error(w, "Invalid Inventory ID", http.StatusBadRequest)
+			return
+		}
+		srv.ServeStash(id, w, r)
 
 	default:
 		http.Error(w, "File not found", http.StatusNotFound)

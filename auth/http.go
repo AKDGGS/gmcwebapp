@@ -3,10 +3,11 @@ package auth
 import (
 	"bytes"
 	"fmt"
+	"net/http"
+
 	"gmc/assets"
 	"gmc/auth/securecookie"
 	authu "gmc/auth/util"
-	"net/http"
 )
 
 func (auths *Auths) Logout(w http.ResponseWriter, r *http.Request) error {
@@ -74,7 +75,6 @@ func (auths *Auths) CheckForm(w http.ResponseWriter, r *http.Request) error {
 	if err != nil {
 		return err
 	}
-
 
 	uj, err := cookie.GetValue(nil, r)
 	if err == nil {

@@ -2,6 +2,8 @@ package pg
 
 import (
 	dbf "gmc/db/flag"
+
+	"github.com/jackc/pgtype"
 )
 
 func (pg *Postgres) GetWell(id int, flags int) (map[string]interface{}, error) {
@@ -11,6 +13,42 @@ func (pg *Postgres) GetWell(id int, flags int) (map[string]interface{}, error) {
 	}
 	if well == nil {
 		return nil, nil
+	}
+
+	md, ok := well["measured_depth"].(pgtype.Numeric)
+	if !ok {
+		delete(well, "measured_depth")
+	} else {
+		var ift float64
+		md.AssignTo(&ift)
+		well["measured_depth"] = &ift
+	}
+
+	vd, ok := well["vertical_depth"].(pgtype.Numeric)
+	if !ok {
+		delete(well, "vertical_depth")
+	} else {
+		var ift float64
+		vd.AssignTo(&ift)
+		well["vertical_depth"] = &ift
+	}
+
+	elv, ok := well["elevation"].(pgtype.Numeric)
+	if !ok {
+		delete(well, "elvation")
+	} else {
+		var ift float64
+		elv.AssignTo(&ift)
+		well["elevation"] = &ift
+	}
+
+	kb, ok := well["elevation_kb"].(pgtype.Numeric)
+	if !ok {
+		delete(well, "elevation_kb")
+	} else {
+		var ift float64
+		kb.AssignTo(&ift)
+		well["elevation_kb"] = &ift
 	}
 
 	if (flags & dbf.FILES) != 0 {
@@ -53,6 +91,16 @@ func (pg *Postgres) GetWell(id int, flags int) (map[string]interface{}, error) {
 		}
 		if urls != nil {
 			well["urls"] = urls
+		}
+	}
+
+	if (flags & dbf.NOTE) != 0 {
+		notes, err := pg.queryRows("pg/note_bywellid.sql", id)
+		if err != nil {
+			return nil, err
+		}
+		if notes != nil {
+			well["notes"] = notes
 		}
 	}
 

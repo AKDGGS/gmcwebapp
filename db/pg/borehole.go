@@ -1,6 +1,10 @@
 package pg
 
-import dbf "gmc/db/flag"
+import (
+	dbf "gmc/db/flag"
+
+	"github.com/jackc/pgtype"
+)
 
 func (pg *Postgres) GetBorehole(id int, flags int) (map[string]interface{}, error) {
 	borehole, err := pg.queryRow("pg/borehole_byid.sql", id)
@@ -9,6 +13,15 @@ func (pg *Postgres) GetBorehole(id int, flags int) (map[string]interface{}, erro
 	}
 	if borehole == nil {
 		return nil, nil
+	}
+
+	md, ok := borehole["measured_depth"].(pgtype.Numeric)
+	if !ok {
+		delete(borehole, "measured_depth")
+	} else {
+		var ift float64
+		md.AssignTo(&ift)
+		borehole["measured_depth"] = &ift
 	}
 
 	if (flags & dbf.FILES) != 0 {
@@ -51,6 +64,16 @@ func (pg *Postgres) GetBorehole(id int, flags int) (map[string]interface{}, erro
 		}
 		if urls != nil {
 			borehole["urls"] = urls
+		}
+	}
+
+	if (flags & dbf.NOTE) != 0 {
+		notes, err := pg.queryRows("pg/note_byboreholeid.sql", id)
+		if err != nil {
+			return nil, err
+		}
+		if notes != nil {
+			borehole["notes"] = notes
 		}
 	}
 
