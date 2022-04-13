@@ -4,13 +4,12 @@ fieldset, legend {
 }
 fieldset { margin: 8px 8px 0 8px; }
 legend { padding: 0 8px; }
-
-/* #map { width: 100%; height: 100%; min-width: 400px; min-height: 400px; } */
-#map { flex: 1; min-height: 400px;}
+table { max-width: 600px; }
+#map { flex: 1; min-width: 400px; min-height: 400px;}
 .files div:not(:last-of-type) { margin-bottom: 16px; }
 .apptmpl-content { display: flex; flex-wrap: wrap;}
 .apptmpl-content fieldset { flex-grow: 1;}
-/* .fs-map { flex-grow: 10; } */
+.fs-map { flex-grow: 10; }
 .fs-map {
 	display: flex;
 	flex-grow: 10;
@@ -23,12 +22,9 @@ legend { padding: 0 8px; }
 	padding: 0 4px;
 }
 .tb-fields tr:not(:last-of-type) td { padding-bottom: 8px;}
-
 .tb-spacer-bg:not(:first-of-type) th, .tb-spacer-bg:not(:first-of-type) td {padding-top: 70px;}
 .tb-spacer-sm:not(:first-of-type) th, .tb-spacer-sm:not(:first-of-type) td {padding-top: 25px;}
 .tb-columns th {	padding-right: 50px; }
-table { max-width: 600px; }
-
 
 #stash-dd table { border-collapse: collapse; font-size: 12px; font-family: Tahoma, Geneva, sans-serif; }
 #stash-dd table th { text-align: left; }
