@@ -25,12 +25,13 @@
 							<td>{{- if .is_public}}Yes{{- else}}No{{- end}}</td>
 						</tr>
 						{{- if .geojson}}
-						<tr>
+
 							{{- range $i, $f := .geojson.features}}{{- if ne $i 0}}{{- end}}{{- if (eq $f.geometry.type "Point" )}}
-							<th>Lon/Lat</th>
-							<td>{{$f.geometry.coordinates}}</td>
+							<tr>
+								<th>Lon/Lat</th>
+								<td>{{$f.geometry.coordinates}}</td>
+							</tr>
 							{{- end}}
-						</tr>
 						{{- end}}
 						{{- end}}
 						{{- if .quadrangles}}
