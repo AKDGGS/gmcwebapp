@@ -84,7 +84,7 @@
 
 			<fieldset>
 				<legend>Inventory</legend>
-				<table class="tb-fields">
+				<table class="tb-fields tb-columns">
 					<thead>
 						<tr>
 							<th>Keywords</th>
@@ -104,7 +104,7 @@
 			{{- end}}
 			{{- if .files}}
 
-			<fieldset class="files">
+			<fieldset>
 				<legend>Files</legend>
 				{{- range .files}}
 				<div><a href="../file/{{.file_id}}/{{.file_name}}">{{.file_name}}</a> ({{.file_size}})</div>

@@ -104,7 +104,7 @@
 
 			<fieldset>
 				<legend>Inventory</legend>
-				<table class="tb-fields">
+				<table class="tb-fields tb-columns">
 					<thead>
 						<tr>
 							<th>Keywords</th>
@@ -124,7 +124,7 @@
 			{{- end}}
 			{{- if .files}}
 
-			<fieldset class="files">
+			<fieldset>
 				<legend>Files</legend>
 				{{- range .files}}
 				<div><a href="../file/{{.file_id}}/{{.file_name}}">{{.file_name}}</a> ({{.file_size}})</div>
@@ -132,9 +132,10 @@
 			</fieldset>
 			{{- end}}
 			{{- if .organizations}}
+
 			<fieldset>
 				<legend>Organizations</legend>
-				<table class="tb-fields">
+				<table class="tb-fields tb-columns">
 					<thead>
 						<tr>
 							<th>Organization</th>
@@ -154,7 +155,7 @@
 			{{- end}}
 			{{- if .urls}}
 
-			<fieldset class="urls">
+			<fieldset>
 				<legend>URLs</legend>
 				{{- range .urls}}
 				<div><a href="{{.url}}">{{.description}}</a> ({{.url_type}})</div>
@@ -165,12 +166,12 @@
 
 			<fieldset>
 				<legend>Notes</legend>
-				<table class="tb-fields max-width-600">
+				<table class="tb-fields tb-columns">
 					<thead>
 						<tr>
-							<th class="rt-padding-50">Date</th>
-							<th class="rt-padding-50">User</th>
-							<th class="rt-padding-50">Public</th>
+							<th>Date</th>
+							<th>User</th>
+							<th>Public</th>
 							<th>Note</th>
 						</tr>
 					</thead>

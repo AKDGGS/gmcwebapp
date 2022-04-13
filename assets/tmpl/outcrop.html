@@ -115,7 +115,7 @@
 			{{- end}}
 			{{- if .urls}}
 
-			<fieldset class="urls">
+			<fieldset>
 				<legend>URLs</legend>
 				{{- range .urls}}
 				<div><a href="{{.url}}">{{.description}}</a> ({{.url_type}})</div>
@@ -126,12 +126,12 @@
 
 			<fieldset>
 				<legend>Notes</legend>
-				<table class="tb-fields max-width-600">
+				<table class="tb-fields tb-columns">
 					<thead>
 						<tr>
-							<th class="rt-padding-50">Date</th>
-							<th class="rt-padding-50">User</th>
-							<th class="rt-padding-50">Public</th>
+							<th>Date</th>
+							<th>User</th>
+							<th>Public</th>
 							<th>Note</th>
 						</tr>
 					</thead>

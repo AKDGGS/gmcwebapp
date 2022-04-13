@@ -248,7 +248,7 @@
 					<tbody>
 						{{- range .boreholes}}
 						{{- if .prospect_name}}
-						<tr>
+						<tr class="tb-spacer-sm">
 							<th>Prospect Name</th>
 							<td><a href="../prospect/{{.prospect_id}}">{{.prospect_name}}</a></td>
 						</tr>
@@ -285,7 +285,7 @@
 						{{- range .wells}}
 						{{- if or (.is_current) (eq .is_current nil)}}
 						{{- if .well_name}}
-						<tr>
+						<tr class="tb-spacer-sm">
 							<th>Well Name</th>
 							<td><a href="../well/{{.well_id}}">{{.well_name}}</a></td>
 						</tr>
@@ -334,13 +334,13 @@
 					<tbody>
 						{{- range $i, $f := .shotlines}}
 						{{- if .name}}
-						<tr>
+						<tr class="tb-spacer-sm">
 							{{- if eq $i 0}}
 							<th>Shotline Name</th>
 							<td><a href="../shotline/{{.shotline_id}}">{{.name}}</a></td>
 							{{- else}}
-							<th class="separator-20-before">Shotline Name</th>
-							<td class="separator-20-before"><a href="../shotline/{{.shotline_id}}">{{.name}}</a></td>
+							<th>Shotline Name</th>
+							<td><a href="../shotline/{{.shotline_id}}">{{.name}}</a></td>
 							{{- end}}
 						</tr>
 						{{- end}}
@@ -375,7 +375,7 @@
 					<tbody>
 						{{- range .outcrops}}
 						{{- if .name}}
-						<tr>
+						<tr class="tb-spacer-sm">
 							<th>Outcrop Name</th>
 							<td><a href="../outcrop/{{.outcrop_id}}">{{.name}}</a></td>
 						</tr>
@@ -399,7 +399,7 @@
 			{{- end}}
 			{{- if .urls}}
 
-			<fieldset class="urls">
+			<fieldset>
 				<legend>URLs</legend>
 				{{- range .urls}}
 				<div><a href="{{.url}}">{{.description}}</a> ({{.url_type}})</div>
@@ -408,7 +408,7 @@
 			{{- end}}
 			{{- if .files}}
 
-			<fieldset class="files">
+			<fieldset>
 				<legend>Files</legend>
 				{{- range .files}}
 				<div><a href="../file/{{.file_id}}/{{.file_name}}">{{.file_name}}</a> ({{.file_size}})</div>
@@ -419,11 +419,11 @@
 
 			<fieldset>
 				<legend>Publication(s)</legend>
-				<table class="tb-fields max-width-600">
+				<table class="tb-fields tb-columns">
 					<tbody>
 						{{- range .publications}}
 						{{- if .title}}
-						<tr>
+						<tr class="tb-spacer-bg">
 							<th>Title</th>
 							<td>{{.title}}</td>
 						</tr>
@@ -459,7 +459,7 @@
 						</tr>
 						{{- end}}
 						<tr>
-							<th class="separator-50-after">Publish</th>
+							<th>Publish</th>
 							<td>{{- if .can_publish}}Yes{{- else}}No{{- end}}</td>
 						</tr>
 						{{- end}}
@@ -471,12 +471,12 @@
 
 			<fieldset>
 				<legend>Notes</legend>
-				<table class="tb-fields max-width-600">
+				<table class="tb-fields tb-columns">
 					<thead>
 						<tr>
-							<th class="rt-padding-50">Date</th>
-							<th class="rt-padding-50">User</th>
-							<th class="rt-padding-50">Public</th>
+							<th>Date</th>
+							<th>User</th>
+							<th>Public</th>
 							<th>Note</th>
 						</tr>
 					</thead>
@@ -497,12 +497,12 @@
 
 			<fieldset>
 				<legend>QA</legend>
-				<table class="tb-fields max-width-600">
+				<table class="tb-fields tb-columns">
 					<thead>
 						<tr>
-							<th class="rt-padding-50">Date</th>
-							<th class="rt-padding-50">User</th>
-							<th class="rt-padding-50">Issue(s)</th>
+							<th>Date</th>
+							<th>User</th>
+							<th>Issue(s)</th>
 							<th>Remark</th>
 						</tr>
 					</thead>
@@ -521,13 +521,13 @@
 			{{- end}}
 			{{- if and ._user .containerlog}}
 
-			<fieldset class="inventory_boxes">
+			<fieldset>
 				<legend>Tracking</legend>
-				<table class="tb-fields max-width-600">
+				<table class="tb-fields">
 					<tbody>
 						{{- range .containerlog}}
 						<tr>
-							<td>{{formattime "1/2/2006" .log_date}} <strong>{{.destination}}</strong></td>
+							<td>{{formattime "1/2/2006" .log_date}} <b>{{.destination}}</b></td>
 						</tr>
 					{{- end}}
 					</tbody>
@@ -536,7 +536,7 @@
 			{{- end}}
 			{{- if ._user}}
 
-			<fieldset class="inventory_boxes">
+			<fieldset>
 				<legend>Stash</legend>
 				<button id="stash-link" type="submit">Show Stash</button>
 				<div id="stash-dd"></div>

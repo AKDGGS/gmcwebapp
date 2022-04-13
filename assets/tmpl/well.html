@@ -142,7 +142,7 @@
 			{{- end}}
 			{{- if .files}}
 
-			<fieldset class="files">
+			<fieldset>
 				<legend>Files</legend>
 				{{- range .files}}
 				<div><a href="../file/{{.file_id}}/{{.file_name}}">{{.file_name}}</a> ({{.file_size}})</div>
@@ -153,16 +153,18 @@
 
 			<fieldset>
 				<legend>Operators</legend>
-				<table class="tb-fields">
+				<table class="tb-fields tb-columns">
 					<tbody>
 						{{- range $i, $f := .operators}}
 						{{- if eq $i 0}}
 						<tr>
 							<th>Current Operator</th>
 							<th>Type</th>
+						</tr>
 							{{- else if eq $i 1}}
-							<th class="separator-20-before">Previous Operator(s)</th>
-							<th class="separator-20-before">Type</th>
+						<tr class="tb-spacer-sm">
+							<th>Previous Operator(s)</th>
+							<th>Type</th>
 						</tr>
 						{{- end}}
 						<tr>
@@ -176,23 +178,23 @@
 			{{- end}}
 			{{- if .urls}}
 
-			<fieldset class="urls">
-			<legend>URLs</legend>
-			{{- range .urls}}
-				<div><a href="{{.url}}">{{.description}}</a> ({{.url_type}})</div>
-			{{- end}}
+			<fieldset>
+				<legend>URLs</legend>
+				{{- range .urls}}
+					<div><a href="{{.url}}">{{.description}}</a> ({{.url_type}})</div>
+				{{- end}}
 			</fieldset>
 			{{- end}}
 			{{- if and ._user .notes}}
 
 			<fieldset>
 				<legend>Notes</legend>
-				<table class="tb-fields max-width-600">
+				<table class="tb-fields tb-columns">
 					<thead>
 						<tr>
-							<th class="rt-padding-50">Date</th>
-							<th class="rt-padding-50">User</th>
-							<th class="rt-padding-50">Public</th>
+							<th>Date</th>
+							<th>User</th>
+							<th>Public</th>
 							<th>Note</th>
 						</tr>
 					</thead>
