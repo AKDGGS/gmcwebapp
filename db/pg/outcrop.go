@@ -14,7 +14,7 @@ func (pg *Postgres) GetOutcrop(id int, flags int) (map[string]interface{}, error
 	}
 
 	if (flags & dbf.FILES) != 0 {
-		files, err := pg.queryRows("pg/file_byoutcropid.sql", id)
+		files, err := pg.queryRows("pg/file/by_outcrop_id.sql", id)
 		if err != nil {
 			return nil, err
 		}
@@ -25,7 +25,7 @@ func (pg *Postgres) GetOutcrop(id int, flags int) (map[string]interface{}, error
 
 	if (flags & dbf.INVENTORY_SUMMARY) != 0 {
 		inventory, err := pg.queryRows(
-			"pg/keyword_group_byoutcropid.sql", id,
+			"pg/keyword/group_by_outcrop_id.sql", id,
 			((flags & dbf.PRIVATE) == 0),
 		)
 		if err != nil {
@@ -47,7 +47,7 @@ func (pg *Postgres) GetOutcrop(id int, flags int) (map[string]interface{}, error
 	}
 
 	if (flags & dbf.URLS) != 0 {
-		urls, err := pg.queryRows("pg/url_byoutcropid.sql", id)
+		urls, err := pg.queryRows("pg/url/by_outcrop_id.sql", id)
 		if err != nil {
 			return nil, err
 		}
@@ -57,7 +57,7 @@ func (pg *Postgres) GetOutcrop(id int, flags int) (map[string]interface{}, error
 	}
 
 	if (flags & dbf.NOTE) != 0 {
-		notes, err := pg.queryRows("pg/note_byoutcropid.sql", id)
+		notes, err := pg.queryRows("pg/note/by_outcrop_id.sql", id)
 		if err != nil {
 			return nil, err
 		}
@@ -77,7 +77,7 @@ func (pg *Postgres) GetOutcrop(id int, flags int) (map[string]interface{}, error
 	}
 
 	if (flags & dbf.QUADRANGLES) != 0 {
-		qds, err := pg.queryRows("pg/quadrangle250k_byoutcropid.sql", id)
+		qds, err := pg.queryRows("pg/quadrangle/250k_by_outcrop_id.sql", id)
 		if err != nil {
 			return nil, err
 		}

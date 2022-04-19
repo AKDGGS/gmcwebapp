@@ -35,7 +35,7 @@ func (pg *Postgres) GetShotline(id int, flags int) (map[string]interface{}, erro
 
 	if (flags & dbf.INVENTORY_SUMMARY) != 0 {
 		inventory, err := pg.queryRows(
-			"pg/keyword_group_byshotlineid.sql", id,
+			"pg/keyword/group_by_shotline_id.sql", id,
 			((flags & dbf.PRIVATE) == 0),
 		)
 		if err != nil {
@@ -46,7 +46,7 @@ func (pg *Postgres) GetShotline(id int, flags int) (map[string]interface{}, erro
 		}
 	}
 	if (flags & dbf.URLS) != 0 {
-		urls, err := pg.queryRows("pg/url_byshotlineid.sql", id)
+		urls, err := pg.queryRows("pg/url/by_shotline_id.sql", id)
 		if err != nil {
 			return nil, err
 		}
@@ -56,7 +56,7 @@ func (pg *Postgres) GetShotline(id int, flags int) (map[string]interface{}, erro
 	}
 
 	if (flags & dbf.NOTE) != 0 {
-		notes, err := pg.queryRows("pg/note_byshotlineid.sql", id)
+		notes, err := pg.queryRows("pg/note/by_shotline_id.sql", id)
 		if err != nil {
 			return nil, err
 		}
@@ -76,7 +76,7 @@ func (pg *Postgres) GetShotline(id int, flags int) (map[string]interface{}, erro
 	}
 
 	if (flags & dbf.QUADRANGLES) != 0 {
-		qds, err := pg.queryRows("pg/quadrangle250k_byshotlineid.sql", id)
+		qds, err := pg.queryRows("pg/quadrangle/250k_by_shotline_id.sql", id)
 		if err != nil {
 			return nil, err
 		}

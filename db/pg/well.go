@@ -52,7 +52,7 @@ func (pg *Postgres) GetWell(id int, flags int) (map[string]interface{}, error) {
 	}
 
 	if (flags & dbf.FILES) != 0 {
-		files, err := pg.queryRows("pg/file_bywellid.sql", id)
+		files, err := pg.queryRows("pg/file/by_well_id.sql", id)
 		if err != nil {
 			return nil, err
 		}
@@ -63,7 +63,7 @@ func (pg *Postgres) GetWell(id int, flags int) (map[string]interface{}, error) {
 
 	if (flags & dbf.INVENTORY_SUMMARY) != 0 {
 		inventory, err := pg.queryRows(
-			"pg/keyword_group_bywellid.sql", id,
+			"pg/keyword/group_by_well_id.sql", id,
 			((flags & dbf.PRIVATE) == 0),
 		)
 		if err != nil {
@@ -85,7 +85,7 @@ func (pg *Postgres) GetWell(id int, flags int) (map[string]interface{}, error) {
 	}
 
 	if (flags & dbf.URLS) != 0 {
-		urls, err := pg.queryRows("pg/url_bywellid.sql", id)
+		urls, err := pg.queryRows("pg/url/by_well_id.sql", id)
 		if err != nil {
 			return nil, err
 		}
@@ -95,7 +95,7 @@ func (pg *Postgres) GetWell(id int, flags int) (map[string]interface{}, error) {
 	}
 
 	if (flags & dbf.NOTE) != 0 {
-		notes, err := pg.queryRows("pg/note_bywellid.sql", id)
+		notes, err := pg.queryRows("pg/note/by_well_id.sql", id)
 		if err != nil {
 			return nil, err
 		}
@@ -115,7 +115,7 @@ func (pg *Postgres) GetWell(id int, flags int) (map[string]interface{}, error) {
 	}
 
 	if (flags & dbf.QUADRANGLES) != 0 {
-		qds, err := pg.queryRows("pg/quadrangle250k_bywellid.sql", id)
+		qds, err := pg.queryRows("pg/quadrangle/250k_by_well_id.sql", id)
 		if err != nil {
 			return nil, err
 		}

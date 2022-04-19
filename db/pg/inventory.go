@@ -71,7 +71,7 @@ func (pg *Postgres) GetInventory(id int, flags int) (map[string]interface{}, err
 	}
 
 	if (flags & dbf.FILES) != 0 {
-		files, err := pg.queryRows("pg/file_byinventoryid.sql", id)
+		files, err := pg.queryRows("pg/file/by_inventory_id.sql", id)
 		if err != nil {
 			return nil, err
 		}
@@ -81,7 +81,7 @@ func (pg *Postgres) GetInventory(id int, flags int) (map[string]interface{}, err
 	}
 
 	if (flags & dbf.URLS) != 0 {
-		urls, err := pg.queryRows("pg/url_byinventoryid.sql", id)
+		urls, err := pg.queryRows("pg/url/by_inventory_id.sql", id)
 		if err != nil {
 			return nil, err
 		}
@@ -91,7 +91,7 @@ func (pg *Postgres) GetInventory(id int, flags int) (map[string]interface{}, err
 	}
 
 	if (flags & dbf.NOTE) != 0 {
-		notes, err := pg.queryRows("pg/note_byinventoryid.sql", id)
+		notes, err := pg.queryRows("pg/note/by_inventory_id.sql", id)
 		if err != nil {
 			return nil, err
 		}
