@@ -26,8 +26,8 @@ type DB interface {
 	// Fetches the complete details for an Inventory
 	GetInventory(id int, flags int) (map[string]interface{}, error)
 
-	// Fetches the complete details for an Inventory
-	GetStash(id int, flags int) (map[string]interface{}, error)
+	// Fetches stash for a specific inventory id
+	GetStash(id int) (map[string]interface{}, error)
 
 	// Verify the database connection is working.
 	// (usually by performing a simple query)

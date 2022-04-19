@@ -3,7 +3,6 @@ package web
 import (
 	"encoding/json"
 	"fmt"
-	dbf "gmc/db/flag"
 	"log"
 	"net/http"
 )
@@ -18,12 +17,7 @@ func (srv *Server) ServeStash(id int, w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	flags := dbf.ALL
-	if user == nil {
-		flags = dbf.ALL_NOPRIVATE
-	}
-
-	stash, err := srv.DB.GetStash(id, flags)
+	stash, err := srv.DB.GetStash(id)
 	if err != nil {
 		http.Error(
 			w, fmt.Sprintf("Query error: %s", err.Error()),
@@ -33,7 +27,7 @@ func (srv *Server) ServeStash(id int, w http.ResponseWriter, r *http.Request) {
 	}
 	// If no details were returned, throw a 404
 	if stash == nil {
-		http.Error(w, "Inventory stash not found", http.StatusNotFound)
+		http.Error(w, "stash not found", http.StatusNotFound)
 		return
 	}
 
