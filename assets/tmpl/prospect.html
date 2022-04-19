@@ -94,7 +94,7 @@
 					<tbody>
 						{{- range .inventory}}
 						<tr>
-							<td><a href="../search#prospect_id={{$.prospect_id}}{{range .keywords}}&keyword={{.}}{{- end}}">{{- range $i, $kw := .keywords}}{{- if ne $i 0}} &gt; {{- end}}{{$kw}}{{- end}}</a></td>
+							<td><a href="../search#prospect_id={{$.prospect_id}}{{range .keywords}}&keyword={{.}}{{- end}}">{{- range $i, $kw := .keywords}}{{- if ne $i 0}} &gt; {{end}}{{$kw}}{{- end}}</a></td>
 							<td>{{.count}}</td>
 						</tr>
 						{{- end}}

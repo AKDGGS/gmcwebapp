@@ -132,7 +132,7 @@
 					<tbody>
 						{{- range .inventory }}
 						<tr>
-							<td><a href="../search#well_id={{$.well_id}}&keyword={{.keywords}}">{{range $i, $kw := .keywords}}{{if ne $i 0}} &gt; {{- end}}{{$kw}}{{- end}}</a></td>
+							<td><a href="../search#well_id={{$.well_id}}&keyword={{.keywords}}">{{range $i, $kw := .keywords}}{{if ne $i 0}} &gt; {{end}}{{$kw}}{{- end}}</a></td>
 							<td>{{.count}}</td>
 						</tr>
 						{{- end}}
