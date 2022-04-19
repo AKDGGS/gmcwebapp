@@ -3,7 +3,6 @@ package web
 import (
 	"encoding/json"
 	"fmt"
-	"log"
 	"net/http"
 )
 
@@ -14,6 +13,10 @@ func (srv *Server) ServeStash(id int, w http.ResponseWriter, r *http.Request) {
 			w, fmt.Sprintf("Authentication error: %s", err.Error()),
 			http.StatusBadRequest,
 		)
+		return
+	}
+	if user == nil {
+		http.Error(w, "Access denied.", http.StatusForbidden)
 		return
 	}
 
@@ -27,18 +30,19 @@ func (srv *Server) ServeStash(id int, w http.ResponseWriter, r *http.Request) {
 	}
 	// If no details were returned, throw a 404
 	if stash == nil {
-		http.Error(w, "stash not found", http.StatusNotFound)
+		http.Error(w, "Stash not found", http.StatusNotFound)
 		return
 	}
 
 	w.WriteHeader(http.StatusOK)
 	w.Header().Set("Content-Type", "application/json")
-	resp := make(map[string]string)
-	resp["message"] = "Status Created"
-	jsonResp, err := json.Marshal(stash)
+	js, err := json.Marshal(stash)
 	if err != nil {
-		log.Fatalf("Error happened in JSON marshal. Err: %s", err)
+		http.Error(
+			w, fmt.Sprintf("JSON error: %s", err.Error()),
+			http.StatusInternalServerError,
+		)
+		return
 	}
-
-	w.Write(jsonResp)
+	w.Write(js)
 }
