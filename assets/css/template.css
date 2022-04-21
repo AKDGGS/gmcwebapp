@@ -1,5 +1,11 @@
-html, body { margin: 0; padding: 0; }
+html, body { margin: 0; padding: 0; height: 100%;}
 body { background-color: #f2f2f2; }
+
+.box {
+	display: flex;
+	flex-flow: column;
+	height: 100%;
+}
 .soa-apptmpl-header {
 	background-color: #072f49;
 	border-top: 3px solid #edbd03;
