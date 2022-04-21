@@ -62,15 +62,15 @@ func (pg *Postgres) GetWell(id int, flags int) (map[string]interface{}, error) {
 	}
 
 	if (flags & dbf.INVENTORY_SUMMARY) != 0 {
-		inventory, err := pg.queryRows(
+		keywords, err := pg.queryRows(
 			"pg/keyword/group_by_well_id.sql", id,
 			((flags & dbf.PRIVATE) == 0),
 		)
 		if err != nil {
 			return nil, err
 		}
-		if inventory != nil {
-			well["inventory"] = inventory
+		if keywords != nil {
+			well["keywords"] = keywords
 		}
 	}
 
