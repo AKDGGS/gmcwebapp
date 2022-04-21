@@ -27,8 +27,8 @@ func (srv *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 		assets.ServeStatic("js/mustache-v4.2.0.js", w, r)
 		return
 
-	case "css/template.css", "css/view.css", "js/view.js", "js/stash.js",
-		"ol/ol-layerswitcher.min.css", "ol/ol-layerswitcher.min.js":
+	case "css/template.css", "css/view.css", "css/wellspage.css", "js/view.js", "js/stash.js",
+		"ol/ol-layerswitcher.min.css", "ol/ol-layerswitcher.min.js", "js/wells.js":
 		assets.ServeStatic(path, w, r)
 		return
 
@@ -126,6 +126,21 @@ func (srv *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 		srv.ServeStash(id, w, r)
+
+	case "wells":
+		srv.ServeWells(w, r)
+
+	case "wellpoint.json":
+		srv.ServeWellsPointlist(w, r)
+
+	case "well.json":
+		sid := strings.TrimPrefix(strings.TrimPrefix(path, "well.json"), "/")
+		id, err := strconv.Atoi(sid)
+		if err != nil {
+			http.Error(w, "Invalid Well ID", http.StatusBadRequest)
+			return
+		}
+		srv.ServeWellJSON(id, w, r)
 
 	default:
 		http.Error(w, "File not found", http.StatusNotFound)

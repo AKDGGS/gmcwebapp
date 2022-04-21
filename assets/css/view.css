@@ -9,11 +9,7 @@ table { max-width: 600px; }
 .files div:not(:last-of-type) { margin-bottom: 16px; }
 .apptmpl-content { display: flex; flex-wrap: wrap;}
 .apptmpl-content fieldset { flex-grow: 1;}
-.fs-map { flex-grow: 10; }
-.fs-map {
-	display: flex;
-	flex-grow: 10;
-}
+.fs-map {	display: flex; flex-grow: 10; }
 .fs-detail { min-width: 350px; flex-basis: 0; }
 .flex-break { height: 0; flex-basis: 100%; }
 .tb-fields { border-collapse: separate; }
