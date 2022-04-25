@@ -1,11 +1,12 @@
 html, body { margin: 0; padding: 0; height: 100%;}
-body { background-color: #f2f2f2; }
-
-.box {
+body { background-color: #f2f2f2;
 	display: flex;
 	flex-flow: column;
-	height: 100%;
-}
+	height: 100%;}
+
+/* .box {
+
+} */
 .soa-apptmpl-header {
 	background-color: #072f49;
 	border-top: 3px solid #edbd03;
