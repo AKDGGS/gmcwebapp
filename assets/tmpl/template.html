@@ -7,54 +7,54 @@
 		<link rel="shortcut icon" href="/favicon.ico" type="image/x-icon">
 		<link rel="stylesheet" href="../css/template.css">
 		{{- range .stylesheets}}
-		<link rel="stylesheet" href="../{{.}}">
+		<link rel="stylesheet" href="{{.}}">
 		{{- end}}
 	</head>
 	<body>
-			<div class="soa-apptmpl-header">
-				<div class="soa-apptmpl-header-top">
-					<a class="soa-apptmpl-logo" title="The Great State of Alaska" href="http://alaska.gov"></a>
-					<a class="soa-apptmpl-logo-dggs" title="The Division of Geological &amp; Geophysical Surveys" href="http://dggs.alaska.gov"></a>
-					<div class="soa-apptmpl-header-nav">
-						{{- if .user }}
-						<a href="../logout{{if .redirect}}?redirect={{.redirect}}{{end}}">Logout</a>
-						{{- else }}
-						<a href="../login{{if .redirect}}?redirect={{.redirect}}{{end}}">Login</a>
-						{{- end }}
-						<a href="../help">Help/Contact</a>
-					</div>
-				</div>
-				<div class="soa-apptmpl-header-breadcrumb">
-					<a href="https://alaska.gov">
-						<span class="soa-apptmpl-breadcrumb-lg">State of Alaska</span>
-						<span class="soa-apptmpl-breadcrumb-sm">Alaska</span>
-					</a>
-					|
-					<a href="http://dnr.alaska.gov">
-						<span class="soa-apptmpl-breadcrumb-lg">Natural Resources</span>
-						<span class="soa-apptmpl-breadcrumb-sm">DNR</span>
-					</a>
-					|
-					<a href="https://dggs.alaska.gov">
-						<span class="soa-apptmpl-breadcrumb-lg">Geological &amp; Geophysical Surveys</span>
-						<span class="soa-apptmpl-breadcrumb-sm">DGGS</span>
-					</a>
-					|
-					<a href="https://dggs.alaska.gov/gmc/">
-						<span class="soa-apptmpl-breadcrumb-lg">Geologic Materials Center</span>
-						<span class="soa-apptmpl-breadcrumb-sm">GMC</span>
-					</a>
-					|
-					<a href="https://maps.dggs.alaska.gov/gmc/">
-						<span class="soa-apptmpl-breadcrumb-lg">Inventory</span>
-						<span class="soa-apptmpl-breadcrumb-sm">Inventory</span>
-					</a>
+		<div class="soa-apptmpl-header">
+			<div class="soa-apptmpl-header-top">
+				<a class="soa-apptmpl-logo" title="The Great State of Alaska" href="http://alaska.gov"></a>
+				<a class="soa-apptmpl-logo-dggs" title="The Division of Geological &amp; Geophysical Surveys" href="http://dggs.alaska.gov"></a>
+				<div class="soa-apptmpl-header-nav">
+					{{- if .user }}
+					<a href="../logout{{if .redirect}}?redirect={{.redirect}}{{end}}">Logout</a>
+					{{- else }}
+					<a href="../login{{if .redirect}}?redirect={{.redirect}}{{end}}">Login</a>
+					{{- end }}
+					<a href="../help">Help/Contact</a>
 				</div>
 			</div>
+			<div class="soa-apptmpl-header-breadcrumb">
+				<a href="https://alaska.gov">
+					<span class="soa-apptmpl-breadcrumb-lg">State of Alaska</span>
+					<span class="soa-apptmpl-breadcrumb-sm">Alaska</span>
+				</a>
+				|
+				<a href="http://dnr.alaska.gov">
+					<span class="soa-apptmpl-breadcrumb-lg">Natural Resources</span>
+					<span class="soa-apptmpl-breadcrumb-sm">DNR</span>
+				</a>
+				|
+				<a href="https://dggs.alaska.gov">
+					<span class="soa-apptmpl-breadcrumb-lg">Geological &amp; Geophysical Surveys</span>
+					<span class="soa-apptmpl-breadcrumb-sm">DGGS</span>
+				</a>
+				|
+				<a href="https://dggs.alaska.gov/gmc/">
+					<span class="soa-apptmpl-breadcrumb-lg">Geologic Materials Center</span>
+					<span class="soa-apptmpl-breadcrumb-sm">GMC</span>
+				</a>
+				|
+				<a href="https://maps.dggs.alaska.gov/gmc/">
+					<span class="soa-apptmpl-breadcrumb-lg">Inventory</span>
+					<span class="soa-apptmpl-breadcrumb-sm">Inventory</span>
+				</a>
+			</div>
+		</div>
 			<div class="apptmpl-content">
 		{{.content}}			</div>
 		{{- range .scripts}}
-		<script src="../{{.}}"></script>
+		<script src="{{.}}"></script>
 		{{- end}}
 	</body>
 </html>

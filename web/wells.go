@@ -29,6 +29,7 @@ func (srv *Server) ServeWells(w http.ResponseWriter, r *http.Request) {
 			"ol/ol.js", "ol/ol-layerswitcher.min.js",
 			"js/mustache.js", "js/wells.js",
 		},
+		"redirect": fmt.Sprint("wells"),
 	}
 
 	tbuf := bytes.Buffer{}
