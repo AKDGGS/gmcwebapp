@@ -10,13 +10,13 @@
 .indent {padding-left: 10px;}
 .ol-popup {
  	 	position: relative;
+		margin-top: 10px;
  	 	background-color: white;
  	 	box-shadow: 0 1px 4px rgba(0, 0, 0, 0.2);
  	 	padding-bottom: 5px;
  	 	border: 1px solid #cccccc;
  	 	bottom: 12px;
- 	 	left: -50px;
- 	 	width: 17em;
+ 	 	width: 23em;
  	 	visibility: hidden;
 }
 .ol-popup-after, .ol-popup-before {
@@ -25,7 +25,8 @@
  	 	content: " ";
  	 	height: 0;
  	 	width: 0;
- 	 	position: absolute;
+ 	 	position: relative;
+		margin-top: 10px;
  	 	pointer-events: none;
 }
 .ol-popup::after {
@@ -53,7 +54,7 @@
  	 	font-size: 16px;
 }
 .topBar {
- 	 	background: rgba(39, 111, 147, 1);
+ 	 	background: linear-gradient(315deg, rgba(39, 111, 147, 1) 94%, #999 94%);
  	 	padding: 5px;
  	 	display: flex;
  	 	align-items: center;
@@ -127,13 +128,13 @@
 @media (min-width: 30em) and (orientation: portrait) {
  	 	.ol-popup {
  	 	 	 	position: relative;
+				margin-top: 10px;
  	 	 	 	background-color: white;
  	 	 	 	box-shadow: 0 1px 4px rgba(0, 0, 0, 0.2);
  	 	 	 	padding-bottom: 5px;
  	 	 	 	border: 1px solid #cccccc;
  	 	 	 	bottom: 12px;
- 	 	 	 	left: -50px;
- 	 	 	 	width: 17em;
+ 	 	 	 	width: 23em;
  	 	 	 	visibility: hidden;
  	 	}
  	 	.popup-content {
@@ -143,7 +144,7 @@
  	 	 	 	font-size: 16px;
  	 	}
  	 	.topBar {
- 	 	 	 	background: rgba(39, 111, 147, 1);
+ 	 	 	 	background: linear-gradient(315deg, rgba(39, 111, 147, 1) 94%, #999 94%);
  	 	 	 	padding: 5px;
  	 	 	 	display: flex;
  	 	 	 	align-items: center;
@@ -155,13 +156,13 @@
 @media (min-width: 30em) and (orientation: landscape) {
  	 	.ol-popup {
  	 	 	 	position: relative;
+				margin-top: 10px;
  	 	 	 	background-color: white;
  	 	 	 	box-shadow: 0 1px 4px rgba(0, 0, 0, 0.2);
  	 	 	 	padding-bottom: 5px;
  	 	 	 	border: 1px solid #cccccc;
  	 	 	 	bottom: 12px;
- 	 	 	 	left: -50px;
- 	 	 	 	width: 17em;
+ 	 	 	 	width: 23em;
  	 	 	 	visibility: hidden;
  	 	}
  	 	.popup-content {
@@ -171,7 +172,7 @@
  	 	 	 	font-size: 16px;
  	 	}
  	 	.topBar {
- 	 	 	 	background: rgba(39, 111, 147, 1);
+ 	 	 	 	background: linear-gradient(315deg, rgba(39, 111, 147, 1) 94%, #999 94%);
  	 	 	 	padding: 5px;
  	 	 	 	display: flex;
  	 	 	 	align-items: center;
@@ -183,13 +184,13 @@
 @media (min-width: 50em) and (orientation: landscape) {
  	 	.ol-popup {
  	 	 	 	position: relative;
+				margin-top: 10px;
  	 	 	 	background-color: white;
  	 	 	 	box-shadow: 0 1px 4px rgba(0, 0, 0, 0.2);
  	 	 	 	padding-bottom: 5px;
  	 	 	 	border: 1px solid #cccccc;
  	 	 	 	bottom: 12px;
- 	 	 	 	left: -50px;
- 	 	 	 	width: 17em;
+ 	 	 	 	width: 23em;
  	 	 	 	visibility: hidden;
  	 	}
  	 	.popup-content {
@@ -199,7 +200,8 @@
  	 	 	 	font-size: 16px;
  	 	}
  	 	.topBar {
- 	 	 	 	background: rgba(39, 111, 147, 1);
+ 	 	 	 	/* background: linear-gradient(315deg, rgba(39, 111, 147, 1) 94%, #999 94%); */
+				background: linear-gradient(315deg, rgba(39, 111, 147, 1) 94%, #999 94%);
  	 	 	 	padding: 5px;
  	 	 	 	display: flex;
  	 	 	 	align-items: center;
@@ -211,13 +213,13 @@
 @media (min-width: 80em) and (orientation: landscape) {
  	 	.ol-popup {
  	 	 	 	position: relative;
+				margin-top: 10px;
  	 	 	 	background-color: white;
  	 	 	 	box-shadow: 0 1px 4px rgba(0, 0, 0, 0.2);
  	 	 	 	padding-bottom: 5px;
  	 	 	 	border: 1px solid #cccccc;
  	 	 	 	bottom: 12px;
- 	 	 	 	left: -50px;
- 	 	 	 	width: 17em;
+ 	 	 	 	width: 23em;
  	 	 	 	visibility: hidden;
  	 	}
  	 	.popup-content {
@@ -227,7 +229,7 @@
  	 	 	 	font-size: 16px;
  	 	}
  	 	.topBar {
- 	 	 	 	background: rgba(39, 111, 147, 1);
+ 	 	 	 	background: linear-gradient(315deg, rgba(39, 111, 147, 1) 94%, #999 94%);
  	 	 	 	padding: 5px;
  	 	 	 	display: flex;
  	 	 	 	align-items: center;
@@ -239,13 +241,13 @@
 @media (min-width: 60em) and (orientation: portrait) {
  	 	.ol-popup {
  	 	 	 	position: relative;
+				margin-top: 10px;
  	 	 	 	background-color: white;
  	 	 	 	box-shadow: 0 1px 4px rgba(0, 0, 0, 0.2);
  	 	 	 	padding-bottom: 5px;
  	 	 	 	border: 1px solid #cccccc;
  	 	 	 	bottom: 12px;
- 	 	 	 	left: -50px;
- 	 	 	 	width: 17em;
+ 	 	 	 	width: 23em;
  	 	 	 	visibility: hidden;
  	 	}
  	 	.popup-content {
@@ -255,7 +257,7 @@
  	 	 	 	font-size: 16px;
  	 	}
  	 	.topBar {
- 	 	 	 	background: rgba(39, 111, 147, 1);
+ 	 	 	 	background: linear-gradient(315deg, rgba(39, 111, 147, 1) 94%, #999 94%);
  	 	 	 	padding: 5px;
  	 	 	 	display: flex;
  	 	 	 	align-items: center;

@@ -6,12 +6,7 @@ const nextBtn = document.getElementById('nextBtn');
 let template = document.getElementById('tmpl-popup');
 
 const overlay = new ol.Overlay({
-	element: popup,
-	autoPan: true,
-	autoPanAnimation: {
-		duration: 100
-	},
-	autoPanMargin: 300
+		element: popup, autoPan: { animation: { duration: 100 }}
 });
 let fts = [];
 let width = 2.5;
@@ -193,23 +188,33 @@ let map = new ol.Map({
 	],
 	overlays: [overlay],
 	view: new ol.View({
-		center: ol.proj.fromLonLat([-150, 64]),
+		center: ol.proj.fromLonLat([ -147.77, 64.83 ]),
 		zoom: 3,
-		maxZoom: 24
+		maxZoom: 19
 	}),
 	controls: ol.control.defaults({
 		attribution: false
 	}).extend([new ol.control.ScaleLine({
 		units: "us"
 	})]),
+	controls: ol.control.defaults({ attribution: false }).extend([
+		new ol.control.ScaleLine({ units: "us" }),
+		new ol.control.LayerSwitcher({
+			tipLabel: 'Legend',
+			groupSelectStyle: 'none'
+		}),
+		new ol.control.MousePosition({
+			projection: 'EPSG:4326',
+			placeholder: '',
+			coordinateFormat: ol.coordinate.createStringXY(3)
+		})
+	]),
+	interactions: ol.interaction.defaults({ mouseWheelZoom: false }).extend([
+		new ol.interaction.MouseWheelZoom({
+			condition: ol.events.condition.platformModifierKeyOnly
+		})
+	])
 });
-
-var layerSwitcher = new ol.control.LayerSwitcher({
-	tipLabel: 'Legend',
-	groupSelectStyle: 'children'
-});
-
-map.addControl(layerSwitcher);
 
 //Allows the overlay to be visible.
 //The overlay needs to be hidden by default to prevent it being
