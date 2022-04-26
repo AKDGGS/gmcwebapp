@@ -58,7 +58,7 @@ let wellPointLabelLayer = new ol.layer.Vector({
 });
 
 //Fetch the makers
-fetch('../wellpoint.json')
+fetch('../well_points.json')
 	.then(response => {
 		if (!response.ok) throw new Error(response.status + " " +
 			response.statusText);
@@ -84,7 +84,6 @@ fetch('../wellpoint.json')
 	.catch(error => {
 		handleError(error);
 	});
-
 let map = new ol.Map({
 	target: 'map',
 	layers: [
@@ -251,7 +250,6 @@ function displayOverlayContents(e) {
 		} else {
 			currentPage = 0;
 		}
-
 		let well_id = fts[currentPage].well_id;
 		fetch('../well.json/' + well_id)
 			.then(response => {
@@ -273,14 +271,12 @@ function displayOverlayContents(e) {
 				}
 				data["nameURL"] = encodeURI("well/" + well_id);
 				data["well_id"] = well_id;
-
 				let t = mustache.render(document.getElementById("tmpl-popup").innerHTML, data, {}, ['[[', ']]']);
 				document.getElementById("popup-content").innerHTML = t;
 				if (e instanceof ol.events.Event) {
 					overlay.setPosition(e.coordinate);
 				}
 				pageNumber.innerHTML = (currentPage + 1) + " of " + fts.length;
-
 				if (currentPage > 0) {
 					prevBtn.style.visibility = 'visible';
 				} else {
@@ -301,17 +297,14 @@ function displayOverlayContents(e) {
 			});
 	}
 }
-
 //Popup
 prevBtn.addEventListener("click", displayOverlayContents);
 nextBtn.addEventListener("click", displayOverlayContents);
-
 closer.addEventListener("click", function() {
 	overlay.setPosition(undefined);
 	closer.blur();
 	return false;
 });
-
 map.on('click', function(e) {
 	fts = map.getFeaturesAtPixel(e.pixel);
 	if (fts.length < 1) {

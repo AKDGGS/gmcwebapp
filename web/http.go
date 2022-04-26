@@ -130,8 +130,8 @@ func (srv *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	case "wells":
 		srv.ServeWells(w, r)
 
-	case "wellpoint.json":
-		srv.ServeWellsPointlist(w, r)
+	case "well_points.json":
+		srv.ServeWellsPoints(w, r)
 
 	case "well.json":
 		sid := strings.TrimPrefix(strings.TrimPrefix(path, "well.json"), "/")
