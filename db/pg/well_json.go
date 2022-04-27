@@ -1,8 +1,8 @@
 package pg
 
 import (
-	"fmt"
 	dbf "gmc/db/flag"
+	"time"
 
 	"github.com/jackc/pgtype"
 )
@@ -52,6 +52,14 @@ func (pg *Postgres) GetWellJSON(id int, flags int) (map[string]interface{}, erro
 		well["elevation_kb"] = &ift
 	}
 
+	cd, ok := well["completion_date"].(time.Time)
+	fcd := cd.Format("01-02-2006")
+	well["completion_date"] = &fcd
+
+	sd, ok := well["spud_date"].(time.Time)
+	fsd := sd.Format("01-02-2006")
+	well["spud_date"] = &fsd
+
 	if (flags & dbf.INVENTORY_SUMMARY) != 0 {
 		keywords, err := pg.queryRows(
 			"pg/keyword/group_by_well_id.sql", id,
@@ -65,6 +73,5 @@ func (pg *Postgres) GetWellJSON(id int, flags int) (map[string]interface{}, erro
 		}
 	}
 
-	fmt.Println(well)
 	return well, nil
 }
