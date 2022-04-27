@@ -251,13 +251,14 @@ function displayOverlayContents(e) {
 			currentPage = 0;
 		}
 		let well_id = fts[currentPage].well_id;
-		fetch('../well.json/' + well_id)
+		fetch('../well.json?id=' + well_id)
 			.then(response => {
 				if (!response.ok) throw new Error(response.status + " " +
 					response.statusText);
 				return response.json();
 			})
 			.then(data => {
+				console.log(data);
 				for (let i = 0; i < data.keywords.length; i++) {
 					let arr = data.keywords[i].keywords.toString().split(",");
 					let qParams = "";

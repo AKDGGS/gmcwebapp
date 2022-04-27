@@ -134,8 +134,8 @@ func (srv *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 		srv.ServeWellsPoints(w, r)
 
 	case "well.json":
-		sid := strings.TrimPrefix(strings.TrimPrefix(path, "well.json"), "/")
-		id, err := strconv.Atoi(sid)
+		q := r.URL.Query()
+		id, err := strconv.Atoi(q.Get("id"))
 		if err != nil {
 			http.Error(w, "Invalid Well ID", http.StatusBadRequest)
 			return
