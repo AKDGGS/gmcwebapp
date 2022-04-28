@@ -51,6 +51,12 @@ func (srv *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 			)
 		}
 		return
+
+	case "wells":
+		srv.ServeWells(w, r)
+
+	case "well_points.json":
+		srv.ServeWellsPoints(w, r)
 	}
 
 	sidx := strings.Index(path, "/")
@@ -126,12 +132,6 @@ func (srv *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 		srv.ServeStash(id, w, r)
-
-	case "wells":
-		srv.ServeWells(w, r)
-
-	case "well_points.json":
-		srv.ServeWellsPoints(w, r)
 
 	case "well.json":
 		q := r.URL.Query()
