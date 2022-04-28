@@ -22,7 +22,7 @@ func (srv *Server) ServeWells(w http.ResponseWriter, r *http.Request) {
 		"content": template.HTML(buf.String()),
 		"stylesheets": []string{
 			"ol/ol.css", "ol/ol-layerswitcher.min.css",
-			"css/wellspage.css",
+			"css/wells_page.css",
 		},
 		"scripts": []string{
 			"ol/ol.js", "ol/ol-layerswitcher.min.js",
