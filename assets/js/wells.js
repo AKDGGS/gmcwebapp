@@ -66,7 +66,7 @@ fetch('../well_points.json')
 	})
 	.then(d => {
 		let markers = [];
-		d.points.forEach(({
+		d.forEach(({
 			geog,
 			name,
 			well_id
