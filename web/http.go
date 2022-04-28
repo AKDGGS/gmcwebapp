@@ -54,9 +54,11 @@ func (srv *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 
 	case "wells":
 		srv.ServeWells(w, r)
+		return
 
 	case "well_points.json":
 		srv.ServeWellsPoints(w, r)
+		return
 	}
 
 	sidx := strings.Index(path, "/")

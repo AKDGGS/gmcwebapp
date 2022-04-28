@@ -258,7 +258,6 @@ function displayOverlayContents(e) {
 				return response.json();
 			})
 			.then(data => {
-				console.log(data);
 				for (let i = 0; i < data.keywords.length; i++) {
 					let arr = data.keywords[i].keywords.toString().split(",");
 					let qParams = "";
