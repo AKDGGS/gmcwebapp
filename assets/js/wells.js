@@ -191,11 +191,6 @@ let map = new ol.Map({
 		zoom: 3,
 		maxZoom: 19
 	}),
-	controls: ol.control.defaults({
-		attribution: false
-	}).extend([new ol.control.ScaleLine({
-		units: "us"
-	})]),
 	controls: ol.control.defaults({ attribution: false }).extend([
 		new ol.control.ScaleLine({ units: "us" }),
 		new ol.control.LayerSwitcher({

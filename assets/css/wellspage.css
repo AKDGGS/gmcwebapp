@@ -125,6 +125,15 @@
  	 	margin-top: 1px;
  	 	font-size: 0.8em;
 }
+.ol-mouse-position:empty { display: none; }
+.ol-mouse-position {
+	top: 8px; right: 8px;
+	padding: 2px 8px;
+	background-color: #ffffff80;
+	position: absolute;
+	font-size: 14px;
+	font-family: 'Open Sans','Helvetica Neue',Helvetica,Arial,sans-serif;
+}
 @media (min-width: 30em) and (orientation: portrait) {
  	 	.ol-popup {
  	 	 	 	position: relative;
