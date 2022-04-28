@@ -19,6 +19,7 @@ func (srv *Server) ServeWells(w http.ResponseWriter, r *http.Request) {
 	}
 
 	params := map[string]interface{}{
+		"title":   "Wells Page",
 		"content": template.HTML(buf.String()),
 		"stylesheets": []string{
 			"ol/ol.css", "ol/ol-layerswitcher.min.css",
