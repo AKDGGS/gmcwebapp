@@ -29,6 +29,9 @@ type DB interface {
 	// Fetches stash for a specific inventory id
 	GetStash(id int) (map[string]interface{}, error)
 
+	// Fetches well data for wells page for a specific inventory id
+	GetWellJSON(id int, flags int) (map[string]interface{}, error)
+
 	// Fetches wells point list for a specific inventory id
 	GetWellsPointList() (map[string]interface{}, error)
 
