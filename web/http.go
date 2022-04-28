@@ -57,7 +57,7 @@ func (srv *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 		return
 
 	case "well_points.json":
-		srv.ServeWellsPoints(w, r)
+		srv.ServeWellsPoints("wells_points.go", w, r)
 		return
 	}
 
