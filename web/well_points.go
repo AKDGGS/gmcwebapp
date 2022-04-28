@@ -21,7 +21,7 @@ type staticEntry struct {
 
 var staticCache map[string]*staticEntry = make(map[string]*staticEntry)
 
-func (srv *Server) ServeWellsPoints(name string, w http.ResponseWriter, r *http.Request) {
+func (srv *Server) ServeWellPoints(name string, w http.ResponseWriter, r *http.Request) {
 	pts, err := srv.DB.GetWellPoints()
 	if err != nil {
 		http.Error(
