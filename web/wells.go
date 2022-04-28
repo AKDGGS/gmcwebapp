@@ -9,7 +9,6 @@ import (
 )
 
 func (srv *Server) ServeWells(w http.ResponseWriter, r *http.Request) {
-
 	buf := bytes.Buffer{}
 	if err := assets.ExecuteTemplate("tmpl/wells.html", &buf, nil); err != nil {
 		http.Error(
