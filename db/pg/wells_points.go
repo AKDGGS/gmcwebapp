@@ -1,7 +1,7 @@
 package pg
 
-func (pg *Postgres) GetWellsPointList() (map[string]interface{}, error) {
-	pl, err := pg.queryRows("pg/well_pointlist.sql")
+func (pg *Postgres) GetWellsPoints() (map[string]interface{}, error) {
+	pl, err := pg.queryRows("pg/wells_points.sql")
 	if err != nil {
 		return nil, err
 	}

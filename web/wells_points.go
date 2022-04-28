@@ -7,7 +7,7 @@ import (
 )
 
 func (srv *Server) ServeWellsPoints(w http.ResponseWriter, r *http.Request) {
-	pts, err := srv.DB.GetWellsPointList()
+	pts, err := srv.DB.GetWellsPoints()
 	if err != nil {
 		http.Error(
 			w, fmt.Sprintf("Error: %s", err.Error()),

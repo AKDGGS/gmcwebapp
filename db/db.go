@@ -33,7 +33,7 @@ type DB interface {
 	GetWellJSON(id int, flags int) (map[string]interface{}, error)
 
 	// Fetches wells point list for a specific inventory id
-	GetWellsPointList() (map[string]interface{}, error)
+	GetWellsPoints() (map[string]interface{}, error)
 
 	// Verify the database connection is working.
 	// (usually by performing a simple query)
