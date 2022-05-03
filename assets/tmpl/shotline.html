@@ -59,7 +59,7 @@
 			</fieldset>
 			<div class="flex-break"></div>
 			{{- end}}
-			{{- if .inventory}}
+			{{- if .keywords}}
 
 			<fieldset>
 				<legend>Inventory</legend>
@@ -71,7 +71,7 @@
 						</tr>
 					</thead>
 					<tbody>
-						{{- range .inventory}}
+						{{- range .keywords}}
 						<tr>
 							<td><a href="../search#shotline_id={{$.shotline_id}}{{range .keywords}}&keyword={{.}}{{- end}}">{{range $i, $kw := .keywords}}{{if ne $i 0}} &gt; {{end}}{{$kw}}{{- end}}</a></td>
 							<td>{{.count}}</td>

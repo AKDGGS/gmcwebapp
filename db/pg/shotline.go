@@ -34,15 +34,15 @@ func (pg *Postgres) GetShotline(id int, flags int) (map[string]interface{}, erro
 	}
 
 	if (flags & dbf.INVENTORY_SUMMARY) != 0 {
-		inventory, err := pg.queryRows(
+		kw, err := pg.queryRows(
 			"pg/keyword/group_by_shotline_id.sql", id,
 			((flags & dbf.PRIVATE) == 0),
 		)
 		if err != nil {
 			return nil, err
 		}
-		if inventory != nil {
-			shotline["inventory"] = inventory
+		if kw != nil {
+			shotline["keywords"] = kw
 		}
 	}
 	if (flags & dbf.URLS) != 0 {

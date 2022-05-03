@@ -24,15 +24,15 @@ func (pg *Postgres) GetOutcrop(id int, flags int) (map[string]interface{}, error
 	}
 
 	if (flags & dbf.INVENTORY_SUMMARY) != 0 {
-		inventory, err := pg.queryRows(
+		kw, err := pg.queryRows(
 			"pg/keyword/group_by_outcrop_id.sql", id,
 			((flags & dbf.PRIVATE) == 0),
 		)
 		if err != nil {
 			return nil, err
 		}
-		if inventory != nil {
-			outcrop["inventory"] = inventory
+		if kw != nil {
+			outcrop["inventory"] = kw
 		}
 	}
 
