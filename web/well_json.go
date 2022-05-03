@@ -9,7 +9,20 @@ import (
 )
 
 func (srv *Server) ServeWellJSON(id int, w http.ResponseWriter, r *http.Request) {
-	flags := dbf.ALL_NOPRIVATE
+	user, err := srv.Auths.CheckRequest(w, r)
+	if err != nil {
+		http.Error(
+			w, fmt.Sprintf("Authentication error: %s", err.Error()),
+			http.StatusBadRequest,
+		)
+		return
+	}
+
+	flags := dbf.INVENTORY_SUMMARY
+	if user != nil {
+		flags |= dbf.PRIVATE
+	}
+
 	welljson, err := srv.DB.GetWell(id, flags)
 	if err != nil {
 		http.Error(
