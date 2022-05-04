@@ -48,7 +48,7 @@
 						{{- end}}
 						{{- if .alt_sample_number}}
 						<tr>
-							<th>Alternative Sample Number</th>
+							<th>Alt. Sample Number</th>
 							<td>{{.alt_sample_number}}</td>
 						</tr>
 						{{- end}}
@@ -485,7 +485,7 @@
 						<tr>
 							<td>{{formattime "1/2/2006" .note_date}}</td>
 							<td>{{.username}}</td>
-							<td>{{- if .can_publish}}Yes{{- else}}No{{- end}}</td>
+							<td>{{- if .is_public}}Yes{{- else}}No{{- end}}</td>
 							<td>{{.note}}</td>
 						</tr>
 						{{- end}}
