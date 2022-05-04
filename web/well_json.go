@@ -38,20 +38,18 @@ func (srv *Server) ServeWellJSON(id int, w http.ResponseWriter, r *http.Request)
 		return
 	}
 
-	cd, ok := welljson["completion_date"].(time.Time)
-	if !ok {
-		delete(welljson, "completion_date")
-	} else {
+	if cd, ok := welljson["completion_date"].(time.Time); ok {
 		fcd := cd.Format("01-02-2006")
 		welljson["completion_date"] = &fcd
+	} else {
+		delete(welljson, "completion_date")
 	}
 
-	sd, ok := welljson["spud_date"].(time.Time)
-	if !ok {
-		delete(welljson, "spud_date")
-	} else {
+	if sd, ok := welljson["spud_date"].(time.Time); ok {
 		fsd := sd.Format("01-02-2006")
 		welljson["spud_date"] = &fsd
+	} else {
+		delete(welljson, "spud_datee")
 	}
 
 	w.WriteHeader(http.StatusOK)
