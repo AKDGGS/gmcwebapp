@@ -55,7 +55,7 @@
 						{{- if .published_sample_number}}
 						<tr>
 							<th>Published Sample No.</th>
-							<td>{{.published_sample_number}} {{.published_number_has_suffix}}</td>
+							<td>{{.published_sample_number}}{{- if .published_sample_number_has_suffix}} Has Suffix{{else}} No Suffix{{- end}}</td>
 						</tr>
 						{{- end}}
 						{{- if .collection_name}}
