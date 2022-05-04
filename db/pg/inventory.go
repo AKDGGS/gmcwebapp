@@ -174,10 +174,15 @@ func (pg *Postgres) GetInventory(id int, flags int) (map[string]interface{}, err
 			for _, m := range qualities {
 				for k, v := range m {
 					if k == "issues" {
-						s := strings.Replace(fmt.Sprintf("%v", v), " ", ", ", -1)
-						s = strings.Replace(s, "_", " ", -1)
-						if len(s) > 0 && s[len(s)-1] == ']' && s[0] == '[' {
-							s = s[1 : len(s)-1]
+						var s string
+						if v != nil {
+							s = strings.Replace(fmt.Sprintf("%v", v), " ", ", ", -1)
+							s = strings.Replace(s, "_", " ", -1)
+							if len(s) > 0 && s[len(s)-1] == ']' && s[0] == '[' {
+								s = s[1 : len(s)-1]
+							}
+						} else {
+							s = "GOOD"
 						}
 						issuesStr = &s
 						if issuesStr != nil {
