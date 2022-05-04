@@ -21,10 +21,10 @@
 							<td>{{.barcode}}</td>
 						</tr>
 						{{- end}}
-						{{- if .container_alt_barcode}}
+						{{- if .alt_barcode}}
 						<tr>
 							<th>Alt. Barcode</th>
-							<td>{{.container_alt_barcode}}</td>
+							<td>{{.alt_barcode}}</td>
 						</tr>
 						{{- end}}
 						{{- end}}
@@ -212,7 +212,7 @@
 						{{- end}}
 						<tr>
 							<th>Publish</th>
-							<td>{{- if .is_public}}Yes{{- else}}No{{- end}}</td>
+							<td>{{- if .can_publish}}Yes{{- else}}No{{- end}}</td>
 						</tr>
 						<tr>
 							<th>Active</th>
@@ -485,7 +485,7 @@
 						<tr>
 							<td>{{formattime "1/2/2006" .note_date}}</td>
 							<td>{{.username}}</td>
-							<td>{{- if .is_public}}Yes{{- else}}No{{- end}}</td>
+							<td>{{- if .can_publish}}Yes{{- else}}No{{- end}}</td>
 							<td>{{.note}}</td>
 						</tr>
 						{{- end}}
@@ -511,7 +511,7 @@
 						<tr>
 							<td>{{formattime "1/2/2006" .check_date}}</td>
 							<td>{{.username}}</td>
-							<td>{{.issues}}</td>
+							<td>{{.issues }}</td>
 							<td>{{.remark}}</td>
 						</tr>
 					</tbody>
