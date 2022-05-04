@@ -52,8 +52,6 @@ func (srv *Server) ServeWellJSON(id int, w http.ResponseWriter, r *http.Request)
 		delete(welljson, "spud_datee")
 	}
 
-	w.WriteHeader(http.StatusOK)
-	w.Header().Set("Content-Type", "application/json")
 	js, err := json.Marshal(welljson)
 	if err != nil {
 		http.Error(
@@ -62,5 +60,7 @@ func (srv *Server) ServeWellJSON(id int, w http.ResponseWriter, r *http.Request)
 		)
 		return
 	}
+	w.Header().Set("Content-Type", "application/json")
+	w.Header().Set("Content-Length", fmt.Sprintf("%d", len(js)))
 	w.Write(js)
 }

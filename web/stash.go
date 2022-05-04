@@ -34,7 +34,6 @@ func (srv *Server) ServeStash(id int, w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	w.WriteHeader(http.StatusOK)
 	w.Header().Set("Content-Type", "application/json")
 	js, err := json.Marshal(stash)
 	if err != nil {

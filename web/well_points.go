@@ -3,23 +3,13 @@ package web
 import (
 	"bytes"
 	"compress/gzip"
-	"crypto/md5"
 	"encoding/json"
 	"fmt"
-	"mime"
 	"net/http"
-	"path"
 	"strings"
 )
 
-type staticEntry struct {
-	Content   *[]byte
-	ETag      string
-	GZContent *[]byte
-	GZETag    string
-}
-
-var staticCache map[string]*staticEntry = make(map[string]*staticEntry)
+var gzc []byte
 
 func (srv *Server) ServeWellPoints(name string, w http.ResponseWriter, r *http.Request) {
 	pts, err := srv.DB.GetWellPoints()
@@ -43,12 +33,6 @@ func (srv *Server) ServeWellPoints(name string, w http.ResponseWriter, r *http.R
 			http.StatusInternalServerError,
 		)
 		return
-	}
-
-	curEntry, _ := staticCache[name]
-	curEntry = &staticEntry{
-		Content: &js,
-		ETag:    fmt.Sprintf("%x", md5.Sum(js)),
 	}
 
 	// 860 bytes is Akamai's recommended minimum for gzip
@@ -83,30 +67,17 @@ func (srv *Server) ServeWellPoints(name string, w http.ResponseWriter, r *http.R
 
 		// Only accept gzip if it's less than the original in size
 		if buf.Len() > 0 && buf.Len() < len(js) {
-			gzc := buf.Bytes()
-			curEntry.GZContent = &gzc
-			curEntry.GZETag = fmt.Sprintf("%x", md5.Sum(buf.Bytes()))
+			gzc = buf.Bytes()
 		}
 	}
 
 	var content *[]byte
-	var etag *string
-	gzok := strings.Contains(r.Header.Get("Accept-Encoding"), "gzip") && curEntry.GZContent != nil
+	gzok := strings.Contains(r.Header.Get("Accept-Encoding"), "gzip") && &gzc != nil
 	if gzok {
-		content = curEntry.GZContent
-		etag = &curEntry.GZETag
-	} else {
-		content = curEntry.Content
-		etag = &curEntry.ETag
+		content = &gzc
 	}
 
-	w.Header().Set("ETag", *etag)
-	contenttype := mime.TypeByExtension(path.Ext(name))
-	if contenttype == "" {
-		contenttype = "application/octet-stream"
-	}
-	w.Header().Set("Content-Type", contenttype)
-
+	w.Header().Set("Content-Type", "application/json")
 	if gzok {
 		w.Header().Set("Content-Encoding", "gzip")
 	}
