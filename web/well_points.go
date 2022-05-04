@@ -9,8 +9,6 @@ import (
 	"strings"
 )
 
-var GZContent *[]byte
-
 func (srv *Server) ServeWellPoints(name string, w http.ResponseWriter, r *http.Request) {
 	pts, err := srv.DB.GetWellPoints()
 	if err != nil {
@@ -64,24 +62,22 @@ func (srv *Server) ServeWellPoints(name string, w http.ResponseWriter, r *http.R
 			)
 			return
 		}
-
+		var gzc []byte
 		// Only accept gzip if it's less than the original in size
 		if buf.Len() > 0 && buf.Len() < len(js) {
-			gzc := buf.Bytes()
-			GZContent = &gzc
+			gzc = buf.Bytes()
 		}
-	}
+		var content *[]byte
+		gzok := strings.Contains(r.Header.Get("Accept-Encoding"), "gzip") && &gzc != nil
+		if gzok {
+			content = &gzc
+		}
 
-	var content *[]byte
-	gzok := strings.Contains(r.Header.Get("Accept-Encoding"), "gzip") && &GZContent != nil
-	if gzok {
-		content = GZContent
+		w.Header().Set("Content-Type", "application/json")
+		if gzok {
+			w.Header().Set("Content-Encoding", "gzip")
+		}
+		w.Header().Set("Content-Length", fmt.Sprintf("%d", len(*content)))
+		w.Write(*content)
 	}
-
-	w.Header().Set("Content-Type", "application/json")
-	if gzok {
-		w.Header().Set("Content-Encoding", "gzip")
-	}
-	w.Header().Set("Content-Length", fmt.Sprintf("%d", len(*content)))
-	w.Write(*content)
 }
