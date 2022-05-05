@@ -2,9 +2,10 @@ package pg
 
 import (
 	"context"
-	"github.com/jackc/pgx/v4/pgxpool"
 	"gmc/assets"
 	"net/url"
+
+	"github.com/jackc/pgx/v4/pgxpool"
 )
 
 type Postgres struct {
