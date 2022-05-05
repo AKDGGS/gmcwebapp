@@ -268,6 +268,8 @@ function displayOverlayContents(e) {
 				data["well_id"] = well_id;
 				let t = mustache.render(document.getElementById("tmpl-popup").innerHTML, data, {}, ['[[', ']]']);
 				document.getElementById("popup-content").innerHTML = t;
+				document.getElementById('topBar').style.visibility = 'visible';
+				popup.style.visibility = 'visible';
 				if (e instanceof ol.events.Event) {
 					overlay.setPosition(e.coordinate);
 				}
@@ -300,12 +302,15 @@ closer.addEventListener("click", function() {
 	closer.blur();
 	return false;
 });
+
 map.on('click', function(e) {
+	popup.style.visibility = "hidden";
+	document.getElementById('topBar').style.visibility = 'hidden';
 	fts = map.getFeaturesAtPixel(e.pixel);
 	if (fts.length < 1) {
 		overlay.setPosition(undefined);
 		return
 	}
-	displayOverlayContents(e);
 	overlay.setPosition(e.coordinate);
+	displayOverlayContents(e);
 });
