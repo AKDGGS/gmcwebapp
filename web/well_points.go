@@ -36,7 +36,6 @@ func (srv *Server) ServeWellPoints(name string, w http.ResponseWriter, r *http.R
 
 	var content *[]byte
 	if strings.Contains(r.Header.Get("Accept-Encoding"), "gzip") {
-		var gzok bool
 		// 860 bytes is Akamai's recommended minimum for gzip
 		// so only bother to gzip files greater than 860 bytes
 		if len(js) > 860 {
@@ -70,23 +69,14 @@ func (srv *Server) ServeWellPoints(name string, w http.ResponseWriter, r *http.R
 			// Only accept gzip if it's less than the original in size
 			if buf.Len() > 0 && buf.Len() < len(js) {
 				gzc = buf.Bytes()
-			}
-
-			gzok = strings.Contains(r.Header.Get("Accept-Encoding"), "gzip") && &gzc != nil
-			if gzok {
 				content = &gzc
 			}
 		}
-		w.Header().Set("Content-Type", "application/json")
-		if gzok {
-			w.Header().Set("Content-Encoding", "gzip")
-		}
-		w.Header().Set("Content-Length", fmt.Sprintf("%d", len(*content)))
-		w.Write(*content)
+		w.Header().Set("Content-Encoding", "gzip")
 	} else {
 		content = &js
-		w.Header().Set("Content-Type", "application/json")
-		w.Header().Set("Content-Length", fmt.Sprintf("%d", len(*content)))
-		w.Write(*content)
 	}
+	w.Header().Set("Content-Type", "application/json")
+	w.Header().Set("Content-Length", fmt.Sprintf("%d", len(*content)))
+	w.Write(*content)
 }
