@@ -1,27 +1,27 @@
-          <div id="map"></div>
-          <div id="popup" class="ol-popup">
-            <div id="topBar" class="topBar">
-              <div id="prevBtn" class="prevBtn">&#x25C0;</div>
-              <div id="pageNumber" class="pageNumber"></div>
-              <div id="nextBtn" class="nextBtn">&#x25B6;</div>
-              <div id="popup-closure" class="ol-popup-closer"></div>
-            </div>
-            <div id="popup-content" class="popup-content"></div>
-          </div>
-          <script id="tmpl-popup" type="x-tmpl-mustache">
-            [[#name]]<div><b>Name: </b><a href="../well/[[well_id]]"> [[name]] [[#well_id]] - [[well_id]] [[/well_id]]</a></div>[[/name]]
-            [[#api_number]]<div><b>API Number:</b> [[api_number]]</div>[[/api_number]]
-            [[#well_number]]<div><b>Well Number:</b> [[well_number]]</div>[[/well_number]]
-            [[#measured_depth]]<div><b>Measured Depth:</b> [[measured_depth]] [[#unit]][[unit]][[/unit]]</div>[[/measured_depth]]
-            [[#vertical_depth]]<div><b>Vertical Depth:</b> [[vertical_depth]] [[#unit]][[unit]][[/unit]]</div>[[/vertical_depth]]
-            [[#elevation]]<div><b>Elevation:</b> [[elevation]] [[#unit]] [[unit]][[/unit]]</div>[[/elevation]]
-            [[#is_onshore]]<div><b>Onshore:</b> [[is_onshore]]<br/></div>[[/is_onshore]]
-            [[#is_federal]]<div><b>Federal:</b> [[is_federal]]<br/></div>[[/is_federal]]
-            [[#permit_status]]<div><b>Permit Status:</b> [[permit_status]]</div>[[/permit_status]]
-            [[#permit_number]]<div><b>Permit Number:</b> [[permit_number]]</div>[[/permit_number]]
-            [[#completion_status]]<div><b>Completion Status:</b> [[completion_status]]</div>[[/completion_status]]
-            [[#completion_date]]<div><b>Completion Date:</b> [[completion_date]]</div>[[/completion_date]]
-            [[#spud_date]]<div><b>Spud Date:</b> [[spud_date]]</div>[[/spud_date]]
-            [[#keywords.0]]<div><br/><b>Keywords:</b></div>[[/keywords.0]]
-            [[#keywords]]<div class="indent"><a href="[[keywordsURL]]">[[keywords]]</a> [[count]]</div>[[/keywords]]
-          </script>
+		<div id="map"></div>
+		<div id="popup" class="ol-popup">
+			<div id="topBar" class="topBar">
+				<div id="prevBtn" class="prevBtn">&#x25C0;</div>
+				<div id="pageNumber" class="pageNumber"></div>
+				<div id="nextBtn" class="nextBtn">&#x25B6;</div>
+				<div id="popup-closure" class="ol-popup-closer"></div>
+			</div>
+			<div id="popup-content" class="popup-content"></div>
+		</div>
+			<script id="tmpl-popup" type="x-tmpl-mustache">
+				[[#name]]<div><b>Name: </b><a href="../well/[[well_id]]"> [[name]] [[#well_id]] - [[well_id]] [[/well_id]]</a></div>[[/name]]
+				[[#api_number]]<div><b>API Number:</b> [[api_number]]</div>[[/api_number]]
+				[[#well_number]]<div><b>Well Number:</b> [[well_number]]</div>[[/well_number]]
+				[[#measured_depth]]<div><b>Measured Depth:</b> [[measured_depth]] [[#unit]][[unit]][[/unit]]</div>[[/measured_depth]]
+				[[#vertical_depth]]<div><b>Vertical Depth:</b> [[vertical_depth]] [[#unit]][[unit]][[/unit]]</div>[[/vertical_depth]]
+				[[#elevation]]<div><b>Elevation:</b> [[elevation]] [[#unit]] [[unit]][[/unit]]</div>[[/elevation]]
+				[[#is_onshore]]<div><b>Onshore:</b> [[is_onshore]]<br/></div>[[/is_onshore]]
+				[[#is_federal]]<div><b>Federal:</b> [[is_federal]]<br/></div>[[/is_federal]]
+				[[#permit_status]]<div><b>Permit Status:</b> [[permit_status]]</div>[[/permit_status]]
+				[[#permit_number]]<div><b>Permit Number:</b> [[permit_number]]</div>[[/permit_number]]
+				[[#completion_status]]<div><b>Completion Status:</b> [[completion_status]]</div>[[/completion_status]]
+				[[#completion_date]]<div><b>Completion Date:</b> [[completion_date]]</div>[[/completion_date]]
+				[[#spud_date]]<div><b>Spud Date:</b> [[spud_date]]</div>[[/spud_date]]
+				[[#keywords.0]]<div><br/><b>Keywords:</b></div>[[/keywords.0]]
+				[[#keywords]]<div class="indent"><a href="[[keywordsURL]]">[[keywords]]</a> [[count]]</div>[[/keywords]]
+			</script>
