@@ -19,10 +19,9 @@ func (srv *Server) ServeWellPoints(name string, w http.ResponseWriter, r *http.R
 		return
 	}
 
-	// If no details were returned, throw a 404
+	// If no details were returned, return empty json
 	if pts == nil {
-		http.Error(w, "Point list not found", http.StatusNotFound)
-		return
+		pts = make([]map[string]interface{}, 0)
 	}
 
 	js, err := json.Marshal(pts)
@@ -34,7 +33,7 @@ func (srv *Server) ServeWellPoints(name string, w http.ResponseWriter, r *http.R
 		return
 	}
 
-	var content *[]byte
+	content := &js
 	if strings.Contains(r.Header.Get("Accept-Encoding"), "gzip") {
 		// 860 bytes is Akamai's recommended minimum for gzip
 		// so only bother to gzip files greater than 860 bytes
@@ -65,16 +64,15 @@ func (srv *Server) ServeWellPoints(name string, w http.ResponseWriter, r *http.R
 				)
 				return
 			}
+
 			var gzc []byte
 			// Only accept gzip if it's less than the original in size
 			if buf.Len() > 0 && buf.Len() < len(js) {
 				gzc = buf.Bytes()
 				content = &gzc
 			}
+			w.Header().Set("Content-Encoding", "gzip")
 		}
-		w.Header().Set("Content-Encoding", "gzip")
-	} else {
-		content = &js
 	}
 	w.Header().Set("Content-Type", "application/json")
 	w.Header().Set("Content-Length", fmt.Sprintf("%d", len(*content)))
