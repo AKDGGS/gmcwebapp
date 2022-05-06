@@ -68,10 +68,8 @@ func (srv *Server) ServeWellPoints(name string, w http.ResponseWriter, r *http.R
 		if buf.Len() > 0 && buf.Len() < len(js) {
 			gzc := buf.Bytes()
 			content = &gzc
+			w.Header().Set("Content-Encoding", "gzip")
 		}
-	}
-	if strings.Contains(r.Header.Get("Accept-Encoding"), "gzip") {
-		w.Header().Set("Content-Encoding", "gzip")
 	}
 	w.Header().Set("Content-Type", "application/json")
 	w.Header().Set("Content-Length", fmt.Sprintf("%d", len(*content)))
