@@ -64,14 +64,14 @@ func (srv *Server) ServeWellPoints(name string, w http.ResponseWriter, r *http.R
 			return
 		}
 
-		var gzc []byte
 		// Only accept gzip if it's less than the original in size
 		if buf.Len() > 0 && buf.Len() < len(js) {
-			gzc = buf.Bytes()
+			gzc := buf.Bytes()
 			content = &gzc
 		}
+	}
+	if strings.Contains(r.Header.Get("Accept-Encoding"), "gzip") {
 		w.Header().Set("Content-Encoding", "gzip")
-
 	}
 	w.Header().Set("Content-Type", "application/json")
 	w.Header().Set("Content-Length", fmt.Sprintf("%d", len(*content)))
