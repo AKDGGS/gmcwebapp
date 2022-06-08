@@ -52,12 +52,32 @@ func (srv *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 		}
 		return
 
+	case "stash.json":
+		q := r.URL.Query()
+		id, err := strconv.Atoi(q.Get("id"))
+		if err != nil {
+			http.Error(w, "Invalid Inventory ID", http.StatusBadRequest)
+			return
+		}
+		srv.ServeStash(id, w, r)
+		return
+
 	case "wells":
 		srv.ServeWells(w, r)
 		return
 
 	case "well_points.json":
 		srv.ServeWellPoints("well_points.go", w, r)
+		return
+
+	case "well.json":
+		q := r.URL.Query()
+		id, err := strconv.Atoi(q.Get("id"))
+		if err != nil {
+			http.Error(w, "Invalid Well ID", http.StatusBadRequest)
+			return
+		}
+		srv.ServeWellJSON(id, w, r)
 		return
 	}
 
@@ -125,24 +145,6 @@ func (srv *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 		srv.ServeInventory(id, w, r)
-
-	case "stash":
-		sid := strings.TrimPrefix(strings.TrimPrefix(path, "stash"), "/")
-		id, err := strconv.Atoi(sid)
-		if err != nil {
-			http.Error(w, "Invalid Inventory ID", http.StatusBadRequest)
-			return
-		}
-		srv.ServeStash(id, w, r)
-
-	case "well.json":
-		q := r.URL.Query()
-		id, err := strconv.Atoi(q.Get("id"))
-		if err != nil {
-			http.Error(w, "Invalid Well ID", http.StatusBadRequest)
-			return
-		}
-		srv.ServeWellJSON(id, w, r)
 
 	default:
 		http.Error(w, "File not found", http.StatusNotFound)
