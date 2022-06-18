@@ -18,6 +18,7 @@ type Config struct {
 	SessionKey    string          `yaml:"session_key"`
 	keybytes      []byte          `yaml:"-"`
 	MaxAge        int             `yaml:"session_max_age"`
+	AutoShutdown  bool            `yaml:"auto_shutdown"`
 	Auths         []AuthConfig    `yaml:"authentication"`
 }
 

@@ -7,7 +7,7 @@ import (
 	"os"
 )
 
-func genkeyCommand(rootcmd string) {
+func genkeyCommand() {
 	keyb := make([]byte, 32)
 	_, err := rand.Read(keyb)
 	if err != nil {

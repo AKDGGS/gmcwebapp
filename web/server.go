@@ -2,7 +2,6 @@ package web
 
 import (
 	"context"
-	"gmc/assets"
 	"gmc/auth"
 	"gmc/config"
 	"gmc/db"
@@ -16,13 +15,10 @@ type Server struct {
 	DB        db.DB
 	FileStore filestore.FileStore
 	Auths     *auth.Auths
-	AssetPath string
 	http      http.Server
 }
 
 func (srv *Server) Start() error {
-	assets.Initialize(srv.AssetPath)
-
 	listen, err := net.Listen("tcp", srv.Config.ListenAddress)
 	if err != nil {
 		return err

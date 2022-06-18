@@ -46,8 +46,6 @@ func Stat(name string) (fs.FileInfo, error) {
 	return fs.Stat(embedded_fs, name)
 }
 
-func Initialize(path string) {
-	if path != "" {
-		external_fs = os.DirFS(path)
-	}
+func SetExternal(path string) {
+	external_fs = os.DirFS(path)
 }

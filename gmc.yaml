@@ -7,6 +7,10 @@ database_url: postgresql://localhost
 # base URL path for web requests - useful if behind a proxy, defaults to '/'
 base_path: /
 
+# automatically shutdown when executable changes
+# should only be enabled during development
+auto_shutdown: false
+
 # session_key is used for encoding cookies a new session key can be generated
 # by running "gmc genkey" if a session_key is not provided, one will be
 # generated randomly on each startup, but then logins won't persist across

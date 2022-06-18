@@ -29,7 +29,8 @@ additional file stores can be added by implementing `gmc/auth/Auth`.
 ## Development
 Development requires a minimum of Go 1.16 as go:embed is used extensively.
 Building is as simple as `go build` in the project directory. For developers it
-is recommended to start the application on Linux from the project directory
-with `while true; do ./gmc start -assets assets -s; done` - this will enable
+is recommended to configure `auto_shutdown` to true, and to start the
+application (on Linux) from the project directory with
+`while true; do ./gmc -assets assets start; done` - this will enable
 dynamic reloading of HTML, CSS, templates, and queries, while also
 automatically restarting the application on recompilation.
