@@ -37,7 +37,7 @@ type DB interface {
 	ListTokens() ([]*model.Token, error)
 
 	// Creates a new token
-	// SaveToken(token Token) error
+	CreateToken(token *model.Token) error
 
 	// Removes a token
 	DeleteToken(id int) error
