@@ -2,6 +2,7 @@ package db
 
 import (
 	"fmt"
+	"gmc/db/model"
 	"gmc/db/pg"
 	"net/url"
 	"strings"
@@ -31,6 +32,15 @@ type DB interface {
 
 	// Fetches wells point list for a specific inventory id
 	GetWellPoints() ([]map[string]interface{}, error)
+
+	// List available tokens
+	ListTokens() ([]*model.Token, error)
+
+	// Creates a new token
+	// SaveToken(token Token) error
+
+	// Removes a token
+	DeleteToken(id int) error
 
 	// Verify the database connection is working.
 	// (usually by performing a simple query)
