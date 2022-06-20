@@ -13,16 +13,21 @@ func (pg *Postgres) CreateToken(tk *model.Token) error {
 		return err
 	}
 
-	rows, err := pg.pool.Query(context.Background(), q, tk.Description, tk.Token)
+	tx, err := pg.pool.Begin(context.Background())
 	if err != nil {
 		return err
 	}
-	if rows.Next() {
-		err = rows.Scan(&tk.ID)
-		if err != nil {
-			return err
-		}
+	defer tx.Rollback(context.Background())
+
+	err = tx.QueryRow(
+		context.Background(), q, tk.Description, tk.Token,
+	).Scan(&tk.ID)
+	if err != nil {
+		return err
 	}
 
+	if err := tx.Commit(context.Background()); err != nil {
+		return err
+	}
 	return nil
 }

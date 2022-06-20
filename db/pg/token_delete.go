@@ -13,7 +13,13 @@ func (pg *Postgres) DeleteToken(id int) error {
 		return err
 	}
 
-	ct, err := pg.pool.Exec(context.Background(), q, id)
+	tx, err := pg.pool.Begin(context.Background())
+	if err != nil {
+		return err
+	}
+	defer tx.Rollback(context.Background())
+
+	ct, err := tx.Exec(context.Background(), q, id)
 	if err != nil {
 		return err
 	}
@@ -21,5 +27,8 @@ func (pg *Postgres) DeleteToken(id int) error {
 		return fmt.Errorf("token ID %d not found", id)
 	}
 
+	if err := tx.Commit(context.Background()); err != nil {
+		return err
+	}
 	return nil
 }
