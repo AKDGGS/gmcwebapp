@@ -4,7 +4,9 @@ import (
 	"bytes"
 	"compress/gzip"
 	"crypto/md5"
+	"errors"
 	"fmt"
+	"io/fs"
 	"mime"
 	"net/http"
 	"path"
@@ -27,10 +29,14 @@ var staticCache map[string]*staticEntry = make(map[string]*staticEntry)
 func ServeStatic(name string, w http.ResponseWriter, r *http.Request) {
 	s, err := Stat(name)
 	if err != nil {
-		http.Error(
-			w, fmt.Sprintf("stat error: %s", err.Error()),
-			http.StatusInternalServerError,
-		)
+		if errors.Is(err, fs.ErrNotExist) {
+			http.Error(w, "File not found", http.StatusNotFound)
+		} else {
+			http.Error(
+				w, fmt.Sprintf("stat error: %s", err.Error()),
+				http.StatusInternalServerError,
+			)
+		}
 		return
 	}
 

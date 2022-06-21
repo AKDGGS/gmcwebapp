@@ -46,6 +46,19 @@ func Stat(name string) (fs.FileInfo, error) {
 	return fs.Stat(embedded_fs, name)
 }
 
+func ReadDir(name string) ([]fs.DirEntry, error) {
+	if external_fs != nil {
+		s, err := fs.ReadDir(external_fs, name)
+		if err != nil && !errors.Is(err, fs.ErrNotExist) {
+			return nil, err
+		}
+		if err == nil {
+			return s, nil
+		}
+	}
+	return fs.ReadDir(embedded_fs, name)
+}
+
 func SetExternal(path string) {
 	external_fs = os.DirFS(path)
 }

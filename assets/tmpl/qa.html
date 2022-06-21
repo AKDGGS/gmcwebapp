@@ -1,0 +1,16 @@
+			<table>
+				<thead>
+					<tr>
+						<th>Description</th>
+						<th>&nbsp;</th>
+					</tr>
+				</thead>
+				<tbody>
+					{{- range $i, $r := .}}
+					<tr>
+						<td>{{$r.description}}</td>
+						<td data-id="{{$i}}" class="qa-results {{$r.level}}"></td>
+					</tr>
+					{{- end}}
+				</tbody>
+			</table>

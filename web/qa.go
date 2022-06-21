@@ -7,10 +7,9 @@ import (
 	"net/http"
 
 	"gmc/assets"
-	dbf "gmc/db/flag"
 )
 
-func (srv *Server) ServeWell(id int, w http.ResponseWriter, r *http.Request) {
+func (srv *Server) ServeQA(w http.ResponseWriter, r *http.Request) {
 	user, err := srv.Auths.CheckRequest(w, r)
 	if err != nil {
 		http.Error(
@@ -19,30 +18,22 @@ func (srv *Server) ServeWell(id int, w http.ResponseWriter, r *http.Request) {
 		)
 		return
 	}
-
-	flags := dbf.ALL
 	if user == nil {
-		flags = dbf.ALL_NOPRIVATE
+		http.Redirect(w, r, "login?redirect=qa", http.StatusFound)
+		return
 	}
 
-	well, err := srv.DB.GetWell(id, flags)
+	qar, err := srv.DB.ListQAReports()
 	if err != nil {
 		http.Error(
-			w, fmt.Sprintf("Query error: %s", err.Error()),
+			w, fmt.Sprintf("QA report error: %s", err.Error()),
 			http.StatusInternalServerError,
 		)
 		return
 	}
-	// If no details were returned, throw a 404
-	if well == nil {
-		http.Error(w, "Well not found", http.StatusNotFound)
-		return
-	}
-
-	well["_user"] = user
 
 	buf := bytes.Buffer{}
-	if err := assets.ExecuteTemplate("tmpl/well.html", &buf, well); err != nil {
+	if err := assets.ExecuteTemplate("tmpl/qa.html", &buf, qar); err != nil {
 		http.Error(
 			w, fmt.Sprintf("Parse error: %s", err.Error()),
 			http.StatusInternalServerError,
@@ -51,18 +42,10 @@ func (srv *Server) ServeWell(id int, w http.ResponseWriter, r *http.Request) {
 	}
 
 	params := map[string]interface{}{
-		"title":   "Well Detail",
+		"title":   "Quality Assurance",
+		"scripts": []string{"js/qa.js"},
 		"content": template.HTML(buf.String()),
-		"stylesheets": []string{
-			"../ol/ol.css", "../ol/ol-layerswitcher.min.css",
-			"../css/view.css",
-		},
-		"scripts": []string{
-			"../ol/ol.js", "../ol/ol-layerswitcher.min.js",
-			"../js/mustache.js", "../js/view.js",
-		},
-		"redirect": fmt.Sprintf("well/%d", id),
-		"user":     user,
+		"user":    user,
 	}
 
 	tbuf := bytes.Buffer{}

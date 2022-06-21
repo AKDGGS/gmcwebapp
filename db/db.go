@@ -42,6 +42,12 @@ type DB interface {
 	// Removes a token
 	DeleteToken(id int) error
 
+	// Lists quality assurance reports
+	ListQAReports() ([]map[string]string, error)
+
+	// Runs just the count of a specific QA report
+	CountQAReport(id int) (int, error)
+
 	// Verify the database connection is working.
 	// (usually by performing a simple query)
 	Verify() error

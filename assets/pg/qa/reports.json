@@ -1,0 +1,12 @@
+[
+	{
+		"description": "Inventory without well, borehole, outcrop, shotpoint or publication",
+		"file": "missing_metadata.sql",
+		"level": "critical"
+	},
+	{
+		"description": "Inventory without any assigned keywords",
+		"file": "no_keywords.sql",
+		"level": "critical"
+	}
+]
