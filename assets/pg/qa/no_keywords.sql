@@ -1,5 +1,6 @@
 SELECT inventory_id AS "Inventory ID",
-	COALESCE(co.name || ' ', '')  || COALESCE(c.path_cache, '') AS "Description"
+	co.name AS "Collection",
+	c.path_cache AS "Container"
 FROM inventory AS i
 LEFT OUTER JOIN container AS c
 	ON c.container_id = i.container_id AND c.active

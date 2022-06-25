@@ -8,5 +8,10 @@
 		"description": "Inventory without any assigned keywords",
 		"file": "no_keywords.sql",
 		"level": "critical"
+	},
+	{
+		"description": "Inventory interval bottom less than interval top",
+		"file": "bottom_over_top.sql",
+		"level": "warning"
 	}
 ]

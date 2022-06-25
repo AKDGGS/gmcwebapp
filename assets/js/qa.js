@@ -39,8 +39,16 @@ document.querySelectorAll('.qa-results').forEach(qr => {
 	});
 });
 
+var isLoading = false;
 function loadReport(id){
+	if(isLoading){ return; }
+	else { isLoading = true; }
+
 	let out = document.getElementById('qa-output');
+	while(out.lastChild) out.removeChild(out.lastChild);
+	let img = document.createElement('img');
+	img.src = '../img/loader.gif';
+	out.appendChild(img);
 
 	fetch('qa_run.json?id=' + id)
 	.then(response => {
@@ -48,14 +56,8 @@ function loadReport(id){
 		return response.json();
 	})
 	.then(result => {
-		while(out.lastChild) out.removeChild(out.lastChild);
-
-		if(result.rows.length < 1) {
-			out.appendChild(document.createTextNode("No results."));
-			return
-		}
-
 		let tbl = document.createElement('table');
+		tbl.className = 'qa-table';
 		let thead = document.createElement('thead');
 		let tr = document.createElement('tr');
 		result.columns.forEach(c => {
@@ -71,18 +73,22 @@ function loadReport(id){
 			let tr = document.createElement('tr');
 			r.forEach(k => {
 				let td = document.createElement('td');
-				td.appendChild(document.createTextNode(k));
+				td.appendChild(document.createTextNode(k === null ? '' : k));
 				tr.appendChild(td);
 			});
 			tbody.appendChild(tr);
 		});
 		tbl.appendChild(tbody);
 
-		out.appendChild(tbl);
+		while(out.lastChild) out.removeChild(out.lastChild);
+		if(result.rows.length > 0){ out.appendChild(tbl); }
+		else { out.appendChild(document.createTextNode("No results")); }
+		isLoading = false;
 	})
 	.catch(err => {
 		while(out.lastChild) out.removeChild(out.lastChild);
-		out.appendChild(document.createTextNode('error loading report'));
+		out.appendChild(document.createTextNode('Error loading report'));
 		if(window.console){ console.log(err); }
+		isLoading = false;
 	});
 }

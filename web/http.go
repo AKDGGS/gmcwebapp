@@ -28,12 +28,12 @@ func (srv *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 		return
 
 	case "css/template.css", "css/view.css", "css/wells_page.css", "css/qa.css",
-		"js/view.js", "js/stash.js", "ol/ol-layerswitcher.min.css",
-		"ol/ol-layerswitcher.min.js", "js/wells.js", "js/qa.js":
+		"js/view.js", "js/stash.js", "js/wells.js", "js/qa.js", "img/loader.gif",
+		"ol/ol-layerswitcher.min.css", "ol/ol-layerswitcher.min.js":
 		assets.ServeStatic(path, w, r)
 		return
 
-	case "qa":
+	case "qa/":
 		srv.ServeQA(w, r)
 		return
 
@@ -67,7 +67,7 @@ func (srv *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 		srv.ServeStash(id, w, r)
 		return
 
-	case "qa_count.json":
+	case "qa/qa_count.json":
 		q := r.URL.Query()
 		id, err := strconv.Atoi(q.Get("id"))
 		if err != nil {
@@ -77,7 +77,7 @@ func (srv *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 		srv.ServeQACount(id, w, r)
 		return
 
-	case "qa_run.json":
+	case "qa/qa_run.json":
 		q := r.URL.Query()
 		id, err := strconv.Atoi(q.Get("id"))
 		if err != nil {

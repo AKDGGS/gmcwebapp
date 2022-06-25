@@ -1,5 +1,12 @@
-.qa-table { border-collapse: collapse; margin: 8px 16px; }
-.qa-table td { padding: 4px; }
-.qa-table tbody tr:nth-child(odd) { background-color: #ddd; }
+#qa-container { display: flex; flex-wrap: wrap; }
+#qa-container > div { flex-grow: 1; margin: 8px 16px; }
+#qa-output img { margin: auto; display: block; }
+.qa-reports, .qa-table { border-collapse: collapse; }
+.qa-table { border-style: hidden; }
+.qa-reports tbody tr:nth-child(odd) { background-color: #ddd; }
+.qa-table tbody tr:nth-child(odd) { background-color: #eee; }
+.qa-reports th, .qa-table th { text-align: left; }
+.qa-reports td, .qa-reports th { padding: 4px; }
+.qa-table td, .qa-table th { border: 1px solid #bbb; padding: 4px 8px; }
 .critical { background-color: #f00; color: #fff; }
-.warning { background-color: #ff0; color: #fff; }
+.warning { background-color: #ff0; color: #000; }

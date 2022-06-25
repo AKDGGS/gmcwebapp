@@ -17,6 +17,7 @@
 				<a class="soa-apptmpl-logo-dggs" title="The Division of Geological &amp; Geophysical Surveys" href="http://dggs.alaska.gov"></a>
 				<div class="soa-apptmpl-header-nav">
 					{{- if .user }}
+					<a href="../qa/">Q/A</a>
 					<a href="../logout{{if .redirect}}?redirect={{.redirect}}{{end}}">Logout</a>
 					{{- else }}
 					<a href="../login{{if .redirect}}?redirect={{.redirect}}{{end}}">Login</a>
