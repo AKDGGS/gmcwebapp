@@ -47,5 +47,29 @@
 		"description": "Wells without any spatial data",
 		"file": "well_no_spatial.sql",
 		"level": "warning"
+	},{
+		"description": "Boreholes without any spatial data",
+		"file": "borehole_no_spatial.sql",
+		"level": "warning"
+	},{
+		"description": "Outcrops without any spatial data",
+		"file": "outcrop_no_spatial.sql",
+		"level": "warning"
+	},{
+		"description": "Shopoints without any spatial data",
+		"file": "shotpoint_no_spatial.sql",
+		"level": "warning"
+	},{
+		"description": "Outcrop inventory with no sample number",
+		"file": "outcrop_inventory_no_sample.sql",
+		"level": "warning"
+	},{
+		"description": "Well inventory bottom great than well bottom",
+		"file": "inventory_deeper_than_well.sql",
+		"level": "warning"
+	},{
+		"description": "Prospects with no boreholes",
+		"file": "prospect_no_borehole.sql",
+		"level": "warning"
 	}
 ]

@@ -4,3 +4,4 @@ FROM inventory AS iv
 LEFT OUTER JOIN container AS co
 	ON co.container_id = iv.container_id
 WHERE iv.active AND iv.container_id IS NULL
+ORDER BY iv.inventory_id ASC

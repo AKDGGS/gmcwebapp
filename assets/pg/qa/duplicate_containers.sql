@@ -3,3 +3,4 @@ FROM container
 WHERE active
 GROUP BY path_cache
 HAVING COUNT(*) > 1
+ORDER BY COUNT(*) DESC
