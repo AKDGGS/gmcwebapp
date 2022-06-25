@@ -1,47 +1,47 @@
 [
 	{
 		"description": "Inventory without well, borehole, outcrop, shotpoint or publication",
-		"file": "missing_metadata.sql",
+		"file": "inventory_no_metadata.sql",
 		"level": "critical"
 	},{
 		"description": "Inventory without any assigned keywords",
-		"file": "no_keywords.sql",
+		"file": "inventory_no_keywords.sql",
 		"level": "critical"
 	},{
 		"description": "Inventory interval bottom less than interval top",
-		"file": "bottom_over_top.sql",
+		"file": "inventory_bottom_over_top.sql",
 		"level": "warning"
 	},{
 		"description": "Barcodes that span multiple containers",
-		"file": "separated_barcodes.sql",
+		"file": "inventory_barcode_multi_container.sql",
 		"level": "critical"
 	},{
 		"description": "Barcodes overlaps with others when hypen is removed",
-		"file": "hypen_barcodes_overlap.sql",
+		"file": "inventory_hypen_barcode_overlap.sql",
 		"level": "critical"
 	},{
 		"description": "Wells with an empty well number",
-		"file": "empty_well_number.sql",
+		"file": "well_empty_well_number.sql",
 		"level": "critical"
 	},{
 		"description": "Wells with an API number that is not exactly 14 characters",
-		"file": "bad_well_api_length.sql",
+		"file": "well_bad_api_length.sql",
 		"level": "critical"
 	},{
 		"description": "Wells that share an API number",
-		"file": "duplicate_well_api_number.sql",
+		"file": "well_duplicate_api.sql",
 		"level": "critical"
 	},{
-		"description": "Inventory that has no barcode or alternate barcode",
-		"file": "missing_barcodes.sql",
+		"description": "Inventory that has no barcode or container barcode",
+		"file": "inventory_no_barcode.sql",
 		"level": "critical"
 	},{
 		"description": "Containers with the same name and parent hierarchy",
-		"file": "duplicate_containers.sql",
+		"file": "container_duplicate.sql",
 		"level": "critical"
 	},{
 		"description": "Inventory without a container",
-		"file": "missing_container.sql",
+		"file": "inventory_no_container.sql",
 		"level": "warning"
 	},{
 		"description": "Wells without any spatial data",
@@ -70,6 +70,58 @@
 	},{
 		"description": "Prospects with no boreholes",
 		"file": "prospect_no_borehole.sql",
+		"level": "warning"
+	},{
+		"description": "Shotpoints with no linked inventory",
+		"file": "shotpoint_no_inventory.sql",
+		"level": "warning"
+	},{
+		"description": "Outcrops with no linked inventory",
+		"file": "outcrop_no_inventory.sql",
+		"level": "warning"
+	},{
+		"description": "Boreholes with no linked inventory",
+		"file": "borehole_no_inventory.sql",
+		"level": "warning"
+	},{
+		"description": "Well with no linked inventory",
+		"file": "well_no_inventory.sql",
+		"level": "warning"
+	},{
+		"description": "Organizations not referenced in other tables",
+		"file": "organization_no_links.sql",
+		"level": "warning"
+	},{
+		"description": "Inventory with empty (but not null) barcodes",
+		"file": "inventory_empty_barcode.sql",
+		"level": "warning"
+	},{
+		"description": "Container with empty (but not null) barcodes",
+		"file": "container_empty_barcode.sql",
+		"level": "warning"
+	},{
+		"description": "Inventory with barcodes that contain invalid characters",
+		"file": "inventory_invalid_barcode.sql",
+		"level": "warning"
+	},{
+		"description": "Container with barcodes that contain invalid characters",
+		"file": "container_invalid_barcode.sql",
+		"level": "warning"
+	},{
+		"description": "Duplicate barcodes between container and inventory",
+		"file": "inventory_container_duplicate_barcode.sql",
+		"level": "warning"
+	},{
+		"description": "Points not referenced in other tables",
+		"file": "point_no_links.sql",
+		"level": "warning"
+	},{
+		"description": "Notes not referenced in other tables",
+		"file": "note_no_links.sql",
+		"level": "warning"
+	},{
+		"description": "Files not referenced in other tables",
+		"file": "file_no_links.sql",
 		"level": "warning"
 	}
 ]
