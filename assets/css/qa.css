@@ -10,3 +10,4 @@
 .qa-table td, .qa-table th { border: 1px solid #bbb; padding: 4px 8px; }
 .critical { background-color: #f00; color: #fff; }
 .warning { background-color: #ff0; color: #000; }
+.passed { background-color: #080; color: #fff; }

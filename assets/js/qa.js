@@ -9,8 +9,10 @@ document.querySelectorAll('.qa-results').forEach(qr => {
 		while(qr.lastChild) qr.removeChild(qr.lastChild);
 
 		if(result < 1) {
-			qr.classList.add('passed');
-			qr.appendChild(document.createTextNode('PASSED'));
+			let s = document.createElement('span');
+			s.className = 'passed';
+			s.appendChild(document.createTextNode('PASSED'));
+			qr.appendChild(s);
 		} else {
 			let lvl = qr.dataset.level;
 

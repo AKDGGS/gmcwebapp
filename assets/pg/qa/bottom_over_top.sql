@@ -1,4 +1,6 @@
 SELECT iv.inventory_id AS "Inventory ID",
+	iv.interval_top::TEXT AS "Top",
+	iv.interval_bottom::TEXT AS "Bottom",
 	COALESCE(iv.barcode, iv.alt_barcode) AS "Barcode",
 	co.name AS "Collection",
 	ct.path_cache AS "Container"

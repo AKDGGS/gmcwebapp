@@ -19,7 +19,7 @@ func (srv *Server) ServeQA(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	if user == nil {
-		http.Redirect(w, r, "login?redirect=qa", http.StatusFound)
+		http.Redirect(w, r, "../login?redirect=qa/", http.StatusFound)
 		return
 	}
 
