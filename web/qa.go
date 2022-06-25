@@ -42,10 +42,11 @@ func (srv *Server) ServeQA(w http.ResponseWriter, r *http.Request) {
 	}
 
 	params := map[string]interface{}{
-		"title":   "Quality Assurance",
-		"scripts": []string{"js/qa.js"},
-		"content": template.HTML(buf.String()),
-		"user":    user,
+		"title":       "Quality Assurance",
+		"scripts":     []string{"js/qa.js"},
+		"stylesheets": []string{"css/qa.css"},
+		"content":     template.HTML(buf.String()),
+		"user":        user,
 	}
 
 	tbuf := bytes.Buffer{}

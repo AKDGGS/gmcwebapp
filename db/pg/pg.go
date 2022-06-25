@@ -2,8 +2,10 @@ package pg
 
 import (
 	"context"
-	"gmc/assets"
 	"net/url"
+
+	"gmc/assets"
+	"gmc/db/model"
 
 	"github.com/jackc/pgx/v4/pgxpool"
 )
@@ -87,6 +89,33 @@ func (pg *Postgres) queryRows(name string, args ...interface{}) ([]map[string]in
 
 	if len(rs) < 1 {
 		return nil, nil
+	}
+	return rs, nil
+}
+
+func (pg *Postgres) queryTable(name string, args ...interface{}) (*model.Table, error) {
+	q, err := assets.ReadString(name)
+	if err != nil {
+		return nil, err
+	}
+
+	rows, err := pg.pool.Query(context.Background(), q, args...)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+
+	rs := &model.Table{}
+	for _, f := range rows.FieldDescriptions() {
+		rs.Columns = append(rs.Columns, string(f.Name))
+	}
+
+	for rows.Next() {
+		vals, err := rows.Values()
+		if err != nil {
+			return nil, err
+		}
+		rs.Rows = append(rs.Rows, vals)
 	}
 	return rs, nil
 }

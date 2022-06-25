@@ -2,10 +2,11 @@ package db
 
 import (
 	"fmt"
-	"gmc/db/model"
-	"gmc/db/pg"
 	"net/url"
 	"strings"
+
+	"gmc/db/model"
+	"gmc/db/pg"
 )
 
 type DB interface {
@@ -47,6 +48,9 @@ type DB interface {
 
 	// Runs just the count of a specific QA report
 	CountQAReport(id int) (int, error)
+
+	// Runs a specific QA report and returns the results
+	RunQAReport(id int) (*model.Table, error)
 
 	// Verify the database connection is working.
 	// (usually by performing a simple query)

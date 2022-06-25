@@ -1,16 +1,18 @@
-			<table>
+			<table class="qa-table">
 				<thead>
 					<tr>
 						<th>Description</th>
-						<th>&nbsp;</th>
+						<th style="min-width: 150px">Result</th>
 					</tr>
 				</thead>
 				<tbody>
 					{{- range $i, $r := .}}
 					<tr>
 						<td>{{$r.description}}</td>
-						<td data-id="{{$i}}" class="qa-results {{$r.level}}"></td>
+						<td data-id="{{$i}}" data-level="{{$r.level}}" class="qa-results"></td>
 					</tr>
 					{{- end}}
 				</tbody>
 			</table>
+
+			<div id="qa-output"></div>

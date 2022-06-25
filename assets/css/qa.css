@@ -1,0 +1,5 @@
+.qa-table { border-collapse: collapse; margin: 8px 16px; }
+.qa-table td { padding: 4px; }
+.qa-table tbody tr:nth-child(odd) { background-color: #ddd; }
+.critical { background-color: #f00; color: #fff; }
+.warning { background-color: #ff0; color: #fff; }

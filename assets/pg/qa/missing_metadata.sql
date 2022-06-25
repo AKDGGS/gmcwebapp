@@ -1,5 +1,5 @@
-SELECT iv.inventory_id,
-	COALESCE(iv.barcode, iv.alt_barcode, '') || ' ' || COALESCE(co.path_cache, '') AS description
+SELECT iv.inventory_id AS "Inventory ID",
+	COALESCE(iv.barcode, iv.alt_barcode, '') || ' ' || COALESCE(co.path_cache, '') AS "Description"
 FROM inventory AS iv
 LEFT OUTER JOIN container AS co
 	ON co.container_id = iv.inventory_id
