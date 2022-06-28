@@ -111,7 +111,7 @@ func (pg *Postgres) GetInventory(id int, flags int) (map[string]interface{}, err
 	}
 
 	if (flags & dbf.BOREHOLE) != 0 {
-		boreholes, err := pg.queryRows("pg/borehole_byinventoryid.sql", id)
+		boreholes, err := pg.queryRows("pg/borehole/by_inventory_id.sql", id)
 		if err != nil {
 			return nil, err
 		}

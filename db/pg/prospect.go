@@ -3,7 +3,7 @@ package pg
 import dbf "gmc/db/flag"
 
 func (pg *Postgres) GetProspect(id int, flags int) (map[string]interface{}, error) {
-	prospect, err := pg.queryRow("pg/prospect_byid.sql", id)
+	prospect, err := pg.queryRow("pg/prospect/by_prospect_id.sql", id)
 	if err != nil {
 		return nil, err
 	}
@@ -11,7 +11,7 @@ func (pg *Postgres) GetProspect(id int, flags int) (map[string]interface{}, erro
 		return nil, nil
 	}
 
-	boreholes, err := pg.queryRows("pg/borehole_byprospectid.sql", id)
+	boreholes, err := pg.queryRows("pg/borehole/by_prospect_id.sql", id)
 	if err != nil {
 		return nil, err
 	}
@@ -43,7 +43,7 @@ func (pg *Postgres) GetProspect(id int, flags int) (map[string]interface{}, erro
 	}
 
 	if (flags & dbf.GEOJSON) != 0 {
-		geojson, err := pg.queryRow("pg/prospect_geojson.sql", id)
+		geojson, err := pg.queryRow("pg/prospect/geojson.sql", id)
 		if err != nil {
 			return nil, err
 		}

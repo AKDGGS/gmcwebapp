@@ -7,7 +7,7 @@ import (
 )
 
 func (pg *Postgres) GetBorehole(id int, flags int) (map[string]interface{}, error) {
-	borehole, err := pg.queryRow("pg/borehole_byid.sql", id)
+	borehole, err := pg.queryRow("pg/borehole/by_borehole_id.sql", id)
 	if err != nil {
 		return nil, err
 	}
@@ -78,7 +78,7 @@ func (pg *Postgres) GetBorehole(id int, flags int) (map[string]interface{}, erro
 	}
 
 	if (flags & dbf.GEOJSON) != 0 {
-		geojson, err := pg.queryRow("pg/borehole_geojson.sql", id)
+		geojson, err := pg.queryRow("pg/borehole/geojson.sql", id)
 		if err != nil {
 			return nil, err
 		}
