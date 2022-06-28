@@ -1,20 +1,21 @@
 SELECT jsonb_build_object(
 	'type', 'FeatureCollection',
-	'features', q.features
+	'features', jsonb_agg(jsonb_build_object(
+		'type', 'Feature', 'geometry',
+		ST_AsGeoJSON(q.geog, 5, 0)::jsonb
+	))
 ) AS geojson
 FROM (
-	SELECT jsonb_agg(jsonb_build_object(
-			'type', 'Feature',
-			'geometry', ST_AsGeoJSON(p.geog, 5, 0)::jsonb
-		)
-	) AS features
+	SELECT ST_Makeline(
+		p.geog::geometry ORDER BY sp.shotpoint_number DESC
+	) AS geog
 	FROM shotline AS s
 	JOIN shotpoint AS sp
 		ON sp.shotline_id = s.shotline_id
 	JOIN shotpoint_point as spp
-	ON spp.shotpoint_id = sp.shotpoint_id
+		ON spp.shotpoint_id = sp.shotpoint_id
 	JOIN point AS p
-	ON p.point_id = spp.point_id
+		ON p.point_id = spp.point_id
 	WHERE s.shotline_id = $1
 ) AS q
-WHERE q.features IS NOT NULL
+WHERE q.geog IS NOT NULL

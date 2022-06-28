@@ -15,7 +15,7 @@ if (document.getElementById('map')){
 		target: 'map',
 		overlays: [ overlay ],
 		layers: [
-				new ol.layer.Group({
+			new ol.layer.Group({
 				title: 'Base Maps',
 				layers: [
 					new ol.layer.Tile({
@@ -103,9 +103,15 @@ if (document.getElementById('map')){
 					}),
 				]
 			}),
-			//points
 			new ol.layer.Vector({
 				style: new ol.style.Style({
+					fill: new ol.style.Fill({
+						color: 'rgba(44, 126, 167, 0.25)'
+					}),
+					stroke: new ol.style.Stroke({
+						color: 'rgba(44, 126, 167, 255)',
+						width: 2
+					}),
 					image: new ol.style.Circle({
 						radius: 5,
 						fill: new ol.style.Fill({
@@ -120,21 +126,6 @@ if (document.getElementById('map')){
 				source: new ol.source.Vector({
 					features: fmt.readFeatures(geojson)
 				})
-			}),
-			//polygons
-			new ol.layer.Vector({
-				style: new ol.style.Style({
-				            stroke: new ol.style.Stroke({
-				              color: 'rgba(255, 244, 88, 1)',
-				              width: 2
-				            }),
-				            fill: new ol.style.Fill({
-				              color: 'rgba(255, 255, 180, 0.45)'
-				            })
-				          }),
-				source: new ol.source.Vector({
-	        features: fmt.readFeatures(geojson)
-	      }),
 			})
 		],
 		view: new ol.View({
