@@ -1,5 +1,6 @@
 SELECT well_id AS "Well ID",
-	name AS "Well Name"
+	name AS "Well Name",
+	well_number AS "Well Number"
 FROM well
 WHERE well_id NOT IN (
 	SELECT DISTINCT well_id
