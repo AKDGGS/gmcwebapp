@@ -131,7 +131,7 @@ func (pg *Postgres) GetInventory(id int, flags int) (map[string]interface{}, err
 	}
 
 	if (flags & dbf.SHOTLINE) != 0 {
-		shotlines, err := pg.queryRows("pg/shotline_byinventoryid.sql", id)
+		shotlines, err := pg.queryRows("pg/shotline/by_inventory_id.sql", id)
 		if err != nil {
 			return nil, err
 		}

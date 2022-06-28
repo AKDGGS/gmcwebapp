@@ -7,7 +7,7 @@ import (
 )
 
 func (pg *Postgres) GetShotline(id int, flags int) (map[string]interface{}, error) {
-	shotline, err := pg.queryRow("pg/shotline_byid.sql", id)
+	shotline, err := pg.queryRow("pg/shotline/by_shotline_id.sql", id)
 	if err != nil {
 		return nil, err
 	}
@@ -66,7 +66,7 @@ func (pg *Postgres) GetShotline(id int, flags int) (map[string]interface{}, erro
 	}
 
 	if (flags & dbf.GEOJSON) != 0 {
-		geojson, err := pg.queryRow("pg/shotline_geojson.sql", id)
+		geojson, err := pg.queryRow("pg/shotline/geojson.sql", id)
 		if err != nil {
 			return nil, err
 		}
