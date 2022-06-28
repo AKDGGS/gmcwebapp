@@ -121,7 +121,7 @@ func (pg *Postgres) GetInventory(id int, flags int) (map[string]interface{}, err
 	}
 
 	if (flags & dbf.WELL) != 0 {
-		wells, err := pg.queryRows("pg/well_byinventoryid.sql", id)
+		wells, err := pg.queryRows("pg/well/by_inventory_id.sql", id)
 		if err != nil {
 			return nil, err
 		}

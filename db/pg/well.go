@@ -7,7 +7,7 @@ import (
 )
 
 func (pg *Postgres) GetWell(id int, flags int) (map[string]interface{}, error) {
-	well, err := pg.queryRow("pg/well_byid.sql", id)
+	well, err := pg.queryRow("pg/well/by_well_id.sql", id)
 	if err != nil {
 		return nil, err
 	}
@@ -105,7 +105,7 @@ func (pg *Postgres) GetWell(id int, flags int) (map[string]interface{}, error) {
 	}
 
 	if (flags & dbf.GEOJSON) != 0 {
-		geojson, err := pg.queryRow("pg/well_geojson.sql", id)
+		geojson, err := pg.queryRow("pg/well/geojson.sql", id)
 		if err != nil {
 			return nil, err
 		}
