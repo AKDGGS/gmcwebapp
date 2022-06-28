@@ -21,7 +21,7 @@
 						{{- if .boreholes}}
 						<tr>
 							<th>Boreholes</th>
-							<td>{{range $i, $bh := .boreholes}}{{if ne $i 0}}, {{- end}}<a href="../borehole/{{$bh.borehole_id}}">{{$bh.name}}</a>{{- end}}</td>
+							<td>{{range $i, $bh := .boreholes}}{{if ne $i 0}}, {{end}}<a href="../borehole/{{$bh.borehole_id}}">{{$bh.name}}</a>{{- end}}</td>
 						</tr>
 						{{- end}}
 						{{- if .quadrangles}}
