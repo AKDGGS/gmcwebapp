@@ -37,7 +37,7 @@ func (pg *Postgres) GetOutcrop(id int, flags int) (map[string]interface{}, error
 	}
 
 	if (flags & dbf.ORGANIZATION) != 0 {
-		organizations, err := pg.queryRows("pg/organization_byoutcropid.sql", id)
+		organizations, err := pg.queryRows("pg/organization/by_outcrop_id.sql", id)
 		if err != nil {
 			return nil, err
 		}

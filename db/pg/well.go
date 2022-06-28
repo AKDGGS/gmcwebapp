@@ -75,7 +75,7 @@ func (pg *Postgres) GetWell(id int, flags int) (map[string]interface{}, error) {
 	}
 
 	if (flags & dbf.ORGANIZATION) != 0 {
-		operators, err := pg.queryRows("pg/organization_bywellid.sql", id)
+		operators, err := pg.queryRows("pg/organization/by_well_id.sql", id)
 		if err != nil {
 			return nil, err
 		}
