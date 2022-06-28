@@ -9,7 +9,7 @@ import (
 )
 
 func (pg *Postgres) GetInventory(id int, flags int) (map[string]interface{}, error) {
-	inventory, err := pg.queryRow("pg/inventory_byid.sql", id)
+	inventory, err := pg.queryRow("pg/inventory/by_inventory_id.sql", id)
 	if err != nil {
 		return nil, err
 	}
@@ -206,7 +206,7 @@ func (pg *Postgres) GetInventory(id int, flags int) (map[string]interface{}, err
 	}
 
 	if (flags & dbf.GEOJSON) != 0 {
-		geojson, err := pg.queryRow("pg/inventory_geojson.sql", id)
+		geojson, err := pg.queryRow("pg/inventory/geojson.sql", id)
 		if err != nil {
 			return nil, err
 		}
