@@ -672,7 +672,7 @@ CREATE TABLE inventory (
 	weight NUMERIC(10, 2) NULL,
 	weight_unit units NULL,
 
-	-- This is a hack  This field should eventually be replaced
+	-- This is a hack. This field should eventually be replaced
 	-- with an integer field called "interval_frequency"
 	sample_frequency VARCHAR(25) NULL,
 	recovery VARCHAR(25) NULL,
