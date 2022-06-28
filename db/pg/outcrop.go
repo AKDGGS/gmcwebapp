@@ -32,7 +32,7 @@ func (pg *Postgres) GetOutcrop(id int, flags int) (map[string]interface{}, error
 			return nil, err
 		}
 		if kw != nil {
-			outcrop["inventory"] = kw
+			outcrop["keywords"] = kw
 		}
 	}
 
