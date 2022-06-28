@@ -5,7 +5,7 @@ import (
 )
 
 func (pg *Postgres) GetOutcrop(id int, flags int) (map[string]interface{}, error) {
-	outcrop, err := pg.queryRow("pg/outcrop_byid.sql", id)
+	outcrop, err := pg.queryRow("pg/outcrop/by_outcrop_id.sql", id)
 	if err != nil {
 		return nil, err
 	}
@@ -67,7 +67,7 @@ func (pg *Postgres) GetOutcrop(id int, flags int) (map[string]interface{}, error
 	}
 
 	if (flags & dbf.GEOJSON) != 0 {
-		geojson, err := pg.queryRow("pg/outcrop_geojson.sql", id)
+		geojson, err := pg.queryRow("pg/outcrop/geojson.sql", id)
 		if err != nil {
 			return nil, err
 		}

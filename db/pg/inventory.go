@@ -155,7 +155,7 @@ func (pg *Postgres) GetInventory(id int, flags int) (map[string]interface{}, err
 	}
 
 	if (flags & dbf.OUTCROP) != 0 {
-		outcrops, err := pg.queryRows("pg/outcrop_byinventoryid.sql", id)
+		outcrops, err := pg.queryRows("pg/outcrop/by_inventory_id.sql", id)
 		if err != nil {
 			return nil, err
 		}
