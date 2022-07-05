@@ -110,7 +110,7 @@ if (document.getElementById('map')){
 					}),
 					stroke: new ol.style.Stroke({
 						color: 'rgba(44, 126, 167, 255)',
-						width: 2
+						width: 5
 					}),
 					image: new ol.style.Circle({
 						radius: 5,
