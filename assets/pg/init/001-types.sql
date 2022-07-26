@@ -54,3 +54,8 @@ CREATE TYPE issue AS ENUM (
 	'needs_metadata', 'barcode_missing',
 	'label_obscured', 'insufficient_material'
 );
+
+CREATE TYPE container_materials AS ENUM (
+	'cardboard', 'cardboard/plastic', 'cloth fiber', 'glass',
+	'metal', 'metal/wood',  'paper', 'plastic', 'wood'
+);

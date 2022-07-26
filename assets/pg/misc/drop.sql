@@ -11,7 +11,6 @@ DROP TABLE IF EXISTS
 	container,
 	container_file,
 	container_log,
-	container_material,
 	container_type,
 	core_diameter,
 	dimension,

@@ -576,13 +576,6 @@ CREATE TABLE shotpoint_point (
 	PRIMARY KEY(shotpoint_id, point_id)
 );
 
-
-CREATE TABLE container_material (
-	container_material_id SERIAL PRIMARY KEY,
-	name VARCHAR(100) NOT NULL
-);
-
-
 CREATE TABLE container_type (
 	container_type_id SERIAL PRIMARY KEY,
 	name VARCHAR(100) NOT NULL
@@ -593,7 +586,7 @@ CREATE TABLE container (
 	container_id SERIAL PRIMARY KEY,
 	parent_container_id INT REFERENCES container(container_id) NULL,
 	container_type_id INT REFERENCES container_type(container_type_id) NOT NULL,
-	container_material_id INT REFERENCES container_material(container_material_id) NULL,
+	container_material container_materials NULL,
 
 	name VARCHAR(50) NOT NULL,
 	description VARCHAR(255) NULL,
@@ -634,7 +627,7 @@ CREATE TABLE inventory (
 	project_id INT REFERENCES project(project_id) NULL,
 	dimension_id INT REFERENCES dimension(dimension_id) NULL,
 	container_id INT REFERENCES container(container_id) NULL,
-	container_material_id INT REFERENCES container_material(container_material_id) NULL,
+	container_material container_materials NULL,
 
 	keywords keyword[] NULL CHECK (cardinality(keywords) <> 0),
 

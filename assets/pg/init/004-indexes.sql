@@ -19,8 +19,6 @@ CREATE INDEX container_active_idx ON container(active);
 CREATE INDEX container_parent_container_id_idx
 	ON container(parent_container_id);
 
-CREATE INDEX container_material_name_idx ON container_material(name);
-
 CREATE INDEX container_type_name_idx ON container_type(name);
 
 CREATE INDEX core_diameter_name_idx ON core_diameter(name);
@@ -45,9 +43,6 @@ CREATE INDEX inventory_coalesce_barcode_idx
 	ON inventory(coalesce(barcode, alt_barcode));
 
 CREATE INDEX inventory_container_id_idx ON inventory(container_id);
-
-CREATE INDEX inventory_container_material_id_idx
-	ON inventory(container_material_id);
 
 CREATE INDEX inventory_container_log_inventory_id_idx
 	ON inventory_container_log(inventory_id);
