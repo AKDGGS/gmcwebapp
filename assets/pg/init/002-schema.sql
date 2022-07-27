@@ -64,16 +64,8 @@ CREATE TABLE url (
 	url TEXT
 );
 
-
-CREATE TABLE file_type (
-	file_type_id SERIAL PRIMARY KEY,
-	name VARCHAR(50)
-);
-
-
 CREATE TABLE file (
 	file_id SERIAL PRIMARY KEY,
-	file_type_id INT REFERENCES file_type(file_type_id) NULL,
 	description VARCHAR(255) NULL,
 	mimetype VARCHAR(255) NOT NULL DEFAULT 'application/octet-stream',
 	size INT NOT NULL,

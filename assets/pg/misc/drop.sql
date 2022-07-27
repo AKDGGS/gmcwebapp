@@ -16,7 +16,6 @@ DROP TABLE IF EXISTS
 	dimension,
 	energy_district,
 	file,
-	file_type,
 	gmc_region,
 	stratigraphy_type,
 	stratigraphy,
