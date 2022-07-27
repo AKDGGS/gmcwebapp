@@ -113,13 +113,6 @@ CREATE TABLE mining_district (
 );
 
 
-CREATE TABLE gmc_region (
-	gmc_region_id SERIAL PRIMARY KEY,
-	name VARCHAR(35) NULL,
-	geog GEOGRAPHY(MultiPolygon) NULL
-);
-
-
 CREATE TABLE plss (
 	plss_id SERIAL PRIMARY KEY,
 	meridian VARCHAR(4) NOT NULL,
