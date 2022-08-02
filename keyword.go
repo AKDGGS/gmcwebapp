@@ -15,8 +15,10 @@ func keywordCommand(cfg *config.Config, exec string, cmd string, args []string) 
 		fmt.Printf("Subcommands:\n")
 		fmt.Printf("  list, ls\n")
 		fmt.Printf("      list keywords\n")
-		fmt.Printf("  add <keyword>\n")
-		fmt.Printf("      add new keyword\n")
+		fmt.Printf("  add <keywords ...>\n")
+		fmt.Printf("      add new keywords\n")
+		fmt.Printf("  del <keywords ...>\n")
+		fmt.Printf("      remove existing keywords\n")
 	}
 
 	if len(args) < 1 {
@@ -66,9 +68,27 @@ func keywordCommand(cfg *config.Config, exec string, cmd string, args []string) 
 			os.Exit(1)
 		}
 
-		if err := db.AddKeyword(args[1]); err != nil {
+		if err := db.AddKeywords(args[1:]...); err != nil {
 			fmt.Fprintf(os.Stderr, "%s: %s\n", exec, err.Error())
 			os.Exit(1)
 		}
+
+	case "del", "rm", "delete", "remove":
+		if len(args) < 2 {
+			fmt.Fprintf(os.Stderr, "%s: keywords to remove required\n", exec)
+			os.Exit(1)
+		}
+
+		db, err := db.New(cfg.DatabaseURL)
+		if err != nil {
+			fmt.Fprintf(os.Stderr, "%s: %s\n", exec, err.Error())
+			os.Exit(1)
+		}
+
+		if err := db.DeleteKeywords(args[1:]...); err != nil {
+			fmt.Fprintf(os.Stderr, "%s: %s\n", exec, err.Error())
+			os.Exit(1)
+		}
+
 	}
 }

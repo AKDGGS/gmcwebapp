@@ -47,7 +47,10 @@ type DB interface {
 	ListKeywords() ([]string, error)
 
 	// Adds a new keyword
-	AddKeyword(keyword string) error
+	AddKeywords(keywords ...string) error
+
+	// Deletes a keyword
+	DeleteKeywords(keywords ...string) error
 
 	// Lists quality assurance reports
 	ListQAReports() ([]map[string]string, error)
