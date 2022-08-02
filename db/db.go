@@ -43,6 +43,12 @@ type DB interface {
 	// Removes a token
 	DeleteToken(id int) error
 
+	// Lists available keywords
+	ListKeywords() ([]string, error)
+
+	// Adds a new keyword
+	AddKeyword(keyword string) error
+
 	// Lists quality assurance reports
 	ListQAReports() ([]map[string]string, error)
 

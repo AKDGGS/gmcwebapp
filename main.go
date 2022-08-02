@@ -26,6 +26,9 @@ func main() {
 		fmt.Printf("      generate a random session key\n")
 		fmt.Printf("  token, tk\n")
 		fmt.Printf("      manage personal access tokens\n")
+		fmt.Printf("  keyword, kw\n")
+		fmt.Printf("      manage keywords\n")
+
 		fmt.Printf("See '%s <command> --help' for information ", exec)
 		fmt.Printf("on a specific command\n")
 	}
@@ -62,6 +65,9 @@ func main() {
 
 	case "token", "tk":
 		tokenCommand(cfg, exec, cmd, flag.Args()[1:])
+
+	case "keyword", "kw":
+		keywordCommand(cfg, exec, cmd, flag.Args()[1:])
 
 	case "--help", "help":
 		flag.Usage()
