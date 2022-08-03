@@ -31,44 +31,36 @@ type DB interface {
 	// Fetches stash for a specific inventory id
 	GetStash(id int) (map[string]interface{}, error)
 
-	// Fetches wells point list for a specific inventory id
+	// Fetches wells point list
 	GetWellPoints() ([]map[string]interface{}, error)
 
 	// List available tokens
 	ListTokens() ([]*model.Token, error)
-
 	// Creates a new token
 	CreateToken(token *model.Token) error
-
 	// Removes a token
 	DeleteToken(id int) error
 
 	// Lists available keywords
 	ListKeywords() ([]string, error)
-
-	// Adds a new keyword
+	// Adds any number of keywords
 	AddKeywords(keywords ...string) error
-
-	// Deletes a keyword
+	// Deletes any number of keywords
 	DeleteKeywords(keywords ...string) error
 
 	// Lists quality assurance reports
 	ListQAReports() ([]map[string]string, error)
-
 	// Runs just the count of a specific QA report
 	CountQAReport(id int) (int, error)
-
 	// Runs a specific QA report and returns the results
 	RunQAReport(id int) (*model.Table, error)
 
 	// Verify the database connection is working.
 	// (usually by performing a simple query)
 	Verify() error
-
 	// Initializes schema for a new installation. Throws an error
 	// if the schema already exists, or the initialization fails.
 	SchemaInit() error
-
 	// Removes schema from configured database.
 	// WARNING: This is destructive and intended only for use in development.
 	SchemaDrop() error

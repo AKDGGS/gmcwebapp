@@ -8,6 +8,14 @@ import (
 	"gmc/assets"
 )
 
+func (pg *Postgres) ListKeywords() ([]string, error) {
+	return pg.enumList("keyword")
+}
+
+func (pg *Postgres) AddKeywords(keywords ...string) error {
+	return pg.enumAddValues("keyword", keywords...)
+}
+
 func (pg *Postgres) DeleteKeywords(keywords ...string) error {
 	// Build new list of keywords by removing the deleted keywords
 	// from the current list
