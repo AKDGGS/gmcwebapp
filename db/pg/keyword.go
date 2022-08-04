@@ -4,8 +4,6 @@ import (
 	"context"
 	"fmt"
 	"strings"
-
-	"gmc/assets"
 )
 
 func (pg *Postgres) ListKeywords() ([]string, error) {
@@ -38,10 +36,9 @@ func (pg *Postgres) DeleteKeywords(keywords ...string) error {
 	defer tx.Rollback(context.Background())
 
 	// Step 1: Remove all references to the to-be-deleted keys
-	del_sql, err := assets.ReadString("pg/keyword/delete_references.sql")
-	if err != nil {
-		return err
-	}
+	del_sql := "UPDATE inventory SET " +
+		"keywords = array_remove(keywords, $1::keyword) " +
+		"WHERE keywords @> ARRAY[$1::keyword]"
 	for _, kw := range keywords {
 		if _, err := tx.Exec(context.Background(), del_sql, kw); err != nil {
 			return err
@@ -49,10 +46,7 @@ func (pg *Postgres) DeleteKeywords(keywords ...string) error {
 	}
 
 	// Step 2: Rename original keyword type
-	altertype_sql, err := assets.ReadString("pg/keyword/rename_type.sql")
-	if err != nil {
-		return err
-	}
+	altertype_sql := "ALTER TYPE keyword RENAME TO old_keyword"
 	if _, err := tx.Exec(context.Background(), altertype_sql); err != nil {
 		return err
 	}
@@ -79,19 +73,14 @@ func (pg *Postgres) DeleteKeywords(keywords ...string) error {
 	}
 
 	// Step 4: Move inventory from old type to new type
-	altercolumn_sql, err := assets.ReadString("pg/keyword/alter_column.sql")
-	if err != nil {
-		return err
-	}
+	altercolumn_sql := "ALTER TABLE inventory ALTER COLUMN keywords " +
+		"TYPE keyword[] USING ((keywords::text[])::keyword[])"
 	if _, err := tx.Exec(context.Background(), altercolumn_sql); err != nil {
 		return err
 	}
 
 	// Step 5: Remove old type
-	droptype_sql, err := assets.ReadString("pg/keyword/drop_old_type.sql")
-	if err != nil {
-		return err
-	}
+	droptype_sql := "DROP TYPE old_keyword"
 	if _, err := tx.Exec(context.Background(), droptype_sql); err != nil {
 		return err
 	}
