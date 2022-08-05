@@ -9,16 +9,17 @@ import (
 	"gmc/db"
 )
 
-func keywordCommand(cfg *config.Config, exec string, cmd string, args []string) {
+func issueCommand(cfg *config.Config, exec string, cmd string, args []string) {
 	printUsage := func() {
 		fmt.Printf("Usage: %s [args] %s <subcommand> ...\n", exec, cmd)
 		fmt.Printf("Subcommands:\n")
 		fmt.Printf("  list, ls\n")
-		fmt.Printf("      list keywords\n")
-		fmt.Printf("  add <keywords ...>\n")
-		fmt.Printf("      add new keyword(s)\n")
-		fmt.Printf("  del <keywords ...>\n")
-		fmt.Printf("      remove existing keyword(s)\n")
+		fmt.Printf("      list issues\n")
+		fmt.Printf("  add <issues ...>\n")
+		fmt.Printf("      add new quality issue(s)\n")
+		fmt.Printf("  del <issues ...>\n")
+		fmt.Printf("      remove quality issue(s)\n")
+
 	}
 
 	if len(args) < 1 {
@@ -46,19 +47,19 @@ func keywordCommand(cfg *config.Config, exec string, cmd string, args []string) 
 			os.Exit(1)
 		}
 
-		kws, err := db.ListKeywords()
+		iss, err := db.ListIssues()
 		if err != nil {
 			fmt.Fprintf(os.Stderr, "%s: %s\n", exec, err.Error())
 			os.Exit(1)
 		}
 
-		for _, kw := range kws {
-			fmt.Printf("%s\n", kw)
+		for _, is := range iss {
+			fmt.Printf("%s\n", is)
 		}
 
 	case "add":
 		if len(args) < 2 {
-			fmt.Fprintf(os.Stderr, "%s: new keyword name required\n", exec)
+			fmt.Fprintf(os.Stderr, "%s: new issue name required\n", exec)
 			os.Exit(1)
 		}
 
@@ -68,14 +69,13 @@ func keywordCommand(cfg *config.Config, exec string, cmd string, args []string) 
 			os.Exit(1)
 		}
 
-		if err := db.AddKeywords(args[1:]...); err != nil {
+		if err := db.AddIssues(args[1:]...); err != nil {
 			fmt.Fprintf(os.Stderr, "%s: %s\n", exec, err.Error())
 			os.Exit(1)
 		}
-
 	case "del", "rm", "delete", "remove":
 		if len(args) < 2 {
-			fmt.Fprintf(os.Stderr, "%s: keywords to remove required\n", exec)
+			fmt.Fprintf(os.Stderr, "%s: issues to remove required\n", exec)
 			os.Exit(1)
 		}
 
@@ -85,7 +85,7 @@ func keywordCommand(cfg *config.Config, exec string, cmd string, args []string) 
 			os.Exit(1)
 		}
 
-		if err := db.DeleteKeywords(args[1:]...); err != nil {
+		if err := db.DeleteIssues(args[1:]...); err != nil {
 			fmt.Fprintf(os.Stderr, "%s: %s\n", exec, err.Error())
 			os.Exit(1)
 		}

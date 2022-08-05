@@ -48,6 +48,13 @@ type DB interface {
 	// Deletes any number of keywords
 	DeleteKeywords(keywords ...string) error
 
+	// Lists available issues
+	ListIssues() ([]string, error)
+	// Add any number of issues
+	AddIssues(issues ...string) error
+	// Deletes any number of issues
+	DeleteIssues(issues ...string) error
+
 	// Lists quality assurance reports
 	ListQAReports() ([]map[string]string, error)
 	// Runs just the count of a specific QA report
