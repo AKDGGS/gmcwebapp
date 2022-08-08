@@ -4,11 +4,14 @@ import (
 	"bytes"
 	"fmt"
 	"net/http"
+	"regexp"
 
 	"gmc/assets"
 	"gmc/auth/securecookie"
 	authu "gmc/auth/util"
 )
+
+var redirect_rx *regexp.Regexp = regexp.MustCompile(`^(?:\.|borehole|inventory|outcrop|prospect|shotline|well|wells|qa)\/?\d*$`)
 
 func (auths *Auths) Logout(w http.ResponseWriter, r *http.Request) error {
 	cookie, err := securecookie.New(
@@ -28,6 +31,10 @@ func (auths *Auths) Logout(w http.ResponseWriter, r *http.Request) error {
 	if redirect == "" {
 		redirect = "."
 	}
+	if !redirect_rx.MatchString(redirect) {
+		return fmt.Errorf("invalid redirect")
+	}
+
 	http.Redirect(w, r, redirect, http.StatusFound)
 	return nil
 }
@@ -106,6 +113,9 @@ func (auths *Auths) CheckForm(w http.ResponseWriter, r *http.Request) error {
 	redirect := r.FormValue("redirect")
 	if redirect == "" {
 		redirect = r.URL.Query().Get("redirect")
+	}
+	if !redirect_rx.MatchString(redirect) {
+		return fmt.Errorf("invalid redirect")
 	}
 
 	params := map[string]interface{}{}
