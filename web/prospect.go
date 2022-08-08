@@ -3,10 +3,11 @@ package web
 import (
 	"bytes"
 	"fmt"
-	"gmc/assets"
-	dbf "gmc/db/flag"
 	"html/template"
 	"net/http"
+
+	"gmc/assets"
+	dbf "gmc/db/flag"
 )
 
 func (srv *Server) ServeProspect(id int, w http.ResponseWriter, r *http.Request) {

@@ -58,7 +58,7 @@ let wellPointLabelLayer = new ol.layer.Vector({
 });
 
 //Fetch the makers
-fetch('../well_points.json')
+fetch('points.json')
 	.then(response => {
 		if (!response.ok) throw new Error(response.status + " " +
 			response.statusText);
@@ -246,7 +246,7 @@ function displayOverlayContents(e) {
 			currentPage = 0;
 		}
 		let well_id = fts[currentPage].well_id;
-		fetch('../well.json?id=' + well_id)
+		fetch('detail.json?id=' + well_id)
 			.then(response => {
 				if (!response.ok) throw new Error(response.status + " " +
 					response.statusText);

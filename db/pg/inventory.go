@@ -2,8 +2,9 @@ package pg
 
 import (
 	"fmt"
-	dbf "gmc/db/flag"
 	"strings"
+
+	dbf "gmc/db/flag"
 
 	"github.com/jackc/pgtype"
 )

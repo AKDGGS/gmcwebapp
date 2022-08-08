@@ -2,10 +2,11 @@ package dir
 
 import (
 	"fmt"
-	fsutil "gmc/filestore/util"
 	"mime"
 	"os"
 	"path/filepath"
+
+	fsutil "gmc/filestore/util"
 )
 
 type Dir struct {

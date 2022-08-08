@@ -9,7 +9,7 @@ import (
 	"strings"
 )
 
-func (srv *Server) ServeWellPoints(w http.ResponseWriter, r *http.Request) {
+func (srv *Server) ServeWellsPointsJSON(w http.ResponseWriter, r *http.Request) {
 	pts, err := srv.DB.GetWellPoints()
 	if err != nil {
 		http.Error(

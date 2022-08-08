@@ -2,12 +2,13 @@ package web
 
 import (
 	"context"
+	"net"
+	"net/http"
+
 	"gmc/auth"
 	"gmc/config"
 	"gmc/db"
 	"gmc/filestore"
-	"net"
-	"net/http"
 )
 
 type Server struct {

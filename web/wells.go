@@ -3,9 +3,10 @@ package web
 import (
 	"bytes"
 	"fmt"
-	"gmc/assets"
 	"html/template"
 	"net/http"
+
+	"gmc/assets"
 )
 
 func (srv *Server) ServeWells(w http.ResponseWriter, r *http.Request) {
@@ -22,14 +23,14 @@ func (srv *Server) ServeWells(w http.ResponseWriter, r *http.Request) {
 		"title":   "Wells Page",
 		"content": template.HTML(buf.String()),
 		"stylesheets": []string{
-			"ol/ol.css", "ol/ol-layerswitcher.min.css",
-			"css/wells_page.css",
+			"../ol/ol.css", "../ol/ol-layerswitcher.min.css",
+			"../css/wells_page.css",
 		},
 		"scripts": []string{
-			"ol/ol.js", "ol/ol-layerswitcher.min.js",
-			"js/mustache.js", "js/wells.js",
+			"../ol/ol.js", "../ol/ol-layerswitcher.min.js",
+			"../js/mustache.js", "../js/wells.js",
 		},
-		"redirect": fmt.Sprint("wells"),
+		"redirect": "wells/",
 	}
 
 	tbuf := bytes.Buffer{}

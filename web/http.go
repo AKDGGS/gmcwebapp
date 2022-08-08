@@ -2,10 +2,11 @@ package web
 
 import (
 	"fmt"
-	"gmc/assets"
 	"net/http"
 	"strconv"
 	"strings"
+
+	"gmc/assets"
 )
 
 func (srv *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
@@ -87,22 +88,22 @@ func (srv *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 		srv.ServeQARun(id, w, r)
 		return
 
-	case "wells":
+	case "wells/":
 		srv.ServeWells(w, r)
 		return
 
-	case "well_points.json":
-		srv.ServeWellPoints(w, r)
+	case "wells/points.json":
+		srv.ServeWellsPointsJSON(w, r)
 		return
 
-	case "well.json":
+	case "wells/detail.json":
 		q := r.URL.Query()
 		id, err := strconv.Atoi(q.Get("id"))
 		if err != nil {
 			http.Error(w, "Invalid Well ID", http.StatusBadRequest)
 			return
 		}
-		srv.ServeWellJSON(id, w, r)
+		srv.ServeWellsDetailJSON(id, w, r)
 		return
 	}
 

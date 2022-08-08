@@ -3,12 +3,13 @@ package web
 import (
 	"encoding/json"
 	"fmt"
-	dbf "gmc/db/flag"
 	"net/http"
 	"time"
+
+	dbf "gmc/db/flag"
 )
 
-func (srv *Server) ServeWellJSON(id int, w http.ResponseWriter, r *http.Request) {
+func (srv *Server) ServeWellsDetailJSON(id int, w http.ResponseWriter, r *http.Request) {
 	user, err := srv.Auths.CheckRequest(w, r)
 	if err != nil {
 		http.Error(

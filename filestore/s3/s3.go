@@ -3,10 +3,12 @@ package s3
 import (
 	"context"
 	"fmt"
+	"os"
+
+	fsutil "gmc/filestore/util"
+
 	"github.com/minio/minio-go/v7"
 	"github.com/minio/minio-go/v7/pkg/credentials"
-	fsutil "gmc/filestore/util"
-	"os"
 )
 
 type S3 struct {
