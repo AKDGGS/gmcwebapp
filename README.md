@@ -12,11 +12,8 @@ Currently only PostgreSQL (v12+) is a supported database. Support for
 additional databases can be added by implementing `gmc/db/DB`.
 
 #### File Store
-Both S3 and Directory-based file stores are supported. It is highly recommended
-that S3 be used in production environments, as it offers a higher degree of
-security and built-in support for ETags. Directory-based file stores are
-intended for development and testing. Support for additional file stores can be
-added by implementing `gmc/filestore/FileStore`.
+Both S3 and Directory-based file stores are supported. Support for additional
+file stores can be added by implementing `gmc/filestore/FileStore`.
 
 #### Authentication
 Two authentication schemes are supported, file and always. The file

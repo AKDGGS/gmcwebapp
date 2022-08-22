@@ -1,7 +1,9 @@
 package dir
 
 import (
+	"encoding/base64"
 	"fmt"
+	"math/big"
 	"mime"
 	"os"
 	"path/filepath"
@@ -43,13 +45,19 @@ func (d *Dir) GetFile(name string) (*fsutil.File, error) {
 		mt = "application/octet-stream"
 	}
 
+	md_b := big.NewInt(stat.ModTime().UnixMicro()).Bytes()
+	sz_b := big.NewInt(stat.Size()).Bytes()
+
 	return &fsutil.File{
 		Name:         stat.Name(),
-		ETag:         "",
 		Size:         stat.Size(),
 		LastModified: stat.ModTime(),
 		ContentType:  mt,
 		Content:      file,
+		ETag: fmt.Sprintf("%s-%s",
+			base64.RawStdEncoding.EncodeToString(md_b),
+			base64.RawStdEncoding.EncodeToString(sz_b),
+		),
 	}, nil
 }
 
