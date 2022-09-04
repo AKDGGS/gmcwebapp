@@ -1,26 +1,24 @@
+.ol-mouse-position, .layer-switcher {
+	font-family: 'Open Sans','Helvetica Neue',Helvetica,Arial,sans-serif;
+	font-size: 14px;
+}
 .ol-mouse-position:empty { display: none; }
 .ol-mouse-position {
 	bottom: 35px; left: 8px;
 	top: unset; right: unset;
 	padding: 2px 8px;
-	background-color: #ffffff80;
+	background-color: #fff8;
 	position: absolute;
-	font-size: 14px;
-	font-family: 'Open Sans','Helvetica Neue',Helvetica,Arial,sans-serif;
 }
-.layer-switcher {
-	top: unset; bottom: 8px; right: 8px;
-	font-family: 'Open Sans','Helvetica Neue',Helvetica,Arial,sans-serif;
-	font-size: 14px;
-}
-.layer-switcher button { background-color: #ffffff80; }
+.layer-switcher { top: unset; bottom: 8px; right: 8px; }
+.layer-switcher button { background-color: #fff8; }
 .layer-switcher ul { margin: 8px; padding: 0; }
 .layer-switcher li { margin: 0; padding: 0; }
 .layer-switcher li label { margin: 0; padding: 0 !important; }
 .layer-switcher li input {
 	position: relative;
 	left: auto;
-	margin: 0; margin-right: 4px;
+	margin: 0 4px 0 0;
 	padding: 0;
 }
 .layer-switcher ul ul { margin-left: 4px; padding: 0; }
