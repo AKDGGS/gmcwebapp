@@ -55,11 +55,12 @@ func (srv *Server) ServeShotline(id int, w http.ResponseWriter, r *http.Request)
 		"content": template.HTML(buf.String()),
 		"stylesheets": []string{
 			"../ol/ol.css", "../ol/ol-layerswitcher.min.css",
-			"../css/view.css",
+			"../css/map-defaults.css", "../css/view.css",
 		},
 		"scripts": []string{
 			"../ol/ol.js", "../ol/ol-layerswitcher.min.js",
-			"../js/mustache.js", "../js/view.js",
+			"../js/mustache.js", "../js/map-defaults.js",
+			"../js/view.js",
 		},
 		"redirect": fmt.Sprintf("shotline/%d", id),
 		"user":     user,

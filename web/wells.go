@@ -24,11 +24,12 @@ func (srv *Server) ServeWells(w http.ResponseWriter, r *http.Request) {
 		"content": template.HTML(buf.String()),
 		"stylesheets": []string{
 			"../ol/ol.css", "../ol/ol-layerswitcher.min.css",
-			"../css/wells_page.css",
+			"../css/map-defaults.css", "../css/wells.css",
 		},
 		"scripts": []string{
 			"../ol/ol.js", "../ol/ol-layerswitcher.min.js",
-			"../js/mustache.js", "../js/wells.js",
+			"../js/mustache.js", "../js/map-defaults.js",
+			"../js/wells.js",
 		},
 		"redirect": "wells/",
 	}

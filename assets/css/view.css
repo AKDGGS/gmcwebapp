@@ -26,16 +26,6 @@ table { max-width: 600px; }
 #stash-dd table th { text-align: left; }
 #stash-dd table th, #stash-dd table td { border: 1px solid #bbb; padding: 4px 8px; }
 #stash-dd table tr:nth-child(odd){ background-color: #eee; }
-
-.ol-mouse-position:empty { display: none; }
-.ol-mouse-position {
-	top: 8px; right: 8px;
-	padding: 2px 8px;
-	background-color: #ffffff80;
-	position: absolute;
-	font-size: 14px;
-	font-family: 'Open Sans','Helvetica Neue',Helvetica,Arial,sans-serif;
-}
 .ol-popup { border: 2px solid #999; background-color: #fff; display: none; }
 .ol-popup-top {
 	padding: 2px 4px;
@@ -53,20 +43,3 @@ table { max-width: 600px; }
 	text-align: left;
 }
 #popup-closer { font-weight: bold; font-size: 20px; cursor: pointer; }
-.layer-switcher {
-	top: auto; bottom: 8px; right: 8px;
-	font-family: 'Open Sans','Helvetica Neue',Helvetica,Arial,sans-serif;
-	font-size: 14px;
-}
-.layer-switcher button { background-color: #ffffff80; }
-.layer-switcher ul { margin: 8px; padding: 0; }
-.layer-switcher li { margin: 0; padding: 0; }
-.layer-switcher li label { margin: 0; padding: 0 !important; }
-.layer-switcher li input {
-	position: relative;
-	left: auto;
-	margin: 0; margin-right: 4px;
-	padding: 0;
-}
-.layer-switcher ul ul { margin-left: 4px; padding: 0; }
-.layer-switcher ul ul li { margin: 4px 0; }

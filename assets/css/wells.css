@@ -98,42 +98,6 @@
 .wellList {
  	 	display: block
 }
-.layer-switcher {
- 	 	max-width: 300px;
- 	 	top: auto;
- 	 	bottom: 0.5em;
-}
-.layer-switcher button {
- 	 	background-color: transparent;
-}
-.layer-switcher ul {
- 	 	margin: 0.6em 0.4em;
-}
-.layer-switcher ul ul {
- 	 	padding-left: 0.4em;
- 	 	margin: 0.1em 0 0 0;
-}
-.layer-switcher li input {
- 	 	margin-top: 4px;
- 	 	left: 0.2em;
- 	 	height: 0.8em;
- 	 	weight: 0.8em;
-}
-.layer-switcher li label {
- 	 	padding-left: 1.8em;
- 	 	padding-right: 0.2em;
- 	 	margin-top: 1px;
- 	 	font-size: 0.8em;
-}
-.ol-mouse-position:empty { display: none; }
-.ol-mouse-position {
-	top: 8px; right: 8px;
-	padding: 2px 8px;
-	background-color: #ffffff80;
-	position: absolute;
-	font-size: 14px;
-	font-family: 'Open Sans','Helvetica Neue',Helvetica,Arial,sans-serif;
-}
 @media (min-width: 30em) and (orientation: portrait) {
  	 	.ol-popup {
  	 	 	 	position: relative;

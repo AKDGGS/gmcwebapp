@@ -28,9 +28,11 @@ func (srv *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 		assets.ServeStatic("js/mustache-v4.2.0.js", w, r)
 		return
 
-	case "css/template.css", "css/view.css", "css/wells_page.css", "css/qa.css",
-		"js/view.js", "js/stash.js", "js/wells.js", "js/qa.js", "img/loader.gif",
-		"ol/ol-layerswitcher.min.css", "ol/ol-layerswitcher.min.js":
+	case "css/template.css", "css/map-defaults.css", "css/view.css",
+		"css/wells.css", "css/qa.css", "js/map-defaults.js",
+		"js/view.js", "js/stash.js", "js/wells.js", "js/qa.js",
+		"img/loader.gif", "ol/ol-layerswitcher.min.css",
+		"ol/ol-layerswitcher.min.js":
 		assets.ServeStatic(path, w, r)
 		return
 
