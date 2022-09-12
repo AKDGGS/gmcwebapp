@@ -3,7 +3,6 @@ package auth
 import (
 	"fmt"
 
-	"gmc/auth/always"
 	"gmc/auth/file"
 	authu "gmc/auth/util"
 	"gmc/config"
@@ -22,11 +21,6 @@ func NewAuth(cfg config.AuthConfig) (Auth, error) {
 	var auth Auth
 	var err error
 	switch cfg.Type {
-	case "always":
-		auth, err = always.New(cfg.Attrs)
-		if err != nil {
-			return nil, err
-		}
 	case "file":
 		auth, err = file.New(cfg.Attrs)
 		if err != nil {

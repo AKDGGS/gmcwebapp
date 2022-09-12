@@ -19,7 +19,6 @@ func issueCommand(cfg *config.Config, exec string, cmd string, args []string) {
 		fmt.Printf("      add new quality issue(s)\n")
 		fmt.Printf("  del <issues ...>\n")
 		fmt.Printf("      remove quality issue(s)\n")
-
 	}
 
 	if len(args) < 1 {
