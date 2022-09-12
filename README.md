@@ -1,10 +1,10 @@
 ## Configuration
-Please see `gmc.sample.yaml` for configuration examples. `gmc.yaml` is
-first searched for in the location specified at the command line with `-conf`,
-then in `/etc`, and finally in `$HOME/.config` (on Linux.) Configuration
-requires at minimum a database source and a filestore. Neither is
-checked on startup, so fillers may be used for application testing and
-development.
+Please see `gmc.sample.yaml` for configuration examples. The configuration
+file is first searched for in the location specified at the command line
+with `-conf`, then in `/etc/gmc.yaml`, and finally in `$HOME/.config/gmc.yaml`
+(on Linux.) Configuration requires at minimum a database source and a
+filestore. Neither is checked on startup, so fillers may be used for
+application testing and development.
 
 #### Database
 Currently only PostgreSQL (v12+) is a supported database. Support for
