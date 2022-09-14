@@ -1,7 +1,8 @@
-apptmpl-content {
+.apptmpl-content {
 	display: flex;
 	flex-flow: column;
 	height: 100%;
+	font-family: 'Open Sans','Helvetica Neue',Helvetica,Arial,sans-serif;
 }
 .apptmpl-content .content {
 	flex: 1 1 auto;
@@ -11,35 +12,13 @@ apptmpl-content {
 .ol-popup {
 	position: relative;
 	margin-top: 10px;
-	background-color: white;
-	box-shadow: 0 1px 4px rgba(0, 0, 0, 0.2);
+	background-color: #fff;
+	box-shadow: 0 1px 4px #00000033;
 	padding-bottom: 5px;
-	border: 1px solid #cccccc;
+	border: 1px solid #ccc;
 	bottom: 12px;
-	width: 23em;
+	width: 250px;
 	visibility: hidden;
-}
-.ol-popup-after, .ol-popup-before {
-	top: 100%;
-	border: solid transparent;
-	content: " ";
-	height: 0;
-	width: 0;
-	position: relative;
-	margin-top: 10px;
-	pointer-events: none;
-}
-.ol-popup::after {
-	border-top-color: white;
-	border-width: 10px;
-	left: 48px;
-	margin-left: -10px;
-}
-.ol-popup::before {
-	border-top-color: #cccccc;
-	border-width: 11px;
-	left: 48px;
-	margin-left: -11px;
 }
 .ol-popup-closer::after {
 	cursor: pointer;
@@ -51,32 +30,25 @@ apptmpl-content {
 	padding: 10px 5px 5px 5px;
 	max-height: 300px;
 	overflow: auto;
-	font-size: 16px;
+	font-size: 12px;
 }
-.topBar {
-	background: linear-gradient(315deg, rgba(39, 111, 147, 1) 94%, #999 94%);
+.popup-topbar {
+	background: linear-gradient(315deg, #276f93 94%, #999 94%);
 	padding: 5px;
 	display: flex;
 	align-items: center;
-	font-size: 20px;
+	font-size: 14px;
 	cursor: default;
 	visibility: hidden;
 }
-.topBar div {
-	color: white;
+.popup-topbar div {
+	color: #fff;
 	padding: 2px;
 	display: flex;
 	letter-spacing: 0.5px;
 	text-decoration: none;
-	tranisition: 0.6s;
-	-webkit-touch-callout: none;
-	-webkit-user-select: none;
-	-moz-user-select: none;
-	-ms-user-select: none;
-	-user-select: none;
-}
-.spacer {
-	width: 25%;
+	transition: 0.6s;
+	user-select: none;
 }
 .prevBtn {
 	cursor: pointer;
@@ -98,179 +70,26 @@ apptmpl-content {
 .wellList {
 	display: block
 }
-.layer-switcher {
-	max-width: 300px;
-	top: auto;
-	bottom: 0.5em;
+@media (min-width: 400px) {
+	.ol-popup {
+		width: 275px;
+	}
+	.popup-content {
+		font-size: 14px;
+	}
+	.popup-topbar {
+		font-size: 16px;
+	}
 }
-.layer-switcher button {
-	background-color: transparent;
-}
-.layer-switcher ul {
-	margin: 0.6em 0.4em;
-}
-.layer-switcher ul ul {
-	padding-left: 0.4em;
-	margin: 0.1em 0 0 0;
-}
-.layer-switcher li input {
-	margin-top: 4px;
-	left: 0.2em;
-	height: 0.8em;
-	weight: 0.8em;
-}
-.layer-switcher li label {
-	padding-left: 1.8em;
-	padding-right: 0.2em;
-	margin-top: 1px;
-	font-size: 0.8em;
-}
-.ol-mouse-position:empty { display: none; }
-.ol-mouse-position {
-	top: 8px; right: 8px;
-	padding: 2px 8px;
-	background-color: #ffffff80;
-	position: absolute;
-	font-size: 14px;
-	font-family: 'Open Sans','Helvetica Neue',Helvetica,Arial,sans-serif;
+@media (min-width: 640px) {
+	.ol-popup {
+		width: 325px;
+	}
+	.popup-content {
+		font-size: 16px;
+	}
+	.popup-topbar {
+		font-size: 18px;
+	}
 }
 
-@media (min-width: 30em) and (orientation: portrait) {
-	.ol-popup {
-		position: relative;
-		margin-top: 10px;
-		background-color: white;
-		box-shadow: 0 1px 4px rgba(0, 0, 0, 0.2);
-		padding-bottom: 5px;
-		border: 1px solid #cccccc;
-		bottom: 12px;
-		width: 23em;
-		visibility: hidden;
-	}
-	.popup-content {
-		padding: 10px 10px 10px 10px;
-		max-height: 50vh;
-		overflow: auto;
-		font-size: 16px;
-	}
-	.topBar {
-		background: linear-gradient(315deg, rgba(39, 111, 147, 1) 94%, #999 94%);
-		padding: 5px;
-		display: flex;
-		align-items: center;
-		font-size: 20px;
-		cursor: default;
-		visibility: hidden;
-	}
-}
-@media (min-width: 30em) and (orientation: landscape) {
-	.ol-popup {
-		position: relative;
-		margin-top: 10px;
-		background-color: white;
-		box-shadow: 0 1px 4px rgba(0, 0, 0, 0.2);
-		padding-bottom: 5px;
-		border: 1px solid #cccccc;
-		bottom: 12px;
-		width: 23em;
-		visibility: hidden;
-	}
-	.popup-content {
-		padding: 10px 10px 10px 10px;
-		max-height: 50vh;
-		overflow: auto;
-		font-size: 16px;
-	}
-	.topBar {
-		background: linear-gradient(315deg, rgba(39, 111, 147, 1) 94%, #999 94%);
-		padding: 5px;
-		display: flex;
-		align-items: center;
-		font-size: 20px;
-		cursor: default;
-		visibility: hidden;
-	}
-}
-@media (min-width: 50em) and (orientation: landscape) {
-	.ol-popup {
-		position: relative;
-		margin-top: 10px;
-		background-color: white;
-		box-shadow: 0 1px 4px rgba(0, 0, 0, 0.2);
-		padding-bottom: 5px;
-		border: 1px solid #cccccc;
-		bottom: 12px;
-		width: 23em;
-		visibility: hidden;
-	}
-	.popup-content {
-		padding: 10px 10px 10px 10px;
-		max-height: 50vh;
-		overflow: auto;
-		font-size: 16px;
-	}
-	.topBar {
-		background: linear-gradient(315deg, rgba(39, 111, 147, 1) 94%, #999 94%);
-		padding: 5px;
-		display: flex;
-		align-items: center;
-		font-size: 20px;
-		cursor: default;
-		visibility: hidden;
-	}
-}
-@media (min-width: 80em) and (orientation: landscape) {
-	.ol-popup {
-		position: relative;
-		margin-top: 10px;
-		background-color: white;
-		box-shadow: 0 1px 4px rgba(0, 0, 0, 0.2);
-		padding-bottom: 5px;
-		border: 1px solid #cccccc;
-		bottom: 12px;
-		width: 23em;
-		visibility: hidden;
-	}
-	.popup-content {
-		padding: 10px 10px 10px 10px;
-		max-height: 50vh;
-		overflow: auto;
-		font-size: 16px;
-	}
-	.topBar {
-		background: linear-gradient(315deg, rgba(39, 111, 147, 1) 94%, #999 94%);
-		padding: 5px;
-		display: flex;
-		align-items: center;
-		font-size: 20px;
-		cursor: default;
-		visibility: hidden;
-	}
-}
-@media (min-width: 60em) and (orientation: portrait) {
-	.ol-popup {
-		position: relative;
-		background-color: white;
-		box-shadow: 0 1px 4px rgba(0, 0, 0, 0.2);
-		padding-bottom: 5px;
-		border: 1px solid #cccccc;
-		bottom: 12px;
-		width: 23em;
-		visibility: hidden;
-	}
-	.popup-content {
-		padding: 10px 10px 10px 10px;
-		max-height: 50vh;
-		overflow: auto;
-		font-size: 16px;
-	}
-	.topBar {
-		background: linear-gradient(315deg, rgba(39, 111, 147, 1) 94%, #999 94%);
-		padding: 5px;
-		display: flex;
-		align-items: center;
-		font-size: 20px;
-		cursor: default;
-		visibility: hidden;
-	}
-}

@@ -125,7 +125,7 @@ let map = new ol.Map({
 //Allows the overlay to be visible.
 //The overlay needs to be hidden by default to prevent it being
 //displayed at startup
-document.getElementById('topBar').style.visibility = 'visible';
+document.getElementById('popup-topbar').style.visibility = 'visible';
 popup.style.visibility = 'visible';
 
 //Pagination Code
@@ -180,7 +180,7 @@ function displayOverlayContents(e) {
 				data["well_id"] = well_id;
 				let t = mustache.render(document.getElementById("tmpl-popup").innerHTML, data, {}, ['[[', ']]']);
 				document.getElementById("popup-content").innerHTML = t;
-				document.getElementById('topBar').style.visibility = 'visible';
+				document.getElementById('popup-topbar').style.visibility = 'visible';
 				popup.style.visibility = 'visible';
 				if (e instanceof ol.events.Event) {
 					overlay.setPosition(e.coordinate);
@@ -217,7 +217,7 @@ closer.addEventListener("click", function() {
 
 map.on('click', function(e) {
 	popup.style.visibility = "hidden";
-	document.getElementById('topBar').style.visibility = 'hidden';
+	document.getElementById('popup-topbar').style.visibility = 'hidden';
 	fts = map.getFeaturesAtPixel(e.pixel);
 	if (fts.length < 1) {
 		overlay.setPosition(undefined);
