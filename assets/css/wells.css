@@ -36,6 +36,7 @@
 	background: linear-gradient(315deg, #276f93 94%, #999 94%);
 	padding: 5px;
 	display: flex;
+	justify-content: space-around;
 	align-items: center;
 	font-size: 14px;
 	cursor: default;
@@ -50,22 +51,11 @@
 	transition: 0.6s;
 	user-select: none;
 }
-.prevBtn {
+.prev-btn {
 	cursor: pointer;
-	width: 50%;
-	display: flex;
-	justify-content: center;
 }
-.pageNumber {
-	width: 50%;
-	display: flex;
-	justify-content: center;
-}
-.nextBtn {
+.next-btn {
 	cursor: pointer;
-	width: 50%;
-	display: flex;
-	justify-content: center;
 }
 .wellList {
 	display: block

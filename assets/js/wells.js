@@ -1,8 +1,8 @@
 const popup = document.getElementById('popup');
 const content = document.getElementById('popup-content');
 const closer = document.getElementById('popup-closure');
-const prevBtn = document.getElementById('prevBtn');
-const nextBtn = document.getElementById('nextBtn');
+const prevBtn = document.getElementById('prev-btn');
+const nextBtn = document.getElementById('next-btn');
 let template = document.getElementById('tmpl-popup');
 
 const overlay = new ol.Overlay({
@@ -139,14 +139,16 @@ function displayOverlayContents(e) {
 		running = true;
 		if (e instanceof MouseEvent) {
 			switch (e.target.id) {
-				case "prevBtn":
-					if (!(currentPage < 0)) {
+				case "prev-btn":
+					if (currentPage > 0) {
 						currentPage--;
+						console.log("prev btn: " + currentPage);
 					}
 					break;
-				case "nextBtn":
-					if (!(currentPage > fts.length - 1)) {
+				case "next-btn":
+					if (currentPage < fts.length - 1) {
 						currentPage++;
+						console.log("Next btn: " + currentPage);
 					}
 					break;
 			}
@@ -157,53 +159,57 @@ function displayOverlayContents(e) {
 		} else {
 			currentPage = 0;
 		}
-		let well_id = fts[currentPage].well_id;
-		fetch('detail.json?id=' + well_id)
-			.then(response => {
-				if (!response.ok) throw new Error(response.status + " " +
-					response.statusText);
-				return response.json();
-			})
-			.then(data => {
-				for (let i = 0; i < data.keywords.length; i++) {
-					let arr = data.keywords[i].keywords.toString().split(",");
-					let qParams = "";
-					for (let j = 0; j < arr.length; j++) {
-						qParams = qParams.concat("&keyword=" + arr[j]);
+		
+		console.log("Current Page: " + currentPage);
+		if (typeof fts[currentPage] !== "undefined") {
+			let well_id = fts[currentPage].well_id;
+			fetch('detail.json?id=' + well_id)
+				.then(response => {
+					if (!response.ok) throw new Error(response.status + " " +
+						response.statusText);
+					return response.json();
+				})
+				.then(data => {
+					for (let i = 0; i < data.keywords.length; i++) {
+						let arr = data.keywords[i].keywords.toString().split(",");
+						let qParams = "";
+						for (let j = 0; j < arr.length; j++) {
+							qParams = qParams.concat("&keyword=" + arr[j]);
+						}
+						data.keywords[i].keywords = data.keywords[i]
+							.keywords.toString().replaceAll(",", ", ");
+						data.keywords[i]["keywordsURL"] = encodeURI("search#q=well_id:" +
+							well_id + qParams);
 					}
-					data.keywords[i].keywords = data.keywords[i]
-						.keywords.toString().replaceAll(",", ", ");
-					data.keywords[i]["keywordsURL"] = encodeURI("search#q=well_id:" +
-						well_id + qParams);
-				}
-				data["nameURL"] = encodeURI("well/" + well_id);
-				data["well_id"] = well_id;
-				let t = mustache.render(document.getElementById("tmpl-popup").innerHTML, data, {}, ['[[', ']]']);
-				document.getElementById("popup-content").innerHTML = t;
-				document.getElementById('popup-topbar').style.visibility = 'visible';
-				popup.style.visibility = 'visible';
-				if (e instanceof ol.events.Event) {
-					overlay.setPosition(e.coordinate);
-				}
-				pageNumber.innerHTML = (currentPage + 1) + " of " + fts.length;
-				if (currentPage > 0) {
-					prevBtn.style.visibility = 'visible';
-				} else {
-					prevBtn.style.visibility = 'hidden';
-				}
-				if (currentPage < (fts.length - 1)) {
-					nextBtn.style.visibility = 'visible';
-				} else {
-					nextBtn.style.visibility = 'hidden';
-				}
-				prevBtn.style.color = "#ffffff";
-				nextBtn.style.color = "#ffffff";
-				running = false;
-			})
-			.catch(error => {
-				handleError(error);
-				running = false;
-			});
+					data["nameURL"] = encodeURI("well/" + well_id);
+					data["well_id"] = well_id;
+					let t = mustache.render(document.getElementById("tmpl-popup").innerHTML, data, {}, ['[[', ']]']);
+					document.getElementById("popup-content").innerHTML = t;
+					document.getElementById('popup-topbar').style.visibility = 'visible';
+					popup.style.visibility = 'visible';
+					if (e instanceof ol.events.Event) {
+						overlay.setPosition(e.coordinate);
+					}
+					pageNumber.innerHTML = (currentPage + 1) + " of " + fts.length;
+					if (currentPage > 0) {
+						prevBtn.style.visibility = 'visible';
+					} else {
+						prevBtn.style.visibility = 'hidden';
+					}
+					if (currentPage < (fts.length - 1)) {
+						nextBtn.style.visibility = 'visible';
+					} else {
+						nextBtn.style.visibility = 'hidden';
+					}
+					prevBtn.style.color = "#ffffff";
+					nextBtn.style.color = "#ffffff";
+					running = false;
+				})
+				.catch(error => {
+					handleError(error);
+					running = false;
+				});
+		}
 	}
 }
 //Popup
