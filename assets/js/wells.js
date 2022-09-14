@@ -19,10 +19,10 @@ let markerStyle = new ol.style.Style({
 	image: new ol.style.Circle({
 		radius: width * 2,
 		fill: new ol.style.Fill({
-			color: 'rgba(44, 126,167, 0.25)'
+			color: '#2C7EA740'
 		}),
 		stroke: new ol.style.Stroke({
-			color: 'rgba(44, 126,167, 255)',
+			color: '#2C7EA7FF',
 			width: width / 1.5
 		})
 	}),
@@ -32,12 +32,11 @@ let markerStyle = new ol.style.Style({
 let labelStyle = new ol.style.Style({
 	text: new ol.style.Text({
 		offsetY: -9,
-		font: '13px Calibri, sans-serif',
 		fill: new ol.style.Fill({
-			color: 'rgba(0,0,0,255)'
+			color: '#000000FF'
 		}),
 		backgroundFill: new ol.style.Fill({
-			color: 'rgba(255, 255, 255, 0.1)'
+			color: '#FFFFFF1A'
 		})
 	})
 });
@@ -142,25 +141,21 @@ function displayOverlayContents(e) {
 				case "prev-btn":
 					if (currentPage > 0) {
 						currentPage--;
-						console.log("prev btn: " + currentPage);
 					}
 					break;
 				case "next-btn":
 					if (currentPage < fts.length - 1) {
 						currentPage++;
-						console.log("Next btn: " + currentPage);
 					}
 					break;
 			}
 			prevBtn.disable = true;
-			prevBtn.style.color = "rgba(134, 134, 134, 0.75)";
+			prevBtn.style.color = '#868686BF';
 			nextBtn.disable = true;
-			nextBtn.style.color = "rgba(134,134,134, 0.75)";
+			nextBtn.style.color = '#868686BF';
 		} else {
 			currentPage = 0;
 		}
-		
-		console.log("Current Page: " + currentPage);
 		if (typeof fts[currentPage] !== "undefined") {
 			let well_id = fts[currentPage].well_id;
 			fetch('detail.json?id=' + well_id)
@@ -201,8 +196,8 @@ function displayOverlayContents(e) {
 					} else {
 						nextBtn.style.visibility = 'hidden';
 					}
-					prevBtn.style.color = "#ffffff";
-					nextBtn.style.color = "#ffffff";
+					prevBtn.style.color = "#fff";
+					nextBtn.style.color = "#fff";
 					running = false;
 				})
 				.catch(error => {
