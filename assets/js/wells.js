@@ -97,11 +97,7 @@ let map = new ol.Map({
 		}),
 	],
 	overlays: [ overlay ],
-	view: new ol.View({
-		center: ol.proj.fromLonLat([ -147.77, 64.83 ]),
-		zoom: 3,
-		maxZoom: 19
-	}),
+	view: MAP_DEFAULTS.View,
 	controls: ol.control.defaults({ attribution: false }).extend([
 		new ol.control.ScaleLine({ units: "us" }),
 		new ol.control.LayerSwitcher({
