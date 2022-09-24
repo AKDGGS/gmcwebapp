@@ -102,7 +102,7 @@ func (pg *Postgres) GetInventory(id int, flags int) (map[string]interface{}, err
 	}
 
 	if (flags & dbf.PUBLICATION) != 0 {
-		publications, err := pg.queryRows("pg/publication_byinventoryid.sql", id)
+		publications, err := pg.queryRows("pg/publication/by_inventory_id.sql", id)
 		if err != nil {
 			return nil, err
 		}
@@ -166,7 +166,7 @@ func (pg *Postgres) GetInventory(id int, flags int) (map[string]interface{}, err
 	}
 
 	if (flags & dbf.QUALITY) != 0 {
-		qualities, err := pg.queryRows("pg/quality_byinventoryid.sql", id)
+		qualities, err := pg.queryRows("pg/quality/by_inventory_id.sql", id)
 		if err != nil {
 			return nil, err
 		}
@@ -197,7 +197,7 @@ func (pg *Postgres) GetInventory(id int, flags int) (map[string]interface{}, err
 	}
 
 	if (flags & dbf.TRACKING) != 0 {
-		containerlog, err := pg.queryRows("pg/containerlog_byinventoryid.sql", id)
+		containerlog, err := pg.queryRows("pg/container_log/by_inventory_id.sql", id)
 		if err != nil {
 			return nil, err
 		}

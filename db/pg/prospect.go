@@ -53,7 +53,7 @@ func (pg *Postgres) GetProspect(id int, flags int) (map[string]interface{}, erro
 	}
 
 	if (flags & dbf.MINING_DISTRICTS) != 0 {
-		mds, err := pg.queryRows("pg/miningdistrict_byprospectid.sql", id)
+		mds, err := pg.queryRows("pg/mining_district/by_prospect_id.sql", id)
 		if err != nil {
 			return nil, err
 		}

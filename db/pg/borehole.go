@@ -88,7 +88,7 @@ func (pg *Postgres) GetBorehole(id int, flags int) (map[string]interface{}, erro
 	}
 
 	if (flags & dbf.MINING_DISTRICTS) != 0 {
-		mds, err := pg.queryRows("pg/miningdistrict_byboreholeid.sql", id)
+		mds, err := pg.queryRows("pg/mining_district/by_borehole_id.sql", id)
 		if err != nil {
 			return nil, err
 		}
