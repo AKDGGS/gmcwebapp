@@ -98,7 +98,7 @@ let map = new ol.Map({
 	],
 	overlays: [ overlay ],
 	view: MAP_DEFAULTS.View,
-	controls: ol.control.defaults({ attribution: false }).extend([
+	controls: ol.control.defaults.defaults({ attribution: false }).extend([
 		new ol.control.ScaleLine({ units: "us" }),
 		new ol.control.LayerSwitcher({
 			tipLabel: 'Legend',
@@ -110,7 +110,7 @@ let map = new ol.Map({
 			coordinateFormat: ol.coordinate.createStringXY(3)
 		})
 	]),
-	interactions: ol.interaction.defaults({ mouseWheelZoom: false }).extend([
+	interactions: ol.interaction.defaults.defaults({ mouseWheelZoom: false }).extend([
 		new ol.interaction.MouseWheelZoom({
 			condition: ol.events.condition.platformModifierKeyOnly
 		})

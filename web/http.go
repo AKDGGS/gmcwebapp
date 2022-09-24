@@ -17,11 +17,11 @@ func (srv *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 		return
 
 	case "ol/ol.css":
-		assets.ServeStatic("ol/ol-v6.9.0.css", w, r)
+		assets.ServeStatic("ol/ol-v7.1.0.css", w, r)
 		return
 
 	case "ol/ol.js":
-		assets.ServeStatic("ol/ol-v6.9.0.js", w, r)
+		assets.ServeStatic("ol/ol-v7.1.0.js", w, r)
 		return
 
 	case "js/mustache.js":
