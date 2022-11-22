@@ -2,27 +2,27 @@
 				<legend>Outcrop Detail</legend>
 				<table class="tb-fields">
 					<tbody>
-						{{- if .name}}
+						{{- if .Name}}
 						<tr>
 							<th>Outcrop Name</th>
-							<td>{{.name}}</td>
+							<td>{{.Name}}</td>
 						</tr>
 						{{- end}}
-						{{- if .outcrop_number}}
+						{{- if .OutcropNumber}}
 						<tr>
 							<th>Outcrop Number</th>
-							<td>{{.outcrop_number}}</td>
+							<td>{{.OutcropNumber}}</td>
 						</tr>
 						{{- end}}
-						{{- if .year}}
+						{{- if .Year}}
 						<tr>
 							<th>Outcrop Year</th>
-							<td>{{.year}}</td>
+							<td>{{.Year}}</td>
 						</tr>
 						{{- end}}
 						<tr>
 							<th>Onshore</th>
-							<td>{{- if .is_public}}Yes{{- else}}No{{- end}}</td>
+							<td>{{- if .IsOnshore}}Yes{{- else}}No{{- end}}</td>
 						</tr>
 						{{- if .geojson}}
 

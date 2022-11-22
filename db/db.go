@@ -17,7 +17,7 @@ type DB interface {
 	GetBorehole(id int, flags int) (map[string]interface{}, error)
 
 	// Fetches the complete details for an Outcrop
-	GetOutcrop(id int, flags int) (map[string]interface{}, error)
+	GetOutcrop(id int, flags int) (*model.Outcrop, error)
 
 	// Fetches the complete details for a Well
 	GetWell(id int, flags int) (map[string]interface{}, error)

@@ -1,8 +1,8 @@
 package model
 
 type Outcrop struct {
+	ID            int32                  `json:"outcrop_id"`
 	Name          string                 `json:"name"`
-	ID            int32                  `json:"id"`
 	IsOnshore     bool                   `json:"is_onshore"`
 	OutcropNumber string                 `json:"outcrop_number"`
 	Year          int16                  `json:"year"`

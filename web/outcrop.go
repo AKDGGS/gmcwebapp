@@ -25,7 +25,7 @@ func (srv *Server) ServeOutcrop(id int, w http.ResponseWriter, r *http.Request) 
 		flags = dbf.ALL_NOPRIVATE
 	}
 
-	outcrop, err := srv.DB.GetOutcrop(id, flags)
+	o, err := srv.DB.GetOutcrop(id, flags)
 	if err != nil {
 		http.Error(
 			w, fmt.Sprintf("Query error: %s", err.Error()),
@@ -34,12 +34,12 @@ func (srv *Server) ServeOutcrop(id int, w http.ResponseWriter, r *http.Request) 
 		return
 	}
 	// If no details were returned, throw a 404
-	if outcrop == nil {
+	if o == nil {
 		http.Error(w, "Outcrop not found", http.StatusNotFound)
 		return
 	}
-
-	outcrop["_user"] = user
+	outcrop := *o
+	// outcrop["_user"] = user
 
 	buf := bytes.Buffer{}
 	if err := assets.ExecuteTemplate("tmpl/outcrop.html", &buf, outcrop); err != nil {
