@@ -4,10 +4,13 @@ import (
 	"context"
 	"fmt"
 	"net/url"
+	"reflect"
+	"strings"
 
 	"gmc/assets"
 	"gmc/db/model"
 
+	"github.com/jackc/pgx/v4"
 	"github.com/jackc/pgx/v4/pgxpool"
 )
 
@@ -179,4 +182,58 @@ func (pg *Postgres) enumAddValues(enum string, values ...string) error {
 		return err
 	}
 	return nil
+}
+
+func rowToStruct(r pgx.Rows, a interface{}) int {
+	rv := reflect.ValueOf(a)
+	if rv.Kind() == reflect.Ptr {
+		rv = rv.Elem()
+	}
+
+	switch rv.Kind() {
+	case reflect.Slice:
+		var elem reflect.Value
+		typ := rv.Type().Elem()
+		if typ.Kind() == reflect.Ptr {
+			elem = reflect.New(typ.Elem())
+		}
+		if typ.Kind() == reflect.Struct {
+			elem = reflect.New(typ).Elem()
+		}
+
+		rowCount := 0
+		for {
+			if rCount := rowToStruct(r, elem.Addr().Interface()); rCount > 0 {
+				rowCount = rowCount + rCount
+				rv.Set(reflect.Append(rv, elem))
+			} else {
+				break
+			}
+		}
+		return rowCount
+	case reflect.Struct:
+		if r.Next() {
+			fieldDescriptions := r.FieldDescriptions()
+			var columns []string
+			for _, col := range fieldDescriptions {
+				columns = append(columns, string(col.Name))
+			}
+			columnValues, _ := r.Values()
+			for j, val := range columnValues {
+				for i := 0; i < rv.NumField(); i++ {
+					if reflect.TypeOf(val) != rv.Field(i).Type() {
+						continue
+					}
+					if !strings.EqualFold(columns[j], rv.Type().Field(i).Name) {
+						continue
+					}
+					if rv.CanSet() {
+						rv.FieldByName(rv.Type().Field(i).Name).Set(reflect.ValueOf(val))
+					}
+				}
+			}
+			return 1
+		}
+	}
+	return 0
 }
