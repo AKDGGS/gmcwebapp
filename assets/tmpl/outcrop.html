@@ -1,3 +1,4 @@
+{{with .outcrop }}
 			<fieldset class="fs-detail">
 				<legend>Outcrop Detail</legend>
 				<table class="tb-fields">
@@ -8,10 +9,10 @@
 							<td>{{.Name}}</td>
 						</tr>
 						{{- end}}
-						{{- if .OutcropNumber}}
+						{{- if .Number}}
 						<tr>
 							<th>Outcrop Number</th>
-							<td>{{.OutcropNumber}}</td>
+							<td>{{.Number}}</td>
 						</tr>
 						{{- end}}
 						{{- if .Year}}
@@ -24,9 +25,8 @@
 							<th>Onshore</th>
 							<td>{{- if .IsOnshore}}Yes{{- else}}No{{- end}}</td>
 						</tr>
-						{{- if .geojson}}
-
-							{{- range $i, $f := .geojson.features}}{{- if ne $i 0}}{{- end}}{{- if (eq $f.geometry.type "Point" )}}
+						{{- if .GeoJSON}}
+							{{- range $i, $f := .GeoJSON.features}}{{- if ne $i 0}}{{- end}}{{- if (eq $f.geometry.type "Point" )}}
 							<tr>
 								<th>Lon/Lat</th>
 								<td>{{$f.geometry.coordinates}}</td>
@@ -34,16 +34,16 @@
 							{{- end}}
 						{{- end}}
 						{{- end}}
-						{{- if .quadrangles}}
+						{{- if .Quadrangle}}
 						<tr>
 							<th>Quadrangle</th>
-							<td>{{range $i, $qd := .quadrangles}}{{if ne $i 0}}, {{- end}}<a href="../search#quadrangle_id={{$qd.quadrangle_id}}">{{$qd.name}}</a>{{- end}}</td>
+							<td>{{range $i, $qd := .Quadrangle}}{{if ne $i 0}}, {{- end}}<a href="../search#quadrangle_id={{$qd.ID}}">{{$qd.Name}}</a>{{- end}}</td>
 						</tr>
 						{{- end}}
 					</tbody>
 				</table>
 			</fieldset>
-			{{- if .geojson}}
+			{{- if .GeoJSON}}
 
 			<fieldset class="fs-map">
 				<legend>Geospatial</legend>
@@ -56,12 +56,12 @@
 					<div id="popup-content" class="ol-popup-content"></div>
 				</div>
 				<script>
-					var geojson = {{ rawjs .geojson }};
+					var geojson = {{ rawjs .GeoJSON }};
 				</script>
 			</fieldset>
 			<div class="flex-break"></div>
 			{{- end}}
-			{{- if .keywords}}
+			{{- if .Keywords}}
 
 			<fieldset>
 				<legend>Inventory</legend>
@@ -73,9 +73,9 @@
 						</tr>
 					</thead>
 					<tbody>
-						{{- range .keywords}}
+						{{- range .Keywords}}
 						<tr>
-							<td><a href="../search#outcrop_id={{$.outcrop_id}}{{range .keywords}}&keyword={{.}}{{- end}}">{{range $i, $kw := .keywords}}{{if ne $i 0}} &gt; {{end}}{{$kw}}{{- end}}</a></td>
+							<td><a href="../search#outcrop_id={{$.ID}}{{range .keywords}}&keyword={{.}}{{- end}}">{{range $i, $kw := .keywords}}{{if ne $i 0}} &gt; {{end}}{{$kw}}{{- end}}</a></td>
 							<td>{{.count}}</td>
 						</tr>
 						{{- end}}
@@ -83,16 +83,16 @@
 				</table>
 			</fieldset>
 			{{- end}}
-			{{- if .files}}
+			{{- if .File}}
 
-			<fieldset class="files">
+			<fieldset class="File">
 				<legend>Files</legend>
-				{{- range .files}}
-				<div><a href="../file/{{.file_id}}/{{.file_name}}">{{.file_name}}</a> ({{.file_size}})</div>
+				{{- range .File}}
+				<div><a href="../File/{{.ID}}/{{.Name}}">{{.Name}}</a> ({{.Size}})</div>
 				{{- end}}
 			</fieldset>
 			{{- end}}
-			{{- if .organizations}}
+			{{- if .Organization}}
 
 			<fieldset>
 				<legend>Organizations</legend>
@@ -104,26 +104,26 @@
 						</tr>
 					</thead>
 					<tbody>
-						{{- range .organizations}}
+						{{- range .Organization}}
 						<tr>
-							<td>{{.name}}</td>
-							<td>{{.organization_type}}</td>
+							<td>{{.Name}}</td>
+							<td>{{.Type}}</td>
 						</tr>
 					</tbody>
 					{{- end}}
 				</table>
 			</fieldset>
 			{{- end}}
-			{{- if .urls}}
+			{{- if .URL}}
 
 			<fieldset>
 				<legend>URLs</legend>
-				{{- range .urls}}
-				<div><a href="{{.url}}">{{.description}}</a> ({{.url_type}})</div>
+				{{- range .URL}}
+				<div><a href="{{.URL}}">{{.Description}}</a> ({{.Type}})</div>
 				{{- end}}
 			</fieldset>
 			{{- end}}
-			{{- if and ._user .notes}}
+			{{- if and $.user .Note}}
 
 			<fieldset>
 				<legend>Notes</legend>
@@ -137,15 +137,16 @@
 						</tr>
 					</thead>
 					<tbody>
-						{{- range .notes}}
+						{{- range .Note}}
 						<tr>
-							<td>{{formattime "1/2/2006" .note_date}}</td>
-							<td>{{.username}}</td>
-							<td>{{- if .is_public}} Yes {{- else -}}No{{- end}} </td>
-							<td>{{.note}}</td>
+							<td>{{formattime "1/2/2006" .Date}}</td>
+							<td>{{.Username}}</td>
+							<td>{{- if .IsPublic}} Yes {{- else -}}No{{- end}} </td>
+							<td>{{.Note}}</td>
 						</tr>
 						{{- end}}
 					</tbody>
 				</table>
 			</fieldset>
 			{{- end}}
+{{end}}

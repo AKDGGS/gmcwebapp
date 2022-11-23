@@ -1,4 +1,4 @@
-SELECT DISTINCT q.quadrangle_id, q.name
+SELECT DISTINCT q.quadrangle_id AS ID, q.name AS Name
 FROM outcrop AS o
 JOIN outcrop_point AS op
 	ON op.outcrop_id = o.outcrop_id

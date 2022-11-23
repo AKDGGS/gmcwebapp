@@ -1,4 +1,4 @@
-SELECT o.organization_id, o.name, ot.name AS organization_type
+SELECT o.organization_id, o.name, ot.name AS Type
 FROM organization AS o
 JOIN organization_type AS ot
 	ON o.organization_type_id = ot.organization_type_id

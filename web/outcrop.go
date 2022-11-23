@@ -38,11 +38,14 @@ func (srv *Server) ServeOutcrop(id int, w http.ResponseWriter, r *http.Request) 
 		http.Error(w, "Outcrop not found", http.StatusNotFound)
 		return
 	}
-	outcrop := *o
-	// outcrop["_user"] = user
+
+	outcrop_params := map[string]interface{}{
+		"outcrop": o,
+		"user":    user,
+	}
 
 	buf := bytes.Buffer{}
-	if err := assets.ExecuteTemplate("tmpl/outcrop.html", &buf, outcrop); err != nil {
+	if err := assets.ExecuteTemplate("tmpl/outcrop.html", &buf, outcrop_params); err != nil {
 		http.Error(
 			w, fmt.Sprintf("Parse error: %s", err.Error()),
 			http.StatusInternalServerError,

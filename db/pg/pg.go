@@ -186,10 +186,10 @@ func (pg *Postgres) enumAddValues(enum string, values ...string) error {
 
 func rowToStruct(r pgx.Rows, a interface{}) int {
 	rv := reflect.ValueOf(a)
+
 	if rv.Kind() == reflect.Ptr {
 		rv = rv.Elem()
 	}
-
 	switch rv.Kind() {
 	case reflect.Slice:
 		var elem reflect.Value
@@ -200,7 +200,6 @@ func rowToStruct(r pgx.Rows, a interface{}) int {
 		if typ.Kind() == reflect.Struct {
 			elem = reflect.New(typ).Elem()
 		}
-
 		rowCount := 0
 		for {
 			if rCount := rowToStruct(r, elem.Addr().Interface()); rCount > 0 {
@@ -228,6 +227,7 @@ func rowToStruct(r pgx.Rows, a interface{}) int {
 						continue
 					}
 					if rv.CanSet() {
+						// fmt.Println(rv.Field(i).Type(), rv.Type().Field(i).Name, reflect.ValueOf(val))
 						rv.FieldByName(rv.Type().Field(i).Name).Set(reflect.ValueOf(val))
 					}
 				}
