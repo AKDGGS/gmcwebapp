@@ -1,10 +1,10 @@
-SELECT ARRAY_TO_JSON(keywords) AS keywords,
-	COUNT(q2.inventory_id) AS count
+SELECT ARRAY_TO_JSON(keywords) AS "Keywords",
+	COUNT(q2.inventory_id) AS "Count"
 FROM (
 	SELECT q1.inventory_id,
-		ARRAY_AGG(q1.keyword ORDER BY q1.keyword) AS keywords
+		ARRAY_AGG(q1.keyword ORDER BY q1.keyword) AS Keywords
 	FROM (
-		SELECT i.inventory_id, UNNEST(i.keywords) AS keyword
+		SELECT i.inventory_id, UNNEST(i.keywords) AS Keyword
 		FROM inventory_outcrop AS io
 		JOIN outcrop AS o
 			ON o.outcrop_id = io.outcrop_id
@@ -16,5 +16,5 @@ FROM (
 	) AS q1
 	GROUP BY q1.inventory_id
 ) AS q2
-GROUP BY q2.keywords
-ORDER BY q2.keywords
+GROUP BY q2.Keywords
+ORDER BY q2.Keywords

@@ -190,6 +190,7 @@ func rowToStruct(r pgx.Rows, a interface{}) int {
 	if rv.Kind() == reflect.Ptr {
 		rv = rv.Elem()
 	}
+
 	switch rv.Kind() {
 	case reflect.Slice:
 		var elem reflect.Value
@@ -227,7 +228,6 @@ func rowToStruct(r pgx.Rows, a interface{}) int {
 						continue
 					}
 					if rv.CanSet() {
-						// fmt.Println(rv.Field(i).Type(), rv.Type().Field(i).Name, reflect.ValueOf(val))
 						rv.FieldByName(rv.Type().Field(i).Name).Set(reflect.ValueOf(val))
 					}
 				}

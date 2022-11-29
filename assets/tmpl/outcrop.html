@@ -34,10 +34,10 @@
 							{{- end}}
 						{{- end}}
 						{{- end}}
-						{{- if .Quadrangle}}
+						{{- if .Quadrangles}}
 						<tr>
-							<th>Quadrangle</th>
-							<td>{{range $i, $qd := .Quadrangle}}{{if ne $i 0}}, {{- end}}<a href="../search#quadrangle_id={{$qd.ID}}">{{$qd.Name}}</a>{{- end}}</td>
+							<th>Quadrangles</th>
+							<td>{{range $i, $qd := .Quadrangles}}{{if ne $i 0}}, {{- end}}<a href="../search#quadrangle_id={{$qd.ID}}">{{$qd.Name}}</a>{{- end}}</td>
 						</tr>
 						{{- end}}
 					</tbody>
@@ -61,7 +61,7 @@
 			</fieldset>
 			<div class="flex-break"></div>
 			{{- end}}
-			{{- if .Keywords}}
+			{{- if .KeywordSummary}}
 
 			<fieldset>
 				<legend>Inventory</legend>
@@ -73,26 +73,26 @@
 						</tr>
 					</thead>
 					<tbody>
-						{{- range .Keywords}}
+						{{- range .KeywordSummary}}
 						<tr>
-							<td><a href="../search#outcrop_id={{$.ID}}{{range .keywords}}&keyword={{.}}{{- end}}">{{range $i, $kw := .keywords}}{{if ne $i 0}} &gt; {{end}}{{$kw}}{{- end}}</a></td>
-							<td>{{.count}}</td>
+							<td><a href="../search#outcrop_id={{$.ID}}{{range .Keywords}}&Keyword={{.}}{{- end}}">{{range $i, $kw := .Keywords}}{{if ne $i 0}} &gt; {{end}}{{$kw}}{{- end}}</a></td>
+							<td>{{.Count}}</td>
 						</tr>
 						{{- end}}
 					</tbody>
 				</table>
 			</fieldset>
 			{{- end}}
-			{{- if .File}}
+			{{- if .Files}}
 
 			<fieldset class="File">
 				<legend>Files</legend>
-				{{- range .File}}
+				{{- range .Files}}
 				<div><a href="../File/{{.ID}}/{{.Name}}">{{.Name}}</a> ({{.Size}})</div>
 				{{- end}}
 			</fieldset>
 			{{- end}}
-			{{- if .Organization}}
+			{{- if .Organizations}}
 
 			<fieldset>
 				<legend>Organizations</legend>
@@ -104,7 +104,7 @@
 						</tr>
 					</thead>
 					<tbody>
-						{{- range .Organization}}
+						{{- range .Organizations}}
 						<tr>
 							<td>{{.Name}}</td>
 							<td>{{.Type}}</td>
@@ -114,16 +114,16 @@
 				</table>
 			</fieldset>
 			{{- end}}
-			{{- if .URL}}
+			{{- if .URLs}}
 
 			<fieldset>
 				<legend>URLs</legend>
-				{{- range .URL}}
+				{{- range .URLs}}
 				<div><a href="{{.URL}}">{{.Description}}</a> ({{.Type}})</div>
 				{{- end}}
 			</fieldset>
 			{{- end}}
-			{{- if and $.user .Note}}
+			{{- if and $.user .Notes}}
 
 			<fieldset>
 				<legend>Notes</legend>
@@ -137,7 +137,7 @@
 						</tr>
 					</thead>
 					<tbody>
-						{{- range .Note}}
+						{{- range .Notes}}
 						<tr>
 							<td>{{formattime "1/2/2006" .Date}}</td>
 							<td>{{.Username}}</td>

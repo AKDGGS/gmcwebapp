@@ -26,22 +26,22 @@ func (pg *Postgres) GetOutcrop(id int, flags int) (*model.Outcrop, error) {
 		if err != nil {
 			return nil, err
 		}
-		r, _ := pg.pool.Query(context.Background(), q, id)
-		rowToStruct(r, &oc.File)
-	}
-	if (flags & dbf.INVENTORY_SUMMARY) != 0 {
-		kw, err := pg.queryRows(
-			"pg/keyword/group_by_outcrop_id.sql", id,
-			((flags & dbf.PRIVATE) == 0),
-		)
+		r, err := pg.pool.Query(context.Background(), q, id)
 		if err != nil {
 			return nil, err
 		}
-		if kw != nil {
-			for _, v := range kw {
-				oc.Keywords = append(oc.Keywords, v)
-			}
+		rowToStruct(r, &oc.Files)
+	}
+	if (flags & dbf.INVENTORY_SUMMARY) != 0 {
+		q, err = assets.ReadString("pg/keyword/group_by_outcrop_id.sql")
+		if err != nil {
+			return nil, err
 		}
+		r, err := pg.pool.Query(context.Background(), q, id, ((flags & dbf.PRIVATE) == 0))
+		if err != nil {
+			return nil, err
+		}
+		rowToStruct(r, &oc.KeywordSummary)
 	}
 
 	if (flags & dbf.ORGANIZATION) != 0 {
@@ -49,8 +49,11 @@ func (pg *Postgres) GetOutcrop(id int, flags int) (*model.Outcrop, error) {
 		if err != nil {
 			return nil, err
 		}
-		r, _ := pg.pool.Query(context.Background(), q, id)
-		rowToStruct(r, &oc.Organization)
+		r, err := pg.pool.Query(context.Background(), q, id)
+		if err != nil {
+			return nil, err
+		}
+		rowToStruct(r, &oc.Organizations)
 	}
 
 	if (flags & dbf.URLS) != 0 {
@@ -58,8 +61,11 @@ func (pg *Postgres) GetOutcrop(id int, flags int) (*model.Outcrop, error) {
 		if err != nil {
 			return nil, err
 		}
-		r, _ := pg.pool.Query(context.Background(), q, id)
-		rowToStruct(r, &oc.URL)
+		r, err := pg.pool.Query(context.Background(), q, id)
+		if err != nil {
+			return nil, err
+		}
+		rowToStruct(r, &oc.URLs)
 	}
 
 	if (flags & dbf.NOTE) != 0 {
@@ -67,8 +73,11 @@ func (pg *Postgres) GetOutcrop(id int, flags int) (*model.Outcrop, error) {
 		if err != nil {
 			return nil, err
 		}
-		r, _ := pg.pool.Query(context.Background(), q, id)
-		rowToStruct(r, &oc.Note)
+		r, err := pg.pool.Query(context.Background(), q, id)
+		if err != nil {
+			return nil, err
+		}
+		rowToStruct(r, &oc.Notes)
 	}
 
 	if (flags & dbf.GEOJSON) != 0 {
@@ -84,8 +93,11 @@ func (pg *Postgres) GetOutcrop(id int, flags int) (*model.Outcrop, error) {
 		if err != nil {
 			return nil, err
 		}
-		r, _ := pg.pool.Query(context.Background(), q, id)
-		rowToStruct(r, &oc.Quadrangle)
+		r, err := pg.pool.Query(context.Background(), q, id)
+		if err != nil {
+			return nil, err
+		}
+		rowToStruct(r, &oc.Quadrangles)
 	}
 	return &oc, nil
 }
