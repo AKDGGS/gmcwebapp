@@ -7,11 +7,11 @@ import (
 	"reflect"
 	"strings"
 
-	"gmc/assets"
-	"gmc/db/model"
-
+	// "github.com/jackc/pgtype"
 	"github.com/jackc/pgx/v4"
 	"github.com/jackc/pgx/v4/pgxpool"
+	"gmc/assets"
+	"gmc/db/model"
 )
 
 type Postgres struct {
@@ -195,6 +195,7 @@ func rowToStruct(r pgx.Rows, a interface{}) int {
 	case reflect.Slice:
 		var elem reflect.Value
 		typ := rv.Type().Elem()
+
 		if typ.Kind() == reflect.Ptr {
 			elem = reflect.New(typ.Elem())
 		}
@@ -217,6 +218,9 @@ func rowToStruct(r pgx.Rows, a interface{}) int {
 			var columns []string
 			for _, col := range fieldDescriptions {
 				columns = append(columns, string(col.Name))
+			}
+			if rv.Type().Name() == "KeywordSummary" {
+				r.Scan(rv.FieldByName("Keywords").Addr().Interface(), rv.FieldByName("Count").Addr().Interface())
 			}
 			columnValues, _ := r.Values()
 			for j, val := range columnValues {

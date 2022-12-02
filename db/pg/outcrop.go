@@ -43,7 +43,6 @@ func (pg *Postgres) GetOutcrop(id int, flags int) (*model.Outcrop, error) {
 		}
 		rowToStruct(r, &oc.KeywordSummary)
 	}
-
 	if (flags & dbf.ORGANIZATION) != 0 {
 		q, err = assets.ReadString("pg/organization/by_outcrop_id.sql")
 		if err != nil {
