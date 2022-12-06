@@ -221,12 +221,11 @@ func rowToStruct(r pgx.Rows, a interface{}) int {
 			}
 			columnValues, _ := r.Values()
 			for j, val := range columnValues {
-				s, ok := val.(pgtype.TextArray)
-				if ok {
+				switch val.(type) {
+				case pgtype.TextArray:
+					s := val.(pgtype.TextArray)
 					var s_arr []string
-					for i := 0; i < len(s.Elements); i++ {
-						s_arr = append(s_arr, s.Elements[i].String)
-					}
+					s.AssignTo(&s_arr)
 					val = s_arr
 				}
 				for i := 0; i < rv.NumField(); i++ {
