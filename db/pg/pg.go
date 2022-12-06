@@ -215,15 +215,11 @@ func rowToStruct(r pgx.Rows, a interface{}) int {
 		return rowCount
 	case reflect.Struct:
 		if r.Next() {
-			fieldDescriptions := r.FieldDescriptions()
-			var columns []string
-			for _, col := range fieldDescriptions {
-				columns = append(columns, string(col.Name))
-			}
 			columnValues, _ := r.Values()
 			for j, val := range columnValues {
+				fd := string(r.FieldDescriptions()[j].Name)
 				for i := 0; i < rv.NumField(); i++ {
-					if !strings.EqualFold(columns[j], rv.Type().Field(i).Name) {
+					if !strings.EqualFold(fd, rv.Type().Field(i).Name) {
 						continue
 					}
 					switch val.(type) {
@@ -232,11 +228,11 @@ func rowToStruct(r pgx.Rows, a interface{}) int {
 						var s_arr []string
 						s.AssignTo(&s_arr)
 						if reflect.TypeOf(s_arr) == rv.Field(i).Type() {
-							rv.FieldByName(rv.Type().Field(i).Name).Set(reflect.ValueOf(s_arr))
+							rv.Field(i).Set(reflect.ValueOf(s_arr))
 						}
 					default:
 						if reflect.TypeOf(val) == rv.Field(i).Type() {
-							rv.FieldByName(rv.Type().Field(i).Name).Set(reflect.ValueOf(val))
+							rv.Field(i).Set(reflect.ValueOf(val))
 						}
 					}
 				}
