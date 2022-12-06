@@ -195,12 +195,12 @@ func rowToStruct(r pgx.Rows, a interface{}) int {
 	switch rv.Kind() {
 	case reflect.Slice:
 		var elem reflect.Value
-		typ := rv.Type().Elem()
+		// typ := rv.Type().Elem()
 
-		if typ.Kind() == reflect.Ptr {
+		switch typ := rv.Type().Elem(); typ.Kind() {
+		case reflect.Ptr:
 			elem = reflect.New(typ.Elem())
-		}
-		if typ.Kind() == reflect.Struct {
+		case reflect.Struct:
 			elem = reflect.New(typ).Elem()
 		}
 		rowCount := 0
