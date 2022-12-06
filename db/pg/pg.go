@@ -186,11 +186,12 @@ func (pg *Postgres) enumAddValues(enum string, values ...string) error {
 
 func rowToStruct(r pgx.Rows, a interface{}) int {
 	rv := reflect.ValueOf(a)
-
 	if rv.Kind() == reflect.Ptr {
 		rv = rv.Elem()
 	}
-
+	if !rv.CanSet() {
+		return 0
+	}
 	switch rv.Kind() {
 	case reflect.Slice:
 		var elem reflect.Value
@@ -221,22 +222,22 @@ func rowToStruct(r pgx.Rows, a interface{}) int {
 			}
 			columnValues, _ := r.Values()
 			for j, val := range columnValues {
-				switch val.(type) {
-				case pgtype.TextArray:
-					s := val.(pgtype.TextArray)
-					var s_arr []string
-					s.AssignTo(&s_arr)
-					val = s_arr
-				}
 				for i := 0; i < rv.NumField(); i++ {
-					if reflect.TypeOf(val) != rv.Field(i).Type() {
-						continue
-					}
 					if !strings.EqualFold(columns[j], rv.Type().Field(i).Name) {
 						continue
 					}
-					if rv.CanSet() {
-						rv.FieldByName(rv.Type().Field(i).Name).Set(reflect.ValueOf(val))
+					switch val.(type) {
+					case pgtype.TextArray:
+						s := val.(pgtype.TextArray)
+						var s_arr []string
+						s.AssignTo(&s_arr)
+						if reflect.TypeOf(s_arr) == rv.Field(i).Type() {
+							rv.FieldByName(rv.Type().Field(i).Name).Set(reflect.ValueOf(s_arr))
+						}
+					default:
+						if reflect.TypeOf(val) == rv.Field(i).Type() {
+							rv.FieldByName(rv.Type().Field(i).Name).Set(reflect.ValueOf(val))
+						}
 					}
 				}
 			}
