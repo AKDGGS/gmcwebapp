@@ -7,7 +7,7 @@ import (
 	"reflect"
 	"strings"
 
-	// "github.com/jackc/pgtype"
+	"github.com/jackc/pgtype"
 	"github.com/jackc/pgx/v4"
 	"github.com/jackc/pgx/v4/pgxpool"
 	"gmc/assets"
@@ -219,11 +219,16 @@ func rowToStruct(r pgx.Rows, a interface{}) int {
 			for _, col := range fieldDescriptions {
 				columns = append(columns, string(col.Name))
 			}
-			if rv.Type().Name() == "KeywordSummary" {
-				r.Scan(rv.FieldByName("Keywords").Addr().Interface(), rv.FieldByName("Count").Addr().Interface())
-			}
 			columnValues, _ := r.Values()
 			for j, val := range columnValues {
+				s, ok := val.(pgtype.TextArray)
+				if ok {
+					var s_arr []string
+					for i := 0; i < len(s.Elements); i++ {
+						s_arr = append(s_arr, s.Elements[i].String)
+					}
+					val = s_arr
+				}
 				for i := 0; i < rv.NumField(); i++ {
 					if reflect.TypeOf(val) != rv.Field(i).Type() {
 						continue
