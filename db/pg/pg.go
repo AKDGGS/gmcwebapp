@@ -203,16 +203,14 @@ func rowToStruct(r pgx.Rows, a interface{}) int {
 		case reflect.Struct:
 			elem = reflect.New(typ).Elem()
 		}
-		rowCount := 0
-		for {
-			if rCount := rowToStruct(r, elem.Addr().Interface()); rCount > 0 {
-				rowCount = rowCount + rCount
+		for rowCount := 0; ; {
+			if c := rowToStruct(r, elem.Addr().Interface()); c > 0 {
+				rowCount += c
 				rv.Set(reflect.Append(rv, elem))
-			} else {
-				break
+				continue
 			}
+			return rowCount
 		}
-		return rowCount
 	case reflect.Struct:
 		if r.Next() {
 			columnValues, _ := r.Values()
