@@ -217,9 +217,9 @@ func rowToStruct(r pgx.Rows, a interface{}) int {
 		if r.Next() {
 			columnValues, _ := r.Values()
 			for j, val := range columnValues {
-				fd := string(r.FieldDescriptions()[j].Name)
+				fieldName := string(r.FieldDescriptions()[j].Name)
 				for i := 0; i < rv.NumField(); i++ {
-					if !strings.EqualFold(fd, rv.Type().Field(i).Name) {
+					if !strings.EqualFold(fieldName, rv.Type().Field(i).Name) {
 						continue
 					}
 					switch val.(type) {
