@@ -7,11 +7,12 @@ import (
 	"reflect"
 	"strings"
 
+	"gmc/assets"
+	"gmc/db/model"
+
 	"github.com/jackc/pgtype"
 	"github.com/jackc/pgx/v4"
 	"github.com/jackc/pgx/v4/pgxpool"
-	"gmc/assets"
-	"gmc/db/model"
 )
 
 type Postgres struct {
@@ -195,7 +196,6 @@ func rowToStruct(r pgx.Rows, a interface{}) int {
 	switch rv.Kind() {
 	case reflect.Slice:
 		var elem reflect.Value
-		// typ := rv.Type().Elem()
 
 		switch typ := rv.Type().Elem(); typ.Kind() {
 		case reflect.Ptr:
@@ -214,10 +214,10 @@ func rowToStruct(r pgx.Rows, a interface{}) int {
 	case reflect.Struct:
 		if r.Next() {
 			columnValues, _ := r.Values()
-			for j, val := range columnValues {
-				fieldName := string(r.FieldDescriptions()[j].Name)
-				for i := 0; i < rv.NumField(); i++ {
-					if !strings.EqualFold(fieldName, rv.Type().Field(i).Name) {
+			for i, val := range columnValues {
+				fieldName := string(r.FieldDescriptions()[i].Name)
+				for j := 0; j < rv.NumField(); j++ {
+					if !strings.EqualFold(fieldName, rv.Type().Field(j).Name) {
 						continue
 					}
 					switch val.(type) {
@@ -225,12 +225,12 @@ func rowToStruct(r pgx.Rows, a interface{}) int {
 						s := val.(pgtype.TextArray)
 						var s_arr []string
 						s.AssignTo(&s_arr)
-						if reflect.TypeOf(s_arr) == rv.Field(i).Type() {
-							rv.Field(i).Set(reflect.ValueOf(s_arr))
+						if reflect.TypeOf(s_arr) == rv.Field(j).Type() {
+							rv.Field(j).Set(reflect.ValueOf(s_arr))
 						}
 					default:
-						if reflect.TypeOf(val) == rv.Field(i).Type() {
-							rv.Field(i).Set(reflect.ValueOf(val))
+						if reflect.TypeOf(val) == rv.Field(j).Type() {
+							rv.Field(j).Set(reflect.ValueOf(val))
 						}
 					}
 				}
