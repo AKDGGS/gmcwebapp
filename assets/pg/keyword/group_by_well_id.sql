@@ -1,5 +1,5 @@
- SELECT ARRAY_TO_JSON(keywords) AS keywords,
-	COUNT(q2.inventory_id) AS count
+ SELECT keywords AS Keywords,
+	COUNT(q2.inventory_id) AS Count
 FROM (
 	SELECT q1.inventory_id,
 		ARRAY_AGG(q1.keyword ORDER BY q1.keyword) AS keywords

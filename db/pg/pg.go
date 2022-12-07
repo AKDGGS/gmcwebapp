@@ -220,6 +220,7 @@ func rowToStruct(r pgx.Rows, a interface{}) int {
 					if !strings.EqualFold(fieldName, rv.Type().Field(j).Name) {
 						continue
 					}
+					fmt.Println(rv.Type().Field(j).Name, reflect.TypeOf(val))
 					switch val.(type) {
 					case pgtype.TextArray:
 						s := val.(pgtype.TextArray)
@@ -227,6 +228,13 @@ func rowToStruct(r pgx.Rows, a interface{}) int {
 						s.AssignTo(&s_arr)
 						if reflect.TypeOf(s_arr) == rv.Field(j).Type() {
 							rv.Field(j).Set(reflect.ValueOf(s_arr))
+						}
+					case pgtype.Numeric:
+						n := val.(pgtype.Numeric)
+						var nv float32
+						n.AssignTo(&nv)
+						if reflect.TypeOf(nv) == rv.Field(j).Type() {
+							rv.Field(j).Set(reflect.ValueOf(nv))
 						}
 					default:
 						if reflect.TypeOf(val) == rv.Field(j).Type() {
