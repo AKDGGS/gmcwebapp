@@ -1,5 +1,5 @@
-SELECT f.file_id, f.filename AS file_name,
-	pg_size_pretty(f.size::numeric) AS file_size
+SELECT f.file_id AS ID, f.filename AS Name,
+	pg_size_pretty(f.size::numeric) AS "Size"
 FROM well_file AS wf
 JOIN file AS f
 	ON f.file_id = wf.file_id
