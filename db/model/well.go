@@ -5,7 +5,7 @@ import "time"
 type Well struct {
 	ID               int32                  `json:"well_id"`
 	Name             string                 `json:"name"`
-	AltName          string                 `json:"alt_name"`
+	AltNames         string                 `json:"alt_name"`
 	WellNumber       string                 `json:"well_number"`
 	APINumber        string                 `json:"api_number"`
 	IsOnshore        bool                   `json:"is_onshore"`
@@ -18,6 +18,7 @@ type Well struct {
 	VerticalDepth    float32                `json:"vertical_depth"`
 	Elevation        float32                `json:"elevation_depth"`
 	ElevationKb      float32                `json:"elevation_kb"`
+	Unit             string                 `json:unit`
 	Stash            map[string]interface{} `json:"stash"`
 	KeywordSummary   []KeywordSummary       `json:"keywords"`
 	GeoJSON          map[string]interface{} `json:"geojson"`

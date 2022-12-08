@@ -20,7 +20,7 @@ type DB interface {
 	GetOutcrop(id int, flags int) (*model.Outcrop, error)
 
 	// Fetches the complete details for a Well
-	GetWell(id int, flags int) (map[string]interface{}, error)
+	GetWell(id int, flags int) (*model.Well, error)
 
 	// Fetches the complete details for a Shotline
 	GetShotline(id int, flags int) (map[string]interface{}, error)

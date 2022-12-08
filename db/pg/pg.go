@@ -220,7 +220,6 @@ func rowToStruct(r pgx.Rows, a interface{}) int {
 					if !strings.EqualFold(fieldName, rv.Type().Field(j).Name) {
 						continue
 					}
-					fmt.Println(rv.Type().Field(j).Name, reflect.TypeOf(val))
 					switch val.(type) {
 					case pgtype.TextArray:
 						s := val.(pgtype.TextArray)

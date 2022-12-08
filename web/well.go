@@ -38,11 +38,12 @@ func (srv *Server) ServeWell(id int, w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "Well not found", http.StatusNotFound)
 		return
 	}
-
-	well["_user"] = user
-
+	wellParams := map[string]interface{}{
+		"well": well,
+		"user": user,
+	}
 	buf := bytes.Buffer{}
-	if err := assets.ExecuteTemplate("tmpl/well.html", &buf, well); err != nil {
+	if err := assets.ExecuteTemplate("tmpl/well.html", &buf, wellParams); err != nil {
 		http.Error(
 			w, fmt.Sprintf("Parse error: %s", err.Error()),
 			http.StatusInternalServerError,

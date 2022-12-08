@@ -2,14 +2,12 @@ package pg
 
 import (
 	"context"
-	"fmt"
-
 	"gmc/assets"
 	dbf "gmc/db/flag"
 	"gmc/db/model"
 )
 
-func (pg *Postgres) GetWell(id int, flags int) (map[string]interface{}, error) {
+func (pg *Postgres) GetWell(id int, flags int) (*model.Well, error) {
 	q, err := assets.ReadString("pg/well/by_well_id.sql")
 	if err != nil {
 		return nil, err
@@ -22,8 +20,6 @@ func (pg *Postgres) GetWell(id int, flags int) (map[string]interface{}, error) {
 
 	well := model.Well{}
 	rowToStruct(rows, &well)
-
-	fmt.Println(well)
 
 	if (flags & dbf.FILES) != 0 {
 		q, err = assets.ReadString("pg/file/by_well_id.sql")
@@ -99,8 +95,5 @@ func (pg *Postgres) GetWell(id int, flags int) (map[string]interface{}, error) {
 		}
 		rowToStruct(r, &well.Quadrangles)
 	}
-
-	fmt.Println(well)
-	// return &well, nil
-	return nil, nil
+	return &well, nil
 }
