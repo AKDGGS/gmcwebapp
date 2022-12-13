@@ -17,10 +17,10 @@ type Well struct {
 	CompletionStatus string                 `json:"completion_status"`
 	SpudDate         time.Time              `json:"spud_date"`
 	CompletionDate   time.Time              `json:"completion_date"`
-	MeasuredDepth    float32                `json:"measured_depth"`
-	VerticalDepth    float32                `json:"vertical_depth"`
-	Elevation        float32                `json:"elevation_depth"`
-	ElevationKb      float32                `json:"elevation_kb"`
+	MeasuredDepth    float64                `json:"measured_depth"`
+	VerticalDepth    float64                `json:"vertical_depth"`
+	Elevation        float64                `json:"elevation_depth"`
+	ElevationKb      float64                `json:"elevation_kb"`
 	Unit             string                 `json:unit`
 	Stash            map[string]interface{} `json:"stash"`
 	KeywordSummary   []KeywordSummary       `json:"keywords"`

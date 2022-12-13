@@ -230,7 +230,7 @@ func rowToStruct(r pgx.Rows, a interface{}) int {
 						}
 					case pgtype.Numeric:
 						n := val.(pgtype.Numeric)
-						var nv float32
+						var nv float64
 						n.AssignTo(&nv)
 						if reflect.TypeOf(nv) == rv.Field(j).Type() {
 							rv.Field(j).Set(reflect.ValueOf(nv))

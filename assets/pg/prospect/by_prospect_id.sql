@@ -1,3 +1,3 @@
-SELECT prospect_id, name, alt_names, ardf_number
+SELECT prospect_id, name AS NAME, alt_names AS ALTNames, ardf_number AS ARDFNumber
 FROM prospect
 WHERE prospect_id = $1

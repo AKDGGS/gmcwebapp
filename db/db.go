@@ -14,7 +14,7 @@ type DB interface {
 	GetProspect(id int, flags int) (map[string]interface{}, error)
 
 	// Fetches the complete details for a Borehole
-	GetBorehole(id int, flags int) (map[string]interface{}, error)
+	GetBorehole(id int, flags int) (*model.Borehole, error)
 
 	// Fetches the complete details for an Outcrop
 	GetOutcrop(id int, flags int) (*model.Outcrop, error)
