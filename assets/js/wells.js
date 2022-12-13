@@ -173,7 +173,8 @@ function displayOverlayContents(e) {
 							well_id + qParams);
 					}
 					data["nameURL"] = encodeURI("well/" + well_id);
-					data["well_id"] = well_id;
+					data["well_id"] = well_id;					
+					
 					let t = mustache.render(document.getElementById("tmpl-popup").innerHTML, data, {}, ['[[', ']]']);
 					document.getElementById("popup-content").innerHTML = t;
 					document.getElementById('popup-topbar').style.visibility = 'visible';
