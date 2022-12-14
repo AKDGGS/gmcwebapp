@@ -6,10 +6,6 @@ import (
 )
 
 type Borehole struct {
-	ProspectID        int32                  `json:"prospect_id"`
-	ProspectName      string                 `json:"prospect_name"`
-	AltProspectNames  string                 `json:"alt_names"`
-	ARDFNumber        string                 `json:"ardf_number"`
 	ID                int32                  `json:"well_id"`
 	Name              string                 `json:"name"`
 	AltNames          string                 `json:"alt_name"`
@@ -30,6 +26,7 @@ type Borehole struct {
 	URLs              []URL                  `json:"url"`
 	Organizations     []Organization         `json:"organization"`
 	Files             []File                 `json:"file"`
+	Prospect          Prospect               `json:"prospect"`
 }
 
 func (b *Borehole) MarshalJSON() ([]byte, error) {

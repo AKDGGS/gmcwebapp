@@ -3,23 +3,25 @@
 				<legend>Borehole Detail</legend>
 				<table class="tb-fields">
 					<tbody>
-						{{- if .ProspectName}}
-						<tr>
-							<th>Prospect Name</th>
-							<td><a href="../prospect/{{.ProspectID}}">{{.ProspectName}}</a></td>
-						</tr>
-						{{- end}}
-						{{- if .AltProspectNames}}
-						<tr>
-							<th>Alternatives Prospect Name(s)</th>
-							<td>{{.AltProspectNames}}</td>
-						</tr>
-						{{- end}}
-						{{- if .ARDFNumber}}
-						<tr>
-							<th>ARDF Number</th>
-							<td><a href="http://mrdata.usgs.gov/ardf/show-ardf.php?ardf_num={{.ARDFNumber}}">{{.ARDFNumber}}</a></td>
-						</tr>
+						{{- if .Prospect}}
+							{{- if .Prospect.Name}}
+							<tr>
+								<th>Prospect Name</th>
+								<td><a href="../prospect/{{.Prospect.ID}}">{{.Prospect.Name}}</a></td>
+							</tr>
+							{{- end}}
+							{{- if .Prospect.AltNames}}
+							<tr>
+								<th>Alternatives Prospect Name(s)</th>
+								<td>{{.Prospect.AltNames}}</td>
+							</tr>
+							{{- end}}
+							{{- if .Prospect.ARDFNumber}}
+							<tr>
+								<th>ARDF Number</th>
+								<td><a href="http://mrdata.usgs.gov/ardf/show-ardf.php?ardf_num={{.Prospect.ARDFNumber}}">{{.Prospect.ARDFNumber}}</a></td>
+							</tr>
+							{{- end}}
 						{{- end}}
 						{{- if .Name}}
 						<tr>
@@ -61,6 +63,7 @@
 						{{- end}}
 						{{- end}}
 						{{- if .Quadrangles}}
+
 						<tr>
 							<th>Quadrangle</th>
 							<td>{{- range $i, $qd := .Quadrangles}}{{- if ne $i 0}}, {{- end}}
@@ -69,6 +72,7 @@
 						</tr>
 						{{- end}}
 						{{- if .MiningDistricts}}
+
 						<tr>
 							<th>Mining District</th>
 							<td>{{- range $i, $md := .MiningDistricts}}{{- if ne $i 0}}, {{- end}}
@@ -115,7 +119,7 @@
 					<tbody>
 						{{- range .KeywordSummary}}
 						<tr>
-							<td><a href="../search#prospect_id={{$.Prospect.ID}}{{range .Keywords}}&keyword={{.}}{{- end}}">{{- range $i, $kw := .Keywords}}{{- if ne $i 0}} &gt; {{end}}{{$kw}}{{- end}}</a></td>
+							<td><a href="../search#borehole_id:{{$.borehole.ID}}prospect_id:{{$.borehole.Prospect.ID}}{{range .Keywords}}&keyword={{.}}{{- end}}">{{- range $i, $kw := .Keywords}}{{- if ne $i 0}} &gt; {{end}}{{$kw}}{{- end}}</a></td>
 							<td>{{.Count}}</td>
 						</tr>
 						{{- end}}

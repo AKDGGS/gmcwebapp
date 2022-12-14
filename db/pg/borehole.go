@@ -2,7 +2,6 @@ package pg
 
 import (
 	"context"
-	"fmt"
 	"gmc/assets"
 	dbf "gmc/db/flag"
 	"gmc/db/model"
@@ -20,6 +19,19 @@ func (pg *Postgres) GetBorehole(id int, flags int) (*model.Borehole, error) {
 	defer rows.Close()
 	borehole := model.Borehole{}
 	rowToStruct(rows, &borehole)
+
+	if (flags & dbf.PROSPECT) != 0 {
+		q, err = assets.ReadString("pg/prospect/by_borehole_id.sql")
+		if err != nil {
+			return nil, err
+		}
+		r, err := pg.pool.Query(context.Background(), q, id)
+		if err != nil {
+			return nil, err
+		}
+		rowToStruct(r, &borehole.Prospect)
+	}
+
 	if (flags & dbf.FILES) != 0 {
 		q, err = assets.ReadString("pg/file/by_borehole_id.sql")
 		if err != nil {
@@ -104,6 +116,5 @@ func (pg *Postgres) GetBorehole(id int, flags int) (*model.Borehole, error) {
 		}
 		rowToStruct(r, &borehole.Quadrangles)
 	}
-	fmt.Println(borehole)
 	return &borehole, nil
 }

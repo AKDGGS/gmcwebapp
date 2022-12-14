@@ -22,6 +22,7 @@ const (
 	OUTCROP
 	QUALITY
 	TRACKING
+	PROSPECT
 )
 
 // Option for everything
