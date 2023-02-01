@@ -11,7 +11,7 @@ import (
 
 type DB interface {
 	// Fetches the complete details for a Prospect
-	GetProspect(id int, flags int) (map[string]interface{}, error)
+	GetProspect(id int, flags int) (*model.Prospect, error)
 
 	// Fetches the complete details for a Borehole
 	GetBorehole(id int, flags int) (*model.Borehole, error)
@@ -23,7 +23,7 @@ type DB interface {
 	GetWell(id int, flags int) (*model.Well, error)
 
 	// Fetches the complete details for a Shotline
-	GetShotline(id int, flags int) (map[string]interface{}, error)
+	GetShotline(id int, flags int) (*model.Shotline, error)
 
 	// Fetches the complete details for an Inventory
 	GetInventory(id int, flags int) (map[string]interface{}, error)

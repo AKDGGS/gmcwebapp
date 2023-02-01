@@ -15,13 +15,13 @@ type Well struct {
 	IsFederal        bool                   `json:"is_federal"`
 	PermitStatus     string                 `json:"permit_status"`
 	CompletionStatus string                 `json:"completion_status"`
-	SpudDate         time.Time              `json:"spud_date"`
-	CompletionDate   time.Time              `json:"completion_date"`
+	SpudDate         *time.Time             `json:"spud_date"`
+	CompletionDate   *time.Time             `json:"completion_date"`
 	MeasuredDepth    float64                `json:"measured_depth"`
 	VerticalDepth    float64                `json:"vertical_depth"`
 	Elevation        float64                `json:"elevation_depth"`
 	ElevationKb      float64                `json:"elevation_kb"`
-	Unit             string                 `json:unit`
+	Unit             string                 `json:"unit"`
 	Stash            map[string]interface{} `json:"stash"`
 	KeywordSummary   []KeywordSummary       `json:"keywords"`
 	GeoJSON          map[string]interface{} `json:"geojson"`

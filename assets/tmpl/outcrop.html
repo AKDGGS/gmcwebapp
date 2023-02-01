@@ -75,7 +75,7 @@
 					<tbody>
 						{{- range .KeywordSummary}}
 						<tr>
-							<td><a href="../search#q=outcrop_id:{{$.outcrop.ID}}{{range .Keywords}}&Keyword={{.}}{{- end}}">{{range $i, $kw := .Keywords}}{{if ne $i 0}} &gt; {{end}}{{$kw}}{{- end}}</a></td>
+							<td><a href="../search#q=outcrop_id:{{$.outcrop.ID}}{{range .Keywords}}&keyword={{.}}{{- end}}">{{range $i, $kw := .Keywords}}{{if ne $i 0}} &gt; {{end}}{{$kw}}{{- end}}</a></td>
 							<td>{{.Count}}</td>
 						</tr>
 						{{- end}}
@@ -139,7 +139,7 @@
 					<tbody>
 						{{- range .Notes}}
 						<tr>
-							<td>{{formattime "1/2/2006" .Date}}</td>
+							<td>{{.Date.Format "1/2/2006"}}</td>
 							<td>{{.Username}}</td>
 							<td>{{- if .IsPublic}} Yes {{- else -}}No{{- end}} </td>
 							<td>{{.Note}}</td>

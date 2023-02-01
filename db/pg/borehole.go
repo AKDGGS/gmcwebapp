@@ -2,6 +2,8 @@ package pg
 
 import (
 	"context"
+	"encoding/json"
+	"fmt"
 	"gmc/assets"
 	dbf "gmc/db/flag"
 	"gmc/db/model"
@@ -19,6 +21,7 @@ func (pg *Postgres) GetBorehole(id int, flags int) (*model.Borehole, error) {
 	defer rows.Close()
 	borehole := model.Borehole{}
 	rowToStruct(rows, &borehole)
+	// ReadStruct(rows, &borehole)
 
 	if (flags & dbf.PROSPECT) != 0 {
 		q, err = assets.ReadString("pg/prospect/by_borehole_id.sql")
@@ -30,6 +33,9 @@ func (pg *Postgres) GetBorehole(id int, flags int) (*model.Borehole, error) {
 			return nil, err
 		}
 		rowToStruct(r, &borehole.Prospect)
+
+		fmt.Println(borehole.Prospect)
+		// ReadStruct(r, &borehole.Prospect)
 	}
 
 	if (flags & dbf.FILES) != 0 {
@@ -42,6 +48,7 @@ func (pg *Postgres) GetBorehole(id int, flags int) (*model.Borehole, error) {
 			return nil, err
 		}
 		rowToStruct(r, &borehole.Files)
+		// ReadStruct(r, &borehole.Files)
 	}
 	if (flags & dbf.INVENTORY_SUMMARY) != 0 {
 		q, err = assets.ReadString("pg/keyword/group_by_borehole_id.sql")
@@ -53,6 +60,7 @@ func (pg *Postgres) GetBorehole(id int, flags int) (*model.Borehole, error) {
 			return nil, err
 		}
 		rowToStruct(r, &borehole.KeywordSummary)
+		// ReadStruct(r, &borehole.KeywordSummary)
 	}
 	if (flags & dbf.ORGANIZATION) != 0 {
 		q, err = assets.ReadString("pg/organization/by_borehole_id.sql")
@@ -64,6 +72,7 @@ func (pg *Postgres) GetBorehole(id int, flags int) (*model.Borehole, error) {
 			return nil, err
 		}
 		rowToStruct(r, &borehole.Organizations)
+		// ReadStruct(r, &borehole.Organizations)
 	}
 	if (flags & dbf.URLS) != 0 {
 		q, err = assets.ReadString("pg/url/by_borehole_id.sql")
@@ -75,6 +84,7 @@ func (pg *Postgres) GetBorehole(id int, flags int) (*model.Borehole, error) {
 			return nil, err
 		}
 		rowToStruct(r, &borehole.URLs)
+		// ReadStruct(r, &borehole.URLs)
 	}
 	if (flags & dbf.NOTE) != 0 {
 		q, err = assets.ReadString("pg/note/by_borehole_id.sql")
@@ -86,13 +96,16 @@ func (pg *Postgres) GetBorehole(id int, flags int) (*model.Borehole, error) {
 			return nil, err
 		}
 		rowToStruct(r, &borehole.Notes)
+		// ReadStruct(r, &borehole.Notes)
 	}
 	if (flags & dbf.GEOJSON) != 0 {
 		geojson, err := pg.queryRow("pg/borehole/geojson.sql", id)
 		if err != nil {
 			return nil, err
 		}
-		borehole.GeoJSON = geojson["geojson"].(map[string]interface{})
+		if geojson["geojson"] != nil {
+			borehole.GeoJSON = geojson["geojson"].(map[string]interface{})
+		}
 	}
 	if (flags & dbf.MINING_DISTRICTS) != 0 {
 		q, err = assets.ReadString("pg/mining_district/by_borehole_id.sql")
@@ -104,6 +117,7 @@ func (pg *Postgres) GetBorehole(id int, flags int) (*model.Borehole, error) {
 			return nil, err
 		}
 		rowToStruct(r, &borehole.MiningDistricts)
+		// ReadStruct(r, &borehole.MiningDistricts)
 	}
 	if (flags & dbf.QUADRANGLES) != 0 {
 		q, err = assets.ReadString("pg/quadrangle/250k_by_borehole_id.sql")
@@ -115,6 +129,13 @@ func (pg *Postgres) GetBorehole(id int, flags int) (*model.Borehole, error) {
 			return nil, err
 		}
 		rowToStruct(r, &borehole.Quadrangles)
+		// ReadStruct(r, &borehole.Quadrangles)
 	}
+
+	b, err := json.Marshal(borehole)
+	if err != nil {
+		fmt.Println(err)
+	}
+	fmt.Println(string(b))
 	return &borehole, nil
 }

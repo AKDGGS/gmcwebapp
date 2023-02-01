@@ -39,10 +39,13 @@ func (srv *Server) ServeShotline(id int, w http.ResponseWriter, r *http.Request)
 		return
 	}
 
-	shotline["_user"] = user
+	shotlineParams := map[string]interface{}{
+		"shotline": shotline,
+		"user":     user,
+	}
 
 	buf := bytes.Buffer{}
-	if err := assets.ExecuteTemplate("tmpl/shotline.html", &buf, shotline); err != nil {
+	if err := assets.ExecuteTemplate("tmpl/shotline.html", &buf, shotlineParams); err != nil {
 		http.Error(
 			w, fmt.Sprintf("Parse error: %s", err.Error()),
 			http.StatusInternalServerError,

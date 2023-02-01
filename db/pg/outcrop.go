@@ -2,6 +2,7 @@ package pg
 
 import (
 	"context"
+
 	"gmc/assets"
 	dbf "gmc/db/flag"
 	"gmc/db/model"
@@ -17,10 +18,8 @@ func (pg *Postgres) GetOutcrop(id int, flags int) (*model.Outcrop, error) {
 		return nil, err
 	}
 	defer rows.Close()
-
-	oc := model.Outcrop{}
-	rowToStruct(rows, &oc)
-
+	outcrop := model.Outcrop{}
+	rowToStruct(rows, &outcrop)
 	if (flags & dbf.FILES) != 0 {
 		q, err = assets.ReadString("pg/file/by_outcrop_id.sql")
 		if err != nil {
@@ -30,7 +29,7 @@ func (pg *Postgres) GetOutcrop(id int, flags int) (*model.Outcrop, error) {
 		if err != nil {
 			return nil, err
 		}
-		rowToStruct(r, &oc.Files)
+		rowToStruct(r, &outcrop.Files)
 	}
 	if (flags & dbf.INVENTORY_SUMMARY) != 0 {
 		q, err = assets.ReadString("pg/keyword/group_by_outcrop_id.sql")
@@ -41,7 +40,7 @@ func (pg *Postgres) GetOutcrop(id int, flags int) (*model.Outcrop, error) {
 		if err != nil {
 			return nil, err
 		}
-		rowToStruct(r, &oc.KeywordSummary)
+		rowToStruct(r, &outcrop.KeywordSummary)
 	}
 	if (flags & dbf.ORGANIZATION) != 0 {
 		q, err = assets.ReadString("pg/organization/by_outcrop_id.sql")
@@ -52,9 +51,8 @@ func (pg *Postgres) GetOutcrop(id int, flags int) (*model.Outcrop, error) {
 		if err != nil {
 			return nil, err
 		}
-		rowToStruct(r, &oc.Organizations)
+		rowToStruct(r, &outcrop.Organizations)
 	}
-
 	if (flags & dbf.URLS) != 0 {
 		q, err = assets.ReadString("pg/url/by_outcrop_id.sql")
 		if err != nil {
@@ -64,7 +62,7 @@ func (pg *Postgres) GetOutcrop(id int, flags int) (*model.Outcrop, error) {
 		if err != nil {
 			return nil, err
 		}
-		rowToStruct(r, &oc.URLs)
+		rowToStruct(r, &outcrop.URLs)
 	}
 
 	if (flags & dbf.NOTE) != 0 {
@@ -76,17 +74,17 @@ func (pg *Postgres) GetOutcrop(id int, flags int) (*model.Outcrop, error) {
 		if err != nil {
 			return nil, err
 		}
-		rowToStruct(r, &oc.Notes)
+		rowToStruct(r, &outcrop.Notes)
 	}
-
 	if (flags & dbf.GEOJSON) != 0 {
 		geojson, err := pg.queryRow("pg/outcrop/geojson.sql", id)
 		if err != nil {
 			return nil, err
 		}
-		oc.GeoJSON = geojson["geojson"].(map[string]interface{})
+		if geojson["geojson"] != nil {
+			outcrop.GeoJSON = geojson["geojson"].(map[string]interface{})
+		}
 	}
-
 	if (flags & dbf.QUADRANGLES) != 0 {
 		q, err = assets.ReadString("pg/quadrangle/250k_by_outcrop_id.sql")
 		if err != nil {
@@ -96,7 +94,7 @@ func (pg *Postgres) GetOutcrop(id int, flags int) (*model.Outcrop, error) {
 		if err != nil {
 			return nil, err
 		}
-		rowToStruct(r, &oc.Quadrangles)
+		rowToStruct(r, &outcrop.Quadrangles)
 	}
-	return &oc, nil
+	return &outcrop, nil
 }

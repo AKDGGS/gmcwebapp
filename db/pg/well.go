@@ -2,6 +2,7 @@ package pg
 
 import (
 	"context"
+
 	"gmc/assets"
 	dbf "gmc/db/flag"
 	"gmc/db/model"
@@ -82,7 +83,9 @@ func (pg *Postgres) GetWell(id int, flags int) (*model.Well, error) {
 		if err != nil {
 			return nil, err
 		}
-		well.GeoJSON = geojson["geojson"].(map[string]interface{})
+		if geojson["geojson"] != nil {
+			well.GeoJSON = geojson["geojson"].(map[string]interface{})
+		}
 	}
 	if (flags & dbf.QUADRANGLES) != 0 {
 		q, err = assets.ReadString("pg/quadrangle/250k_by_well_id.sql")

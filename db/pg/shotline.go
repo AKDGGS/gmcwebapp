@@ -1,89 +1,78 @@
 package pg
 
 import (
-	dbf "gmc/db/flag"
+	"context"
 
-	"github.com/jackc/pgtype"
+	"gmc/assets"
+	dbf "gmc/db/flag"
+	"gmc/db/model"
 )
 
-func (pg *Postgres) GetShotline(id int, flags int) (map[string]interface{}, error) {
-	shotline, err := pg.queryRow("pg/shotline/by_shotline_id.sql", id)
+func (pg *Postgres) GetShotline(id int, flags int) (*model.Shotline, error) {
+	q, err := assets.ReadString("pg/shotline/by_shotline_id.sql")
 	if err != nil {
 		return nil, err
 	}
-	if shotline == nil {
-		return nil, nil
+	rows, err := pg.pool.Query(context.Background(), q, id)
+	if err != nil {
+		return nil, err
 	}
-
-	ptmin, ok := shotline["shotpoint_min"].(pgtype.Numeric)
-	if !ok {
-		delete(shotline, "shotpoint_min")
-	} else {
-		var ift float64
-		ptmin.AssignTo(&ift)
-		shotline["shotpoint_min"] = &ift
-	}
-
-	ptmax, ok := shotline["shotpoint_max"].(pgtype.Numeric)
-	if !ok {
-		delete(shotline, "shotpoint_max")
-	} else {
-		var ift float64
-		ptmax.AssignTo(&ift)
-		shotline["shotpoint_max"] = &ift
-	}
-
+	defer rows.Close()
+	shotline := model.Shotline{}
+	rowToStruct(rows, &shotline)
 	if (flags & dbf.INVENTORY_SUMMARY) != 0 {
-		kw, err := pg.queryRows(
-			"pg/keyword/group_by_shotline_id.sql", id,
-			((flags & dbf.PRIVATE) == 0),
-		)
+		q, err = assets.ReadString("pg/keyword/group_by_shotline_id.sql")
 		if err != nil {
 			return nil, err
 		}
-		if kw != nil {
-			shotline["keywords"] = kw
+		r, err := pg.pool.Query(context.Background(), q, id, ((flags & dbf.PRIVATE) == 0))
+		if err != nil {
+			return nil, err
 		}
+		rowToStruct(r, &shotline.KeywordSummary)
 	}
 	if (flags & dbf.URLS) != 0 {
-		urls, err := pg.queryRows("pg/url/by_shotline_id.sql", id)
+		q, err = assets.ReadString("pg/url/by_shotline_id.sql")
 		if err != nil {
 			return nil, err
 		}
-		if urls != nil {
-			shotline["urls"] = urls
+		r, err := pg.pool.Query(context.Background(), q, id)
+		if err != nil {
+			return nil, err
 		}
+		rowToStruct(r, &shotline.URLs)
 	}
-
 	if (flags & dbf.NOTE) != 0 {
-		notes, err := pg.queryRows("pg/note/by_shotline_id.sql", id)
+		q, err = assets.ReadString("pg/note/by_shotline_id.sql")
 		if err != nil {
 			return nil, err
 		}
-		if notes != nil {
-			shotline["notes"] = notes
+		r, err := pg.pool.Query(context.Background(), q, id)
+		if err != nil {
+			return nil, err
 		}
+		rowToStruct(r, &shotline.Notes)
 	}
-
 	if (flags & dbf.GEOJSON) != 0 {
 		geojson, err := pg.queryRow("pg/shotline/geojson.sql", id)
 		if err != nil {
 			return nil, err
 		}
-		if geojson != nil {
-			shotline["geojson"] = geojson["geojson"]
+		if geojson["geojson"] != nil {
+			shotline.GeoJSON = geojson["geojson"].(map[string]interface{})
 		}
 	}
-
 	if (flags & dbf.QUADRANGLES) != 0 {
-		qds, err := pg.queryRows("pg/quadrangle/250k_by_shotline_id.sql", id)
+		q, err = assets.ReadString("pg/quadrangle/250k_by_shotline_id.sql")
 		if err != nil {
 			return nil, err
 		}
-		if qds != nil {
-			shotline["quadrangles"] = qds
+		r, err := pg.pool.Query(context.Background(), q, id)
+		if err != nil {
+			return nil, err
 		}
+		rowToStruct(r, &shotline.Quadrangles)
 	}
 
-	return shotline, nil
+	return &shotline, nil
 }

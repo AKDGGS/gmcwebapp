@@ -1,5 +1,5 @@
-SELECT f.file_id, f.filename AS file_name,
-	pg_size_pretty(f.size::numeric) AS file_size
+SELECT f.file_id AS "ID", f.filename AS Name,
+	pg_size_pretty(f.size::numeric) AS Size
 FROM prospect_file AS pf
 JOIN file AS f
 	ON f.file_id = pf.file_id

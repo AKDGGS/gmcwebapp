@@ -1,12 +1,22 @@
-SELECT w.well_id, w.name AS well_name, w.alt_names,
-	w.well_number, w.api_number,
-	w.is_onshore, w.is_federal,
-	w.spud_date, w.completion_date,
-	w.measured_depth, w.vertical_depth,
-	w.elevation, w.elevation_kb,
-	w.permit_status, w.completion_status, w.permit_number,
+SELECT w.well_id, w.name AS "WellName", w.alt_names "AltNames",
+	w.well_number AS "WellNumber",
+	w.api_number AS "APINumber",
+	w.is_onshore AS "IsOnshore", 
+	w.is_federal AS "IsFederal",
+	w.spud_date AS "SpudDate", 
+	w.completion_date AS "CompletionDate",
+	w.measured_depth AS "MeasuredDepth",
+	w.vertical_depth AS "VerticalDepth",
+	w.elevation,
+	w.elevation_kb AS "ElevationKB",
+	w.permit_status AS "PermitStatus",
+	w.completion_status AS "ComletionStatus",
+	w.permit_number AS "PermitNumber",
 	w.unit::text,
-	wo.is_current, o.name AS operator_name, o.remark, ot.name AS operator_type
+	wo.is_current AS "IsCurrent",
+	o.name AS "OperatorName",
+	o.remark,
+	ot.name AS "OperatorType"
 	FROM well AS w
 	LEFT OUTER JOIN well_operator AS wo
 		ON wo.well_id = w.well_id

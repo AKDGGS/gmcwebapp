@@ -1,45 +1,48 @@
+{{with .prospect }}
 			<fieldset class="fs-detail">
 				<legend>Prospect Detail</legend>
 				<table class="tb-fields">
 					<tbody>
+						{{- if .ProspectName}}
 						<tr>
 							<th>Name</th>
-							<td><a href="../search#prospect_id={{.prospect_id}}">{{.name}}</a></td>
+							<td><a href="../search#prospect_id={{.ProspectID}}">{{.ProspectName}}</a></td>
 						</tr>
-						{{- if .alt_names}}
+						{{- end}}
+						{{- if .AltNames}}
 						<tr>
 							<th>Alternative Name(s)</th>
-							<td>{{.alt_names}}</td>
+							<td>{{.AltNames}}</td>
 						</tr>
 						{{- end}}
-						{{- if .ardf_number}}
+						{{- if .ARDFNumber}}
 						<tr>
 							<th>ARDF Number</th>
-							<td><a href="http://mrdata.usgs.gov/ardf/show-ardf.php?ardf_num={{.ardf_number}}">{{.ardf_number}}</a></td>
+							<td><a href="http://mrdata.usgs.gov/ardf/show-ardf.php?ardf_num={{.ARDFNumber}}">{{.ARDFNumber}}</a></td>
 						</tr>
 						{{- end}}
-						{{- if .boreholes}}
+						{{- if .Boreholes}}
 						<tr>
 							<th>Boreholes</th>
-							<td>{{range $i, $bh := .boreholes}}{{if ne $i 0}}, {{end}}<a href="../borehole/{{$bh.borehole_id}}">{{$bh.name}}</a>{{- end}}</td>
+							<td>{{range $i, $bh := .Boreholes}}{{if ne $i 0}}, {{end}}<a href="../borehole/{{$bh.ID}}">{{$bh.Name}}</a>{{- end}}</td>
 						</tr>
 						{{- end}}
-						{{- if .quadrangles}}
+						{{- if .Quadrangles}}
 						<tr>
 							<th>Quadrangle</th>
-							<td>{{range $i, $qd := .quadrangles}}{{if ne $i 0}}, {{- end}}<a href="../search#quadrangle_id={{$qd.quadrangle_id}}">{{$qd.name}}</a>{{- end}}</td>
+							<td>{{range $i, $qd := .Quadrangles}}{{if ne $i 0}}, {{- end}}<a href="../search#quadrangle_id={{$qd.ID}}">{{$qd.Name}}</a>{{- end}}</td>
 						</tr>
 						{{- end}}
-						{{- if .mining_districts}}
+						{{- if .MiningDistricts}}
 						<tr>
 							<th>Mining District</th>
-							<td>{{- range $i, $md := .mining_districts}}{{- if ne $i 0}}, {{- end}}<a href="../search#mining_district_id={{$md.mining_district_id}}">{{$md.name}}</a>{{- end}}</td>
+							<td>{{- range $i, $md := .MiningDistricts}}{{- if ne $i 0}}, {{- end}}<a href="../search#mining_district_id={{$md.ID}}">{{$md.Name}}</a>{{- end}}</td>
 						</tr>
 						{{- end}}
 					</tbody>
 				</table>
 			</fieldset>
-			{{- if .geojson}}
+			{{- if .GeoJSON}}
 
 			<fieldset class="fs-map">
 				<legend>Geospatial</legend>
@@ -52,7 +55,7 @@
 					<div id="popup-content" class="ol-popup-content"></div>
 				</div>
 				<script>
-					var geojson = {{rawjs .geojson}};
+					var geojson = {{rawjs .GeoJSON}};
 				</script>
 			</fieldset>
 			<div class="flex-break"></div>
@@ -80,7 +83,7 @@
 				</table>
 			</script>
 			{{- end}}
-			{{- if .keywords}}
+			{{- if .KeywordSummary}}
 
 			<fieldset>
 				<legend>Inventory</legend>
@@ -92,22 +95,23 @@
 						</tr>
 					</thead>
 					<tbody>
-						{{- range .keywords}}
+						{{- range .KeywordSummary}}
 						<tr>
-							<td><a href="../search#prospect_id={{$.prospect_id}}{{range .keywords}}&keyword={{.}}{{- end}}">{{- range $i, $kw := .keywords}}{{- if ne $i 0}} &gt; {{end}}{{$kw}}{{- end}}</a></td>
-							<td>{{.count}}</td>
+							<td><a href="../search#prospect_id={{$.prospect.ProspectID}}{{range .Keywords}}&keyword={{.}}{{- end}}">{{- range $i, $kw := .Keywords}}{{- if ne $i 0}} &gt; {{end}}{{$kw}}{{- end}}</a></td>
+							<td>{{.Count}}</td>
 						</tr>
 						{{- end}}
 					</tbody>
 				</table>
 			</fieldset>
 			{{- end}}
-			{{- if .files}}
+			{{- if .Files}}
 
 			<fieldset>
 				<legend>Files</legend>
-				{{- range .files}}
-				<div><a href="../file/{{.file_id}}/{{.file_name}}">{{.file_name}}</a> ({{.file_size}})</div>
+				{{- range .Files}}
+				<div><a href="../file/{{.ID}}">{{.Name}}</a> ({{.Size}})</div>
 				{{- end}}
 			</fieldset>
 			{{- end}}
+{{end}}

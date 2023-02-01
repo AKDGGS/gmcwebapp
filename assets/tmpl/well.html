@@ -38,13 +38,13 @@
 						{{- if .SpudDate}}
 						<tr>
 							<th>Spud Date</th>
-							<td>{{formattime "1/2/2006" .SpudDate}}</td>
+							<td>{{.SpudDate.Format "1/2/2006"}}</td>
 						</tr>
 						{{- end}}
 						{{- if .CompletionDate}}
 						<tr>
 							<th>Completion Date</th>
-							<td>{{formattime "1/2/2006" .CompletionDate}}</td>
+							<td>{{.CompletionDate.Format "1/2/2006"}}</td>
 						</tr>
 						{{- end}}
 						{{- if .MeasuredDepth}}

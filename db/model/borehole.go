@@ -1,22 +1,22 @@
 package model
 
 import (
-	"encoding/json"
+	// "encoding/json"
 	"time"
 )
 
 type Borehole struct {
-	ID                int32                  `json:"well_id"`
+	ID                int32                  `json:"borehole_id"`
 	Name              string                 `json:"name"`
 	AltNames          string                 `json:"alt_name"`
-	WellNumber        string                 `json:"well_number"`
-	APINumber         string                 `json:"api_number"`
+	ProspectName      string                 `json:"prospect_name"`
+	AltProspectNames  string                 `json:"alt_prospect_names"`
 	IsOnshore         bool                   `json:"is_onshore"`
-	CompletionDate    time.Time              `json:"completion_date"`
+	CompletionDate    *time.Time             `json:"completion_date"`
 	MeasuredDepth     float64                `json:"measured_depth"`
-	MeasuredDepthUnit string                 `json:"measured_depth_unit`
+	MeasuredDepthUnit string                 `json:"measured_depth_unit"`
 	Elevation         float64                `json:"elevation"`
-	ElevationUnit     string                 `json:"elevation_unit`
+	ElevationUnit     string                 `json:"elevation_unit"`
 	Stash             map[string]interface{} `json:"stash"`
 	KeywordSummary    []KeywordSummary       `json:"keywords"`
 	GeoJSON           map[string]interface{} `json:"geojson"`
@@ -29,13 +29,13 @@ type Borehole struct {
 	Prospect          Prospect               `json:"prospect"`
 }
 
-func (b *Borehole) MarshalJSON() ([]byte, error) {
-	type Alias Borehole
-	return json.Marshal(&struct {
-		CompletionDate string `json:"completion_date"`
-		*Alias
-	}{
-		CompletionDate: b.CompletionDate.Format("01-02-2006"),
-		Alias:          (*Alias)(b),
-	})
-}
+// func (b *Borehole) MarshalJSON() ([]byte, error) {
+// 	type Alias Borehole
+// 	return json.Marshal(&struct {
+// 		CompletionDate string `json:"completion_date"`
+// 		*Alias
+// 	}{
+// 		CompletionDate: b.CompletionDate.Format("01-02-2006"),
+// 		Alias:          (*Alias)(b),
+// 	})
+// }

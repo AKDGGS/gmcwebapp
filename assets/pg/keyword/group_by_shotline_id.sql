@@ -1,8 +1,8 @@
-SELECT ARRAY_TO_JSON(keywords) AS keywords,
+SELECT keywords AS "Keywords",
 	COUNT(q2.inventory_id) AS count
 FROM (
 	SELECT q1.inventory_id,
-		ARRAY_AGG(q1.keyword ORDER BY q1.keyword) AS keywords
+		ARRAY_AGG(q1.keyword ORDER BY q1.keyword)::text[] AS keywords
 	FROM (
 		SELECT i.inventory_id, UNNEST(i.keywords) AS keyword
 		FROM inventory_shotpoint AS isp
