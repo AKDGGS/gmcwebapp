@@ -315,37 +315,33 @@
 				<legend>Shotline(s)</legend>
 				<table class="tb-fields">
 					<tbody>
-						{{- range $i, $f := .Shotlines}}
+						{{- range $i, $s := .Shotlines}}
+						{{- if eq $i 0}}
 						{{- if .Name}}
 						<tr class="tb-spacer-sm">
-							{{- if eq $i 0}}
-							<th>Shotline Name</th>
-							<td><a href="../shotline/{{.ID}}">{{.Name}}</a></td>
-							{{- else}}
 							<th>Shotline Name</th>
 							<td><a href="../shotline/{{.ID}}">{{.Name}}</a></td>
 							{{- end}}
+							{{- if .AltNames}}
+							<tr>
+								<th>Shotline Alt. Name</th>
+								<td>{{.AltNames}}</td>
+							</tr>
+							{{- end}}
+							{{- if .Year}}
+							<tr>
+								<th>Shotline Year</th>
+								<td>{{.Year}}</td>
+							</tr>
+							{{- end}}
 						</tr>
 						{{- end}}
-						{{- if .AltNames}}
+						{{- end}}
 						<tr>
-							<th>Shotline Alt. Name</th>
-							<td>{{.AltNames}}</td>
+							<th>Shotlpoint(s)</th>
+							<td>{{- range $i, $s := .Shotlines}}{{- if ne $i 0}}, {{- end}}
+								{{$s.Number}}{{- end}}
 						</tr>
-						{{- end}}
-						{{- if .Year}}
-						<tr>
-							<th>Shotline Year</th>
-							<td>{{.Year}}</td>
-						</tr>
-						{{- end}}
-						{{- if .Number}}
-						<tr>
-							<th>Shotpoint</th>
-							<td>{{.Number}}</td>
-						</tr>
-						{{- end}}
-						{{- end}}
 					</tbody>
 				</table>
 			</fieldset>
