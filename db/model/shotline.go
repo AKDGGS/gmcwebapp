@@ -6,6 +6,8 @@ type Shotline struct {
 	AltNames       string                 `json:"alt_names"`
 	Year           int16                  `json:"year"`
 	Remark         string                 `json:"remark"`
+	ShotpointID    int32                  `json:"shotpoint_id"`
+	Number         float64                `json:"shotpoint_number"`
 	ShotpointMin   int16                  `json:"shotpoint_min"`
 	ShotpointMax   int16                  `json:"shotpoint_max"`
 	Stash          map[string]interface{} `json:"stash"`

@@ -214,39 +214,70 @@ func rowToStruct(r pgx.Rows, a interface{}) int {
 			columnValues, _ := r.Values()
 			for i, val := range columnValues {
 				fieldName := string(r.FieldDescriptions()[i].Name)
-				for j := 0; j < rv.NumField(); j++ {
 
+				if strings.Contains(fieldName, ".") {
+					fieldName = strings.Split(fieldName, ".")[1]
+				}
+				for j := 0; j < rv.NumField(); j++ {
 					if rv.Field(j).Kind() == reflect.Struct {
-						// fmt.Println(rv.Field(j).Type().Name(), rv.Field(j).Kind())
-						rowToStruct(r, rv.Field(j).Addr().Interface())
-					}
-					if !strings.EqualFold(fieldName, rv.Type().Field(j).Name) {
-						continue
-					}
-					fmt.Println(rv.Type().Field(j).Name, rv.Type().Field(j).Name)
-					switch val.(type) {
-					case pgtype.TextArray:
-						s := val.(pgtype.TextArray)
-						var s_arr []string
-						s.AssignTo(&s_arr)
-						if reflect.TypeOf(s_arr) == rv.Field(j).Type() {
-							rv.Field(j).Set(reflect.ValueOf(s_arr))
+						for k := 0; k < rv.Field(j).NumField(); k++ {
+							if !strings.EqualFold(fieldName, rv.Field(j).Type().Field(k).Name) {
+								continue
+							}
+							switch val.(type) {
+							case pgtype.TextArray:
+								s := val.(pgtype.TextArray)
+								var s_arr []string
+								s.AssignTo(&s_arr)
+								if reflect.TypeOf(s_arr) == rv.Field(j).Type() {
+									rv.Field(j).Set(reflect.ValueOf(s_arr))
+								}
+							case pgtype.Numeric:
+								n := val.(pgtype.Numeric)
+								var nv float64
+								n.AssignTo(&nv)
+								if reflect.TypeOf(nv) == rv.Field(j).Type() {
+									rv.Field(j).Set(reflect.ValueOf(nv))
+								}
+							case time.Time:
+								t, ok := val.(time.Time)
+								if ok {
+									rv.Field(j).Set(reflect.ValueOf(&t))
+								}
+							default:
+								if reflect.TypeOf(val) == rv.Field(j).Type().Field(k).Type {
+									rv.Field(j).Field(k).Set(reflect.ValueOf(val))
+								}
+							}
 						}
-					case pgtype.Numeric:
-						n := val.(pgtype.Numeric)
-						var nv float64
-						n.AssignTo(&nv)
-						if reflect.TypeOf(nv) == rv.Field(j).Type() {
-							rv.Field(j).Set(reflect.ValueOf(nv))
+					} else {
+						if !strings.EqualFold(fieldName, rv.Type().Field(j).Name) {
+							continue
 						}
-					case time.Time:
-						t, ok := val.(time.Time)
-						if ok {
-							rv.Field(j).Set(reflect.ValueOf(&t))
-						}
-					default:
-						if reflect.TypeOf(val) == rv.Field(j).Type() {
-							rv.Field(j).Set(reflect.ValueOf(val))
+						switch val.(type) {
+						case pgtype.TextArray:
+							s := val.(pgtype.TextArray)
+							var s_arr []string
+							s.AssignTo(&s_arr)
+							if reflect.TypeOf(s_arr) == rv.Field(j).Type() {
+								rv.Field(j).Set(reflect.ValueOf(s_arr))
+							}
+						case pgtype.Numeric:
+							n := val.(pgtype.Numeric)
+							var nv float64
+							n.AssignTo(&nv)
+							if reflect.TypeOf(nv) == rv.Field(j).Type() {
+								rv.Field(j).Set(reflect.ValueOf(nv))
+							}
+						case time.Time:
+							t, ok := val.(time.Time)
+							if ok {
+								rv.Field(j).Set(reflect.ValueOf(&t))
+							}
+						default:
+							if reflect.TypeOf(val) == rv.Field(j).Type() {
+								rv.Field(j).Set(reflect.ValueOf(val))
+							}
 						}
 					}
 				}
@@ -256,272 +287,3 @@ func rowToStruct(r pgx.Rows, a interface{}) int {
 	}
 	return 0
 }
-
-func ReadStruct(r pgx.Rows, st interface{}) {
-	var rowResults = make(map[string]interface{})
-	for r.Next() {
-		columnValues, _ := r.Values()
-		for i, val := range columnValues {
-			fieldName := string(r.FieldDescriptions()[i].Name)
-			rowResults[fieldName] = val
-		}
-	}
-	readStruct(r, reflect.ValueOf(st), rowResults)
-}
-
-func readStruct(r pgx.Rows, rv reflect.Value, rowResults map[string]interface{}) int {
-	if rv.Kind() == reflect.Ptr {
-		rv = rv.Elem()
-	}
-	if !rv.CanSet() {
-		return 0
-	}
-	fmt.Println("==============" + rv.Type().Name() + "===============")
-
-	switch rv.Kind() {
-	case reflect.Slice:
-		var elem reflect.Value
-		switch typ := rv.Type().Elem(); typ.Kind() {
-		case reflect.Ptr:
-			elem = reflect.New(typ.Elem())
-		case reflect.Struct:
-			elem = reflect.New(typ).Elem()
-		}
-		for rowCount := 0; ; {
-			if c := readStruct(r, elem.Addr(), rowResults); c > 0 {
-				rowCount += c
-				rv.Set(reflect.Append(rv, elem))
-				continue
-			}
-			return rowCount
-		}
-	case reflect.Struct:
-		for j := 0; j < rv.NumField(); j++ {
-			switch rv.Field(j).Kind() {
-			case reflect.Struct:
-				readStruct(r, rv.Field(j), rowResults)
-			default:
-				if reflect.TypeOf(rowResults[rv.Type().Field(j).Name]) == rv.Field(j).Type() {
-					fmt.Println(rv.Type().Field(j).Name, rowResults[rv.Type().Field(j).Name])
-					rv.Field(j).Set(reflect.ValueOf(rowResults[rv.Type().Field(j).Name]))
-
-					// Line 304 isn't setting the value.  I think I need to pass the value as a pointer or Addr().Interface()
-				}
-			}
-		}
-	}
-	return 0
-}
-
-//Some of this might be useful
-// func ReadStruct(r pgx.Rows, st interface{}) {
-// 	readStruct(r, reflect.ValueOf(st))
-// }
-//
-// func readStruct(r pgx.Rows, rv reflect.Value) int {
-// 	if rv.Kind() == reflect.Ptr {
-// 		rv = rv.Elem()
-// 	}
-// 	if !rv.CanSet() {
-// 		return 0
-// 	}
-// 	fmt.Println("==============" + rv.Type().Name() + "===============")
-// 	switch rv.Kind() {
-// 	case reflect.Slice:
-// 		var elem reflect.Value
-// 		switch typ := rv.Type().Elem(); typ.Kind() {
-// 		case reflect.Ptr:
-// 			elem = reflect.New(typ.Elem())
-// 		case reflect.Struct:
-// 			elem = reflect.New(typ).Elem()
-// 		}
-// 		ReadStruct(r, elem.Addr().Interface())
-// 		for rowCount := 0; ; {
-// 			ReadStruct(r, elem.Addr().Interface())
-// 			rv.Set(reflect.Append(rv, elem))
-// 			// if c := rowToStruct(r, elem.Addr().Interface()); c > 0 {
-// 			// 	rowCount += c
-// 			// 	rv.Set(reflect.Append(rv, elem))
-// 			// 	continue
-// 			// }
-// 			return rowCount
-// 		}
-// 	case reflect.Struct:
-// 		fmt.Println("============= Struct", rv.Type().Name(), rv.NumField(), "=================")
-// 		for j := 0; j < rv.NumField(); j++ {
-// 			if r.Next() {
-// 				columnValues, _ := r.Values()
-// 				for i, _ := range columnValues {
-// 					fieldName := string(r.FieldDescriptions()[i].Name)
-// 					// fmt.Println(fieldName, val)
-// 					if strings.Contains(fieldName, ".") {
-// 						sArr := strings.Split(fieldName, ".")
-// 						fmt.Println(rv.Type().Name(), sArr[0], sArr[1])
-// 						if (rv.FieldByName(sArr[0]) != reflect.Value{}) {
-// 							fmt.Println(reflect.ValueOf(rv.FieldByName(sArr[0]).Type()))
-// 							ReadStruct(r, rv.FieldByName(sArr[0]))
-// 						}
-// 					}
-// 					// else {
-// 					// 	fmt.Println(rv.Field(j).Type().Name(), rv.Type().Name(), val)
-// 					// }
-// 				}
-//
-// 				// for i, val := range columnValues {
-// 				// 	fieldName := string(r.FieldDescriptions()[i].Name)
-// 				// 	fmt.Println(fieldName, val)
-// 				// 	fmt.Println("-------- Fields: ", rv.Field(j).Type().Name())
-// 				// }
-// 			}
-// 		}
-// 	}
-//
-// 	// for j := 0; j < rv.NumField(); j++ {
-// 	// 	// fmt.Println("Fields: "+rv.Field(j).Type().Name(), rv.Field(j).Kind())
-// 	// 	if rv.Field(j).Kind() == reflect.Struct {
-// 	// 		fmt.Println("====", rv.Type().Name())
-// 	// 		typ := rv.Type().Elem()
-// 	// 		elem := reflect.New(typ).Elem()
-// 	// 		ReadStruct(r, elem.Addr().Interface())
-// 	// 		rv.Field(j).Set(elem)
-// 	// 	}
-// 	// else {
-// 	// 	if r.Next() {
-// 	// 		columnValues, _ := r.Values()
-// 	// 		for i, val := range columnValues {
-// 	// 			fieldName := string(r.FieldDescriptions()[i].Name)
-// 	// 			for j := 0; j < rv.NumField(); j++ {
-// 	// 				f := rv.Field(j)
-// 	// 				switch f.Kind() {
-// 	// 				case reflect.Struct:
-// 	// 					fmt.Println(">>>>>>>>>>>>>>", f.Kind(), "|", f.Type(), "|", f.Type().Name())
-// 	// 					readStruct(r, f)
-// 	// 				case reflect.Slice:
-// 	// 					for k := 0; k < f.Len(); k++ {
-// 	// 						readStruct(r, f.Index(k))
-// 	// 					}
-// 	// 				default:
-// 	// 					// fmt.Println(fieldName, rv.Type().Field(j).Name)
-// 	// 					if !strings.EqualFold(fieldName, rv.Type().Field(j).Name) {
-// 	// 						continue
-// 	// 					}
-// 	// 					// fmt.Println(fieldName, rv.Type().Field(j).Name, val)
-// 	// 					switch val.(type) {
-// 	// 					case pgtype.TextArray:
-// 	// 						s := val.(pgtype.TextArray)
-// 	// 						var s_arr []string
-// 	// 						s.AssignTo(&s_arr)
-// 	// 						if reflect.TypeOf(s_arr) == rv.Field(j).Type() {
-// 	// 							rv.Field(j).Set(reflect.ValueOf(s_arr))
-// 	// 						}
-// 	// 					case pgtype.Numeric:
-// 	// 						n := val.(pgtype.Numeric)
-// 	// 						var nv float64
-// 	// 						n.AssignTo(&nv)
-// 	// 						if reflect.TypeOf(nv) == rv.Field(j).Type() {
-// 	// 							rv.Field(j).Set(reflect.ValueOf(nv))
-// 	// 						}
-// 	// 					case time.Time:
-// 	// 						t, ok := val.(time.Time)
-// 	// 						if ok {
-// 	// 							rv.Field(j).Set(reflect.ValueOf(&t))
-// 	// 						}
-// 	// 					default:
-// 	// 						if reflect.TypeOf(val) == rv.Field(j).Type() {
-// 	// 							// fmt.Println(rv.Type().Field(j).Name, val)
-// 	// 							rv.Field(j).Set(reflect.ValueOf(val))
-// 	// 						}
-// 	// 					}
-// 	// 				}
-// 	// 				// case reflect.String:
-// 	// 				// 	fmt.Printf("%v=%v\n", val.Type().Field(i).Name, val.Field(i))
-// 	// 				// 	val.Field(i).SetString("Test")
-// 	// 				// case reflect.Int32:
-// 	// 				// 	fmt.Printf("%v=%v\n", val.Type().Field(i).Name, val.Field(i))
-// 	// 				// 	val.Field(i).SetInt(99)
-// 	// 				// 	// fmt.Printf("%v=%v\n", val.Type().Field(i).Name, val.Field(i))
-// 	// 				// default:
-// 	// 				// 	if !strings.EqualFold(fieldName, val.Type().Field(i).Name) {
-// 	// 				// 		continue
-// 	// 				// 	}
-// 	// 				// 	if reflect.TypeOf(val) == rv.Field(j).Type() {
-// 	// 				// 		// fmt.Println(rv.Type().Field(j).Name, val)
-// 	// 				// 		rv.Field(j).Set(reflect.ValueOf(val))
-// 	// 				// 	}
-// 	// 			}
-// 	// 		}
-// 	// 		return 1
-// 	// 	}
-// 	// }
-// 	// }
-//
-// 	// if r.Next() {
-// 	// 	columnValues, _ := r.Values()
-// 	// 	for i, val := range columnValues {
-// 	// 		fieldName := string(r.FieldDescriptions()[i].Name)
-// 	// 		// fmt.Println(fieldName, val)
-// 	// 		for j := 0; j < rv.NumField(); j++ {
-// 	// 			f := rv.Field(j)
-// 	// 			switch f.Kind() {
-// 	// 			case reflect.Struct:
-// 	// 				fmt.Println(">>>>>>>>>>>>>>", f.Kind(), "|", f.Type(), "|", f.Type().Name())
-// 	// 				readStruct(r, f)
-// 	// 			case reflect.Slice:
-// 	// 				for k := 0; k < f.Len(); k++ {
-// 	// 					readStruct(r, f.Index(k))
-// 	// 				}
-// 	// 			default:
-// 	// 				// fmt.Println(fieldName, rv.Type().Field(j).Name)
-// 	// 				if !strings.EqualFold(fieldName, rv.Type().Field(j).Name) {
-// 	// 					continue
-// 	// 				}
-// 	// 				// fmt.Println(fieldName, rv.Type().Field(j).Name, val)
-// 	// 				switch val.(type) {
-// 	// 				case pgtype.TextArray:
-// 	// 					s := val.(pgtype.TextArray)
-// 	// 					var s_arr []string
-// 	// 					s.AssignTo(&s_arr)
-// 	// 					if reflect.TypeOf(s_arr) == rv.Field(j).Type() {
-// 	// 						rv.Field(j).Set(reflect.ValueOf(s_arr))
-// 	// 					}
-// 	// 				case pgtype.Numeric:
-// 	// 					n := val.(pgtype.Numeric)
-// 	// 					var nv float64
-// 	// 					n.AssignTo(&nv)
-// 	// 					if reflect.TypeOf(nv) == rv.Field(j).Type() {
-// 	// 						rv.Field(j).Set(reflect.ValueOf(nv))
-// 	// 					}
-// 	// 				case time.Time:
-// 	// 					t, ok := val.(time.Time)
-// 	// 					if ok {
-// 	// 						rv.Field(j).Set(reflect.ValueOf(&t))
-// 	// 					}
-// 	// 				default:
-// 	// 					if reflect.TypeOf(val) == rv.Field(j).Type() {
-// 	// 						// fmt.Println(rv.Type().Field(j).Name, val)
-// 	// 						rv.Field(j).Set(reflect.ValueOf(val))
-// 	// 					}
-// 	// 				}
-// 	// 			}
-// 	// 			// case reflect.String:
-// 	// 			// 	fmt.Printf("%v=%v\n", val.Type().Field(i).Name, val.Field(i))
-// 	// 			// 	val.Field(i).SetString("Test")
-// 	// 			// case reflect.Int32:
-// 	// 			// 	fmt.Printf("%v=%v\n", val.Type().Field(i).Name, val.Field(i))
-// 	// 			// 	val.Field(i).SetInt(99)
-// 	// 			// 	// fmt.Printf("%v=%v\n", val.Type().Field(i).Name, val.Field(i))
-// 	// 			// default:
-// 	// 			// 	if !strings.EqualFold(fieldName, val.Type().Field(i).Name) {
-// 	// 			// 		continue
-// 	// 			// 	}
-// 	// 			// 	if reflect.TypeOf(val) == rv.Field(j).Type() {
-// 	// 			// 		// fmt.Println(rv.Type().Field(j).Name, val)
-// 	// 			// 		rv.Field(j).Set(reflect.ValueOf(val))
-// 	// 			// 	}
-// 	// 		}
-// 	// 	}
-// 	// 	return 1
-// 	// }
-//
-// 	return 0
-// }

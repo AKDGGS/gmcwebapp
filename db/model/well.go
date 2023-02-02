@@ -9,19 +9,24 @@ type Well struct {
 	ID               int32                  `json:"well_id"`
 	Name             string                 `json:"name"`
 	AltNames         string                 `json:"alt_name"`
-	WellNumber       string                 `json:"well_number"`
+	Number           string                 `json:"well_number"`
 	APINumber        string                 `json:"api_number"`
 	IsOnshore        bool                   `json:"is_onshore"`
 	IsFederal        bool                   `json:"is_federal"`
-	PermitStatus     string                 `json:"permit_status"`
-	CompletionStatus string                 `json:"completion_status"`
 	SpudDate         *time.Time             `json:"spud_date"`
 	CompletionDate   *time.Time             `json:"completion_date"`
 	MeasuredDepth    float64                `json:"measured_depth"`
 	VerticalDepth    float64                `json:"vertical_depth"`
 	Elevation        float64                `json:"elevation_depth"`
-	ElevationKb      float64                `json:"elevation_kb"`
+	ElevationKB      float64                `json:"elevation_kb"`
+	PermitStatus     string                 `json:"permit_status"`
+	PermitNumber     int32                  `json:"permit_number"`
+	CompletionStatus string                 `json:"completion_status"`
 	Unit             string                 `json:"unit"`
+	IsCurrent        bool                   `json:"is_current"`
+	OperatorName     string                 `json:"operator_name"`
+	Remark           string                 `json:"remark"`
+	OperatorType     string                 `json:"operator_type"`
 	Stash            map[string]interface{} `json:"stash"`
 	KeywordSummary   []KeywordSummary       `json:"keywords"`
 	GeoJSON          map[string]interface{} `json:"geojson"`

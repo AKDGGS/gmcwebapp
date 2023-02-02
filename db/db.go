@@ -26,7 +26,7 @@ type DB interface {
 	GetShotline(id int, flags int) (*model.Shotline, error)
 
 	// Fetches the complete details for an Inventory
-	GetInventory(id int, flags int) (map[string]interface{}, error)
+	GetInventory(id int, flags int) (*model.Inventory, error)
 
 	// Fetches stash for a specific inventory id
 	GetStash(id int) (map[string]interface{}, error)

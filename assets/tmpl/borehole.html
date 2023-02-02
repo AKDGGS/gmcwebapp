@@ -57,7 +57,9 @@
 						{{- range $i, $f := .GeoJSON.features}}{{- if ne $i 0}}, {{- end}} {{- if (eq $f.geometry.type "Point" )}}
 							<tr>
 								<th>Lon/Lat</th>
-								<td>{{$f.geometry.coordinates}}</td>
+								<td>{{- range $i, $coor := $f.geometry.coordinates}}{{- if ne $i 0}}, {{- end}}
+									{{$coor}}{{- end}}
+								</td>
 							</tr>
 						{{- end}}
 						{{- end}}
