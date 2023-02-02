@@ -1,5 +1,5 @@
 SELECT bh.borehole_id AS "ID",
-	bh.name AS "Name",
+	bh.name,
 	bh.alt_names AS "AltNames",
 	bh.is_onshore AS "IsOnshore", 
 	bh.completion_date AS "CompletionDate",
@@ -9,8 +9,8 @@ SELECT bh.borehole_id AS "ID",
 	COALESCE(bh.elevation_unit::text, 'ft') AS "ElevationUnit",
 	ph.prospect_id AS "Prospect.ProspectID",
 	ph.name AS "Prospect.ProspectName",
-	ph.alt_names AS "AltNames",
-	ph.ardf_number AS "ARDFNumber"
+	ph.alt_names AS "Prospect.AltNames",
+	ph.ardf_number AS "Prospect.ARDFNumber"
 FROM borehole AS bh
 LEFT OUTER JOIN prospect AS ph
 	ON ph.prospect_id = bh.prospect_id

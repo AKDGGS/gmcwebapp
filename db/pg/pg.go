@@ -214,7 +214,6 @@ func rowToStruct(r pgx.Rows, a interface{}) int {
 			columnValues, _ := r.Values()
 			for i, val := range columnValues {
 				fieldName := string(r.FieldDescriptions()[i].Name)
-
 				if strings.Contains(fieldName, ".") {
 					fieldName = strings.Split(fieldName, ".")[1]
 				}
