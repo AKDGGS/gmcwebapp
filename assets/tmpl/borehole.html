@@ -121,7 +121,7 @@
 					<tbody>
 						{{- range .KeywordSummary}}
 						<tr>
-							<td><a href="../search#borehole_id:{{$.borehole.ID}}prospect_id:{{$.borehole.Prospect.ProspectID}}{{range .Keywords}}&keyword={{.}}{{- end}}">{{- range $i, $kw := .Keywords}}{{- if ne $i 0}} &gt; {{end}}{{$kw}}{{- end}}</a></td>
+							<td><a href="../search#borehole_id:{{$.borehole.ID}}prospect_id:{{$.borehole.Prospect.ID}}{{range .Keywords}}&keyword={{.}}{{- end}}">{{- range $i, $kw := .Keywords}}{{- if ne $i 0}} &gt; {{end}}{{$kw}}{{- end}}</a></td>
 							<td>{{.Count}}</td>
 						</tr>
 						{{- end}}
