@@ -1,8 +1,8 @@
 package model
 
 type Prospect struct {
-	ProspectID      int32                  `json:"prospect_id"`
-	ProspectName    string                 `json:"prospect_name"`
+	ID              int32                  `json:"prospect_id"`
+	Name            string                 `json:"prospect_name"`
 	AltNames        string                 `json:"alt_names"`
 	ARDFNumber      string                 `json:"ardf_number"`
 	Files           []File                 `json:"files"`

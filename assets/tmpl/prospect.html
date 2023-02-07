@@ -3,10 +3,10 @@
 				<legend>Prospect Detail</legend>
 				<table class="tb-fields">
 					<tbody>
-						{{- if .ProspectName}}
+						{{- if .Name}}
 						<tr>
 							<th>Name</th>
-							<td><a href="../search#prospect_id={{.ProspectID}}">{{.ProspectName}}</a></td>
+							<td><a href="../search#prospect_id={{.ID}}">{{.Name}}</a></td>
 						</tr>
 						{{- end}}
 						{{- if .AltNames}}

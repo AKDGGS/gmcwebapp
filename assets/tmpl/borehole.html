@@ -4,10 +4,10 @@
 				<table class="tb-fields">
 					<tbody>
 						{{- if .Prospect}}
-							{{- if .Prospect.ProspectName}}
+							{{- if .Prospect.Name}}
 							<tr>
 								<th>Prospect Name</th>
-								<td><a href="../prospect/{{.Prospect.ProspectID}}">{{.Prospect.ProspectName}}</a></td>
+								<td><a href="../prospect/{{.Prospect.ID}}">{{.Prospect.Name}}</a></td>
 							</tr>
 							{{- end}}
 							{{- if .Prospect.AltNames}}
