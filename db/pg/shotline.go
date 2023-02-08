@@ -20,6 +20,19 @@ func (pg *Postgres) GetShotline(id int, flags int) (*model.Shotline, error) {
 	defer rows.Close()
 	shotline := model.Shotline{}
 	rowToStruct(rows, &shotline)
+
+	if (flags & dbf.SHOTPOINT) != 0 {
+		q, err = assets.ReadString("pg/shotpoint/by_shotline_id.sql")
+		if err != nil {
+			return nil, err
+		}
+		r, err := pg.pool.Query(context.Background(), q, id)
+		if err != nil {
+			return nil, err
+		}
+		rowToStruct(r, &shotline.Shotpoints)
+	}
+
 	if (flags & dbf.INVENTORY_SUMMARY) != 0 {
 		q, err = assets.ReadString("pg/keyword/group_by_shotline_id.sql")
 		if err != nil {

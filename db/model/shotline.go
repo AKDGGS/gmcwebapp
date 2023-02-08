@@ -10,6 +10,7 @@ type Shotline struct {
 	Number         float64                `json:"shotpoint_number"`
 	ShotpointMin   float64                `json:"shotpoint_min"`
 	ShotpointMax   float64                `json:"shotpoint_max"`
+	Shotpoints     []Shotpoint            `json:"shotponts"`
 	Stash          map[string]interface{} `json:"stash"`
 	KeywordSummary []KeywordSummary       `json:"keywords"`
 	GeoJSON        map[string]interface{} `json:"geojson"`

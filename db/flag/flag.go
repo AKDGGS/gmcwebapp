@@ -23,6 +23,7 @@ const (
 	QUALITY
 	TRACKING
 	PROSPECT
+	SHOTPOINT
 )
 
 // Option for everything
