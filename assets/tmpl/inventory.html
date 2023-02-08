@@ -250,10 +250,10 @@
 				<table class="tb-fields">
 					<tbody>
 						{{- range .Boreholes}}
-						{{- if .Prospect.ProspectName}}
+						{{- if .Prospect.Name}}
 						<tr class="tb-spacer-sm">
 							<th>Prospect Name</th>
-							<td><a href="../prospect/{{.Prospect.ProspectID}}">{{.Prospect.ProspectName}}</a></td>
+							<td><a href="../prospect/{{.Prospect.ID}}">{{.Prospect.Name}}</a></td>
 						</tr>
 						{{- end}}
 						{{- if .Prospect.ARDFNumber}}
