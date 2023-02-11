@@ -15,10 +15,10 @@
 							<td>{{.AltNames}}</td>
 						</tr>
 						{{- end}}
-						{{- if .WellNumber}}
+						{{- if .Number}}
 						<tr>
 							<th>Well Number</th>
-							<td>{{.WellNumber}}</td>
+							<td>{{.Number}}</td>
 						</tr>
 						{{- end}}
 						{{- if .APINumber}}
@@ -65,10 +65,10 @@
 							<td>{{.Elevation}} {{.Unit}}</td>
 						</tr>
 						{{- end}}
-						{{- if .ElevationKb}}
+						{{- if .ElevationKB}}
 						<tr>
 							<th>Kelly Bushing Elevation</th>
-							<td>{{.ElevationKb}} {{.Unit}}</td>
+							<td>{{.ElevationKB}} {{.Unit}}</td>
 						</tr>
 						{{- end}}
 						{{- if .PermitStatus}}

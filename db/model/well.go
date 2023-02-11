@@ -23,7 +23,7 @@ type Well struct {
 	PermitNumber     int32                  `json:"permit_number"`
 	CompletionStatus string                 `json:"completion_status"`
 	Unit             string                 `json:"unit"`
-	IsCurrent        bool                   `json:"is_current"`
+	Current          bool                   `json:"is_current"`
 	OperatorName     string                 `json:"operator_name"`
 	Remark           string                 `json:"remark"`
 	OperatorType     string                 `json:"operator_type"`

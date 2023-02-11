@@ -66,6 +66,7 @@ type Inventory struct {
 	Outcrops        []Outcrop              `json:"outcrops"`
 	Shotlines       []Shotline             `json:"shotlines"`
 	Wells           []Well                 `json:"wells"`
+	Organizations   []Organization         `json:"organizations"`
 	Notes           []Note                 `json:"notes"`
 	URLs            []URL                  `json:"urls"`
 	Files           []File                 `json:"files"`
