@@ -1,14 +1,14 @@
 SELECT bh.borehole_id AS "ID",
 	bh.name,
 	bh.alt_names AS "AltNames",
-	bh.is_onshore AS "IsOnshore", 
+	bh.is_onshore AS "Onshore",
 	bh.completion_date AS "CompletionDate",
 	bh.measured_depth AS "MeasuredDepth",
 	COALESCE(bh.measured_depth_unit::text, 'ft') AS "MeasuredDepthUnit",
 	bh.elevation AS "Elevation",
 	COALESCE(bh.elevation_unit::text, 'ft') AS "ElevationUnit",
-	ph.prospect_id AS "Prospect.ProspectID",
-	ph.name AS "Prospect.ProspectName",
+	ph.prospect_id AS "Prospect.ID",
+	ph.name AS "Prospect.Name",
 	ph.alt_names AS "Prospect.AltNames",
 	ph.ardf_number AS "Prospect.ARDFNumber"
 FROM borehole AS bh

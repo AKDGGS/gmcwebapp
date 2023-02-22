@@ -1,7 +1,7 @@
-SELECT o.outcrop_id AS "ID", 
+SELECT o.outcrop_id AS "ID",
 	o.name,
-	o.outcrop_number AS "Number", 
-	o.is_onshore AS "IsOnshore", 
+	o.outcrop_number AS "Number",
+	o.is_onshore AS "Onshore", 
 	o.year
 FROM outcrop AS o
 JOIN inventory_outcrop AS io

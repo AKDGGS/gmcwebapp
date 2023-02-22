@@ -11,8 +11,8 @@ type Well struct {
 	AltNames         string                 `json:"alt_name"`
 	Number           string                 `json:"well_number"`
 	APINumber        string                 `json:"api_number"`
-	IsOnshore        bool                   `json:"is_onshore"`
-	IsFederal        bool                   `json:"is_federal"`
+	Onshore          bool                   `json:"is_onshore"`
+	Federal          bool                   `json:"is_federal"`
 	SpudDate         *time.Time             `json:"spud_date"`
 	CompletionDate   *time.Time             `json:"completion_date"`
 	MeasuredDepth    float64                `json:"measured_depth"`

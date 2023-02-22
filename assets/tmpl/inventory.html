@@ -380,32 +380,34 @@
 						</tr>
 						{{- end}}
 						{{- end}}
+						{{- range $i, $o :=.Organizations}}
 						{{- if .Current}}
-						{{- if .OperatorName}}
+						{{- if .Name}}
 						<tr>
 							<th>Current Operator</th>
-							<td>{{.OperatorName}}</td>
+							<td>{{.Name}}</td>
 						</tr>
 						{{- end}}
-						{{- if .OperatorType}}
+						{{- if .Type}}
 						<tr>
 							<th>Operator Type</th>
-							<td>{{.OperatorType}}</td>
+							<td>{{.Type}}</td>
 						</tr>
 						{{- end}}
 						{{- end}}
 						{{- if not .Current}}
-						{{- if .OperatorName}}
+						{{- if .Name}}
 						<tr>
 							<th>Previous Operator</th>
-							<td>{{.OperatorName}}</td>
+							<td>{{.Name}}</td>
 						</tr>
 						{{- end}}
-						{{- if .OperatorType}}
+						{{- if .Type}}
 						<tr>
 							<th>Operator Type</th>
-							<td>{{.OperatorType}}</td>
+							<td>{{.Type}}</td>
 						</tr>
+						{{- end}}
 						{{- end}}
 						{{- end}}
 						{{- end}}
@@ -440,7 +442,7 @@
 						<tr>
 							<td>{{.Date.Format "1/2/2006"}}</td>
 							<td>{{.Username}}</td>
-							<td>{{- if .IsPublic}} Yes {{- else -}}No{{- end}} </td>
+							<td>{{- if .Public}} Yes {{- else -}}No{{- end}} </td>
 							<td>{{.Note}}</td>
 						</tr>
 						{{- end}}

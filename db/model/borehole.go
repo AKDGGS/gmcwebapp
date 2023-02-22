@@ -9,7 +9,7 @@ type Borehole struct {
 	ID                int32                  `json:"borehole_id"`
 	Name              string                 `json:"name"`
 	AltNames          string                 `json:"alt_name"`
-	IsOnshore         bool                   `json:"is_onshore"`
+	Onshore           bool                   `json:"is_onshore"`
 	CompletionDate    *time.Time             `json:"completion_date"`
 	MeasuredDepth     float64                `json:"measured_depth"`
 	MeasuredDepthUnit string                 `json:"measured_depth_unit"`

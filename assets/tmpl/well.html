@@ -29,11 +29,11 @@
 						{{- end}}
 						<tr>
 							<th>Onshore</th>
-							<td>{{- if .IsOnshore}}Yes{{- else}}No{{- end}}</td>
+							<td>{{- if .Onshore}}Yes{{- else}}No{{- end}}</td>
 						</tr>
 						<tr>
 							<th>Federal</th>
-							<td>{{- if .IsFederal}}Yes{{- else}}No{{- end}}</td>
+							<td>{{- if .Federal}}Yes{{- else}}No{{- end}}</td>
 						</tr>
 						{{- if .SpudDate}}
 						<tr>
@@ -204,7 +204,7 @@
 						<tr>
 							<td>{{formattime "1/2/2006" .Date}}</td>
 							<td>{{.Username}}</td>
-							<td>{{- if .IsPublic}}Yes{{- else}}No{{- end}}</td>
+							<td>{{- if .Public}}Yes{{- else}}No{{- end}}</td>
 							<td>{{.Note}}</td>
 						</tr>
 					{{- end}}

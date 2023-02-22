@@ -1,4 +1,4 @@
-SELECT f.file_id AS ID, f.filename AS Name,
+SELECT f.file_id AS ID, f.filename AS Name, f.mimetype as "Type",
 	pg_size_pretty(f.size::numeric) AS "Size"
 FROM well_file AS wf
 JOIN file AS f

@@ -8,7 +8,7 @@ type Outcrop struct {
 	ID             int32                  `json:"outcrop_id"`
 	Name           string                 `json:"name"`
 	Number         string                 `json:"outcrop_number"`
-	IsOnshore      bool                   `json:"is_onshore"`
+	Onshore        bool                   `json:"is_onshore"`
 	EnteredDate    *time.Time             `json:"entered_date"`
 	ModifiedDate   *time.Time             `json:"modified_date"`
 	ModifiedUser   string                 `json:"modified_user"`

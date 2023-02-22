@@ -84,7 +84,7 @@
 						{{- end}}
 						<tr>
 							<th>Onshore</th>
-							<td>{{- if .IsOnshore}}Yes{{- else}}No{{- end}}</td>
+							<td>{{- if .Onshore}}Yes{{- else}}No{{- end}}</td>
 						</tr>
 					</tbody>
 				</table>
@@ -187,7 +187,7 @@
 						<tr>
 							<td>{{.Date.Format "1/2/2006"}}</td>
 							<td>{{.Username}}</td>
-							<td>{{- if .IsPublic}}Yes{{- else}}No{{- end}}</td>
+							<td>{{- if .Public}}Yes{{- else}}No{{- end}}</td>
 							<td>{{.Note}}</td>
 						</tr>
 						{{- end}}

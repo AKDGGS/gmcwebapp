@@ -214,69 +214,96 @@ func rowToStruct(r pgx.Rows, a interface{}) int {
 			columnValues, _ := r.Values()
 			for i, val := range columnValues {
 				fieldName := string(r.FieldDescriptions()[i].Name)
-				if strings.Contains(fieldName, ".") {
-					fieldName = strings.Split(fieldName, ".")[1]
-				}
 				for j := 0; j < rv.NumField(); j++ {
+
 					if rv.Field(j).Kind() == reflect.Struct {
+						var parent string
 						for k := 0; k < rv.Field(j).NumField(); k++ {
+							if strings.Contains(fieldName, ".") {
+								index := strings.Index(fieldName[:], ".")
+								parent = fieldName[:index]
+								if index+1 < len(fieldName) {
+									fieldName = fieldName[index+1:]
+								}
+							}
+							if !strings.EqualFold(parent, rv.Type().Field(j).Name) {
+								continue
+							}
 							if !strings.EqualFold(fieldName, rv.Field(j).Type().Field(k).Name) {
 								continue
 							}
-							switch val.(type) {
-							case pgtype.TextArray:
-								s := val.(pgtype.TextArray)
-								var s_arr []string
-								s.AssignTo(&s_arr)
-								if reflect.TypeOf(s_arr) == rv.Field(j).Type().Field(k).Type {
-									rv.Field(j).Field(k).Set(reflect.ValueOf(s_arr))
-								}
-							case pgtype.Numeric:
-								n := val.(pgtype.Numeric)
-								var nv float64
-								n.AssignTo(&nv)
-								if reflect.TypeOf(nv) == rv.Field(j).Type().Field(k).Type {
-									rv.Field(j).Field(k).Set(reflect.ValueOf(nv))
-								}
-							case time.Time:
-								t, ok := val.(time.Time)
-								if ok {
-									rv.Field(j).Field(k).Set(reflect.ValueOf(&t))
-								}
-							default:
-								if reflect.TypeOf(val) == rv.Field(j).Type().Field(k).Type {
-									rv.Field(j).Field(k).Set(reflect.ValueOf(val))
-								}
+							if reflect.TypeOf(val) == rv.Field(j).Type().Field(k).Type {
+								rv.Field(j).Field(k).Set(reflect.ValueOf(val))
 							}
 						}
-					} else {
-						if !strings.EqualFold(fieldName, rv.Type().Field(j).Name) {
-							continue
+					}
+
+					if !strings.EqualFold(fieldName, rv.Type().Field(j).Name) {
+						continue
+					}
+					if reflect.ValueOf(val).Kind() == reflect.Slice {
+						var elem reflect.Value
+						switch typ := rv.Field(j).Type().Elem(); typ.Kind() {
+						case reflect.Ptr:
+							elem = reflect.New(typ.Elem())
+						case reflect.Struct:
+							elem = reflect.New(typ).Elem()
 						}
 						switch val.(type) {
-						case pgtype.TextArray:
-							s := val.(pgtype.TextArray)
-							var s_arr []string
-							s.AssignTo(&s_arr)
-							if reflect.TypeOf(s_arr) == rv.Field(j).Type() {
-								rv.Field(j).Set(reflect.ValueOf(s_arr))
+						case []interface{}:
+							rec, ok := val.([]interface{})
+							if !ok {
+								return 0
 							}
-						case pgtype.Numeric:
-							n := val.(pgtype.Numeric)
-							var nv float64
-							n.AssignTo(&nv)
-							if reflect.TypeOf(nv) == rv.Field(j).Type() {
-								rv.Field(j).Set(reflect.ValueOf(nv))
+							for i := 0; i < len(rec); i++ {
+								switch typ := rv.Field(j).Type().Elem(); typ.Kind() {
+								case reflect.Ptr:
+									elem = reflect.New(typ.Elem())
+								case reflect.Struct:
+									elem = reflect.New(typ).Elem()
+								}
+								switch rec[i].(type) {
+								case map[string]interface{}:
+									for k, v := range rec[i].(map[string]interface{}) {
+										if v != nil {
+											switch elem.FieldByName(k).Kind() {
+											case reflect.Int32:
+												elem.FieldByName(k).Set(reflect.ValueOf(int32(v.(float64))))
+											default:
+												fmt.Println(elem.Type().Name(), k, v)
+												elem.FieldByName(k).Set(reflect.ValueOf(v))
+											}
+										}
+									}
+								}
+								rv.Field(j).Set(reflect.Append(rv.Field(j), elem))
 							}
-						case time.Time:
-							t, ok := val.(time.Time)
-							if ok {
-								rv.Field(j).Set(reflect.ValueOf(&t))
-							}
-						default:
-							if reflect.TypeOf(val) == rv.Field(j).Type() {
-								rv.Field(j).Set(reflect.ValueOf(val))
-							}
+						}
+					}
+
+					switch val.(type) {
+					case pgtype.TextArray:
+						s := val.(pgtype.TextArray)
+						var s_arr []string
+						s.AssignTo(&s_arr)
+						if reflect.TypeOf(s_arr) == rv.Field(j).Type() {
+							rv.Field(j).Set(reflect.ValueOf(s_arr))
+						}
+					case pgtype.Numeric:
+						n := val.(pgtype.Numeric)
+						var nv float64
+						n.AssignTo(&nv)
+						if reflect.TypeOf(nv) == rv.Field(j).Type() {
+							rv.Field(j).Set(reflect.ValueOf(nv))
+						}
+					case time.Time:
+						t, ok := val.(time.Time)
+						if ok {
+							rv.Field(j).Set(reflect.ValueOf(&t))
+						}
+					default:
+						if reflect.TypeOf(val) == rv.Field(j).Type() {
+							rv.Field(j).Set(reflect.ValueOf(val))
 						}
 					}
 				}
