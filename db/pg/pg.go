@@ -270,7 +270,6 @@ func rowToStruct(r pgx.Rows, a interface{}) int {
 											case reflect.Int32:
 												elem.FieldByName(k).Set(reflect.ValueOf(int32(v.(float64))))
 											default:
-												fmt.Println(elem.Type().Name(), k, v)
 												elem.FieldByName(k).Set(reflect.ValueOf(v))
 											}
 										}
