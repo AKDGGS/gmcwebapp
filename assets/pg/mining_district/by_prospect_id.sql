@@ -1,4 +1,4 @@
-SELECT DISTINCT md.mining_district_id AS "ID", md.name AS "Name"
+SELECT DISTINCT md.mining_district_id AS "ID", md.name
 FROM borehole AS b
 JOIN borehole_point AS bp
 	ON bp.borehole_id = b.borehole_id

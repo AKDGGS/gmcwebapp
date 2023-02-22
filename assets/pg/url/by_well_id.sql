@@ -1,4 +1,4 @@
-SELECT u.url_id, u.url, u.description, u.url_type::text AS "Type"
+SELECT u.url_id AS "ID", u.url, u.description, u.url_type::text AS "Type"
 From url AS u
 JOIN well_url AS wu
 	ON wu.url_id = u.url_id
