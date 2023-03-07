@@ -11,22 +11,22 @@ import (
 
 type DB interface {
 	// Fetches the complete details for a Prospect
-	GetProspect(id int, flags int) (map[string]interface{}, error)
+	GetProspect(id int, flags int) (*model.Prospect, error)
 
 	// Fetches the complete details for a Borehole
-	GetBorehole(id int, flags int) (map[string]interface{}, error)
+	GetBorehole(id int, flags int) (*model.Borehole, error)
 
 	// Fetches the complete details for an Outcrop
-	GetOutcrop(id int, flags int) (map[string]interface{}, error)
+	GetOutcrop(id int, flags int) (*model.Outcrop, error)
 
 	// Fetches the complete details for a Well
-	GetWell(id int, flags int) (map[string]interface{}, error)
+	GetWell(id int, flags int) (*model.Well, error)
 
 	// Fetches the complete details for a Shotline
-	GetShotline(id int, flags int) (map[string]interface{}, error)
+	GetShotline(id int, flags int) (*model.Shotline, error)
 
 	// Fetches the complete details for an Inventory
-	GetInventory(id int, flags int) (map[string]interface{}, error)
+	GetInventory(id int, flags int) (*model.Inventory, error)
 
 	// Fetches stash for a specific inventory id
 	GetStash(id int) (map[string]interface{}, error)

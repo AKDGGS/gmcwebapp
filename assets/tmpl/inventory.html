@@ -1,228 +1,231 @@
+{{with .inventory }}
 			<fieldset class="fs-detail inventory_boxes">
 				<legend>Inventory Detail</legend>
 				<table class="tb-fields">
 					<tbody>
-						{{- if .inventory_id}}
+						{{- if .ID}}
 						<tr>
 							<th>ID</th>
-							<td>{{.inventory_id}}</td>
+							<td>{{.ID}}</td>
 						</tr>
 						{{- end}}
-						{{- if ._user}}
-						{{- if .container_path_cache}}
+						{{- if $.user}}
+						{{- if .ContainerPathCache}}
 						<tr>
 							<th>Location</th>
-							<td>{{.container_path_cache}}</td>
+							<td>{{.ContainerPathCache}}</td>
 						</tr>
 						{{- end}}
-						{{- if .barcode}}
+						{{- if .Barcode}}
 						<tr>
 							<th>Barcode</th>
-							<td>{{.barcode}}</td>
+							<td>{{.Barcode}}</td>
 						</tr>
 						{{- end}}
-						{{- if .alt_barcode}}
+						{{- if .AltBarcode}}
 						<tr>
 							<th>Alt. Barcode</th>
-							<td>{{.alt_barcode}}</td>
+							<td>{{.ALTBarcode}}</td>
 						</tr>
 						{{- end}}
 						{{- end}}
-						{{- if .dggs_sample_id}}
+						{{- if .SampleID}}
 						<tr>
 							<th>DGGS Sample ID</th>
-							<td>{{.dggs_sample_id}}</td>
+							<td>{{.SampleID}}</td>
 						</tr>
 						{{- end}}
-						{{- if .sample_number}}
+						{{- if .SampleNumber}}
 						<tr>
 							<th>Sample Number</th>
-							<td>{{.sample_number}}</td>
+							<td>{{.SampleNumber}}</td>
 						</tr>
 						{{- end}}
-						{{- if .sample_number_prefix}}
+						{{- if .SampleNumberPrefix}}
 						<tr>
 							<th>Sample Number Prefix</th>
-							<td>{{.sample_number_prefix}}</td>
+							<td>{{.SampleNumberPrefix}}</td>
 						</tr>
 						{{- end}}
-						{{- if .alt_sample_number}}
+						{{- if .AltSampleNumber}}
 						<tr>
 							<th>Alt. Sample Number</th>
-							<td>{{.alt_sample_number}}</td>
+							<td>{{.AltSampleNumber}}</td>
 						</tr>
 						{{- end}}
-						{{- if .published_sample_number}}
+						{{- if .PublishedSampleNumber}}
 						<tr>
 							<th>Published Sample No.</th>
-							<td>{{.published_sample_number}}{{- if .published_sample_number_has_suffix}} Has Suffix{{else}} No Suffix{{- end}}</td>
+							<td>{{.PublishedSampleNumber}}{{- if .PublishedNumberHasSuffix}} Has Suffix{{else}} No Suffix{{- end}}</td>
 						</tr>
 						{{- end}}
-						{{- if .collection_name}}
+						{{- if .CollectionName}}
 						<tr>
 							<th>Collection</th>
-							<td>{{.collection_name}}</td>
+							<td>{{.CollectionName}}</td>
 						</tr>
 						{{- end}}
-						{{- if .state_number}}
+						{{- if .StateNumber }}
 						<tr>
 							<th>State Number</th>
-							<td>{{.state_number}}</td>
+							<td>{{.StateNumber}}</td>
 						</tr>
 						{{- end}}
-						{{- if .box_number}}
+						{{- if .BoxNumber}}
 						<tr>
 							<th>Box Number</th>
-							<td>{{.box_number}}</td>
+							<td>{{.BoxNumber}}</td>
 						</tr>
 						{{- end}}
-						{{- if .set_number}}
+						{{- if .SetNumber}}
 						<tr>
 							<th>Set Number</th>
-							<td>{{.set_number}}</td>
+							<td>{{.SetNumber}}</td>
 						</tr>
 						{{- end}}
-						{{- if .split_number}}
+						{{- if .SplitNumber}}
 						<tr>
 							<th>Split Number</th>
-							<td>{{.split_number}}</td>
+							<td>{{.SplitNumber}}</td>
 						</tr>
 						{{- end}}
-						{{- if .slide_number}}
+						{{- if .SlideNumber}}
 						<tr>
 							<th>Slide Number</th>
-							<td>{{.slide_number}}</td>
+							<td>{{.SlideNumber}}</td>
 						</tr>
 						{{- end}}
-						{{- if .slip_number}}
+						{{- if .SlipNumber}}
 						<tr>
 							<th>slip_number</th>
-							<td>{{.slip_number}}</td>
+							<td>{{.SlipNumber}}</td>
 						</tr>
 						{{- end}}
-						{{- if .lab_number}}
+						{{- if .LabNumber}}
 						<tr>
 							<th>Lab Number</th>
-							<td>{{.lab_number}}</td>
+							<td>{{.LabNumber}}</td>
 						</tr>
 						{{- end}}
-						{{- if .lab_report_id}}
+						{{- if .LabReportID}}
 						<tr>
 							<th>Lab Report ID</th>
-							<td>{{.lab_report_id}}</td>
+							<td>{{.LabReportID}}</td>
 						</tr>
 						{{- end}}
-						{{- if .core_number}}
+						{{- if .CoreNumber}}
 						<tr>
 							<th>Core Number</th>
-							<td>{{.core_number}}</td>
+							<td>{{.CoreNumber}}</td>
 						</tr>
 						{{- end}}
-						{{- if .core_diameter}}
+						{{- if .CoreDiameter}}
 						<tr>
 							<th>Core Diameter</th>
-							<td>{{.core_diameter}} {{.unit}}
-								{{- if .core_diameter_name}} ({{.core_diameter_name}}){{- end}}</td>
+							<td>{{.CoreDiameter}} {{.CoreDiameterUnit}}
+								{{- if .CoreDiameterName}} ({{.CoreDiameterName}}){{- end}}</td>
 						</tr>
 						{{- end}}
-						{{- if .interval_top}}
+						{{- if .IntervalTop}}
 						<tr>
 							<th>Interval Top</th>
-							<td>{{.interval_top}} {{.interval_unit}}</td>
+							<td>{{.IntervalTop}} {{.IntervalUnit}}</td>
 						</tr>
 						{{- end}}
-						{{- if .interval_bottom}}
+						{{- if .IntervalBottom}}
 						<tr>
 							<th>Interval Bottom</th>
-							<td>{{.interval_bottom}} {{.interval_unit}}</td>
+							<td>{{.IntervalBottom}} {{.IntervalUnit}}</td>
 						</tr>
 						{{- end}}
-						{{- if .description}}
+						{{- if .Description}}
 						<tr>
 							<th>Description</th>
-							<td>{{.description}}</td>
+							<td>{{.Description}}</td>
 						</tr>
 						{{- end}}
-						{{- if .remark}}
+						{{- if .Remark}}
 						<tr>
 							<th>Remark</th>
-							<td>{{.remark}}</td>
+							<td>{{.Remark}}</td>
 						</tr>
 						{{- end}}
-						{{- if and ._user .tray}}
+						{{- if and $.user .Tray}}
 						<tr>
 							<th>Tray</th>
-							<td>{{.tray}}</td>
+							<td>{{.Tray}}</td>
 						</tr>
 						{{- end}}
-						{{- if .weight}}
+						{{- if .Weight}}
 						<tr>
 							<th>Weight</th>
-							<td>{{.weight}} {{.weight_unit}}</td>
+							<td>{{.Weight}} {{.WeightUnit}}</td>
 						</tr>
 						{{- end}}
-						{{- if .sample_frequency}}
+						{{- if .SampleFrequency}}
 						<tr>
 							<th>Sample Frequency</th>
-							<td>{{.sample_frequency}}</td>
+							<td>{{.SampleFrequency}}</td>
 						</tr>
 						{{- end}}
-						{{- if .recovery}}
+						{{- if .Recovery}}
 						<tr>
 							<th>Recovery</th>
-							<td>{{.recovery}}</td>
+							<td>{{.Recovery}}</td>
 						</tr>
 						{{- end}}
-						{{- if .radiation_msvh}}
+						{{- if .RadiationMSVH}}
 						<tr>
 							<th>Radiation</th>
-							<td>{{.radiation_msvh}}</td>
+							<td>{{.RadiationMSVH}}</td>
 						</tr>
 						{{- end}}
-						{{- if .keywords}}
+						{{- if .Keywords}}
 						<tr>
 							<th>Keywords</th>
-							<td><a href="../search#keyword={{.keywords}}">{{.keywords}}</a></td>
+							<td>{{- range $i, $kw := .Keywords}}{{- if ne $i 0}}, {{- end}}
+								<a href="../search#keyword={{$kw}}">{{$kw}}</a>{{- end}}
+							</td>
 						</tr>
 						{{- end}}
-						{{- if ._user}}
-						{{- if .received_date}}
+						{{- if $.user}}
+						{{- if .ReceivedDate}}
 						<tr>
 							<th>Received Date</th>
-							<td>{{formattime "1/2/2006" .received_date}}</td>
+							<td>{{.ReceivedDate.Format "1/2/2006"}}</td>
 						</tr>
 						{{- end}}
-						{{- if .entered_date}}
+						{{- if .EnteredDate}}
 						<tr>
 							<th>Entered Date</th>
-							<td>{{formattime "1/2/2006" .entered_date}}</td>
+							<td>{{.EnteredDate.Format "1/2/2006"}}</td>
 						</tr>
 						{{- end}}
-						{{- if .modified_user}}
+						{{- if .ModifiedUser}}
 						<tr>
 							<th>Last Modified By</th>
-							<td>{{.modified_user}}</td>
+							<td>{{.ModifiedUser}}</td>
 						</tr>
 						{{- end}}
-						{{- if .modified_date}}
+						{{- if .ModifiedDate}}
 						<tr>
 							<th>Modified Date</th>
-							<td>{{formattime "1/2/2006" .modified_date}}</td>
+							<td>{{.ModifiedDate.Format "1/2/2006"}}</td>
 						</tr>
 						{{- end}}
 						<tr>
 							<th>Publish</th>
-							<td>{{- if .can_publish}}Yes{{- else}}No{{- end}}</td>
+							<td>{{- if .CanPublish}}Yes{{- else}}No{{- end}}</td>
 						</tr>
 						<tr>
 							<th>Active</th>
-							<td>{{- if .active}}Yes{{- else}}No{{- end}}</td>
+							<td>{{- if .Active}}Yes{{- else}}No{{- end}}</td>
 						</tr>
 						{{- end}}
 					</tbody>
 				</table>
 			</fieldset>
-			{{- if .geojson}}
+			{{- if .GeoJSON}}
 
 			<fieldset class="fs-map">
 				<legend>Geospatial</legend>
@@ -235,40 +238,40 @@
 					<div id="popup-content" class="ol-popup-content"></div>
 				</div>
 				<script>
-					var geojson = {{rawjs .geojson}};
+					var geojson = {{rawjs .GeoJSON}};
 				</script>
 			</fieldset>
 			<div class="flex-break"></div>
 			{{- end}}
-			{{- if .boreholes}}
+			{{- if .Boreholes}}
 
 			<fieldset>
 				<legend>Prospect(s)</legend>
 				<table class="tb-fields">
 					<tbody>
-						{{- range .boreholes}}
-						{{- if .prospect_name}}
+						{{- range .Boreholes}}
+						{{- if .Prospect.Name}}
 						<tr class="tb-spacer-sm">
 							<th>Prospect Name</th>
-							<td><a href="../prospect/{{.prospect_id}}">{{.prospect_name}}</a></td>
+							<td><a href="../prospect/{{.Prospect.ID}}">{{.Prospect.Name}}</a></td>
 						</tr>
 						{{- end}}
-						{{- if .ardf_number}}
+						{{- if .Prospect.ARDFNumber}}
 						<tr>
 							<th>Prospect ARDF</th>
-							<td><a href="http://mrdata.usgs.gov/ardf/show.php?labno={{.ardf_number}}">{{.ardf_number}}</a></td>
+							<td><a href="http://mrdata.usgs.gov/ardf/show.php?labno={{.Prospect.ARDFNumber}}">{{.Prospect.ARDFNumber}}</a></td>
 						</tr>
 						{{- end}}
-						{{- if .borehole_name}}
+						{{- if .Name}}
 						<tr>
 							<th>Borehole Name</th>
-							<td><a href="../borehole/{{.borehole_id}}">{{.borehole_name}}</a></td>
+							<td><a href="../borehole/{{.ID}}">{{.Name}}</a></td>
 						</tr>
 						{{- end}}
-						{{- if .alt_borehole_names}}
+						{{- if .AltNames}}
 						<tr>
 							<th>Borehole Alt. Name(s)</th>
-							<td>{{.alt_borehole_names}}</td>
+							<td>{{.AltNames}}</td>
 						</tr>
 						{{- end}}
 						{{- end}}
@@ -276,120 +279,29 @@
 				</table>
 			</fieldset>
 			{{- end}}
-			{{- if .wells}}
-
-			<fieldset>
-				<legend>Well(s)</legend>
-				<table class="tb-fields">
-					<tbody>
-						{{- range .wells}}
-						{{- if or (.is_current) (eq .is_current nil)}}
-						{{- if .well_name}}
-						<tr class="tb-spacer-sm">
-							<th>Well Name</th>
-							<td><a href="../well/{{.well_id}}">{{.well_name}}</a></td>
-						</tr>
-						{{- end}}
-						{{- if .alt_names}}
-						<tr>
-							<th>Well Alt. Name</th>
-							<td>{{.alt_names}}</td>
-						</tr>
-						{{- end}}
-						{{- if .well_number}}
-						<tr>
-							<th>Well Number</th>
-							<td>{{.well_number}}</td>
-						</tr>
-						{{- end}}
-						{{- if .api_number}}
-						<tr>
-							<th>API Number</th>
-							<td>{{.api_number}}</td>
-						</tr>
-						{{- end}}
-						{{- if .operator_name}}
-						<tr>
-							<th>Current Operator</th>
-							<td>{{.operator_name}}</td>
-						</tr>
-						{{- end}}
-						{{- if .operator_type}}
-						<tr>
-							<th>Operator Type</th>
-							<td>{{.operator_type}}</td>
-						</tr>
-						{{- end}}
-						{{- end}}
-						{{- end}}
-					</tbody>
-				</table>
-			</fieldset>
-			{{- end}}
-			{{- if .shotlines}}
-
-			<fieldset>
-				<legend>Shotline(s)</legend>
-				<table class="tb-fields">
-					<tbody>
-						{{- range $i, $f := .shotlines}}
-						{{- if .name}}
-						<tr class="tb-spacer-sm">
-							{{- if eq $i 0}}
-							<th>Shotline Name</th>
-							<td><a href="../shotline/{{.shotline_id}}">{{.name}}</a></td>
-							{{- else}}
-							<th>Shotline Name</th>
-							<td><a href="../shotline/{{.shotline_id}}">{{.name}}</a></td>
-							{{- end}}
-						</tr>
-						{{- end}}
-						{{- if .alt_names}}
-						<tr>
-							<th>Shotline Alt. Name</th>
-							<td>{{.alt_names}}</td>
-						</tr>
-						{{- end}}
-						{{- if .year}}
-						<tr>
-							<th>Shotline Year</th>
-							<td>{{.year}}</td>
-						</tr>
-						{{- end}}
-						{{- if .shotpoint_number}}
-						<tr>
-							<th>Shotpoint</th>
-							<td>{{.shotpoint_number}}</td>
-						</tr>
-						{{- end}}
-						{{- end}}
-					</tbody>
-				</table>
-			</fieldset>
-			{{- end}}
-			{{- if .outcrops}}
+			{{- if .Outcrops}}
 
 			<fieldset>
 				<legend>Outcrop(s)</legend>
 				<table class="tb-fields">
 					<tbody>
-						{{- range .outcrops}}
-						{{- if .name}}
+						{{- range .Outcrops}}
+						{{- if .Name}}
 						<tr class="tb-spacer-sm">
 							<th>Outcrop Name</th>
-							<td><a href="../outcrop/{{.outcrop_id}}">{{.name}}</a></td>
+							<td><a href="../outcrop/{{.ID}}">{{.Name}}</a></td>
 						</tr>
 						{{- end}}
-						{{- if .outcrop_number}}
+						{{- if .Number}}
 						<tr>
 							<th>Outcrop Number</th>
-							<td>{{.outcrop_number}}</td>
+							<td>{{.Number}}</td>
 						</tr>
 						{{- end}}
-						{{- if .year}}
+						{{- if .Year}}
 						<tr>
 							<th>Outcrop Year</th>
-							<td>{{.year}}</td>
+							<td>{{.Year}}</td>
 						</tr>
 						{{- end}}
 						{{- end}}
@@ -397,77 +309,122 @@
 				</table>
 			</fieldset>
 			{{- end}}
-			{{- if .urls}}
+			{{- if .Shotlines}}
+
+			<fieldset>
+				<legend>Shotline(s)</legend>
+				<table class="tb-fields">
+					<tbody>
+						{{- range $i, $s := .Shotlines}}
+						{{- if eq $i 0}}
+						{{- if .Name}}
+						<tr class="tb-spacer-sm">
+							<th>Shotline Name</th>
+							<td><a href="../shotline/{{.ID}}">{{.Name}}</a></td>
+							{{- end}}
+							{{- if .AltNames}}
+							<tr>
+								<th>Shotline Alt. Name</th>
+								<td>{{.AltNames}}</td>
+							</tr>
+							{{- end}}
+							{{- if .Year}}
+							<tr>
+								<th>Shotline Year</th>
+								<td>{{.Year}}</td>
+							</tr>
+							{{- end}}
+						</tr>
+						{{- end}}
+						{{- end}}
+						<tr>
+							<th>Shotlpoint(s)</th>
+							<td>{{- range $i, $s := .Shotlines}}{{- if ne $i 0}}, {{- end}}
+								{{$s.Number}}{{- end}}
+						</tr>
+					</tbody>
+				</table>
+			</fieldset>
+			{{- end}}
+			{{- if .Wells}}
+
+			<fieldset>
+				<legend>Well(s)</legend>
+				<table class="tb-fields">
+					<tbody>
+						{{- range $i, $w :=.Wells}}
+
+						{{if eq $i 0}}
+						{{- if .Name}}
+						<tr class="tb-spacer-sm">
+							<th>Well Name</th>
+							<td><a href="../well/{{.ID}}">{{.Name}}</a></td>
+						</tr>
+						{{- end}}
+						{{- if .AltNames}}
+						<tr>
+							<th>Well Alt. Name</th>
+							<td>{{.AltNames}}</td>
+						</tr>
+						{{- end}}
+						{{- if .Number}}
+						<tr>
+							<th>Well Number</th>
+							<td>{{.Number}}</td>
+						</tr>
+						{{- end}}
+						{{- if .APINumber}}
+						<tr>
+							<th>API Number</th>
+							<td>{{.APINumber}}</td>
+						</tr>
+						{{- end}}
+						{{- end}}
+						{{- range $i, $o :=.Organizations}}
+						{{- if .Current}}
+						{{- if .Name}}
+						<tr>
+							<th>Current Operator</th>
+							<td>{{.Name}}</td>
+						</tr>
+						{{- end}}
+						{{- if .Type}}
+						<tr>
+							<th>Operator Type</th>
+							<td>{{.Type}}</td>
+						</tr>
+						{{- end}}
+						{{- end}}
+						{{- if not .Current}}
+						{{- if .Name}}
+						<tr>
+							<th>Previous Operator</th>
+							<td>{{.Name}}</td>
+						</tr>
+						{{- end}}
+						{{- if .Type}}
+						<tr>
+							<th>Operator Type</th>
+							<td>{{.Type}}</td>
+						</tr>
+						{{- end}}
+						{{- end}}
+						{{- end}}
+						{{- end}}
+					</tbody>
+				</table>
+			</fieldset>
+			{{- end}}
+			{{- if .URLs}}
 
 			<fieldset>
 				<legend>URLs</legend>
-				{{- range .urls}}
-				<div><a href="{{.url}}">{{.description}}</a> ({{.url_type}})</div>
+				{{- range .URLs}}
+				<div><a href="{{.URL}}">{{.Description}}</a> ({{.Type}})</div>
 				{{- end}}
 			</fieldset>
 			{{- end}}
-			{{- if .files}}
-
-			<fieldset>
-				<legend>Files</legend>
-				{{- range .files}}
-				<div><a href="../file/{{.file_id}}/{{.file_name}}">{{.file_name}}</a> ({{.file_size}})</div>
-				{{- end}}
-			</fieldset>
-			{{- end}}
-			{{- if and ._user .publications}}
-
-			<fieldset>
-				<legend>Publication(s)</legend>
-				<table class="tb-fields tb-columns">
-					<tbody>
-						{{- range .publications}}
-						{{- if .title}}
-						<tr class="tb-spacer-bg">
-							<th>Title</th>
-							<td>{{.title}}</td>
-						</tr>
-						{{- end}}
-						{{- if .year}}
-						<tr>
-							<th>Year</th>
-							<td>{{.year}}</td>
-						</tr>
-						{{- end}}
-						{{- if .publication_type}}
-						<tr>
-							<th>Type</th>
-							<td>{{.publication_type}}</td>
-						</tr>
-						{{- end}}
-						{{- if .publication_number}}
-						<tr>
-							<th>Number</th>
-							<td>{{.publication_number}}</td>
-						</tr>
-						{{- end}}
-						{{- if .publication_series}}
-						<tr>
-							<th>Series</th>
-							<td>{{.publication_series}}</td>
-						</tr>
-						{{- end}}
-						{{- if .description}}
-						<tr>
-							<th>Description</th>
-							<td>{{.description}}</td>
-						</tr>
-						{{- end}}
-						<tr>
-							<th>Publish</th>
-							<td>{{- if .can_publish}}Yes{{- else}}No{{- end}}</td>
-						</tr>
-						{{- end}}
-					</tbody>
-				</table>
-			</fieldset>
-			{{- end}}
-			{{- if and ._user .notes}}
+			{{- if and $.user .Notes}}
 
 			<fieldset>
 				<legend>Notes</legend>
@@ -481,19 +438,95 @@
 						</tr>
 					</thead>
 					<tbody>
-						{{- range .notes}}
+						{{- range .Notes}}
 						<tr>
-							<td>{{formattime "1/2/2006" .note_date}}</td>
-							<td>{{.username}}</td>
-							<td>{{- if .is_public}}Yes{{- else}}No{{- end}}</td>
-							<td>{{.note}}</td>
+							<td>{{.Date.Format "1/2/2006"}}</td>
+							<td>{{.Username}}</td>
+							<td>{{- if .Public}} Yes {{- else -}}No{{- end}} </td>
+							<td>{{.Note}}</td>
 						</tr>
 						{{- end}}
 					</tbody>
 				</table>
 			</fieldset>
 			{{- end}}
-			{{- if and ._user .qualities}}
+			{{- if .Files}}
+
+			<fieldset class="File">
+				<legend>Files</legend>
+				{{- range .Files}}
+				<div><a href="../file/{{.ID}}">{{.Name}}</a> ({{.Size}})</div>
+				{{- end}}
+			</fieldset>
+			{{- end}}
+			{{- if and $.user .Publications}}
+
+			<fieldset>
+				<legend>Publication(s)</legend>
+				<table class="tb-fields tb-columns">
+					<tbody>
+						{{- range .Publications}}
+						{{- if .Title}}
+						<tr class="tb-spacer-bg">
+							<th>Title</th>
+							<td>{{.Title}}</td>
+						</tr>
+						{{- end}}
+						{{- if .Year}}
+						<tr>
+							<th>Year</th>
+							<td>{{.Year}}</td>
+						</tr>
+						{{- end}}
+						{{- if .Type}}
+						<tr>
+							<th>Type</th>
+							<td>{{.Type}}</td>
+						</tr>
+						{{- end}}
+						{{- if .PublicationNumber}}
+						<tr>
+							<th>Number</th>
+							<td>{{.PublicationNumber}}</td>
+						</tr>
+						{{- end}}
+						{{- if .PublicationSeries}}
+						<tr>
+							<th>Series</th>
+							<td>{{.PublicationSeries}}</td>
+						</tr>
+						{{- end}}
+						{{- if .Description}}
+						<tr>
+							<th>Description</th>
+							<td>{{.Description}}</td>
+						</tr>
+						{{- end}}
+						<tr>
+							<th>Publish</th>
+							<td>{{- if .CanPublish}}Yes{{- else}}No{{- end}}</td>
+						</tr>
+						{{- end}}
+					</tbody>
+				</table>
+			</fieldset>
+			{{- end}}
+			{{- if and $.user .ContainerLog}}
+
+			<fieldset>
+				<legend>Tracking</legend>
+				<table class="tb-fields">
+					<tbody>
+						{{- range .ContainerLog}}
+						<tr>
+							<td>{{.Date.Format "1/2/2006"}} <b>{{.Destination}}</b></td>
+						</tr>
+					{{- end}}
+					</tbody>
+				</table>
+			</fieldset>
+			{{- end}}
+			{{- if and $.user .Qualities}}
 
 			<fieldset>
 				<legend>QA</legend>
@@ -507,34 +540,21 @@
 						</tr>
 					</thead>
 					<tbody>
-						{{- range .qualities}}
+						{{- range .Qualities}}
 						<tr>
-							<td>{{formattime "1/2/2006" .check_date}}</td>
-							<td>{{.username}}</td>
-							<td>{{.issues }}</td>
-							<td>{{.remark}}</td>
+							<td>{{.Date.Format "1/2/2006"}}</td>
+							<td>{{.Username}}</td>
+							<td>{{- range $i, $is := .Issues}}{{- if ne $i 0}}, {{- end}}
+								{{$is}}{{- end}}
+							</td>
+							<td>{{.Remark}}</td>
 						</tr>
 					</tbody>
 					{{- end}}
 				</table>
 			</fieldset>
 			{{- end}}
-			{{- if and ._user .containerlog}}
-
-			<fieldset>
-				<legend>Tracking</legend>
-				<table class="tb-fields">
-					<tbody>
-						{{- range .containerlog}}
-						<tr>
-							<td>{{formattime "1/2/2006" .log_date}} <b>{{.destination}}</b></td>
-						</tr>
-					{{- end}}
-					</tbody>
-				</table>
-			</fieldset>
-			{{- end}}
-			{{- if ._user}}
+			{{- if $.user}}
 
 			<fieldset>
 				<legend>Stash</legend>
@@ -542,3 +562,6 @@
 				<div id="stash-dd"></div>
 			</fieldset>
 			{{- end}}
+
+
+{{- end}}

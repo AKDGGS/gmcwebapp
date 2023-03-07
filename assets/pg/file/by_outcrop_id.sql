@@ -1,5 +1,5 @@
-SELECT f.file_id, f.filename AS file_name,
-	pg_size_pretty(f.size::numeric) AS file_size
+SELECT f.file_id AS "ID", f.filename AS "Name", f.mimetype as "Type",
+	pg_size_pretty(f.size::numeric) AS "Size"
 FROM outcrop_file AS of
 JOIN file AS f
 	ON f.file_id = of.file_id

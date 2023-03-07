@@ -1,4 +1,4 @@
-SELECT DISTINCT q.quadrangle_id, q.name
+SELECT DISTINCT q.quadrangle_id AS "ID", q.name
 FROM borehole AS b
 JOIN borehole_point AS bp
 	ON bp.borehole_id = b.borehole_id

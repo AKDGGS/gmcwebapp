@@ -39,10 +39,13 @@ func (srv *Server) ServeBorehole(id int, w http.ResponseWriter, r *http.Request)
 		return
 	}
 
-	borehole["_user"] = user
+	boreholeParams := map[string]interface{}{
+		"borehole": borehole,
+		"user":     user,
+	}
 
 	buf := bytes.Buffer{}
-	if err := assets.ExecuteTemplate("tmpl/borehole.html", &buf, borehole); err != nil {
+	if err := assets.ExecuteTemplate("tmpl/borehole.html", &buf, boreholeParams); err != nil {
 		http.Error(
 			w, fmt.Sprintf("Parse error: %s", err.Error()),
 			http.StatusInternalServerError,

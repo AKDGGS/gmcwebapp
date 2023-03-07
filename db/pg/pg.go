@@ -6,10 +6,12 @@ import (
 	"net/url"
 	"reflect"
 	"strings"
+	"time"
 
 	"gmc/assets"
 	"gmc/db/model"
 
+	"github.com/jackc/pgtype"
 	"github.com/jackc/pgx/v4"
 	"github.com/jackc/pgx/v4/pgxpool"
 )
@@ -29,7 +31,6 @@ func New(u *url.URL) (*Postgres, error) {
 	if err != nil {
 		return nil, err
 	}
-
 	return &Postgres{pool: pool}, nil
 }
 
@@ -177,7 +178,6 @@ func (pg *Postgres) enumAddValues(enum string, values ...string) error {
 			return err
 		}
 	}
-
 	if err := tx.Commit(context.Background()); err != nil {
 		return err
 	}
@@ -189,46 +189,119 @@ func rowToStruct(r pgx.Rows, a interface{}) int {
 	if rv.Kind() == reflect.Ptr {
 		rv = rv.Elem()
 	}
-
+	if !rv.CanSet() {
+		return 0
+	}
 	switch rv.Kind() {
 	case reflect.Slice:
 		var elem reflect.Value
-		typ := rv.Type().Elem()
-		if typ.Kind() == reflect.Ptr {
+		switch typ := rv.Type().Elem(); typ.Kind() {
+		case reflect.Ptr:
 			elem = reflect.New(typ.Elem())
-		}
-		if typ.Kind() == reflect.Struct {
+		case reflect.Struct:
 			elem = reflect.New(typ).Elem()
 		}
-
-		rowCount := 0
-		for {
-			if rCount := rowToStruct(r, elem.Addr().Interface()); rCount > 0 {
-				rowCount = rowCount + rCount
+		for rowCount := 0; ; {
+			if c := rowToStruct(r, elem.Addr().Interface()); c > 0 {
+				rowCount += c
 				rv.Set(reflect.Append(rv, elem))
-			} else {
-				break
+				continue
 			}
+			return rowCount
 		}
-		return rowCount
 	case reflect.Struct:
 		if r.Next() {
-			fieldDescriptions := r.FieldDescriptions()
-			var columns []string
-			for _, col := range fieldDescriptions {
-				columns = append(columns, string(col.Name))
-			}
 			columnValues, _ := r.Values()
-			for j, val := range columnValues {
-				for i := 0; i < rv.NumField(); i++ {
-					if reflect.TypeOf(val) != rv.Field(i).Type() {
+			for i, val := range columnValues {
+				fieldName := string(r.FieldDescriptions()[i].Name)
+				for j := 0; j < rv.NumField(); j++ {
+					if !strings.EqualFold(fieldName, rv.Type().Field(j).Name) {
+						if rv.Field(j).Kind() == reflect.Struct {
+							var parent string
+							if strings.Contains(fieldName, ".") {
+								index := strings.Index(fieldName[:], ".")
+								parent = fieldName[:index]
+								if index+1 < len(fieldName) {
+									fieldName = fieldName[index+1:]
+								}
+							}
+							for k := 0; k < rv.Field(j).NumField(); k++ {
+								if !strings.EqualFold(parent, rv.Type().Field(j).Name) {
+									continue
+								}
+								if !strings.EqualFold(fieldName, rv.Field(j).Type().Field(k).Name) {
+									continue
+								}
+								if reflect.TypeOf(val) == rv.Field(j).Type().Field(k).Type {
+									rv.Field(j).Field(k).Set(reflect.ValueOf(val))
+								}
+							}
+						}
 						continue
 					}
-					if !strings.EqualFold(columns[j], rv.Type().Field(i).Name) {
-						continue
-					}
-					if rv.CanSet() {
-						rv.FieldByName(rv.Type().Field(i).Name).Set(reflect.ValueOf(val))
+					if reflect.ValueOf(val).Kind() == reflect.Slice {
+						var elem reflect.Value
+						switch typ := rv.Field(j).Type().Elem(); typ.Kind() {
+						case reflect.Ptr:
+							elem = reflect.New(typ.Elem())
+						case reflect.Struct:
+							elem = reflect.New(typ).Elem()
+						}
+						switch val.(type) {
+						case []interface{}:
+							rec, ok := val.([]interface{})
+							if !ok {
+								return 0
+							}
+							for i := 0; i < len(rec); i++ {
+								switch typ := rv.Field(j).Type().Elem(); typ.Kind() {
+								case reflect.Ptr:
+									elem = reflect.New(typ.Elem())
+								case reflect.Struct:
+									elem = reflect.New(typ).Elem()
+								}
+								switch rec[i].(type) {
+								case map[string]interface{}:
+									for k, v := range rec[i].(map[string]interface{}) {
+										if v != nil {
+											switch elem.FieldByName(k).Kind() {
+											case reflect.Int32:
+												elem.FieldByName(k).Set(reflect.ValueOf(int32(v.(float64))))
+											default:
+												elem.FieldByName(k).Set(reflect.ValueOf(v))
+											}
+										}
+									}
+								}
+								rv.Field(j).Set(reflect.Append(rv.Field(j), elem))
+							}
+						}
+					} else {
+						switch val.(type) {
+						case pgtype.TextArray:
+							s := val.(pgtype.TextArray)
+							var s_arr []string
+							s.AssignTo(&s_arr)
+							if reflect.TypeOf(s_arr) == rv.Field(j).Type() {
+								rv.Field(j).Set(reflect.ValueOf(s_arr))
+							}
+						case pgtype.Numeric:
+							n := val.(pgtype.Numeric)
+							var nv float64
+							n.AssignTo(&nv)
+							if reflect.TypeOf(nv) == rv.Field(j).Type() {
+								rv.Field(j).Set(reflect.ValueOf(nv))
+							}
+						case time.Time:
+							t, ok := val.(time.Time)
+							if ok {
+								rv.Field(j).Set(reflect.ValueOf(&t))
+							}
+						default:
+							if reflect.TypeOf(val) == rv.Field(j).Type() {
+								rv.Field(j).Set(reflect.ValueOf(val))
+							}
+						}
 					}
 				}
 			}

@@ -1,12 +1,21 @@
-SELECT w.well_id, w.name AS well_name, w.alt_names,
-	w.well_number, w.api_number,
-	w.is_onshore, w.is_federal,
-	w.spud_date, w.completion_date,
-	w.measured_depth, w.vertical_depth,
-	w.elevation, w.elevation_kb,
-	w.permit_status, w.completion_status, w.permit_number,
+SELECT w.well_id AS "ID",
+	w.name AS "Name",
+	w.alt_names "AltNames",
+	w.well_number AS "Number",
+	w.api_number AS "APINumber",
+	w.is_onshore AS "Onshore",
+	w.is_federal AS "Federal",
+	w.spud_date AS "SpudDate",
+	w.completion_date AS "CompletionDate",
+	w.measured_depth AS "MeasuredDepth",
+	w.vertical_depth AS "VerticalDepth",
+	w.elevation,
+	w.elevation_kb AS "ElevationKB",
+	w.permit_status AS "PermitStatus",
+	w.completion_status AS "CompletionStatus",
+	w.permit_number AS "PermitNumber",
 	w.unit::text,
-	wo.is_current, o.name AS operator_name, o.remark, ot.name AS operator_type
+	json_agg(json_build_object('Name', o.name, 'Remark', o.remark, 'Type', ot.name, 'Current', wo.is_current) ORDER BY wo.is_current DESC) AS "Organizations"
 	FROM well AS w
 	LEFT OUTER JOIN well_operator AS wo
 		ON wo.well_id = w.well_id
@@ -17,3 +26,4 @@ SELECT w.well_id, w.name AS well_name, w.alt_names,
 	LEFT OUTER JOIN inventory_well AS iw
 		ON iw.well_id = w.well_id
 	WHERE iw.inventory_id = $1
+	GROUP BY w.well_id;

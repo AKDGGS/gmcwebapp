@@ -1,4 +1,4 @@
-SELECT u.url_id, u.url, u.description, u.url_type::text
+SELECT u.url_id AS "ID", u.url, u.description, u.url_type::text AS "Type"
 From url AS u
 JOIN shotline_url AS su
 	ON su.url_id = u.url_id

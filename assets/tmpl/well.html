@@ -1,89 +1,90 @@
+{{with .well }}
 			<fieldset class="fs-detail">
 				<legend>Web Detail</legend>
 				<table class="tb-fields">
 					<tbody>
-						{{- if .name}}
+						{{- if .Name}}
 						<tr>
 							<th>Name</th>
-							<td>{{.name}}</td>
+							<td>{{.Name}}</td>
 						</tr>
 						{{- end}}
-						{{- if .alt_names}}
+						{{- if .AltNames}}
 						<tr>
 							<th>Alternative names</th>
-							<td>{{.alt_names}}</td>
+							<td>{{.AltNames}}</td>
 						</tr>
 						{{- end}}
-						{{- if .well_number}}
+						{{- if .Number}}
 						<tr>
 							<th>Well Number</th>
-							<td>{{.well_number}}</td>
+							<td>{{.Number}}</td>
 						</tr>
 						{{- end}}
-						{{- if .api_number}}
+						{{- if .APINumber}}
 						<tr>
 							<th>API Number</th>
-							<td>{{.api_number}}</td>
+							<td><div><a href="../search#q=api:{{.APINumber}}">{{.APINumber}}</a></div></td>
 						</tr>
 						{{- end}}
 						<tr>
 							<th>Onshore</th>
-							<td>{{- if .is_onshore}}Yes{{- else}}No{{- end}}</td>
+							<td>{{- if .Onshore}}Yes{{- else}}No{{- end}}</td>
 						</tr>
 						<tr>
 							<th>Federal</th>
-							<td>{{- if .is_federal}}Yes{{- else}}No{{- end}}</td>
+							<td>{{- if .Federal}}Yes{{- else}}No{{- end}}</td>
 						</tr>
-						{{- if .spud_date}}
+						{{- if .SpudDate}}
 						<tr>
 							<th>Spud Date</th>
-							<td>{{formattime "1/2/2006" .spud_date}}</td>
+							<td>{{.SpudDate.Format "1/2/2006"}}</td>
 						</tr>
 						{{- end}}
-						{{- if .completion_date}}
+						{{- if .CompletionDate}}
 						<tr>
 							<th>Completion Date</th>
-							<td>{{formattime "1/2/2006" .completion_date}}</td>
+							<td>{{.CompletionDate.Format "1/2/2006"}}</td>
 						</tr>
 						{{- end}}
-						{{- if .measured_depth}}
+						{{- if .MeasuredDepth}}
 						<tr>
 							<th>Measured Depth</th>
-							<td>{{.measured_depth}} {{.unit}}</td>
+							<td>{{.MeasuredDepth}} {{.Unit}}</td>
 						</tr>
 						{{- end}}
-						{{- if .vertical_depth}}
+						{{- if .VerticalDepth}}
 						<tr>
 							<th>Vertical Depth</th>
-							<td>{{.vertical_depth}} {{.unit}}</td>
+							<td>{{.VerticalDepth}} {{.Unit}}</td>
 						</tr>
 						{{- end}}
-						{{- if .elevation}}
+						{{- if .Elevation}}
 						<tr>
 							<th>Elevation</th>
-							<td>{{.elevation}} {{.unit}}</td>
+							<td>{{.Elevation}} {{.Unit}}</td>
 						</tr>
 						{{- end}}
-						{{- if .elevation_kb}}
+						{{- if .ElevationKB}}
 						<tr>
 							<th>Kelly Bushing Elevation</th>
-							<td>{{.elevation_kb}} {{.unit}}</td>
+							<td>{{.ElevationKB}} {{.Unit}}</td>
 						</tr>
 						{{- end}}
-						{{- if .permit_status}}
+						{{- if .PermitStatus}}
 						<tr>
 							<th>Permit_Status</th>
-							<td>{{.permit_status}}</td>
+							<td>{{.PermitStatus}}</td>
 						</tr>
 						{{- end}}
-						{{- if .completion_status}}
+						{{- if .CompletionStatus}}
 						<tr>
 							<th>Completion Status</th>
-							<td>{{.completion_status}}</td>
+							<td>{{.CompletionStatus}}</td>
 						</tr>
 						{{- end}}
-						{{- if .geojson}}
-						{{- range $i, $f := .geojson.features}}{{- if ne $i 0}}, {{- end}}{{- if (eq $f.geometry.type "Point" )}}
+						{{- if .GeoJSON}}
+						{{- range $i, $f := .GeoJSON.features}}{{- if ne $i 0}}, {{- end}}{{- if (eq $f.geometry.type "Point" )}}
 						<tr>
 							<th>Lon/Lat</th>
 							<td>{{$f.geometry.coordinates}}</td>
@@ -91,16 +92,16 @@
 						{{- end}}
 						{{- end}}
 						{{- end}}
-						{{- if .quadrangles}}
+						{{- if .Quadrangles}}
 						<tr>
 							<th>Quadrangle</th>
-							<td>{{- range $i, $qd := .quadrangles}}{{- if ne $i 0}}, {{- end}}<a href="../search#quadrangle_id={{$qd.quadrangle_id}}">{{$qd.name}}</a>{{- end}}</td>
+							<td>{{- range $i, $qd := .Quadrangles}}{{- if ne $i 0}}, {{- end}}<a href="../search#quadrangle_id={{$qd.ID}}">{{$qd.Name}}</a>{{- end}}</td>
 						</tr>
 						{{- end}}
 					</tbody>
 				</table>
 			</fieldset>
-			{{- if .geojson}}
+			{{- if .GeoJSON}}
 
 			<fieldset class="fs-map">
 				<legend>Geospatial</legend>
@@ -113,12 +114,12 @@
 					<div id="popup-content" class="ol-popup-content"></div>
 				</div>
 				<script>
-					var geojson = {{rawjs .geojson}};
+					var geojson = {{rawjs .GeoJSON}};
 				</script>
 			</fieldset>
 			<div class="flex-break"></div>
 			{{- end}}
-			{{- if .keywords}}
+			{{- if .KeywordSummary}}
 
 			<fieldset>
 				<legend>Inventory</legend>
@@ -130,32 +131,32 @@
 						</tr>
 					</thead>
 					<tbody>
-						{{- range .keywords }}
+						{{- range .KeywordSummary}}
 						<tr>
-							<td><a href="../search#well_id={{$.well_id}}&keyword={{.keywords}}">{{range $i, $kw := .keywords}}{{if ne $i 0}} &gt; {{end}}{{$kw}}{{- end}}</a></td>
-							<td>{{.count}}</td>
+							<td><a href="../search#q=well_id:{{$.well.ID}}{{range .Keywords}}&keyword={{.}}{{- end}}">{{range $i, $kw := .Keywords}}{{if ne $i 0}} &gt; {{end}}{{$kw}}{{- end}}</a></td>
+							<td>{{.Count}}</td>
 						</tr>
 						{{- end}}
 					</tbody>
 				</table>
 			</fieldset>
 			{{- end}}
-			{{- if .files}}
+			{{- if .Files}}
 
 			<fieldset>
 				<legend>Files</legend>
-				{{- range .files}}
-				<div><a href="../file/{{.file_id}}/{{.file_name}}">{{.file_name}}</a> ({{.file_size}})</div>
+				{{- range .Files}}
+				<div><a href="../file/{{.ID}}">{{.Name}}</a> ({{.Size}})</div>
 				{{- end}}
 			</fieldset>
 			{{- end}}
-			{{- if .operators}}
+			{{- if .Organizations}}
 
 			<fieldset>
 				<legend>Operators</legend>
 				<table class="tb-fields tb-columns">
 					<tbody>
-						{{- range $i, $f := .operators}}
+						{{- range $i, $f := .Organizations}}
 						{{- if eq $i 0}}
 						<tr>
 							<th>Current Operator</th>
@@ -168,24 +169,24 @@
 						</tr>
 						{{- end}}
 						<tr>
-							<td>{{.name}}</td>
-							<td>{{.operator_type}}</td>
+							<td>{{.Name}}</td>
+							<td>{{.Type}}</td>
 						</tr>
 						{{- end}}
 					</tbody>
 				</table>
 			</fieldset>
 			{{- end}}
-			{{- if .urls}}
+			{{- if .URLs}}
 
 			<fieldset>
 				<legend>URLs</legend>
-				{{- range .urls}}
-					<div><a href="{{.url}}">{{.description}}</a> ({{.url_type}})</div>
+				{{- range .URLs}}
+					<div><a href="{{.URL}}">{{.Description}}</a> ({{.Type}})</div>
 				{{- end}}
 			</fieldset>
 			{{- end}}
-			{{- if and ._user .notes}}
+			{{- if and $.user .Notes}}
 
 			<fieldset>
 				<legend>Notes</legend>
@@ -199,15 +200,16 @@
 						</tr>
 					</thead>
 					<tbody>
-					{{- range .notes}}
+					{{- range .Notes}}
 						<tr>
-							<td>{{formattime "1/2/2006" .note_date}}</td>
-							<td>{{.username}}</td>
-							<td>{{- if .is_public}}Yes{{- else}}No{{- end}}</td>
-							<td>{{.note}}</td>
+							<td>{{formattime "1/2/2006" .Date}}</td>
+							<td>{{.Username}}</td>
+							<td>{{- if .Public}}Yes{{- else}}No{{- end}}</td>
+							<td>{{.Note}}</td>
 						</tr>
 					{{- end}}
 					</tbody>
 				</table>
 			</fieldset>
 			{{- end}}
+{{end}}

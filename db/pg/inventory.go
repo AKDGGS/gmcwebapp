@@ -1,209 +1,154 @@
 package pg
 
 import (
-	"fmt"
-	"strings"
+	"context"
 
+	"gmc/assets"
 	dbf "gmc/db/flag"
-
-	"github.com/jackc/pgtype"
+	"gmc/db/model"
 )
 
-func (pg *Postgres) GetInventory(id int, flags int) (map[string]interface{}, error) {
-	inventory, err := pg.queryRow("pg/inventory/by_inventory_id.sql", id)
+func (pg *Postgres) GetInventory(id int, flags int) (*model.Inventory, error) {
+	q, err := assets.ReadString("pg/inventory/by_inventory_id.sql")
 	if err != nil {
 		return nil, err
 	}
-
-	if inventory == nil {
-		return nil, nil
+	rows, err := pg.pool.Query(context.Background(), q, id)
+	if err != nil {
+		return nil, err
 	}
-
-	itop, ok := inventory["interval_top"].(pgtype.Numeric)
-	if !ok {
-		delete(inventory, "interval_top")
-	} else {
-		var ift float64
-		itop.AssignTo(&ift)
-		inventory["interval_top"] = &ift
-	}
-
-	ibot, ok := inventory["interval_bottom"].(pgtype.Numeric)
-	if !ok {
-		delete(inventory, "interval_bottom")
-	} else {
-		var ift float64
-		ibot.AssignTo(&ift)
-		inventory["interval_bottom"] = &ift
-	}
-
-	cd, ok := inventory["core_diameter"].(pgtype.Numeric)
-	if !ok {
-		delete(inventory, "core_diameter")
-	} else {
-		var ift float64
-		cd.AssignTo(&ift)
-		inventory["core_diameter"] = &ift
-	}
-
-	w, ok := inventory["weight"].(pgtype.Numeric)
-	if !ok {
-		delete(inventory, "weight")
-	} else {
-		var ift float64
-		w.AssignTo(&ift)
-		inventory["weight"] = &ift
-	}
-
-	t, ok := inventory["tray"].(int16)
-	if !ok {
-		delete(inventory, "tray")
-	} else {
-		inventory["tray"] = &t
-	}
-
-	if inventory["keywords"] != nil {
-		kw, _ := inventory["keywords"]
-		s := strings.Replace(fmt.Sprintf("%v", kw), " ", ", ", -1)
-		if len(s) > 0 && s[len(s)-1] == ']' && s[0] == '[' {
-			s = s[1 : len(s)-1]
-		}
-		inventory["keywords"] = &s
-	}
+	defer rows.Close()
+	inventory := model.Inventory{}
+	rowToStruct(rows, &inventory)
 
 	if (flags & dbf.FILES) != 0 {
-		files, err := pg.queryRows("pg/file/by_inventory_id.sql", id)
+		q, err = assets.ReadString("pg/file/by_inventory_id.sql")
 		if err != nil {
 			return nil, err
 		}
-		if files != nil {
-			inventory["files"] = files
+		r, err := pg.pool.Query(context.Background(), q, id)
+		if err != nil {
+			return nil, err
 		}
+		defer rows.Close()
+		rowToStruct(r, &inventory.Files)
 	}
 
 	if (flags & dbf.URLS) != 0 {
-		urls, err := pg.queryRows("pg/url/by_inventory_id.sql", id)
+		q, err = assets.ReadString("pg/url/by_inventory_id.sql")
 		if err != nil {
 			return nil, err
 		}
-		if urls != nil {
-			inventory["urls"] = urls
+		r, err := pg.pool.Query(context.Background(), q, id)
+		if err != nil {
+			return nil, err
 		}
+		defer rows.Close()
+		rowToStruct(r, &inventory.URLs)
 	}
 
 	if (flags & dbf.NOTE) != 0 {
-		notes, err := pg.queryRows("pg/note/by_inventory_id.sql", id)
+		q, err = assets.ReadString("pg/note/by_inventory_id.sql")
 		if err != nil {
 			return nil, err
 		}
-		if notes != nil {
-			inventory["notes"] = notes
+		r, err := pg.pool.Query(context.Background(), q, id)
+		if err != nil {
+			return nil, err
 		}
+		defer rows.Close()
+		rowToStruct(r, &inventory.Notes)
 	}
 
 	if (flags & dbf.PUBLICATION) != 0 {
-		publications, err := pg.queryRows("pg/publication/by_inventory_id.sql", id)
+		q, err = assets.ReadString("pg/publication/by_inventory_id.sql")
 		if err != nil {
 			return nil, err
 		}
-		if publications != nil {
-			inventory["publications"] = publications
+		r, err := pg.pool.Query(context.Background(), q, id)
+		if err != nil {
+			return nil, err
 		}
+		defer rows.Close()
+		rowToStruct(r, &inventory.Publications)
 	}
-
 	if (flags & dbf.BOREHOLE) != 0 {
-		boreholes, err := pg.queryRows("pg/borehole/by_inventory_id.sql", id)
+		q, err := assets.ReadString("pg/borehole/by_inventory_id.sql")
 		if err != nil {
 			return nil, err
 		}
-		if boreholes != nil {
-			inventory["boreholes"] = boreholes
-		}
-	}
-
-	if (flags & dbf.WELL) != 0 {
-		wells, err := pg.queryRows("pg/well/by_inventory_id.sql", id)
+		rows, err := pg.pool.Query(context.Background(), q, id)
 		if err != nil {
 			return nil, err
 		}
-		if wells != nil {
-			inventory["wells"] = wells
-		}
-	}
-
-	if (flags & dbf.SHOTLINE) != 0 {
-		shotlines, err := pg.queryRows("pg/shotline/by_inventory_id.sql", id)
-		if err != nil {
-			return nil, err
-		}
-		if shotlines != nil {
-			for _, m := range shotlines {
-				for k, v := range m {
-					if k == "shotpoint_number" {
-						sp, ok := v.(pgtype.Numeric)
-						if !ok {
-							delete(inventory, "weight")
-						} else {
-							var ift float64
-							sp.AssignTo(&ift)
-							m["shotpoint_number"] = &ift
-						}
-					}
-				}
-			}
-			inventory["shotlines"] = shotlines
-		}
+		defer rows.Close()
+		rowToStruct(rows, &inventory.Boreholes)
 	}
 
 	if (flags & dbf.OUTCROP) != 0 {
-		outcrops, err := pg.queryRows("pg/outcrop/by_inventory_id.sql", id)
+		q, err := assets.ReadString("pg/outcrop/by_inventory_id.sql")
 		if err != nil {
 			return nil, err
 		}
-		if outcrops != nil {
-			inventory["outcrops"] = outcrops
+		rows, err := pg.pool.Query(context.Background(), q, id)
+		if err != nil {
+			return nil, err
 		}
+		defer rows.Close()
+		rowToStruct(rows, &inventory.Outcrops)
+	}
+
+	if (flags & dbf.SHOTLINE) != 0 {
+		q, err := assets.ReadString("pg/shotline/by_inventory_id.sql")
+		if err != nil {
+			return nil, err
+		}
+		rows, err := pg.pool.Query(context.Background(), q, id)
+		if err != nil {
+			return nil, err
+		}
+		defer rows.Close()
+		rowToStruct(rows, &inventory.Shotlines)
+	}
+
+	if (flags & dbf.WELL) != 0 {
+		q, err := assets.ReadString("pg/well/by_inventory_id.sql")
+		if err != nil {
+			return nil, err
+		}
+		rows, err := pg.pool.Query(context.Background(), q, id)
+		if err != nil {
+			return nil, err
+		}
+		defer rows.Close()
+		rowToStruct(rows, &inventory.Wells)
 	}
 
 	if (flags & dbf.QUALITY) != 0 {
-		qualities, err := pg.queryRows("pg/quality/by_inventory_id.sql", id)
+
+		q, err := assets.ReadString("pg/quality/by_inventory_id.sql")
 		if err != nil {
 			return nil, err
 		}
-		if qualities != nil {
-			var issuesStr *string
-			for _, m := range qualities {
-				for k, v := range m {
-					if k == "issues" {
-						var s string
-						if v != nil {
-							s = strings.Replace(fmt.Sprintf("%v", v), " ", ", ", -1)
-							s = strings.Replace(s, "_", " ", -1)
-							if len(s) > 0 && s[len(s)-1] == ']' && s[0] == '[' {
-								s = s[1 : len(s)-1]
-							}
-						} else {
-							s = "GOOD"
-						}
-						issuesStr = &s
-						if issuesStr != nil {
-							m["issues"] = *issuesStr
-						}
-					}
-				}
-			}
-			inventory["qualities"] = qualities
+		rows, err := pg.pool.Query(context.Background(), q, id)
+		if err != nil {
+			return nil, err
 		}
+		defer rows.Close()
+		rowToStruct(rows, &inventory.Qualities)
 	}
 
 	if (flags & dbf.TRACKING) != 0 {
-		containerlog, err := pg.queryRows("pg/container_log/by_inventory_id.sql", id)
+		q, err := assets.ReadString("pg/container_log/by_inventory_id.sql")
 		if err != nil {
 			return nil, err
 		}
-		if containerlog != nil {
-			inventory["containerlog"] = containerlog
+		rows, err := pg.pool.Query(context.Background(), q, id)
+		if err != nil {
+			return nil, err
 		}
+		defer rows.Close()
+		rowToStruct(rows, &inventory.ContainerLog)
 	}
 
 	if (flags & dbf.GEOJSON) != 0 {
@@ -211,11 +156,9 @@ func (pg *Postgres) GetInventory(id int, flags int) (map[string]interface{}, err
 		if err != nil {
 			return nil, err
 		}
-
-		if geojson != nil {
-			inventory["geojson"] = geojson["geojson"]
+		if geojson["geojson"] != nil {
+			inventory.GeoJSON = geojson["geojson"].(map[string]interface{})
 		}
 	}
-
-	return inventory, nil
+	return &inventory, nil
 }
