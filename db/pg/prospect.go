@@ -64,7 +64,7 @@ func (pg *Postgres) GetProspect(id int, flags int) (*model.Prospect, error) {
 			return nil, err
 		}
 		if geojson["geojson"] != nil {
-			prospect.GeoJSON = geojson["geojson"].(map[string]interface{})
+			prospect.GeoJSON = geojson["geojson"]
 		}
 	}
 

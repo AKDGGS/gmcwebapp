@@ -29,7 +29,7 @@ type Well struct {
 	OperatorType     string                 `json:"operator_type"`
 	Stash            map[string]interface{} `json:"stash"`
 	KeywordSummary   []KeywordSummary       `json:"keywords"`
-	GeoJSON          map[string]interface{} `json:"geojson"`
+	GeoJSON          interface{}            `json:"geojson"`
 	Quadrangles      []Quadrangle           `json:"quadrangles"`
 	Notes            []Note                 `json:"note"`
 	URLs             []URL                  `json:"url"`

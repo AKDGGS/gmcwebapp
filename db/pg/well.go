@@ -84,7 +84,7 @@ func (pg *Postgres) GetWell(id int, flags int) (*model.Well, error) {
 			return nil, err
 		}
 		if geojson["geojson"] != nil {
-			well.GeoJSON = geojson["geojson"].(map[string]interface{})
+			well.GeoJSON = geojson["geojson"] //.(map[string]interface{})
 		}
 	}
 	if (flags & dbf.QUADRANGLES) != 0 {

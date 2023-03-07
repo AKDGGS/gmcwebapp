@@ -87,7 +87,8 @@
 						{{- range $i, $f := .GeoJSON.features}}{{- if ne $i 0}}, {{- end}}{{- if (eq $f.geometry.type "Point" )}}
 						<tr>
 							<th>Lon/Lat</th>
-							<td>{{$f.geometry.coordinates}}</td>
+							<td>{{- range $i, $coor := $f.geometry.coordinates}}{{- if ne $i 0}}, {{- end}}
+								{{$coor}}{{- end}}
 						</tr>
 						{{- end}}
 						{{- end}}
@@ -108,7 +109,7 @@
 				<div id="map"></div>
 				<div id="popup" class="ol-popup">
 					<div class="ol-popup-top">
-						<div class="ol-popup-top-title">Borehole(s)</div>
+						<div class="ol-popup-top-title">Well(s)</div>
 						<div id="popup-closer">&#215;</div>
 					</div>
 					<div id="popup-content" class="ol-popup-content"></div>

@@ -82,7 +82,7 @@ func (pg *Postgres) GetOutcrop(id int, flags int) (*model.Outcrop, error) {
 			return nil, err
 		}
 		if geojson["geojson"] != nil {
-			outcrop.GeoJSON = geojson["geojson"].(map[string]interface{})
+			outcrop.GeoJSON = geojson["geojson"]
 		}
 	}
 	if (flags & dbf.QUADRANGLES) != 0 {

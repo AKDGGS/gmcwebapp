@@ -20,7 +20,7 @@ type Borehole struct {
 	ModifiedDate      *time.Time             `json:"modified_date"`
 	ModifiedUser      string                 `json:"modified_user"`
 	KeywordSummary    []KeywordSummary       `json:"keywords"`
-	GeoJSON           map[string]interface{} `json:"geojson"`
+	GeoJSON           interface{}            `json:"geojson"`
 	MiningDistricts   []MiningDistricts      `json:"mining_districts"`
 	Quadrangles       []Quadrangle           `json:"quadrangles"`
 	Notes             []Note                 `json:"note"`

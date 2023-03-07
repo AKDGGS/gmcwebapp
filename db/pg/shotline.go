@@ -72,7 +72,7 @@ func (pg *Postgres) GetShotline(id int, flags int) (*model.Shotline, error) {
 			return nil, err
 		}
 		if geojson["geojson"] != nil {
-			shotline.GeoJSON = geojson["geojson"].(map[string]interface{})
+			shotline.GeoJSON = geojson["geojson"]
 		}
 	}
 	if (flags & dbf.QUADRANGLES) != 0 {
