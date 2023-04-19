@@ -73,6 +73,9 @@ func main() {
 	case "issues", "issue", "iss":
 		issueCommand(cfg, exec, cmd, flag.Args()[1:])
 
+	case "file":
+		fileCommand(cfg, exec, cmd, flag.Args()[1:])
+
 	case "--help", "help":
 		flag.Usage()
 		os.Exit(0)

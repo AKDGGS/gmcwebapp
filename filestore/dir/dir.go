@@ -3,6 +3,7 @@ package dir
 import (
 	"encoding/base64"
 	"fmt"
+	"io"
 	"math/big"
 	"mime"
 	"os"
@@ -59,6 +60,20 @@ func (d *Dir) GetFile(name string) (*fsutil.File, error) {
 			base64.RawStdEncoding.EncodeToString(sz_b),
 		),
 	}, nil
+}
+
+func (d *Dir) PutFile(file *fsutil.File) error {
+	newFile, err := os.Create(filepath.Join(d.path, file.Name))
+	if err != nil {
+		return err
+	}
+	defer newFile.Close()
+
+	_, err = io.Copy(newFile, file.Content)
+	if err != nil {
+		return err
+	}
+	return nil
 }
 
 func (d *Dir) Shutdown() {

@@ -89,6 +89,15 @@ func (s3 *S3) GetFile(name string) (*fsutil.File, error) {
 	}, nil
 }
 
+func (s3 *S3) PutFile(file *fsutil.File) error {
+	_, err := s3.client.PutObject(context.Background(), s3.bucket, file.Name,
+		file.Content, file.Size, minio.PutObjectOptions{})
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
 func (s3 *S3) Shutdown() {
 	// Do nothing
 }

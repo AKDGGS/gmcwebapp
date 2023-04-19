@@ -11,6 +11,7 @@ import (
 
 type FileStore interface {
 	GetFile(string) (*fsutil.File, error)
+	PutFile(*fsutil.File) error
 	Shutdown()
 }
 

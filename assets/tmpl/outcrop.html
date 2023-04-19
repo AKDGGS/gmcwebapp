@@ -30,7 +30,7 @@
 							<tr>
 								<th>Lon/Lat</th>
 								<td>{{- range $i, $coor := $f.geometry.coordinates}}{{- if ne $i 0}}, {{- end}}
-									{{$coor}}{{- end}}
+									{{$coor}}{{- end}}</td>
 							</tr>
 							{{- end}}
 						{{- end}}
