@@ -19,8 +19,10 @@ func (pg *Postgres) GetProspect(id int, flags int) (*model.Prospect, error) {
 	}
 	defer rows.Close()
 	prospect := model.Prospect{}
-	rowToStruct(rows, &prospect)
 
+	if rowToStruct(rows, &prospect) == 0 {
+		return nil, nil
+	}
 	if (flags & dbf.BOREHOLE) != 0 {
 		q, err := assets.ReadString("pg/borehole/by_prospect_id.sql")
 		if err != nil {
@@ -91,6 +93,5 @@ func (pg *Postgres) GetProspect(id int, flags int) (*model.Prospect, error) {
 		}
 		rowToStruct(r, &prospect.Quadrangles)
 	}
-
 	return &prospect, nil
 }

@@ -19,8 +19,10 @@ func (pg *Postgres) GetInventory(id int, flags int) (*model.Inventory, error) {
 	}
 	defer rows.Close()
 	inventory := model.Inventory{}
-	rowToStruct(rows, &inventory)
 
+	if rowToStruct(rows, &inventory) == 0 {
+		return nil, nil
+	}
 	if (flags & dbf.FILES) != 0 {
 		q, err = assets.ReadString("pg/file/by_inventory_id.sql")
 		if err != nil {

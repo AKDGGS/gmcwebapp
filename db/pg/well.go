@@ -20,8 +20,10 @@ func (pg *Postgres) GetWell(id int, flags int) (*model.Well, error) {
 	defer rows.Close()
 
 	well := model.Well{}
-	rowToStruct(rows, &well)
 
+	if rowToStruct(rows, &well) == 0 {
+		return nil, nil
+	}
 	if (flags & dbf.FILES) != 0 {
 		q, err = assets.ReadString("pg/file/by_well_id.sql")
 		if err != nil {

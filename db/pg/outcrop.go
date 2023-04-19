@@ -19,7 +19,10 @@ func (pg *Postgres) GetOutcrop(id int, flags int) (*model.Outcrop, error) {
 	}
 	defer rows.Close()
 	outcrop := model.Outcrop{}
-	rowToStruct(rows, &outcrop)
+
+	if rowToStruct(rows, &outcrop) == 0 {
+		return nil, nil
+	}
 	if (flags & dbf.FILES) != 0 {
 		q, err = assets.ReadString("pg/file/by_outcrop_id.sql")
 		if err != nil {

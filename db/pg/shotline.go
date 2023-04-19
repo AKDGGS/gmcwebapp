@@ -19,8 +19,10 @@ func (pg *Postgres) GetShotline(id int, flags int) (*model.Shotline, error) {
 	}
 	defer rows.Close()
 	shotline := model.Shotline{}
-	rowToStruct(rows, &shotline)
 
+	if rowToStruct(rows, &shotline) == 0 {
+		return nil, nil
+	}
 	if (flags & dbf.SHOTPOINT) != 0 {
 		q, err = assets.ReadString("pg/shotpoint/by_shotline_id.sql")
 		if err != nil {
@@ -86,6 +88,5 @@ func (pg *Postgres) GetShotline(id int, flags int) (*model.Shotline, error) {
 		}
 		rowToStruct(r, &shotline.Quadrangles)
 	}
-
 	return &shotline, nil
 }
