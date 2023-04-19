@@ -117,8 +117,13 @@ func (srv *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 
 	switch action {
 	case "file":
-		fn := strings.TrimPrefix(strings.TrimPrefix(path, "file"), "/")
-		srv.ServeFile(fn, w, r)
+		fid := strings.TrimPrefix(strings.TrimPrefix(path, "file"), "/")
+		id, err := strconv.Atoi(fid)
+		if err != nil {
+			http.Error(w, "Invalid File ID", http.StatusBadRequest)
+			return
+		}
+		srv.ServeFile(id, w, r)
 
 	case "prospect":
 		sid := strings.TrimPrefix(strings.TrimPrefix(path, "prospect"), "/")

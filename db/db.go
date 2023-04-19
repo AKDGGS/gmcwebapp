@@ -34,6 +34,9 @@ type DB interface {
 	// Fetches wells point list
 	GetWellPoints() ([]map[string]interface{}, error)
 
+	// Fetches file details
+	GetFile(id int) (*model.File, error)
+
 	// List available tokens
 	ListTokens() ([]*model.Token, error)
 	// Creates a new token
