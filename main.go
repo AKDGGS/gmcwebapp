@@ -49,7 +49,7 @@ func main() {
 		os.Exit(1)
 	}
 
-	if assetpath != nil {
+	if *assetpath != "" {
 		assets.SetExternal(*assetpath)
 	}
 
