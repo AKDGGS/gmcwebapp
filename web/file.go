@@ -9,6 +9,7 @@ import (
 func (srv *Server) ServeFile(id int, w http.ResponseWriter, r *http.Request) {
 	// Fetch the file details from the database
 	db_file, err := srv.DB.GetFile(id)
+	fmt.Println(db_file)
 	if err != nil {
 		http.Error(
 			w, fmt.Sprintf("Query error: %s", err.Error()),
@@ -19,6 +20,10 @@ func (srv *Server) ServeFile(id int, w http.ResponseWriter, r *http.Request) {
 
 	// Fetch the file from filestore
 	fs_file, err := srv.FileStore.GetFile(fmt.Sprintf("%d/%s",
+		db_file.ID, db_file.Name,
+	))
+
+	fmt.Println(fs_file, fmt.Sprintf("%d/%s",
 		db_file.ID, db_file.Name,
 	))
 	if err != nil {

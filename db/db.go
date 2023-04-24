@@ -37,6 +37,9 @@ type DB interface {
 	// Fetches file details
 	GetFile(id int) (*model.File, error)
 
+	// Put file
+	PutFile(*model.File, func() error) error
+
 	// List available tokens
 	ListTokens() ([]*model.Token, error)
 	// Creates a new token
