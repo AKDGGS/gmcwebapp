@@ -71,31 +71,10 @@ func fileCommand(cfg *config.Config, exec string, cmd string, args []string) err
 		}
 		flagset.Parse(subcmdArgs)
 
-		well := *well_id
-
-		if well == 0 {
+		if *well_id == 0 {
 			subcmdArgs = subcmdArgs[0:]
 		} else {
 			subcmdArgs = subcmdArgs[2:]
-		}
-
-		var fileArr []model.File
-		for _, filename := range subcmdArgs {
-			fileInfo, err := os.Stat(filename)
-			if err != nil || fileInfo.Size() == 0 {
-				fmt.Println("At least one of the files doesn't exist or has a size of zero.")
-				break
-			}
-
-			// temporary code until we decide what to do with the MD5.
-			rand.Seed(time.Now().UnixNano())
-			MD5String := strconv.FormatInt(rand.Int63(), 10)
-
-			file := model.File{}
-			file.Name = fileInfo.Name()
-			file.Size = fileInfo.Size()
-			file.MD5 = MD5String
-			fileArr = append(fileArr, file)
 		}
 
 		db, err := db.New(cfg.DatabaseURL)
@@ -104,89 +83,52 @@ func fileCommand(cfg *config.Config, exec string, cmd string, args []string) err
 			os.Exit(1)
 		}
 
-		for i, _ := range fileArr {
-			err = db.PutFile(&fileArr[i], func() error {
-				fs, err := filestore.New(cfg.FileStore)
-				if err != nil {
-					return nil
-				}
+		fs, err := filestore.New(cfg.FileStore)
+		if err != nil {
+			return nil
+		}
 
-				for _, filename := range subcmdArgs {
-					file, err := os.Open(filename)
+		for _, filename := range subcmdArgs {
+			fileInfo, err := os.Stat(filename)
+			if err != nil || fileInfo.Size() == 0 {
+				fmt.Println(filename, "doesn't exist or has a size of zero.")
+			} else {
+				// temporary code until we decide what to do with the MD5.
+				rand.Seed(time.Now().UnixNano())
+				MD5String := strconv.FormatInt(rand.Int63(), 10)
+
+				file := model.File{}
+				file.Name = fileInfo.Name()
+				file.Size = fileInfo.Size()
+				file.MD5 = MD5String
+
+				// Add the file to the database
+				err = db.PutFile(&file, func() error {
+					fileObj, err := os.Open(file.Name)
 					if err != nil {
 						return err
 					}
 
-					stat, err := file.Stat()
-					if err != nil {
-						return err
-					}
-
-					mt := mime.TypeByExtension(filepath.Ext(stat.Name()))
+					mt := mime.TypeByExtension(filepath.Ext(fileInfo.Name()))
 					if mt == "" {
 						mt = "application/octet-stream"
 					}
-
-					md_b := big.NewInt(stat.ModTime().UnixMicro()).Bytes()
-					sz_b := big.NewInt(stat.Size()).Bytes()
-
-					f := &fsutil.File{
-						Name:         stat.Name(),
-						Size:         stat.Size(),
-						LastModified: stat.ModTime(),
+					//Add the file to the filestore
+					fs.PutFile(&fsutil.File{
+						Name:         fileInfo.Name(),
+						Size:         fileInfo.Size(),
+						LastModified: fileInfo.ModTime(),
 						ContentType:  mt,
-						Content:      file,
+						Content:      fileObj,
 						ETag: fmt.Sprintf("%s-%s",
-							base64.RawStdEncoding.EncodeToString(md_b),
-							base64.RawStdEncoding.EncodeToString(sz_b),
+							base64.RawStdEncoding.EncodeToString(big.NewInt(fileInfo.ModTime().UnixMicro()).Bytes()),
+							base64.RawStdEncoding.EncodeToString(big.NewInt(fileInfo.Size()).Bytes()),
 						),
-					}
-					fs.PutFile(f)
-				}
-				return nil
-			})
-			if err != nil {
-				return err
+					})
+					return nil
+				})
 			}
 		}
-
-		// fs, err := filestore.New(cfg.FileStore)
-		// if err != nil {
-		// 	return nil
-		// }
-		//
-		// for _, filename := range subcmdArgs {
-		// 	file, err := os.Open(filename)
-		// 	if err != nil {
-		// 		return err
-		// 	}
-		//
-		// 	stat, err := file.Stat()
-		// 	if err != nil {
-		// 		return err
-		// 	}
-		//
-		// 	mt := mime.TypeByExtension(filepath.Ext(stat.Name()))
-		// 	if mt == "" {
-		// 		mt = "application/octet-stream"
-		// 	}
-		//
-		// 	md_b := big.NewInt(stat.ModTime().UnixMicro()).Bytes()
-		// 	sz_b := big.NewInt(stat.Size()).Bytes()
-		//
-		// 	f := &fsutil.File{
-		// 		Name:         stat.Name(),
-		// 		Size:         stat.Size(),
-		// 		LastModified: stat.ModTime(),
-		// 		ContentType:  mt,
-		// 		Content:      file,
-		// 		ETag: fmt.Sprintf("%s-%s",
-		// 			base64.RawStdEncoding.EncodeToString(md_b),
-		// 			base64.RawStdEncoding.EncodeToString(sz_b),
-		// 		),
-		// 	}
-		// 	fs.PutFile(f)
-		// }
 
 	case "get":
 		flagset := flag.NewFlagSet(cmd, flag.ExitOnError)
