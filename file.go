@@ -1,11 +1,9 @@
 package main
 
 import (
-	"encoding/base64"
 	"flag"
 	"fmt"
 	"io"
-	"math/big"
 	"math/rand"
 	"mime"
 	"os"
@@ -97,10 +95,11 @@ func fileCommand(cfg *config.Config, exec string, cmd string, args []string) err
 				rand.Seed(time.Now().UnixNano())
 				MD5String := strconv.FormatInt(rand.Int63(), 10)
 
-				file := model.File{}
-				file.Name = fileInfo.Name()
-				file.Size = fileInfo.Size()
-				file.MD5 = MD5String
+				file := model.File{
+					Name: fileInfo.Name(),
+					Size: fileInfo.Size(),
+					MD5:  MD5String,
+				}
 
 				// Add the file to the database
 				err = db.PutFile(&file, func() error {
@@ -120,10 +119,6 @@ func fileCommand(cfg *config.Config, exec string, cmd string, args []string) err
 						LastModified: fileInfo.ModTime(),
 						ContentType:  mt,
 						Content:      fileObj,
-						ETag: fmt.Sprintf("%s-%s",
-							base64.RawStdEncoding.EncodeToString(big.NewInt(fileInfo.ModTime().UnixMicro()).Bytes()),
-							base64.RawStdEncoding.EncodeToString(big.NewInt(fileInfo.Size()).Bytes()),
-						),
 					})
 					return nil
 				})

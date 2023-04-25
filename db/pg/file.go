@@ -34,8 +34,11 @@ func (pg *Postgres) PutFile(file *model.File, callback func() error) error {
 	}
 	defer tx.Rollback(context.Background())
 
-	insert_sql := "INSERT INTO file(filename, description, size, mimetype, content, content_md5)" +
-		"VALUES($1, $2, $3, $4, ''::bytea, $5) RETURNING file_id"
+	insert_sql, err := assets.ReadString("pg/file/insert.sql")
+	if err != nil {
+		return err
+	}
+
 	var fileID int
 
 	err = tx.QueryRow(context.Background(), insert_sql, file.Name, file.Description,
@@ -43,10 +46,9 @@ func (pg *Postgres) PutFile(file *model.File, callback func() error) error {
 	if err != nil {
 		return err
 	}
-	file.ID = int32(fileID)
+	file.ID = fileID
 
-	err = callback()
-	if err != nil {
+	if err = callback(); err != nil {
 		return err
 	}
 
