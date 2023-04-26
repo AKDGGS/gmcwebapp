@@ -25,7 +25,7 @@ func (pg *Postgres) GetFile(id int) (*model.File, error) {
 	return &file, nil
 }
 
-func (pg *Postgres) PutFile(file *model.File, rollback func() error) error {
+func (pg *Postgres) PutFile(file *model.File, precommitFunc func() error) error {
 	tx, err := pg.pool.Begin(context.Background())
 	if err != nil {
 		return err
@@ -60,7 +60,7 @@ func (pg *Postgres) PutFile(file *model.File, rollback func() error) error {
 		}
 	}
 
-	if err = rollback(); err != nil {
+	if err = precommitFunc(); err != nil {
 		return err
 	}
 
