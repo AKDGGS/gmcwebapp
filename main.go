@@ -29,7 +29,11 @@ func main() {
 		fmt.Printf("  keyword, keywords, kw\n")
 		fmt.Printf("      manage keywords\n")
 		fmt.Printf("  issue, issues, iss\n")
-		fmt.Printf("      manage quality issues\n\n")
+		fmt.Printf("      manage quality issues\n")
+		fmt.Printf("  get\n")
+		fmt.Printf("      downloads file\n")
+		fmt.Printf("  put\n")
+		fmt.Printf("      uploads files\n\n")
 		fmt.Printf("See '%s <command> --help' for information ", exec)
 		fmt.Printf("on a specific command\n")
 	}

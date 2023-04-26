@@ -4,6 +4,7 @@ import (
 	"flag"
 	"fmt"
 	"io"
+	"io/ioutil"
 	"math/rand"
 	"mime"
 	"os"
@@ -24,19 +25,19 @@ func fileCommand(cfg *config.Config, exec string, cmd string, args []string) err
 	printUsage := func() {
 		fmt.Printf("Usage: %s %s <subcommand> ...\n", exec, cmd)
 		fmt.Printf("Subcommands:\n")
-		fmt.Printf("  list, ls\n")
-		fmt.Printf("      list issues\n")
-		fmt.Printf("  put <filename ...>\n")
-		fmt.Printf("      add new quality issue(s)\n")
-		fmt.Printf("  get <filename ...>\n")
-		fmt.Printf("      remove quality issue(s)\n")
+		fmt.Printf("  put [args] <filename ...>\n")
+		fmt.Printf("      upload file to filestore\n")
+		fmt.Printf("  get [args] <filename ...>\n")
+		fmt.Printf("      download file from filestore\n")
 	}
-	fileFlagSet := flag.NewFlagSet("file", flag.ContinueOnError)
-	fileFlagSet.Usage = func() {
-		printUsage()
-	}
-	fileFlagSet.Parse(args)
 
+	fileFlagSet := flag.NewFlagSet("file", flag.ContinueOnError)
+	fileFlagSet.SetOutput(ioutil.Discard)
+	err := fileFlagSet.Parse(args)
+	if err != nil {
+		printUsage()
+		os.Exit(1)
+	}
 	if len(args) < 1 {
 		fmt.Fprintf(os.Stderr, "%s %s: subcommand missing\n", exec, cmd)
 		printUsage()
@@ -50,14 +51,9 @@ func fileCommand(cfg *config.Config, exec string, cmd string, args []string) err
 	}
 
 	switch subcmd {
-	default:
-		flagset := flag.NewFlagSet(cmd, flag.ExitOnError)
-		flagset.SetOutput(os.Stdout)
-		flagset.Usage = func() {
-			fmt.Printf("Usage: %s %s %s <filename>\n",
-				exec, cmd, subcmd)
-			flagset.PrintDefaults()
-		}
+	case "--help", "help":
+		printUsage()
+		os.Exit(0)
 	case "put":
 		flagset := flag.NewFlagSet(cmd, flag.ExitOnError)
 		well_id := flagset.Int("well_id", 0, "a well ID")
@@ -66,6 +62,7 @@ func fileCommand(cfg *config.Config, exec string, cmd string, args []string) err
 			fmt.Printf("Usage: %s %s %s <filename>\n",
 				exec, cmd, subcmd)
 			flagset.PrintDefaults()
+			os.Exit(1)
 		}
 		flagset.Parse(subcmdArgs)
 
@@ -83,14 +80,16 @@ func fileCommand(cfg *config.Config, exec string, cmd string, args []string) err
 
 		fs, err := filestore.New(cfg.FileStore)
 		if err != nil {
+			fmt.Fprintf(os.Stderr, "%s: %s\n", exec, err.Error())
 			return nil
 		}
 
 		for _, filename := range subcmdArgs {
 			fileInfo, err := os.Stat(filename)
 			if err != nil || fileInfo.Size() == 0 {
-				fmt.Println(filename, "doesn't exist or has a size of zero.")
+				fmt.Println(filename, "does not exist or has a size of zero")
 			} else {
+
 				// temporary code until we decide what to do with the MD5.
 				rand.Seed(time.Now().UnixNano())
 				MD5String := strconv.FormatInt(rand.Int63(), 10)
@@ -107,6 +106,7 @@ func fileCommand(cfg *config.Config, exec string, cmd string, args []string) err
 				err = db.PutFile(&file, func() error {
 					fileObj, err := os.Open(file.Name)
 					if err != nil {
+						fmt.Fprintf(os.Stderr, "%s: %s\n", exec, err.Error())
 						return err
 					}
 
@@ -136,12 +136,13 @@ func fileCommand(cfg *config.Config, exec string, cmd string, args []string) err
 			fmt.Printf("Usage: %s %s %s [args] <filename>\n",
 				exec, cmd, subcmd)
 			flagset.PrintDefaults()
+			os.Exit(1)
 		}
 		flagset.Parse(subcmdArgs)
 
 		if len(subcmdArgs) < 1 || len(args)%2 != 0 {
 			fmt.Fprintf(os.Stderr,
-				"A subcommand and filename are required\n")
+				"A filename is required and a save destination is optional\n")
 			flagset.Usage()
 			os.Exit(1)
 		}
@@ -156,31 +157,41 @@ func fileCommand(cfg *config.Config, exec string, cmd string, args []string) err
 		if outputPath == "" {
 			cwd, err := os.Getwd()
 			if err != nil {
+				fmt.Fprintf(os.Stderr, "%s: %s\n", exec, err.Error())
 				return err
 			}
 			outputPath = filepath.Join(cwd, filepath.Base(subcmdArgs[0]))
 			file, err = fs.GetFile(subcmdArgs[0])
 			if err != nil {
+				fmt.Fprintf(os.Stderr, "%s: %s\n", exec, err.Error())
 				return err
 			}
 		} else {
 			outputPath = filepath.Join(*out, filepath.Base(subcmdArgs[2]))
 			file, err = fs.GetFile(fileFlagSet.Arg(3))
 			if err != nil {
+				fmt.Fprintf(os.Stderr, "%s: %s\n", exec, err.Error())
 				return err
 			}
 		}
 
 		f, err := os.Create(outputPath)
 		if err != nil {
+			fmt.Fprintf(os.Stderr, "%s: %s\n", exec, err.Error())
 			return err
 		}
 		defer f.Close()
 		_, err = io.Copy(f, file.Content)
 		if err != nil {
+			fmt.Fprintf(os.Stderr, "%s: %s\n", exec, err.Error())
 			return err
 		}
 
+	default:
+		fmt.Fprintf(os.Stderr, "%s %s '%s' is not a recognized subcommand\n",
+			exec, cmd, subcmd)
+		printUsage()
+		os.Exit(1)
 	}
 	return nil
 }
