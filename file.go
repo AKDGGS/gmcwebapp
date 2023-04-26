@@ -101,6 +101,8 @@ func fileCommand(cfg *config.Config, exec string, cmd string, args []string) err
 					MD5:  MD5String,
 				}
 
+				file.WellIDs = append(file.WellIDs, *well_id)
+
 				// Add the file to the database
 				err = db.PutFile(&file, func() error {
 					fileObj, err := os.Open(file.Name)
@@ -112,9 +114,10 @@ func fileCommand(cfg *config.Config, exec string, cmd string, args []string) err
 					if mt == "" {
 						mt = "application/octet-stream"
 					}
+
 					//Add the file to the filestore
 					fs.PutFile(&fsutil.File{
-						Name:         fileInfo.Name(),
+						Name:         fmt.Sprintf("%d/%s", file.ID, fileInfo.Name()),
 						Size:         fileInfo.Size(),
 						LastModified: fileInfo.ModTime(),
 						ContentType:  mt,

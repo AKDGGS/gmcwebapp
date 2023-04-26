@@ -63,6 +63,11 @@ func (d *Dir) GetFile(name string) (*fsutil.File, error) {
 }
 
 func (d *Dir) PutFile(file *fsutil.File) error {
+	dir := filepath.Dir(filepath.Join(d.path, file.Name))
+	err := os.MkdirAll(dir, 0755)
+	if err != nil {
+		return err
+	}
 	newFile, err := os.Create(filepath.Join(d.path, file.Name))
 	if err != nil {
 		return err

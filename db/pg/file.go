@@ -2,14 +2,12 @@ package pg
 
 import (
 	"context"
-	"fmt"
 
 	"gmc/assets"
 	"gmc/db/model"
 )
 
 func (pg *Postgres) GetFile(id int) (*model.File, error) {
-	fmt.Println("GetFile")
 	q, err := assets.ReadString("pg/file/by_file_id.sql")
 	if err != nil {
 		return nil, err
@@ -47,6 +45,16 @@ func (pg *Postgres) PutFile(file *model.File, callback func() error) error {
 		return err
 	}
 	file.ID = fileID
+
+	for _, well := range file.WellIDs {
+		if well != 0 {
+			insert_sql := "INSERT INTO well_file(file_id, well_id) VALUES($1, $2)"
+			_, err = tx.Exec(context.Background(), insert_sql, fileID, well)
+			if err != nil {
+				return err
+			}
+		}
+	}
 
 	if err = callback(); err != nil {
 		return err

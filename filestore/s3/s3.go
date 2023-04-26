@@ -90,7 +90,21 @@ func (s3 *S3) GetFile(name string) (*fsutil.File, error) {
 }
 
 func (s3 *S3) PutFile(file *fsutil.File) error {
-	_, err := s3.client.PutObject(context.Background(), s3.bucket, file.Name,
+	// Check if bucket exists
+	exists, err := s3.client.BucketExists(context.Background(), s3.bucket)
+	if err != nil {
+		return err
+	}
+
+	// Create bucket if it doesn't exist
+	if !exists {
+		err := s3.client.MakeBucket(context.Background(), s3.bucket, minio.MakeBucketOptions{})
+		if err != nil {
+			return err
+		}
+	}
+
+	_, err = s3.client.PutObject(context.Background(), s3.bucket, file.Name,
 		file.Content, file.Size, minio.PutObjectOptions{})
 	if err != nil {
 		return err

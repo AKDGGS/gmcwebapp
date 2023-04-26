@@ -6,6 +6,7 @@ require (
 	github.com/boombuler/barcode v1.0.1
 	github.com/jackc/pgtype v1.9.1
 	github.com/jackc/pgx/v4 v4.14.1
+	github.com/lib/pq v1.10.2
 	github.com/minio/minio-go/v7 v7.0.19
 	golang.org/x/crypto v0.0.0-20210711020723-a769d52b0f97
 	gopkg.in/yaml.v2 v2.4.0
