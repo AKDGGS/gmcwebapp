@@ -25,7 +25,7 @@ func (pg *Postgres) GetFile(id int) (*model.File, error) {
 	return &file, nil
 }
 
-func (pg *Postgres) PutFile(file *model.File, callback func() error) error {
+func (pg *Postgres) PutFile(file *model.File, rollback func() error) error {
 	tx, err := pg.pool.Begin(context.Background())
 	if err != nil {
 		return err
@@ -46,17 +46,21 @@ func (pg *Postgres) PutFile(file *model.File, callback func() error) error {
 	}
 	file.ID = fileID
 
+	insert_wellfile_sql, err := assets.ReadString("pg/well/insert_wellfile.sql")
+	if err != nil {
+		return err
+	}
+
 	for _, well := range file.WellIDs {
 		if well != 0 {
-			insert_sql := "INSERT INTO well_file(file_id, well_id) VALUES($1, $2)"
-			_, err = tx.Exec(context.Background(), insert_sql, fileID, well)
+			_, err = tx.Exec(context.Background(), insert_wellfile_sql, fileID, well)
 			if err != nil {
 				return err
 			}
 		}
 	}
 
-	if err = callback(); err != nil {
+	if err = rollback(); err != nil {
 		return err
 	}
 
