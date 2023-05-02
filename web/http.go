@@ -32,7 +32,7 @@ func (srv *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 		"css/wells.css", "css/qa.css", "js/map-defaults.js",
 		"js/view.js", "js/stash.js", "js/wells.js", "js/qa.js",
 		"img/loader.gif", "ol/ol-layerswitcher.min.css",
-		"ol/ol-layerswitcher.min.js":
+		"ol/ol-layerswitcher.min.js", "css/filedrop.css", "js/filedrop.js":
 		assets.ServeStatic(path, w, r)
 		return
 
@@ -106,6 +106,14 @@ func (srv *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 		srv.ServeWellsDetailJSON(id, w, r)
+		return
+
+	case "filedrop":
+		srv.ServeFileDrop(w, r)
+		return
+
+	case "upload":
+		srv.ServeUpload(w, r)
 		return
 	}
 
