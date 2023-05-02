@@ -91,12 +91,12 @@ func fileCommand(cfg *config.Config, exec string, cmd string, args []string) err
 			} else {
 				// temporary code until we decide what to do with the MD5.
 				rand.Seed(time.Now().UnixNano())
-				MD5_string := strconv.FormatInt(rand.Int63(), 10)
+				MD5 := strconv.FormatInt(rand.Int63(), 10)
 
 				file := model.File{
 					Name: file_info.Name(),
 					Size: file_info.Size(),
-					MD5:  MD5_string,
+					MD5:  MD5,
 				}
 
 				file.WellIDs = append(file.WellIDs, *well_id)
