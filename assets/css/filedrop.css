@@ -5,3 +5,12 @@
 	text-align: center;
 	line-height: 100px;
 }
+
+.progress-bar {
+  height: 30px;
+  background-color: #4CAF50;
+  width: 0%;
+	text-align: center;
+	line-height: 30px;
+	font-weight: bold;
+}
