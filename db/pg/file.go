@@ -44,6 +44,7 @@ func (pg *Postgres) PutFile(file *model.File, precommitFunc func() error) error 
 	if err != nil {
 		return err
 	}
+
 	file.ID = fileID
 
 	insert_wellfile_sql, err := assets.ReadString("pg/well/insert_wellfile.sql")

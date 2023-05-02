@@ -62,19 +62,19 @@ func (d *Dir) GetFile(name string) (*fsutil.File, error) {
 	}, nil
 }
 
-func (d *Dir) PutFile(file *fsutil.File) error {
-	dir := filepath.Dir(filepath.Join(d.path, file.Name))
+func (d *Dir) PutFile(f *fsutil.File) error {
+	dir := filepath.Dir(filepath.Join(d.path, f.Name))
 	err := os.MkdirAll(dir, 0755)
 	if err != nil {
 		return err
 	}
-	newFile, err := os.Create(filepath.Join(d.path, file.Name))
+	file, err := os.Create(filepath.Join(d.path, f.Name))
 	if err != nil {
 		return err
 	}
-	defer newFile.Close()
+	defer file.Close()
 
-	_, err = io.Copy(newFile, file.Content)
+	_, err = io.Copy(file, f.Content)
 	if err != nil {
 		return err
 	}

@@ -31,9 +31,9 @@ func fileCommand(cfg *config.Config, exec string, cmd string, args []string) err
 		fmt.Printf("      download file from filestore\n")
 	}
 
-	fileFlagSet := flag.NewFlagSet("file", flag.ContinueOnError)
-	fileFlagSet.SetOutput(ioutil.Discard)
-	err := fileFlagSet.Parse(args)
+	file_flagset := flag.NewFlagSet("file", flag.ContinueOnError)
+	file_flagset.SetOutput(ioutil.Discard)
+	err := file_flagset.Parse(args)
 	if err != nil {
 		printUsage()
 		os.Exit(1)
@@ -44,10 +44,10 @@ func fileCommand(cfg *config.Config, exec string, cmd string, args []string) err
 		os.Exit(1)
 	}
 
-	subcmd := strings.ToLower(fileFlagSet.Arg(0))
-	var subcmdArgs []string
-	if len(fileFlagSet.Args()) > 1 {
-		subcmdArgs = fileFlagSet.Args()[1:]
+	subcmd := strings.ToLower(file_flagset.Arg(0))
+	var subcmd_args []string
+	if len(file_flagset.Args()) > 1 {
+		subcmd_args = file_flagset.Args()[1:]
 	}
 
 	switch subcmd {
@@ -64,12 +64,12 @@ func fileCommand(cfg *config.Config, exec string, cmd string, args []string) err
 			flagset.PrintDefaults()
 			os.Exit(1)
 		}
-		flagset.Parse(subcmdArgs)
+		flagset.Parse(subcmd_args)
 
 		if *well_id == 0 {
-			subcmdArgs = subcmdArgs[0:]
+			subcmd_args = subcmd_args[0:]
 		} else {
-			subcmdArgs = subcmdArgs[2:]
+			subcmd_args = subcmd_args[2:]
 		}
 
 		db, err := db.New(cfg.DatabaseURL)
@@ -84,47 +84,52 @@ func fileCommand(cfg *config.Config, exec string, cmd string, args []string) err
 			return nil
 		}
 
-		for _, filename := range subcmdArgs {
-			fileInfo, err := os.Stat(filename)
-			if err != nil || fileInfo.Size() == 0 {
+		for _, filename := range subcmd_args {
+			file_info, err := os.Stat(filename)
+			if err != nil || file_info.Size() == 0 {
 				fmt.Println(filename, "does not exist or has a size of zero")
 			} else {
-
 				// temporary code until we decide what to do with the MD5.
 				rand.Seed(time.Now().UnixNano())
-				MD5String := strconv.FormatInt(rand.Int63(), 10)
+				MD5_string := strconv.FormatInt(rand.Int63(), 10)
 
 				file := model.File{
-					Name: fileInfo.Name(),
-					Size: fileInfo.Size(),
-					MD5:  MD5String,
+					Name: file_info.Name(),
+					Size: file_info.Size(),
+					MD5:  MD5_string,
 				}
 
 				file.WellIDs = append(file.WellIDs, *well_id)
 
 				// Add the file to the database
 				err = db.PutFile(&file, func() error {
-					fileObj, err := os.Open(file.Name)
+					file_obj, err := os.Open(file.Name)
 					if err != nil {
 						fmt.Fprintf(os.Stderr, "%s: %s\n", exec, err.Error())
 						return err
 					}
 
-					mt := mime.TypeByExtension(filepath.Ext(fileInfo.Name()))
+					mt := mime.TypeByExtension(filepath.Ext(file_info.Name()))
 					if mt == "" {
 						mt = "application/octet-stream"
 					}
 
 					//Add the file to the filestore
-					fs.PutFile(&fsutil.File{
-						Name:         fmt.Sprintf("%d/%s", file.ID, fileInfo.Name()),
-						Size:         fileInfo.Size(),
-						LastModified: fileInfo.ModTime(),
+					err = fs.PutFile(&fsutil.File{
+						Name:         fmt.Sprintf("%d/%s", file.ID, file_info.Name()),
+						Size:         file_info.Size(),
+						LastModified: file_info.ModTime(),
 						ContentType:  mt,
-						Content:      fileObj,
+						Content:      file_obj,
 					})
+					if err != nil {
+						return fmt.Errorf("error putting file in filestore: %w", err)
+					}
 					return nil
 				})
+				if err != nil {
+					return fmt.Errorf("error putting file in database or the filestore: %w", err)
+				}
 			}
 		}
 
@@ -138,9 +143,9 @@ func fileCommand(cfg *config.Config, exec string, cmd string, args []string) err
 			flagset.PrintDefaults()
 			os.Exit(1)
 		}
-		flagset.Parse(subcmdArgs)
+		flagset.Parse(subcmd_args)
 
-		if len(subcmdArgs) < 1 || len(args)%2 != 0 {
+		if len(subcmd_args) < 1 || len(args)%2 != 0 {
 			fmt.Fprintf(os.Stderr,
 				"A filename is required and a save destination is optional\n")
 			flagset.Usage()
@@ -153,29 +158,29 @@ func fileCommand(cfg *config.Config, exec string, cmd string, args []string) err
 		}
 
 		var file *util.File
-		outputPath := *out
-		if outputPath == "" {
+		outpath := *out
+		if outpath == "" {
 			cwd, err := os.Getwd()
 			if err != nil {
 				fmt.Fprintf(os.Stderr, "%s: %s\n", exec, err.Error())
 				return err
 			}
-			outputPath = filepath.Join(cwd, filepath.Base(subcmdArgs[0]))
-			file, err = fs.GetFile(subcmdArgs[0])
+			outpath = filepath.Join(cwd, filepath.Base(subcmd_args[0]))
+			file, err = fs.GetFile(subcmd_args[0])
 			if err != nil {
 				fmt.Fprintf(os.Stderr, "%s: %s\n", exec, err.Error())
 				return err
 			}
 		} else {
-			outputPath = filepath.Join(*out, filepath.Base(subcmdArgs[2]))
-			file, err = fs.GetFile(fileFlagSet.Arg(3))
+			outpath = filepath.Join(*out, filepath.Base(subcmd_args[2]))
+			file, err = fs.GetFile(file_flagset.Arg(3))
 			if err != nil {
 				fmt.Fprintf(os.Stderr, "%s: %s\n", exec, err.Error())
 				return err
 			}
 		}
 
-		f, err := os.Create(outputPath)
+		f, err := os.Create(outpath)
 		if err != nil {
 			fmt.Fprintf(os.Stderr, "%s: %s\n", exec, err.Error())
 			return err
