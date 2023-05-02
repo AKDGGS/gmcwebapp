@@ -27,6 +27,8 @@ async function uploadFiles(files) {
 }
 
 const dropZone = document.querySelector('#file-drop');
+const filecount = document.querySelector('#file-count');
+
 
 dropZone.addEventListener('dragover', (e) => {
     e.preventDefault();
@@ -35,5 +37,19 @@ dropZone.addEventListener('dragover', (e) => {
 dropZone.addEventListener('drop', (e) => {
     e.preventDefault();
     var files = e.dataTransfer.files;
-    uploadFiles(files)
+    uploadFiles(files);
+    filecount.textContent = files.length + ' files uploaded';
+});
+
+const fileInput = document.querySelector('#file-input');
+const chooseFileButton = document.querySelector('#choose-file-button');
+
+fileInput.addEventListener('change', () => {
+	let files = fileInput.files;
+	uploadFiles(files);
+	filecount.textContent = files.length + ' files uploaded';
+});
+
+chooseFileButton.addEventListener('click', () => {
+    fileInput.click();
 });
