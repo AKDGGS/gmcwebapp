@@ -1,9 +1,12 @@
 <div class="container">
-    <div class="file-drop" id="file-drop">Drag files to Upload</div>
-    <input type="file" id="file-input" style="display: none;" multiple>
-    <div class="button-container">
-        <button id="choose-file-button">Choose Files</button>
-        <span id="file-count">No files selected</span>
-    </div>
+	<div class="file-drop" id="file-drop">
+		<span id="file-drop-text">Drag or click to upload files</span>
+		<div class="progress-bar-file" id="progress-bar-file">
+			<span id="pb-file"></span>
+		</div>
+		<div class="progress-bar-total" id="progress-bar-total">
+			<span id="pb-total"></span>
+		</div>
+	</div>
+	<input type="file" id="file-input" style="display: none;" multiple>
 </div>
-<div class="progress-bar" id="progress-bar"></div>

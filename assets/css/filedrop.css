@@ -2,17 +2,8 @@
  	display: flex;
  	flex-direction: column;
  	align-items: center;
-}
-
-.button-container {
- 	display: flex;
- 	align-items: center;
- 	margin-top: 20px;
- 	margin-bottom: 10px;
-}
-
-#choose-file-button {
- 	width: auto;
+	width: 300px;
+	margin: 0 auto;
 }
 
 #file-count {
@@ -20,20 +11,52 @@
 }
 
 .file-drop {
- 	width: 300px;
- 	height: 100px;
+ 	width: 290px;
+ 	height: 110px;
  	border: 5px dashed black;
  	text-align: center;
  	line-height: 100px;
  	margin-top: 20px;
- 	margin-left: 20px;
+  position: relative;
 }
 
-.progress-bar {
- 	height: 30px;
- 	background-color: #4CAF50;
- 	width: 0%;
- 	text-align: center;
- 	line-height: 30px;
- 	font-weight: bold;
+.progress-bar-file,
+.progress-bar-total {
+    display: none;
+}
+
+.progress-bar-file {
+    height: 50%;
+    background-color: #f2f2f2;
+    text-align: center;
+    font-weight: bold;
+    position: absolute;
+    top: 0;
+    width: 100%;
+		line-height: 55px;
+}
+.progress-bar-total {
+    height: 50%;
+    background-color: #f2f2f2;
+    text-align: center;
+    font-weight: bold;
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+		color: white;
+		line-height: 55px;
+}
+
+#pb-file {
+    min-width: 290px;
+		max-width: 290px;
+		white-space: nowrap;
+		color: white;
+}
+
+#pb-total {
+    min-width: 290px;
+		max-width: 290px;
+		white-space: nowrap;
+		color: white;
 }
