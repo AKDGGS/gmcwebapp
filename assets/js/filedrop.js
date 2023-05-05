@@ -4,13 +4,16 @@ async function uploadFiles(files) {
 	let count = 0;
 	document.querySelector('#progress-bar-file').style.display = 'block';
 	document.querySelector('#progress-bar-total').style.display = 'block';
+	document.querySelector('#progress-bar-file').style.backgroundColor = '#194a6b';
+	document.querySelector('#progress-bar-file-name').style.backgroundColor = '#194a6b';
+	document.querySelector('#progress-bar-total').style.backgroundColor = '#194a6b';
+document.querySelector('#progress-bar-total-count').style.backgroundColor = '#194a6b';
 
 	for (let i = 0; i < files.length; i++) {
-		totalSize += files[i].size
+		totalSize += files[i].size;
 	}
 
-	for (let i = 0; i < files.length; i++) {
-		let file = files[i]
+	for (let file of files) {
 		let formData = new FormData();
 		//must be 'files' because web/upload.go looks for files...might want to change this???
 		formData.append('files', file);
@@ -20,27 +23,44 @@ async function uploadFiles(files) {
 			if (event.lengthComputable) {
 				let percentCompletedFile = Math.round((event.loaded / event.total) * 100);
 				let percentCompletedTotal = Math.round(((totalLoaded + event.loaded) / totalSize) * 100);
+
 				document.querySelector('#progress-bar-file').style.width = percentCompletedFile + '%';
-				document.querySelector('#pb-file').textContent = formatSize(event.loaded) + ' / ' +  formatSize(event.total);
-				document.querySelector('#progress-bar-total').style.width = percentCompletedTotal + '%';
-				document.querySelector('#pb-total').textContent = formatSize(totalLoaded + event.loaded) + ' / ' +  formatSize(totalSize);
+				document.querySelector('#pb-file').textContent = formatSize(event.loaded) + ' / ' + formatSize(event.total);
+				document.querySelector('#pb-file').style.backgroundImage = `linear-gradient(to right, white ${percentCompletedFile}%, black ${percentCompletedFile}%)`;
+
+				document.querySelector('#progress-bar-file-name').style.width = percentCompletedFile + '%';
+				document.querySelector('#pb-file-name').textContent = file.name;
+				document.querySelector('#pb-file-name').style.backgroundImage =
+				`linear-gradient(to right, white ${percentCompletedFile}%,
+					black ${percentCompletedFile}%)`;
+
+				document.querySelector('#progress-bar-total').style.width =
+				percentCompletedTotal + '%';
+				document.querySelector('#pb-total').textContent =
+				formatSize(totalLoaded +	event.loaded) + ' / ' + formatSize(totalSize);
+				document.querySelector('#pb-total').style.backgroundImage =
+				`linear-gradient(to right, white ${percentCompletedTotal}%,
+					black ${percentCompletedTotal}%)`;
+					document.querySelector('#progress-bar-total-count').style.width =
+					percentCompletedTotal + '%';
+				document.querySelector('#pb-total-count').style.backgroundImage =
+				`linear-gradient(to right, white ${percentCompletedTotal}%,
+					black ${percentCompletedTotal}%)`;
 			}
 		});
 		xhr.addEventListener('load', (event) => {
 			if (xhr.status >= 200 && xhr.status < 300) {
 				totalLoaded += file.size;
 				count += 1
-			// 	if (files.length == 1){
-			// 	document.querySelector('#progress-bar-total').textContent = count + ' file uploaded';
-			// } else {
-			// 	document.querySelector('#progress-bar-total').textContent = count + ' files uploaded';
-			// }
+				document.querySelector('#pb-total-count').textContent =
+				count + ' / ' + files.length + " Files Transfered";
 			}
 		});
 		xhr.open('POST', 'upload');
-		xhr.send(formData);
-		document.querySelector('#progress-bar-file').style.backgroundColor = '#194a6b';
-		document.querySelector('#progress-bar-total').style.backgroundColor = '#194a6b';
+		await new Promise(resolve => {
+			xhr.addEventListener('load', resolve);
+			xhr.send(formData);
+		});
 	}
 }
 
@@ -54,7 +74,10 @@ dropZone.addEventListener('dragover', (e) => {
 
 dropZone.addEventListener('drop', (e) => {
 	e.preventDefault();
+	document.querySelector('#pb-file').textContent = '';
+	document.querySelector('#pb-file-name').textContent = '';
 	var files = e.dataTransfer.files;
+	document.querySelector('#pb-total-count').textContent = 0 + ' / ' + files.length + " Files Transfered";
 	uploadFiles(files);
 	document.getElementById('file-drop-text').style.display = 'none';
 });
@@ -68,18 +91,19 @@ fileInput.addEventListener('change', () => {
 	uploadFiles(files);
 	document.getElementById('file-drop-text').style.display = 'none';
 	count = +1
-	document.querySelector('#progress-bar-total').textContent = count + ' files uploaded';
+	document.querySelector('#pb-total-count').textContent =
+	count + ' / ' + files.length + " Files Transfered";
 });
 
 
 function formatSize(size) {
-    if (size < 1024) {
-        return size + ' B';
-    } else if (size < 1024 * 1024) {
-        return (size / 1024).toFixed(2) + ' KB';
-    } else if (size < 1024 * 1024 * 1024) {
-        return (size / (1024 * 1024)).toFixed(2) + ' MB';
-    } else {
-        return (size / (1024 * 1024 * 1024)).toFixed(2) + ' GB';
-    }
+	if (size < 1024) {
+		return size + ' B';
+	} else if (size < 1024 * 1024) {
+		return (size / 1024).toFixed(2) + ' KB';
+	} else if (size < 1024 * 1024 * 1024) {
+		return (size / (1024 * 1024)).toFixed(2) + ' MB';
+	} else {
+		return (size / (1024 * 1024 * 1024)).toFixed(2) + ' GB';
+	}
 }
