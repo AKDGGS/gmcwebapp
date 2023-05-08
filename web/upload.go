@@ -25,7 +25,7 @@ func (srv *Server) ServeUpload(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	for _, fh := range r.MultipartForm.File["files"] {
+	for _, fh := range r.MultipartForm.File["file"] {
 		file, err := fh.Open()
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)

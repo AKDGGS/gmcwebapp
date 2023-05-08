@@ -4,10 +4,10 @@ async function uploadFiles(files) {
 	let count = 0;
 	document.querySelector('#progress-bar-file').style.display = 'block';
 	document.querySelector('#progress-bar-total').style.display = 'block';
-	document.querySelector('#progress-bar-file').style.backgroundColor = '#194a6b';
-	document.querySelector('#progress-bar-file-name').style.backgroundColor = '#194a6b';
-	document.querySelector('#progress-bar-total').style.backgroundColor = '#194a6b';
-document.querySelector('#progress-bar-total-count').style.backgroundColor = '#194a6b';
+	document.querySelector('#progress-bar-file').style.backgroundColor = '#cfe4fa';
+	document.querySelector('#progress-bar-file-name').style.backgroundColor = '#cfe4fa';
+	document.querySelector('#progress-bar-total').style.backgroundColor = '#cfe4fa';
+	document.querySelector('#progress-bar-total-count').style.backgroundColor = '#cfe4fa';
 
 	for (let i = 0; i < files.length; i++) {
 		totalSize += files[i].size;
@@ -15,8 +15,7 @@ document.querySelector('#progress-bar-total-count').style.backgroundColor = '#19
 
 	for (let file of files) {
 		let formData = new FormData();
-		//must be 'files' because web/upload.go looks for files...might want to change this???
-		formData.append('files', file);
+		formData.append('file', file);
 
 		let xhr = new XMLHttpRequest();
 		xhr.upload.addEventListener('progress', (event) => {
@@ -26,26 +25,18 @@ document.querySelector('#progress-bar-total-count').style.backgroundColor = '#19
 
 				document.querySelector('#progress-bar-file').style.width = percentCompletedFile + '%';
 				document.querySelector('#pb-file').textContent = formatSize(event.loaded) + ' / ' + formatSize(event.total);
-				document.querySelector('#pb-file').style.backgroundImage = `linear-gradient(to right, white ${percentCompletedFile}%, black ${percentCompletedFile}%)`;
 
 				document.querySelector('#progress-bar-file-name').style.width = percentCompletedFile + '%';
 				document.querySelector('#pb-file-name').textContent = file.name;
-				document.querySelector('#pb-file-name').style.backgroundImage =
-				`linear-gradient(to right, white ${percentCompletedFile}%,
-					black ${percentCompletedFile}%)`;
 
 				document.querySelector('#progress-bar-total').style.width =
-				percentCompletedTotal + '%';
-				document.querySelector('#pb-total').textContent =
-				formatSize(totalLoaded +	event.loaded) + ' / ' + formatSize(totalSize);
-				document.querySelector('#pb-total').style.backgroundImage =
-				`linear-gradient(to right, white ${percentCompletedTotal}%,
-					black ${percentCompletedTotal}%)`;
-					document.querySelector('#progress-bar-total-count').style.width =
 					percentCompletedTotal + '%';
-				document.querySelector('#pb-total-count').style.backgroundImage =
-				`linear-gradient(to right, white ${percentCompletedTotal}%,
-					black ${percentCompletedTotal}%)`;
+				console.log(formatSize(totalSize));
+
+				document.querySelector('#pb-total').textContent =
+					formatSize(totalLoaded + event.loaded) + ' / ' + formatSize(totalSize);
+				document.querySelector('#progress-bar-total-count').style.width =
+					percentCompletedTotal + '%';
 			}
 		});
 		xhr.addEventListener('load', (event) => {
@@ -53,7 +44,7 @@ document.querySelector('#progress-bar-total-count').style.backgroundColor = '#19
 				totalLoaded += file.size;
 				count += 1
 				document.querySelector('#pb-total-count').textContent =
-				count + ' / ' + files.length + " Files Transfered";
+					count + ' / ' + files.length + " Files Transfered";
 			}
 		});
 		xhr.open('POST', 'upload');
@@ -92,9 +83,8 @@ fileInput.addEventListener('change', () => {
 	document.getElementById('file-drop-text').style.display = 'none';
 	count = +1
 	document.querySelector('#pb-total-count').textContent =
-	count + ' / ' + files.length + " Files Transfered";
+		count + ' / ' + files.length + " Files Transfered";
 });
-
 
 function formatSize(size) {
 	if (size < 1024) {

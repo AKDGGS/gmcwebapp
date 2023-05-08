@@ -7,7 +7,7 @@
 }
 
 #file-input {
-	display: none;
+ 	display: none;
 }
 
 .file-drop {
@@ -23,59 +23,50 @@
 .progress-bar-file,
 .progress-bar-total {
  	display: none;
- 	color:black ;
-	width: 100%;
+ 	color: black;
+ 	width: 100%;
  	height: 20px;
-	max-width: 290px;
+ 	max-width: 290px;
  	background-color: #f2f2f2;
  	text-align: center;
-	line-height: 20px;
-	margin-left: 5px;
-	margin-right: 5px;
+ 	line-height: 20px;
+ 	margin-left: 5px;
+ 	margin-right: 5px;
 }
 
 #progress-bar-file {
  	margin-top: 5px;
-	display:block;
+ 	display: block;
 }
 
 #progress-bar-file-name {
-    top: 20px;
-    display: block;
+ 	top: 20px;
+ 	display: block;
 }
 
 #progress-bar-total {
-	margin-top: 5px;
-	display: block;
+ 	margin-top: 5px;
+ 	display: block;
 }
 
 #progress-bar-total-count {
-    bottom: 5px;
-    display: block;
+ 	bottom: 5px;
+ 	display: block;
 }
 
 #pb-total,
 #pb-file {
  	min-width: 290px;
  	max-width: 290px;
-	white-space: pre;
-	display: block;
+ 	white-space: pre;
+ 	display: block;
 }
 
 #pb-file-name,
 #pb-total-count {
-	min-width: 290px;
-	max-width: 290px;
-  position: absolute;
-  left: 50%;
-  transform: translateX(-50%);
-}
-
-#pb-total,
-#pb-file,
-#pb-file-name,
-#pb-total-count {
-background-clip: text;
--webkit-background-clip: text;
-color: transparent;
+ 	min-width: 290px;
+ 	max-width: 290px;
+ 	position: absolute;
+ 	left: 50%;
+ 	transform: translateX(-50%);
 }
