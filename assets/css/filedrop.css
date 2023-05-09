@@ -2,7 +2,7 @@
  	display: flex;
  	flex-direction: column;
  	align-items: center;
- 	width: 300px;
+ 	width: 400px;
  	margin: 0 auto;
 }
 
@@ -11,61 +11,55 @@
 }
 
 .file-drop {
- 	width: 300px;
- 	height: 100px;
+ 	width: 400px;
+ 	height: 155px;
  	border: 5px dashed black;
  	text-align: center;
- 	line-height: 100px;
- 	margin-top: 20px;
- 	position: relative;
+ 	line-height: 160px;
+ 	margin-top: 30px;
+	background-color: #f2f2f2;
 }
 
-.progress-bar-file,
-.progress-bar-total {
+.progress-bar {
  	display: none;
  	color: black;
  	width: 100%;
- 	height: 20px;
- 	max-width: 290px;
- 	background-color: #f2f2f2;
+	height: 70px;
+ 	max-width: 390px;
+ 	background-color: #cfe4fa;
  	text-align: center;
- 	line-height: 20px;
+ 	line-height: 16px;
  	margin-left: 5px;
  	margin-right: 5px;
+	white-space: nowrap;
+}
+
+.long-name {
+	line-height: 12px;
+	font-size: 12px ;
+	word-break: break-all;
+  white-space: normal;
 }
 
 #progress-bar-file {
  	margin-top: 5px;
- 	display: block;
-}
-
-#progress-bar-file-name {
- 	top: 20px;
- 	display: block;
 }
 
 #progress-bar-total {
- 	margin-top: 5px;
- 	display: block;
-}
-
-#progress-bar-total-count {
- 	bottom: 5px;
- 	display: block;
+ 	margin-top: 3px;
 }
 
 #pb-total,
-#pb-file {
- 	min-width: 290px;
- 	max-width: 290px;
- 	white-space: pre;
- 	display: block;
+#pb-total-count,
+#pb-file,
+#pb-file-name {
+ 	width: 390px;
+	display: block;
 }
+
 
 #pb-file-name,
 #pb-total-count {
- 	min-width: 290px;
- 	max-width: 290px;
  	position: absolute;
  	left: 50%;
  	transform: translateX(-50%);
