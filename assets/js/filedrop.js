@@ -39,9 +39,9 @@ async function uploadFiles(files) {
 	const progressBarTotal = document.querySelector('#progress-bar-total');
 	const pbTotal = document.querySelector('#pb-total');
 
-	progressBarFile.style.display = 'block';
-	progressBarTotal.style.display = 'block';
-	pbFileName.classList.remove('long-name');
+	progressBarFile.style.display = 'flex';
+	progressBarTotal.style.display = 'flex';
+
 
 	for (let i = 0; i < files.length; i++) {
 		totalSize += files[i].size;
@@ -59,13 +59,9 @@ async function uploadFiles(files) {
 				progressBarFile.style.width = percentCompletedFile + '%';
 				pbFile.textContent = formatSize(event.loaded) + ' / ' + formatSize(event.total);
 				pbFileName.textContent = file.name;
-
-				if (pbFileName.scrollWidth > pbFileName.clientWidth) {
-					pbFileName.classList.add('long-name');
-				}
 				progressBarTotal.style.width = percentCompletedTotal + '%';
-				pbTotal.textContent = formatSize(totalLoaded + event.loaded) + ' / '
-				+ formatSize(totalSize);
+				pbTotal.textContent = formatSize(totalLoaded + event.loaded) + ' / ' +
+					formatSize(totalSize);
 			}
 		});
 		xhr.addEventListener('load', (event) => {
