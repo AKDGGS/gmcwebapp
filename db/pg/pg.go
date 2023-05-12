@@ -192,6 +192,7 @@ func rowToStruct(r pgx.Rows, a interface{}) int {
 	if !rv.CanSet() {
 		return 0
 	}
+
 	switch rv.Kind() {
 	case reflect.Slice:
 		var elem reflect.Value
@@ -289,9 +290,19 @@ func rowToStruct(r pgx.Rows, a interface{}) int {
 							n := val.(pgtype.Numeric)
 							var nv float64
 							n.AssignTo(&nv)
-							if reflect.TypeOf(nv) == rv.Field(j).Type() {
-								rv.Field(j).Set(reflect.ValueOf(nv))
+
+							var ni int64
+							err := n.AssignTo(&ni)
+							if err == nil && float64(ni) == nv {
+								if reflect.TypeOf(ni) == rv.Field(j).Type() {
+									rv.Field(j).Set(reflect.ValueOf(ni))
+								}
+							} else {
+								if reflect.TypeOf(nv) == rv.Field(j).Type() {
+									rv.Field(j).Set(reflect.ValueOf(nv))
+								}
 							}
+
 						case time.Time:
 							t, ok := val.(time.Time)
 							if ok {

@@ -1,4 +1,6 @@
-{{with .well }}
+<fieldset>
+
+</fieldset>{{with .well }}
 			<fieldset class="fs-detail">
 				<legend>Web Detail</legend>
 				<table class="tb-fields">
@@ -147,7 +149,7 @@
 			<fieldset>
 				<legend>Files</legend>
 				{{- range .Files}}
-				<div><a href="../file/{{.ID}}">{{.Name}}</a> ({{.Size}})</div>
+				<div><a href="../file/{{.ID}}">{{.Name}}</a> ({{.FormattedSize}})</div>
 				{{- end}}
 			</fieldset>
 			{{- end}}

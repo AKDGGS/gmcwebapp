@@ -89,7 +89,7 @@
 			<fieldset class="File">
 				<legend>Files</legend>
 				{{- range .Files}}
-				<div><a href="../file/{{.ID}}">{{.Name}}</a> ({{.Size}})</div>
+				<div><a href="../file/{{.ID}}">{{.Name}}</a> ({{.FormattedSize}})</div>
 				{{- end}}
 			</fieldset>
 			{{- end}}
