@@ -115,6 +115,10 @@ func (srv *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	case "upload":
 		srv.ServeUpload(w, r)
 		return
+
+	case "borehole/upload":
+		srv.ServeUpload(w, r)
+		return
 	}
 
 	sidx := strings.Index(path, "/")

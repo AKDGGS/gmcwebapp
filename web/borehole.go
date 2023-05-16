@@ -33,7 +33,7 @@ func (srv *Server) ServeBorehole(id int, w http.ResponseWriter, r *http.Request)
 		)
 		return
 	}
-	// If no details were returned, throw a 404
+	// If no details are returned, throw a 404
 	if borehole == nil {
 		http.Error(w, "Borehole not found", http.StatusNotFound)
 		return
@@ -59,11 +59,12 @@ func (srv *Server) ServeBorehole(id int, w http.ResponseWriter, r *http.Request)
 		"stylesheets": []string{
 			"../ol/ol.css", "../ol/ol-layerswitcher.min.css",
 			"../css/map-defaults.css", "../css/view.css",
+			"../css/filedrop.css",
 		},
 		"scripts": []string{
 			"../ol/ol.js", "../ol/ol-layerswitcher.min.js",
 			"../js/mustache.js", "../js/map-defaults.js",
-			"../js/view.js",
+			"../js/view.js", "../js/filedrop.js",
 		},
 		"redirect": fmt.Sprintf("borehole/%d", id),
 		"user":     user,
