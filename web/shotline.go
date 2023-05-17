@@ -33,7 +33,7 @@ func (srv *Server) ServeShotline(id int, w http.ResponseWriter, r *http.Request)
 		)
 		return
 	}
-	// If no details were returned, throw a 404
+	// If no details are returned, throw a 404
 	if shotline == nil {
 		http.Error(w, "Shotline not found", http.StatusNotFound)
 		return

@@ -33,7 +33,7 @@ func (srv *Server) ServeOutcrop(id int, w http.ResponseWriter, r *http.Request) 
 		)
 		return
 	}
-	// If no details were returned, throw a 404
+	// If no details are returned, throw a 404
 	if outcrop == nil {
 		http.Error(w, "Outcrop not found", http.StatusNotFound)
 		return

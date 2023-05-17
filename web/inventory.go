@@ -33,7 +33,7 @@ func (srv *Server) ServeInventory(id int, w http.ResponseWriter, r *http.Request
 		)
 		return
 	}
-	// If no details were returned, throw a 404
+	// If no details are returned, throw a 404
 	if inventory == nil {
 		http.Error(w, "Inventory not found", http.StatusNotFound)
 		return

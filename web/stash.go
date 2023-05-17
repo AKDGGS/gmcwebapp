@@ -28,7 +28,7 @@ func (srv *Server) ServeStash(id int, w http.ResponseWriter, r *http.Request) {
 		)
 		return
 	}
-	// If no details were returned, throw a 404
+	// If no details are returned, throw a 404
 	if stash == nil {
 		http.Error(w, "Stash not found", http.StatusNotFound)
 		return

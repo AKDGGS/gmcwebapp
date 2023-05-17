@@ -28,7 +28,7 @@ func (srv *Server) ServeWellsDetailJSON(id int, w http.ResponseWriter, r *http.R
 		)
 		return
 	}
-	// If no details were returned, throw a 404
+	// If no details are returned, throw a 404
 	if well == nil {
 		http.Error(w, "Well ID not found", http.StatusNotFound)
 		return
