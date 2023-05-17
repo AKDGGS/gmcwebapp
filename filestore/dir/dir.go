@@ -4,6 +4,7 @@ import (
 	"encoding/base64"
 	"fmt"
 	"io"
+	"io/ioutil"
 	"math/big"
 	"mime"
 	"os"
@@ -30,6 +31,17 @@ func (d *Dir) GetFile(name string) (*fsutil.File, error) {
 	if !filepath.IsAbs(fp) {
 		return nil, os.ErrPermission
 	}
+	files, err := ioutil.ReadDir(fp)
+	if err != nil {
+		return nil, err
+	}
+
+	if len(files) != 1 {
+		return nil, fmt.Errorf("more than one object found")
+	}
+
+	fileName := files[0].Name()
+	fp = filepath.Join(fp, fileName)
 
 	file, err := os.Open(fp)
 	if err != nil {

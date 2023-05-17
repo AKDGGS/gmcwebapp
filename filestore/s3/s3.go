@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 	"os"
+	"path"
 
 	fsutil "gmc/filestore/util"
 
@@ -52,17 +53,33 @@ func New(cfg map[string]interface{}) (*S3, error) {
 	if err != nil {
 		return nil, err
 	}
-
 	return s3, nil
 }
 
 func (s3 *S3) GetFile(name string) (*fsutil.File, error) {
+	objectCh := s3.client.ListObjects(context.Background(), s3.bucket,
+		minio.ListObjectsOptions{Prefix: fmt.Sprintf("%s/", name)})
+
+	var objectKey string
+	objectCount := 0
+	for object := range objectCh {
+		if object.Err != nil {
+			return nil, object.Err
+		}
+		objectKey = object.Key
+		objectCount++
+		if objectCount > 1 {
+			return nil, fmt.Errorf("more than one object found")
+		}
+	}
+
 	obj, err := s3.client.GetObject(
 		context.Background(),
-		s3.bucket, name,
+		s3.bucket, objectKey,
 		minio.GetObjectOptions{},
 	)
 	if err != nil {
+		fmt.Println("GetObject: ", err)
 		return nil, err
 	}
 
@@ -70,6 +87,7 @@ func (s3 *S3) GetFile(name string) (*fsutil.File, error) {
 	// error can be returned
 	stat, err := obj.Stat()
 	if err != nil {
+		fmt.Println("Error: ", err)
 		switch v := err.(type) {
 		case minio.ErrorResponse:
 			if v.Code == "NoSuchKey" {
@@ -78,9 +96,9 @@ func (s3 *S3) GetFile(name string) (*fsutil.File, error) {
 		}
 		return nil, err
 	}
-
+	fmt.Println("Filepath.Base(stat.Key)", path.Base(stat.Key))
 	return &fsutil.File{
-		Name:         stat.Key,
+		Name:         path.Base(stat.Key),
 		ETag:         stat.ETag,
 		LastModified: stat.LastModified,
 		Size:         stat.Size,

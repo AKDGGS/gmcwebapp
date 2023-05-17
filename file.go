@@ -172,12 +172,12 @@ func fileCommand(cfg *config.Config, exec string, cmd string, args []string) err
 				return err
 			}
 		} else {
-			outpath = filepath.Join(*out, filepath.Base(subcmd_args[2]))
 			file, err = fs.GetFile(file_flagset.Arg(3))
 			if err != nil {
 				fmt.Fprintf(os.Stderr, "%s: %s\n", exec, err.Error())
 				return err
 			}
+			outpath = filepath.Join(*out, (file).Name)
 		}
 
 		f, err := os.Create(outpath)
