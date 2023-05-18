@@ -1,4 +1,4 @@
-SELECT keywords AS "Keywords",
+SELECT keywords AS keywords,
 	COUNT(q2.inventory_id) AS count
 FROM (
 	SELECT q1.inventory_id,

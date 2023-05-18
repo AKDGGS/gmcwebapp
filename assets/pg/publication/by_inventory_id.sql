@@ -1,6 +1,6 @@
-SELECT p.publication_id AS "ID", p.title, p.description, p.year,
-	p.publication_type AS "Type", p.publication_number AS "PublicationNumber",
-	p.publication_series AS "PublicationSeries", p.can_publish AS "CanPublish"
+SELECT p.publication_id AS id, p.title, p.description, p.year,
+	p.publication_type AS type, p.publication_number AS publicationNumber,
+	p.publication_series AS publicationSeries, p.can_publish AS canPublish
 	FROM inventory_publication AS ip
 	JOIN publication AS p
 		ON p.publication_id = ip.publication_id

@@ -1,5 +1,5 @@
-SELECT keywords AS "Keywords",
-	COUNT(q2.inventory_id) AS "Count"
+SELECT keywords AS keywords,
+	COUNT(q2.inventory_id) AS count
 FROM (
 	SELECT q1.inventory_id,
 		ARRAY_AGG(q1.keyword ORDER BY q1.keyword)::text[] AS keywords

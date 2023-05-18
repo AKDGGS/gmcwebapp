@@ -1,5 +1,5 @@
-SELECT inventory_quality_id AS "ID",
-	check_date as "Date",
+SELECT inventory_quality_id AS id,
+	check_date as date,
 	remark,
 	username,
 	issues::text[]

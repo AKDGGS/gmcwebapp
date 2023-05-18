@@ -1,16 +1,16 @@
-SELECT p.prospect_id AS "Prospect.ID",
-	p.name AS "Prospect.Name",
-	p.alt_names AS "Prospect.AltProspectNames",
-	p.ardf_number AS "Prospect.ARDFNumber",
-	b.borehole_id AS "ID",
+SELECT p.prospect_id AS "prospect.id",
+	p.name AS "prospect.name",
+	p.alt_names AS "prospect.altProspectNames",
+	p.ardf_number AS "prospect.ARDFNumber",
+	b.borehole_id AS id,
 	b.name,
-	b.alt_names AS "AltNames",
-	b.is_onshore AS "Onshore",
-	b.completion_date AS "CompletionDate",
-	b.measured_depth AS "MeasuredDepth",
-	COALESCE(measured_depth_unit::text, 'ft') AS "MeasuredDepthUnit",
-	b.elevation AS "Elevation",
-	COALESCE(elevation_unit::text, 'ft') AS "ElevationUnit"
+	b.alt_names AS altNames,
+	b.is_onshore AS onshore,
+	b.completion_date AS completionDate,
+	b.measured_depth AS measuredDepth,
+	COALESCE(measured_depth_unit::text, 'ft') AS measuredDepthUnit,
+	b.elevation AS elevation,
+	COALESCE(elevation_unit::text, 'ft') AS elevationUnit
 FROM borehole AS b
 LEFT OUTER JOIN prospect AS p
 	ON p.prospect_id = b.prospect_id

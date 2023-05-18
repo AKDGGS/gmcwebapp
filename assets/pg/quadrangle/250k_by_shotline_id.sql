@@ -1,4 +1,4 @@
-SELECT DISTINCT q.quadrangle_id, q.name
+SELECT DISTINCT q.quadrangle_id as id, q.name
 FROM shotline AS s
 JOIN shotpoint AS sp
 	ON sp.shotline_id = s.shotline_id

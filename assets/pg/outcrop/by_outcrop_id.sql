@@ -1,3 +1,3 @@
-SELECT outcrop_id as "ID", name, outcrop_number AS "Number", is_onshore AS "Onshore", year
+SELECT outcrop_id as id, name, outcrop_number AS number, is_onshore AS onshore, year
 FROM outcrop
 WHERE outcrop_id = $1

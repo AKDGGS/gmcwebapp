@@ -1,4 +1,4 @@
-SELECT DISTINCT q.quadrangle_id AS ID, q.name AS Name
+SELECT DISTINCT q.quadrangle_id AS id, q.name
 FROM well AS w
 JOIN well_point AS wp
 	ON wp.well_id = w.well_id
