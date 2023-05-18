@@ -79,7 +79,7 @@ func (s3 *S3) GetFile(name string) (*fsutil.File, error) {
 		minio.GetObjectOptions{},
 	)
 	if err != nil {
-		fmt.Println("GetObject: ", err)
+
 		return nil, err
 	}
 
@@ -87,7 +87,6 @@ func (s3 *S3) GetFile(name string) (*fsutil.File, error) {
 	// error can be returned
 	stat, err := obj.Stat()
 	if err != nil {
-		fmt.Println("Error: ", err)
 		switch v := err.(type) {
 		case minio.ErrorResponse:
 			if v.Code == "NoSuchKey" {
@@ -96,7 +95,6 @@ func (s3 *S3) GetFile(name string) (*fsutil.File, error) {
 		}
 		return nil, err
 	}
-	fmt.Println("Filepath.Base(stat.Key)", path.Base(stat.Key))
 	return &fsutil.File{
 		Name:         path.Base(stat.Key),
 		ETag:         stat.ETag,

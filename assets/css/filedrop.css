@@ -11,12 +11,12 @@
 
 .file-drop,
 .progress-bar {
-	flex-direction: column;
+ 	flex-direction: column;
 }
 
 .file-drop {
  	background-color: white;
-	position: relative;
+ 	position: relative;
 }
 
 .progress-bar {
@@ -41,37 +41,37 @@
 
 .pb-text {
  	width: 390px;
-	padding: 1px;
-	display: -webkit-box;
-	-webkit-line-clamp: 1;
-	-webkit-box-orient: vertical;
-	overflow: hidden;
-	text-overflow: ellipsis;
-	word-break: break-all;
+ 	padding: 1px;
+ 	display: -webkit-box;
+ 	-webkit-line-clamp: 1;
+ 	-webkit-box-orient: vertical;
+ 	overflow: hidden;
+ 	text-overflow: ellipsis;
+ 	word-break: break-all;
 }
 
-.center-text{
-	position: absolute;
-  top: 0;
-	left: 50%;
-  transform: translateX(-50%);
+.center-text {
+ 	position: absolute;
+ 	top: 0;
+ 	left: 50%;
+ 	transform: translateX(-50%);
 }
 
 .error-div {
-	display: none;
-	flex-direction: column;
-    width: 100%;
-    min-height: auto;
-    background-color: #f4cecd;
-		text-align: left;
-		margin-bottom:10px;
+ 	display: none;
+ 	flex-direction: column;
+ 	width: 100%;
+ 	min-height: auto;
+ 	background-color: #f4cecd;
+ 	text-align: left;
+ 	margin-bottom: 10px;
 }
 
 .error-div li {
-    display: -webkit-box;
-    -webkit-line-clamp: 1;
-    -webkit-box-orient: vertical;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    word-break: break-all;
+ 	display: -webkit-box;
+ 	-webkit-line-clamp: 1;
+ 	-webkit-box-orient: vertical;
+ 	overflow: hidden;
+ 	text-overflow: ellipsis;
+ 	word-break: break-all;
 }

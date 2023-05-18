@@ -135,7 +135,7 @@
 				<legend>Files</legend>
 				<div>
 					<span class="center-text">Drag or click to upload files</span>
-					</div>
+				</div>
 				<div class="container">
 					<div class="error-div" id="error-div">
 						<span>These files failed to upload:</span>
@@ -149,16 +149,17 @@
 						<span class="pb-text" id="pb-total-count"></span>
 					</div>
 				<input type="file" class="file-input" id="file-input" multiple>
-						{{- range .Files}}
-						<div><a href="../file/{{.ID}}/{{.Name}}">{{if gt (len .Name) 38}}
-        {{slice .Name 0 38}}...
-      {{else}}
-        {{.Name}}
-      {{end}}</a> ({{.FormattedSize}})</div>
-						{{- end}}
+				{{- range .Files}}
+					<div><a href="../file/{{.ID}}/{{.Name}}">
+					{{if gt (len .Name) 38}}
+        	{{slice .Name 0 38}}...
+      		{{else}}
+        	{{.Name}}
+      		{{end}}</a> ({{.FormattedSize}})</div>
+				{{- end}}
 				</div>
 			</fieldset>
-		{{- end}}
+			{{- end}}
 
 			{{- if .Organizations}}
 
