@@ -49,7 +49,7 @@ type Inventory struct {
 	CoreDiameter     float64 `json:"core_diameter"`
 	CoreDiameterUnit string  `json:"core_diameter_unit"`
 
-	Weight          float32                `json:"weight"`
+	Weight          float64                `json:"weight"`
 	WeightUnit      string                 `json:"weight_unit"`
 	SampleFrequency string                 `json:"sample_frequency"`
 	Recovery        string                 `json:"recovery"`

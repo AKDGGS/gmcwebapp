@@ -288,18 +288,20 @@ func rowToStruct(r pgx.Rows, a interface{}) int {
 							}
 						case pgtype.Numeric:
 							n := val.(pgtype.Numeric)
-							var nv float64
-							n.AssignTo(&nv)
+							var nf float64
+							n.AssignTo(&nf)
 
 							var ni int64
 							err := n.AssignTo(&ni)
-							if err == nil && float64(ni) == nv {
+							if err == nil && float64(ni) == nf {
 								if reflect.TypeOf(ni) == rv.Field(j).Type() {
 									rv.Field(j).Set(reflect.ValueOf(ni))
+								} else if reflect.TypeOf(nf) == rv.Field(j).Type() {
+									rv.Field(j).Set(reflect.ValueOf(nf))
 								}
 							} else {
-								if reflect.TypeOf(nv) == rv.Field(j).Type() {
-									rv.Field(j).Set(reflect.ValueOf(nv))
+								if reflect.TypeOf(nf) == rv.Field(j).Type() {
+									rv.Field(j).Set(reflect.ValueOf(nf))
 								}
 							}
 
