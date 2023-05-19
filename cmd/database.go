@@ -1,4 +1,4 @@
-package main
+package cmd
 
 import (
 	"fmt"
@@ -9,7 +9,7 @@ import (
 	"gmc/db"
 )
 
-func databaseCommand(cfg *config.Config, exec string, cmd string, args []string) {
+func DatabaseCommand(cfg *config.Config, exec string, cmd string, args []string) {
 	printUsage := func() {
 		fmt.Printf("Usage: %s [args] %s <subcommand> ...\n", exec, cmd)
 		fmt.Printf("Subcommands:\n")

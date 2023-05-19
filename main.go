@@ -7,6 +7,7 @@ import (
 	"strings"
 
 	"gmc/assets"
+	cli "gmc/cmd"
 	"gmc/config"
 )
 
@@ -60,7 +61,7 @@ func main() {
 	cmd := strings.ToLower(flag.Arg(0))
 	switch cmd {
 	case "database", "db":
-		databaseCommand(cfg, exec, cmd, flag.Args()[1:])
+		cli.DatabaseCommand(cfg, exec, cmd, flag.Args()[1:])
 
 	case "server", "start":
 		serverCommand(cfg, exec)
@@ -72,13 +73,13 @@ func main() {
 		tokenCommand(cfg, exec, cmd, flag.Args()[1:])
 
 	case "keywords", "keyword", "kw":
-		keywordCommand(cfg, exec, cmd, flag.Args()[1:])
+		cli.KeywordCommand(cfg, exec, cmd, flag.Args()[1:])
 
 	case "issues", "issue", "iss":
-		issueCommand(cfg, exec, cmd, flag.Args()[1:])
+		cli.IssueCommand(cfg, exec, cmd, flag.Args()[1:])
 
 	case "file":
-		fileCommand(cfg, exec, cmd, flag.Args()[1:])
+		cli.FileCommand(cfg, exec, cmd, flag.Args()[1:])
 
 	case "--help", "help":
 		flag.Usage()

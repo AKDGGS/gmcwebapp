@@ -1,4 +1,4 @@
-package main
+package cmd
 
 import (
 	"errors"
@@ -21,7 +21,7 @@ import (
 	fsutil "gmc/filestore/util"
 )
 
-func fileCommand(cfg *config.Config, exec string, cmd string, args []string) error {
+func FileCommand(cfg *config.Config, exec string, cmd string, args []string) error {
 	printUsage := func() {
 		fmt.Printf("Usage: %s %s <subcommand> ...\n", exec, cmd)
 		fmt.Printf("Subcommands:\n")
