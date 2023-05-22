@@ -18,13 +18,13 @@ drop_zone.addEventListener('dragover', (e) => {
 drop_zone.addEventListener('drop', (e) => {
 	e.preventDefault();
 	let error_div = document.querySelector('.error-div');
-	if (error_div){
-			error_div.style.display = 'none';
-			error_div.failed_files = [];
-			let le = error_div.querySelector('ul');
-			if (le) {
-				error_div.removeChild(le);
-			}
+	if (error_div) {
+		error_div.style.display = 'none';
+		error_div.failed_files = [];
+		let le = error_div.querySelector('ul');
+		if (le) {
+			error_div.removeChild(le);
+		}
 	}
 
 	all_files = [];
@@ -59,10 +59,43 @@ async function upload_files(files) {
 		all_files.push(files[i].name)
 	}
 
+	const attributes = ["borehole-id", "inventory_id", "outcrop_id", "shotline_id", "well-id"];
 	for (let file of files) {
 		let form_data = new FormData();
 		form_data.append('file', file);
+		let borehole_id = drop_zone.getAttribute("borehole-id");
+		form_data.append("borehole_id", borehole_id);
 		let xhr = new XMLHttpRequest();
+
+		let attribute;
+		for (let attr of attributes) {
+			if (drop_zone.hasAttribute(attr)) {
+				attribute = attr;
+				break;
+			}
+		}
+		switch (attribute) {
+			case "borehole-id":
+				let borehole_id = drop_zone.getAttribute("borehole-id");
+				form_data.append("borehole_id", borehole_id);
+				break;
+			case "inventory_id":
+				let inventory_id = drop_zone.getAttribute("inventory-id");
+				form_data.append("inventory_id", inventory_id);
+				break;
+			case "outcrop_id":
+				let outrcrop_id = drop_zone.getAttribute("outcrop-id");
+				form_data.append("outcrop_id", outcrop_id);
+				break;
+			case "shotline_id":
+				let shotline_id = drop_zone.getAttribute("shotline-id");
+				form_data.append("shotline_id", shotline_id);
+				break;
+			case "well-id":
+				let well_id = drop_zone.getAttribute("well-id");
+				form_data.append("well_id", well_id);
+				break;
+		}
 
 		xhr.upload.addEventListener('progress', (event) => {
 			if (event.lengthComputable) {
@@ -85,9 +118,8 @@ async function upload_files(files) {
 					count + ' / ' + files.length + " Files Transfered";
 				add_file_to_page(file);
 				uploaded_files.push(file.name);
-			}
-			 else {
-				 errorEvent();
+			} else {
+				errorEvent();
 			}
 		});
 
@@ -138,7 +170,7 @@ function add_file_to_page(file) {
 	container.insertBefore(file_div, progress_bar.nextSibling);
 }
 
-function errorEvent(){
+function errorEvent() {
 	let error_div = document.querySelector('.error-div');
 	error_div.style.display = 'flex';
 

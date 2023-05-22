@@ -47,16 +47,34 @@ func (pg *Postgres) PutFile(file *model.File, precommitFunc func() error) error 
 
 	file.ID = fileID
 
-	insert_wellfile_sql, err := assets.ReadString("pg/well/insert_wellfile.sql")
-	if err != nil {
-		return err
-	}
+	switch {
+	case len(file.BoreholeIDs) != 0:
+		insert_boreholefile_sql, err := assets.ReadString("pg/borehole/insert_boreholefile.sql")
+		if err != nil {
+			return err
+		}
 
-	for _, well := range file.WellIDs {
-		if well != 0 {
-			_, err = tx.Exec(context.Background(), insert_wellfile_sql, fileID, well)
-			if err != nil {
-				return err
+		for _, b := range file.BoreholeIDs {
+			if b != 0 {
+				_, err = tx.Exec(context.Background(), insert_boreholefile_sql, fileID, b)
+				if err != nil {
+					return err
+				}
+			}
+		}
+
+	case len(file.WellIDs) != 0:
+		insert_wellfile_sql, err := assets.ReadString("pg/well/insert_wellfile.sql")
+		if err != nil {
+			return err
+		}
+
+		for _, well := range file.WellIDs {
+			if well != 0 {
+				_, err = tx.Exec(context.Background(), insert_wellfile_sql, fileID, well)
+				if err != nil {
+					return err
+				}
 			}
 		}
 	}

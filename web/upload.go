@@ -5,6 +5,7 @@ import (
 	"math/rand"
 	"mime"
 	"net/http"
+	"os"
 	"path/filepath"
 	"strconv"
 	"time"
@@ -48,6 +49,13 @@ func (srv *Server) ServeUpload(w http.ResponseWriter, r *http.Request) {
 			MD5:  MD5,
 			Type: mt,
 		}
+
+		boreholeId := r.FormValue("borehole_id")
+		boreholeIdInt, err := strconv.Atoi(boreholeId)
+		if err != nil {
+			os.Exit(1)
+		}
+		f.BoreholeIDs = append(f.BoreholeIDs, boreholeIdInt)
 
 		err = srv.DB.PutFile(&f, func() error {
 			//Add the file to the filestore

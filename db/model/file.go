@@ -9,7 +9,7 @@ type File struct {
 	Size        int64  `json:"size"`
 	Type        string `json:"mimetype"`
 	MD5         string `json:"content_md5"`
-	BorholeIds  []int  `json:"borehole_ids"`
+	BoreholeIDs []int  `json:"borehole_ids"`
 	WellIDs     []int  `json:"well_ids"`
 }
 
