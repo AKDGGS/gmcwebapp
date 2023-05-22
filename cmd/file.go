@@ -1,203 +1,41 @@
 package cmd
 
 import (
-	"errors"
-	"flag"
 	"fmt"
-	"io"
-	"math/rand"
-	"mime"
 	"os"
-	"path/filepath"
-	"strconv"
 	"strings"
-	"time"
 
 	"gmc/config"
-	"gmc/db"
-	"gmc/db/model"
-	"gmc/filestore"
-	"gmc/filestore/util"
-	fsutil "gmc/filestore/util"
 )
 
 func FileCommand(cfg *config.Config, exec string, cmd string, args []string) error {
-	printUsage := func() {
-		fmt.Printf("Usage: %s %s <subcommand> ...\n", exec, cmd)
-		fmt.Printf("Subcommands:\n")
-		fmt.Printf("  put [args] <filename ...>\n")
-		fmt.Printf("      upload file to filestore\n")
-		fmt.Printf("  get [args] <filename ...>\n")
-		fmt.Printf("      download file from filestore\n")
-	}
-
 	if len(args) < 1 {
 		fmt.Fprintf(os.Stderr, "%s %s: subcommand missing\n", exec, cmd)
-		printUsage()
+		printFileUsage(exec, cmd)
 		os.Exit(1)
 	}
 
 	switch subcmd := strings.ToLower(args[0]); subcmd {
 	case "--help", "help":
-		printUsage()
-		os.Exit(0)
+		printFileUsage(exec, cmd)
 	case "put":
-		flagset := flag.NewFlagSet(cmd, flag.ExitOnError)
-		well_id := flagset.Int("well_id", 0, "Well ID linked to file")
-		flagset.SetOutput(os.Stdout)
-		flagset.Usage = func() {
-			fmt.Printf("Usage: %s %s %s <filename>\n",
-				exec, cmd, subcmd)
-			flagset.PrintDefaults()
-			os.Exit(1)
-		}
-		flagset.Parse(args[1:])
-		if *well_id == 0 {
-			fmt.Fprintf(os.Stderr, "-well_id flag is required\n")
-			os.Exit(1)
-		}
-
-		if len(flagset.Args()) < 1 {
-			fmt.Fprintf(os.Stderr, "filename required\n")
-			os.Exit(1)
-		}
-
-		filenames := flagset.Args()
-		db, err := db.New(cfg.DatabaseURL)
-		if err != nil {
-			fmt.Fprintf(os.Stderr, "%s: %s\n", exec, err.Error())
-			flagset.Usage()
-			os.Exit(1)
-		}
-
-		fs, err := filestore.New(cfg.FileStore)
-		if err != nil {
-			fmt.Fprintf(os.Stderr, "%s: %s\n", exec, err.Error())
-			return nil
-		}
-
-		for _, filename := range filenames {
-			file_info, err := os.Stat(filename)
-			if err != nil || file_info.Size() == 0 {
-				fmt.Println(filename, "does not exist or has a size of zero")
-				continue
-			}
-			// temporary code until we decide what to do with the MD5.
-			rand.Seed(time.Now().UnixNano())
-			MD5 := strconv.FormatInt(rand.Int63(), 10)
-
-			file := model.File{
-				Name: file_info.Name(),
-				Size: file_info.Size(),
-				MD5:  MD5,
-			}
-
-			file.WellIDs = append(file.WellIDs, *well_id)
-
-			// Add the file to the database
-			err = db.PutFile(&file, func() error {
-				file_obj, err := os.Open(file.Name)
-				if err != nil {
-					fmt.Fprintf(os.Stderr, "%s: %s\n", exec, err.Error())
-					return err
-				}
-
-				mt := mime.TypeByExtension(filepath.Ext(file_info.Name()))
-				if mt == "" {
-					mt = "application/octet-stream"
-				}
-
-				//Add the file to the filestore
-				err = fs.PutFile(&fsutil.File{
-					Name:         fmt.Sprintf("%d/%s", file.ID, file_info.Name()),
-					Size:         file_info.Size(),
-					LastModified: file_info.ModTime(),
-					ContentType:  mt,
-					Content:      file_obj,
-				})
-				if err != nil {
-					return fmt.Errorf("error putting file in filestore: %w", err)
-				}
-				return nil
-			})
-			if err != nil {
-				return fmt.Errorf("error putting file in database or the filestore: %w", err)
-			}
-		}
+		FilePut(exec, cfg, fmt.Sprintf("%s %s", cmd, subcmd), args[1:])
 	case "get":
-		flagset := flag.NewFlagSet(cmd, flag.ExitOnError)
-		out := flagset.String("out", "", "save location")
-		flagset.SetOutput(os.Stdout)
-		flagset.Usage = func() {
-			fmt.Printf("Usage: %s %s %s <filename>\n",
-				exec, cmd, subcmd)
-			flagset.PrintDefaults()
-			os.Exit(1)
-		}
-		flagset.Parse(args[1:])
-
-		if len(args) < 2 {
-			fmt.Fprintf(os.Stderr,
-				"A filename is required and a save destination is optional\n")
-			flagset.Usage()
-			os.Exit(1)
-		}
-
-		fs, err := filestore.New(cfg.FileStore)
-		if err != nil {
-			fmt.Fprintf(os.Stderr, "%s: %s\n", exec, err.Error())
-			return nil
-		}
-
-		var file *util.File
-		outpath := *out
-		// if the outpath is empty, the file is saved in the cwd.
-		if outpath == "" {
-			cwd, err := os.Getwd()
-			if err != nil {
-				fmt.Fprintf(os.Stderr, "%s: %s\n", exec, err.Error())
-				return err
-			}
-			file, err = fs.GetFile(args[1])
-			if err != nil {
-				fmt.Fprintf(os.Stderr, "%s: %s\n", exec, err.Error())
-				return err
-			}
-			if file == nil {
-				fmt.Fprintf(os.Stderr, "%s: file not found\n", exec)
-				return errors.New("file not found")
-			}
-			outpath = filepath.Join(cwd, (file).Name)
-			if err != nil {
-				fmt.Fprintf(os.Stderr, "%s: %s\n", exec, err.Error())
-				return err
-			}
-		} else {
-			file, err = fs.GetFile(args[3])
-			if err != nil {
-				fmt.Fprintf(os.Stderr, "%s: %s\n", exec, err.Error())
-				return err
-			}
-			outpath = filepath.Join(*out, (file).Name)
-		}
-
-		f, err := os.Create(outpath)
-		if err != nil {
-			fmt.Fprintf(os.Stderr, "%s: %s\n", exec, err.Error())
-			return err
-		}
-		defer f.Close()
-		_, err = io.Copy(f, file.Content)
-		if err != nil {
-			fmt.Fprintf(os.Stderr, "%s: %s\n", exec, err.Error())
-			return err
-		}
-
+		FileGet(exec, cfg, fmt.Sprintf("%s %s", cmd, subcmd), args[1:])
 	default:
 		fmt.Fprintf(os.Stderr, "%s %s '%s' is not a recognized subcommand\n",
 			exec, cmd, subcmd)
-		printUsage()
+		printFileUsage(exec, cmd)
 		os.Exit(1)
 	}
 	return nil
+}
+
+func printFileUsage(exec, cmd string) {
+	fmt.Printf("Usage: %s %s <subcommand> ...\n", exec, cmd)
+	fmt.Printf("Subcommands:\n")
+	fmt.Printf("  put [args] <filename ...>\n")
+	fmt.Printf("      upload file to filestore\n")
+	fmt.Printf("  get [args] <filename ...>\n")
+	fmt.Printf("      download file from filestore\n")
 }
