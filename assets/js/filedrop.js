@@ -46,7 +46,8 @@ file_input.addEventListener('change', () => {
 	pb_total_count.textContent = count + ' / ' + files.length + " Files Transfered";
 });
 
-async function upload_files(files) {
+
+function upload_files(files) {
 	let total_sizes = 0;
 	let total_loaded = 0;
 	let count = 0;
@@ -59,80 +60,53 @@ async function upload_files(files) {
 		all_files.push(files[i].name)
 	}
 
-	const attributes = ["borehole-id", "inventory_id", "outcrop_id", "shotline_id", "well-id"];
-	for (let file of files) {
-		let form_data = new FormData();
-		form_data.append('file', file);
-		let borehole_id = drop_zone.getAttribute("borehole-id");
-		form_data.append("borehole_id", borehole_id);
-		let xhr = new XMLHttpRequest();
+	Array.from(files).reduce((promise_chain, file) => {
+		return promise_chain.then(() => new Promise((resolve) => {
+			let form_data = new FormData();
+			form_data.append('file', file);
+			let xhr = new XMLHttpRequest();
+			let drop_zone_data = drop_zone.dataset;
 
-		let attribute;
-		for (let attr of attributes) {
-			if (drop_zone.hasAttribute(attr)) {
-				attribute = attr;
-				break;
-			}
-		}
-		switch (attribute) {
-			case "borehole-id":
-				let borehole_id = drop_zone.getAttribute("borehole-id");
-				form_data.append("borehole_id", borehole_id);
-				break;
-			case "inventory_id":
-				let inventory_id = drop_zone.getAttribute("inventory-id");
-				form_data.append("inventory_id", inventory_id);
-				break;
-			case "outcrop_id":
-				let outrcrop_id = drop_zone.getAttribute("outcrop-id");
-				form_data.append("outcrop_id", outcrop_id);
-				break;
-			case "shotline_id":
-				let shotline_id = drop_zone.getAttribute("shotline-id");
-				form_data.append("shotline_id", shotline_id);
-				break;
-			case "well-id":
-				let well_id = drop_zone.getAttribute("well-id");
-				form_data.append("well_id", well_id);
-				break;
-		}
+			Object.keys(drop_zone_data).forEach(el => {
+				form_data.append(el, drop_zone_data[el]);
+			});
 
-		xhr.upload.addEventListener('progress', (event) => {
-			if (event.lengthComputable) {
-				let percent_completed_file = Math.round((event.loaded / event.total) * 100);
-				let percent_completed_total = Math.round(((total_loaded + event.loaded) / total_sizes) * 100);
-				progress_bar_file.style.width = percent_completed_file + '%';
-				pb_file.textContent = format_size(Math.round((event.loaded / event.total) * file.size), file.size) + ' / ' + format_size(file.size, file.size);
-				pb_file_name.textContent = file.name;
-				progress_bar_total.style.width = percent_completed_total + '%';
-				pb_total.textContent = format_size(((total_loaded + event.loaded) / event.total) * file.size, file.size) + ' / ' +
-					format_size(total_sizes, file.size);
-			}
-		});
+			xhr.upload.addEventListener('progress', (event) => {
+				if (event.lengthComputable) {
+					let percent_completed_file = Math.round((event.loaded / event.total) * 100);
+					let percent_completed_total = Math.round(((total_loaded + event.loaded) / total_sizes) * 100);
+					progress_bar_file.style.width = percent_completed_file + '%';
+					pb_file.textContent = format_size(Math.round((event.loaded / event.total) * file.size), file.size) + ' / ' + format_size(file.size, file.size);
+					pb_file_name.textContent = file.name;
+					progress_bar_total.style.width = percent_completed_total + '%';
+					pb_total.textContent = format_size(((total_loaded + event.loaded) / event.total) * file.size, file.size) + ' / ' +
+						format_size(total_sizes, file.size);
+				}
+			});
 
-		xhr.addEventListener('load', (event) => {
-			if (xhr.status >= 200 && xhr.status < 300) {
-				total_loaded += file.size;
-				count += 1
-				pb_total_count.textContent =
-					count + ' / ' + files.length + " Files Transfered";
-				add_file_to_page(file);
-				uploaded_files.push(file.name);
-			} else {
-				errorEvent();
-			}
-		});
+			xhr.addEventListener('load', (event) => {
+				if (xhr.status >= 200 && xhr.status < 300) {
+					total_loaded += file.size;
+					count += 1
+					pb_total_count.textContent =
+						count + ' / ' + files.length + " Files Transfered";
+					add_file_to_page(file);
+					uploaded_files.push(file.name);
+				} else {
+					upload_error();
+				}
+				resolve();
+			});
 
-		xhr.addEventListener('error', (event) => {
-			errorEvent();
-		});
+			xhr.addEventListener('error', (event) => {
+				upload_error();
+				resolve();
+			});
 
-		xhr.open('POST', 'upload');
-		await new Promise(resolve => {
-			xhr.addEventListener('load', resolve);
+			xhr.open('POST', 'upload');
 			xhr.send(form_data);
-		});
-	}
+		}));
+	}, Promise.resolve());
 }
 
 function format_size(uploaded_amt, file_size) {
@@ -170,18 +144,18 @@ function add_file_to_page(file) {
 	container.insertBefore(file_div, progress_bar.nextSibling);
 }
 
-function errorEvent() {
+function upload_error() {
 	let error_div = document.querySelector('.error-div');
 	error_div.style.display = 'flex';
 
 	let failed_files = all_files.filter(file => !uploaded_files.includes(file));
 	error_div.failed_files = failed_files;
 	let le = document.createElement('ul');
-	for (let failedFile of failed_files) {
+	failed_files.forEach(failedFile => {
 		let list_item = document.createElement('li');
 		list_item.textContent = failedFile;
 		le.appendChild(list_item);
-	}
+	});
 	error_div.appendChild(le);
 
 	progress_bar_file.style.display = "none";

@@ -50,12 +50,12 @@ func (srv *Server) ServeUpload(w http.ResponseWriter, r *http.Request) {
 			Type: mt,
 		}
 
-		boreholeId := r.FormValue("borehole_id")
-		boreholeIdInt, err := strconv.Atoi(boreholeId)
+		borehole_id := r.FormValue("boreholeId")
+		borehole_id_int, err := strconv.Atoi(borehole_id)
 		if err != nil {
 			os.Exit(1)
 		}
-		f.BoreholeIDs = append(f.BoreholeIDs, boreholeIdInt)
+		f.BoreholeIDs = append(f.BoreholeIDs, borehole_id_int)
 
 		err = srv.DB.PutFile(&f, func() error {
 			//Add the file to the filestore
