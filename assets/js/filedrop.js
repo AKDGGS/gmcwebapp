@@ -1,22 +1,53 @@
-const pb_file = document.querySelector('#pb-file');
-const pb_file_name = document.querySelector('#pb-file-name');
-const pb_total_count = document.querySelector('#pb-total-count');
 const drop_zone = document.querySelector('#file-drop');
 const file_input = document.querySelector('#file-input');
 
+const upload_link = document.querySelector('#upload-link');
+
 const progress_bar_file = document.querySelector('.progress-bar-file');
+const pb_file = document.querySelector('#pb-file');
+const pb_file_name = document.querySelector('#pb-file-name');
+
 const progress_bar_total = document.querySelector('.progress-bar-total');
 const pb_total = document.querySelector('#pb-total');
+const pb_total_count = document.querySelector('#pb-total-count');
 
-let all_files = [];
+let total_size = 0;
+let total_loaded = 0;
+let count = 0;
+let file_names = [];
 let uploaded_files = [];
+let uploading = false;
+
+upload_link.addEventListener('click', (e) => {
+	e.preventDefault();
+	if (uploading) {
+		return
+	}
+	file_input.click();
+
+});
+
+file_input.addEventListener('change', () => {
+	let files = file_input.files;
+	for (let i = 0; i < files.length; ++i) {
+		total_size += files[i].size;
+		file_names.push(files[i].name)
+		send_file(files[i]);
+	}
+	count = +1
+	pb_total_count.textContent = count + ' / ' + files.length + " Files Transfered";
+})
 
 drop_zone.addEventListener('dragover', (e) => {
 	e.preventDefault();
 })
 
-drop_zone.addEventListener('drop', (e) => {
+drop_zone.addEventListener('drop', async (e) => {
 	e.preventDefault();
+	if (uploading) {
+		return;
+	}
+	uploading = true;
 	let error_div = document.querySelector('.error-div');
 	if (error_div) {
 		error_div.style.display = 'none';
@@ -27,86 +58,80 @@ drop_zone.addEventListener('drop', (e) => {
 		}
 	}
 
-	all_files = [];
+	// reset the variables each time there is a new drop
+	file_names = [];
 	uploaded_files = [];
+	total_size = 0;
+	total_loaded = 0;
+	count = 0;
 
 	var files = e.dataTransfer.files;
+	Array.from(files).forEach(file => {
+		total_size += file.size;
+		file_names.push(file.name)
+	});
+
 	pb_total_count.textContent = 0 + ' / ' + files.length + " Files Transfered";
-	upload_files(files);
-});
-
-drop_zone.addEventListener('click', () => {
-	file_input.click();
-});
-
-file_input.addEventListener('change', () => {
-	let files = file_input.files;
-	upload_files(files);
-	count = +1
-	pb_total_count.textContent = count + ' / ' + files.length + " Files Transfered";
-});
-
-
-function upload_files(files) {
-	let total_sizes = 0;
-	let total_loaded = 0;
-	let count = 0;
-
-	progress_bar_file.style.display = 'flex';
-	progress_bar_total.style.display = 'flex';
-
-	for (let i = 0; i < files.length; i++) {
-		total_sizes += files[i].size;
-		all_files.push(files[i].name)
+	let promise = Promise.resolve();
+	for (let i = 0; i < file_names.length; i++) {
+		try {
+			await send_file(files[i]);
+		} catch (error) {
+			break;
+		}
 	}
+	uploading = false;
+});
 
-	Array.from(files).reduce((promise_chain, file) => {
-		return promise_chain.then(() => new Promise((resolve) => {
-			let form_data = new FormData();
-			form_data.append('file', file);
-			let xhr = new XMLHttpRequest();
-			let drop_zone_data = drop_zone.dataset;
+function send_file(file) {
+	return new Promise((resolve, reject) => {
+		progress_bar_file.style.display = 'flex';
+		progress_bar_total.style.display = 'flex';
 
-			Object.keys(drop_zone_data).forEach(el => {
-				form_data.append(el, drop_zone_data[el]);
-			});
+		let form_data = new FormData();
+		form_data.append('file', file);
+		let xhr = new XMLHttpRequest();
+		let drop_zone_data = drop_zone.dataset;
+		Object.keys(drop_zone_data).forEach(el => {
+			form_data.append(el, drop_zone_data[el]);
+		});
 
-			xhr.upload.addEventListener('progress', (event) => {
-				if (event.lengthComputable) {
-					let percent_completed_file = Math.round((event.loaded / event.total) * 100);
-					let percent_completed_total = Math.round(((total_loaded + event.loaded) / total_sizes) * 100);
-					progress_bar_file.style.width = percent_completed_file + '%';
-					pb_file.textContent = format_size(Math.round((event.loaded / event.total) * file.size), file.size) + ' / ' + format_size(file.size, file.size);
-					pb_file_name.textContent = file.name;
-					progress_bar_total.style.width = percent_completed_total + '%';
-					pb_total.textContent = format_size(((total_loaded + event.loaded) / event.total) * file.size, file.size) + ' / ' +
-						format_size(total_sizes, file.size);
-				}
-			});
+		xhr.upload.addEventListener('progress', (event) => {
+			if (event.lengthComputable) {
+				let percent_completed_file = Math.round((event.loaded / event.total) * 100);
+				let percent_completed_total = Math.round(((total_loaded + event.loaded) / total_size) * 100);
+				progress_bar_file.style.width = percent_completed_file + '%';
+				pb_file.textContent = format_size(Math.round((event.loaded / event.total) * file.size), file.size) + ' / ' + format_size(file.size, file.size);
+				pb_file_name.textContent = file.name;
+				progress_bar_total.style.width = percent_completed_total + '%';
+				pb_total.textContent = format_size(((total_loaded + event.loaded) / event.total) * file.size, file.size) + ' / ' +
+					format_size(total_size, file.size);
+			}
+		});
 
-			xhr.addEventListener('load', (event) => {
-				if (xhr.status >= 200 && xhr.status < 300) {
-					total_loaded += file.size;
-					count += 1
-					pb_total_count.textContent =
-						count + ' / ' + files.length + " Files Transfered";
-					add_file_to_page(file);
-					uploaded_files.push(file.name);
-				} else {
-					upload_error();
-				}
+		xhr.addEventListener('load', (event) => {
+			if (xhr.status >= 200 && xhr.status < 300) {
+				total_loaded += file.size;
+				count += 1
+				pb_total_count.textContent =
+					count + ' / ' + file_names.length + " Files Transfered";
+				add_file_to_page(file);
+				uploaded_files.push(file.name);
 				resolve();
-			});
-
-			xhr.addEventListener('error', (event) => {
+			} else {
 				upload_error();
-				resolve();
-			});
+				reject();
+			}
+		});
 
-			xhr.open('POST', 'upload');
-			xhr.send(form_data);
-		}));
-	}, Promise.resolve());
+		xhr.addEventListener('error', (event) => {
+			upload_error();
+			reject();
+		});
+
+		xhr.open('POST', 'upload');
+		xhr.send(form_data);
+	});
 }
 
 function format_size(uploaded_amt, file_size) {
@@ -145,10 +170,11 @@ function add_file_to_page(file) {
 }
 
 function upload_error() {
+	uploading = false;
 	let error_div = document.querySelector('.error-div');
 	error_div.style.display = 'flex';
 
-	let failed_files = all_files.filter(file => !uploaded_files.includes(file));
+	let failed_files = file_names.filter(file => !uploaded_files.includes(file));
 	error_div.failed_files = failed_files;
 	let le = document.createElement('ul');
 	failed_files.forEach(failedFile => {
