@@ -3,43 +3,14 @@ const file_input = document.getElementById('file-input');
 
 const upload_link = document.getElementById('upload-link');
 
-const progress_bar_file = document.querySelector('.progress-bar-file');
-const pb_file = document.getElementById('pb-file');
+const pb_file = document.querySelector('.pb-file');
+const pb_file_progress = document.getElementById('pb-file-progress');
 const pb_file_name = document.getElementById('pb-file-name');
 
-const progress_bar_total = document.querySelector('.progress-bar-total');
-const pb_total = document.getElementById('pb-total');
+const pb_total = document.querySelector('.pb-total');
+const pb_total_progress = document.getElementById('pb-total-progress');
 const pb_total_count = document.getElementById('pb-total-count');
-
-let total_size = 0;
-let total_loaded = 0;
-let count = 0;
-let file_names = [];
 let uploaded_files = [];
-let uploading = false;
-
-if (upload_link) {
-	upload_link.addEventListener('click', (e) => {
-		e.preventDefault();
-		if (uploading) {
-			return
-		}
-		file_input.click();
-	});
-
-	file_input.addEventListener('change', () => {
-		let files = file_input.files;
-
-		file_names = Array.from(files).map(file => file.name);
-		total_size = Array.from(files).reduce((acc, file) => acc + file.size, 0);
-
-		for (let i = 0; i < files.length; ++i) {
-			send_file(files[i]);
-		}
-		count = +1
-		pb_total_count.textContent = count + ' / ' + files.length + " Files Transfered";
-	})
-}
 
 drop_zone.addEventListener('dragover', (e) => {
 	e.preventDefault();
@@ -47,10 +18,6 @@ drop_zone.addEventListener('dragover', (e) => {
 
 drop_zone.addEventListener('drop', (e) => {
 	e.preventDefault();
-	if (uploading) {
-		return;
-	}
-	uploading = true;
 	let error_div = document.querySelector('.error-div');
 	if (error_div) {
 		error_div.style.display = 'none';
@@ -61,91 +28,97 @@ drop_zone.addEventListener('drop', (e) => {
 		}
 	}
 
-	// reset the variables each time there is a new drop
-	file_names = [];
+	all_files = [];
 	uploaded_files = [];
-	total_size = 0;
-	total_loaded = 0;
-	count = 0;
 
 	var files = e.dataTransfer.files;
-	file_names = Array.from(files).map(file => file.name);
-	total_size = Array.from(files).reduce((acc, file) => acc + file.size, 0);
 	pb_total_count.textContent = 0 + ' / ' + files.length + " Files Transfered";
-	let i = 0;
-
-	function next() {
-		if (i < files.length) {
-			console.log("Total_loaded", total_loaded);
-			send_file(files[i], (err) => {
-				if (err) {
-					upload_error();
-				} else {
-					i++;
-					next();
-				}
-			});
-		} else {
-			uploading = false;
-		}
-	}
-	next();
+	upload_files(files, () => {
+		console.log('All files uploaded');
+	});
 });
 
-function send_file(file, callback) {
-	progress_bar_file.style.display = 'flex';
-	progress_bar_total.style.display = 'flex';
+drop_zone.addEventListener('click', () => {
+	file_input.click();
+});
 
-	let form_data = new FormData();
-	form_data.append('file', file);
-	let xhr = new XMLHttpRequest();
-	let drop_zone_data = drop_zone.dataset;
-	Object.keys(drop_zone_data).forEach(el => {
-		form_data.append(el, drop_zone_data[el]);
-	});
+file_input.addEventListener('change', () => {
+	let files = file_input.files;
+	count = +1
+	pb_total_count.textContent = count + ' / ' + files.length + " Files Transfered";
+});
 
-	xhr.upload.addEventListener('progress', (event) => {
-		if (event.lengthComputable) {
-			let percent_completed_file = Math.round((event.loaded / event.total) * 100);
-			let percent_completed_total = Math.round(((total_loaded + event.loaded) / total_size) * 100);
-			progress_bar_file.style.width = percent_completed_file + '%';
-			pb_file.textContent = format_size(Math.round((event.loaded / event.total) * file.size), file.size) + ' / ' + format_size(file.size, file.size);
-			pb_file_name.textContent = file.name;
-			progress_bar_total.style.width = percent_completed_total + '%';
+function upload_files(files, uploaded_check) {
+	let file_count = 0;
+	let total_sizes = 0;
+	let total_loaded = 0;
+	let count = 0;
 
-console.log("Total_loaded progress", (total_loaded + event.loaded), "Event total:", event.total, "File size", file.size);
-			pb_total.textContent = format_size(((total_loaded + event.loaded) / event.total) * file.size, total_size) + ' / ' +
-				format_size(total_size, total_size);
+	pb_file.style.display = 'flex';
+	pb_total.style.display = 'flex';
+
+	for (let i = 0; i < files.length; i++) {
+		total_sizes += files[i].size;
+		all_files.push(files[i].name)
+	}
+
+	function nextFile() {
+		if (file_count >= files.length) {
+			uploaded_check();
+			return;
 		}
-	});
+		let file = files[file_count];
+		let form_data = new FormData();
+		form_data.append('file', file);
+		let borehole_id = drop_zone.getAttribute("borehole-id");
+		form_data.append("borehole_id", borehole_id);
+		let xhr = new XMLHttpRequest();
+		['boreholeId', 'wellId'].forEach(n => {
+			if (drop_zone.dataset[n]) {
+				form_data.append(n, drop_zone.dataset[n]);
+			}
+		});
+		xhr.upload.addEventListener('progress', (event) => {
+			if (event.lengthComputable) {
+				let percent_completed_file = Math.round((event.loaded / event.total) * 100);
+				let percent_completed_total = Math.round(((total_loaded + event.loaded) / total_sizes) * 100);
+				pb_file_progress.style.width = percent_completed_file + '%';
+				pb_file_progress.textContent = format_size(Math.round((event.loaded / event.total) * file.size), file.size) + ' / ' + format_size(file.size, file.size);
+				pb_file_name.textContent = file.name;
+				pb_total_progress.style.width = percent_completed_total + '%';
+				pb_total_progress.textContent = format_size(((total_loaded + event.loaded) / event.total) * file.size, file.size) + ' / ' +
+					format_size(total_sizes, file.size);
+			}
+		});
 
-	xhr.addEventListener('load', (event) => {
-		if (xhr.status == 200) {
-			total_loaded += file.size;
-			console.log("Load total_loaded", total_loaded);
-			count += 1;
-			pb_total_count.textContent =
-				count + ' / ' + file_names.length + " Files Transfered";
-			add_file_to_page(file);
-			uploaded_files.push(file.name);
-			callback(null);
-		} else {
-			callback(new Error("Upload error"));
-		}
-	});
+		xhr.addEventListener('load', (event) => {
+			if (xhr.status >= 200 && xhr.status < 300) {
+				total_loaded += file.size;
+				count += 1
+				pb_total_count.textContent =
+					count + ' / ' + files.length + " Files Transfered";
+				add_file_to_page(file);
+				uploaded_files.push(file.name);
+			} else {
+				upload_error();
+			}
+		});
 
-	xhr.addEventListener('error', (event) => {
-		callback(new Error("Upload Error"));
-	});
+		xhr.addEventListener('error', (event) => {
+			upload_error();
+		});
 
-	xhr.open('POST', 'upload');
-	xhr.send(form_data);
+		file_count++
+		xhr.open('POST', 'upload');
+		xhr.addEventListener('load', nextFile);
+		xhr.send(form_data);
+	}
+	nextFile()
 }
 
 function format_size(uploaded_amt, file_size) {
 	if (file_size < 1024) {
-		// console.log('B', uploaded_amt, file_size);
-		return uploaded_amt + ' B';
+		return uploaded_amt.toFixed(2) + ' B';
 	} else if (file_size < 1048576) {
 		return (uploaded_amt / 1024).toFixed(0) + ' KB';
 	} else if (file_size < 1073741824) {
@@ -174,7 +147,7 @@ function add_file_to_page(file) {
 	file_div.appendChild(file_size);
 
 	const container = document.querySelector('.container');
-	const progress_bar = container.querySelector('.progress-bar-total');
+	const progress_bar = container.querySelector('.pb-total');
 	container.insertBefore(file_div, progress_bar.nextSibling);
 }
 
@@ -183,7 +156,7 @@ function upload_error() {
 	let error_div = document.querySelector('.error-div');
 	error_div.style.display = 'flex';
 
-	let failed_files = file_names.filter(file => !uploaded_files.includes(file));
+	let failed_files = all_files.filter(file => !uploaded_files.includes(file));
 	let le = document.createElement('ul');
 	failed_files.forEach(failedFile => {
 		let list_item = document.createElement('li');
@@ -192,6 +165,6 @@ function upload_error() {
 	});
 	error_div.appendChild(le);
 
-	progress_bar_file.style.display = "none";
-	progress_bar_total.style.display = "none";
+	pb_file.style.display = "none";
+	pb_total.style.display = "none";
 }
