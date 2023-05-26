@@ -50,7 +50,7 @@ file_input.addEventListener('change', () => {
 
 function upload_files(files, uploaded_check) {
 	let file_count = 0;
-	let total_sizes = 0;
+	let total_size = 0;
 	let total_loaded = 0;
 	let count = 0;
 
@@ -58,7 +58,7 @@ function upload_files(files, uploaded_check) {
 	pb_total.style.display = 'flex';
 
 	for (let i = 0; i < files.length; i++) {
-		total_sizes += files[i].size;
+		total_size += files[i].size;
 		all_files.push(files[i].name)
 	}
 
@@ -81,13 +81,13 @@ function upload_files(files, uploaded_check) {
 		xhr.upload.addEventListener('progress', (event) => {
 			if (event.lengthComputable) {
 				let percent_completed_file = Math.round((event.loaded / event.total) * 100);
-				let percent_completed_total = Math.round(((total_loaded + event.loaded) / total_sizes) * 100);
-				pb_file_progress.style.width = percent_completed_file + '%';
+				let percent_completed_total = Math.round(((total_loaded + event.loaded) / total_size) * 100);
+				pb_file.style.width = percent_completed_file + '%';
 				pb_file_progress.textContent = format_size(Math.round((event.loaded / event.total) * file.size), file.size) + ' / ' + format_size(file.size, file.size);
 				pb_file_name.textContent = file.name;
-				pb_total_progress.style.width = percent_completed_total + '%';
-				pb_total_progress.textContent = format_size(((total_loaded + event.loaded) / event.total) * file.size, file.size) + ' / ' +
-					format_size(total_sizes, file.size);
+				pb_total.style.width = percent_completed_total + '%';
+				pb_total_progress.textContent = format_size(((total_loaded + event.loaded) / event.total) * file.size, total_size) + ' / ' +
+					format_size(total_size, total_size);
 			}
 		});
 
@@ -116,13 +116,12 @@ function upload_files(files, uploaded_check) {
 	nextFile()
 }
 
-function format_size(uploaded_amt, file_size) {
-	if (file_size < 1024) {
+function format_size(uploaded_amt, unit_size) {
+	if (unit_size < 1024) {
 		return uploaded_amt.toFixed(2) + ' B';
-	} else if (file_size < 1048576) {
+	} else if (unit_size < 1048576) {
 		return (uploaded_amt / 1024).toFixed(0) + ' KB';
-	} else if (file_size < 1073741824) {
-		// console.log('MB', uploaded_amt, file_size);
+	} else if (unit_size < 1073741824) {
 		return (uploaded_amt / (1048576)).toFixed(2) + ' MB';
 	} else {
 		return (uploaded_amt / (1073741824)).toFixed(2) + ' GB';
