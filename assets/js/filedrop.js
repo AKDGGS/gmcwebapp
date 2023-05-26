@@ -83,11 +83,12 @@ function upload_files(files, uploaded_check) {
 				let percent_completed_file = Math.round((event.loaded / event.total) * 100);
 				let percent_completed_total = Math.round(((total_loaded + event.loaded) / total_size) * 100);
 				pb_file.style.width = percent_completed_file + '%';
-				pb_file_progress.textContent = format_size(Math.round((event.loaded / event.total) * file.size), file.size) + ' / ' + format_size(file.size, file.size);
+				pb_file_progress.textContent = format_size(Math.round((event.loaded / event.total)
+					* file.size), file.size) + ' / ' + format_size(file.size, file.size);
 				pb_file_name.textContent = file.name;
 				pb_total.style.width = percent_completed_total + '%';
-				pb_total_progress.textContent = format_size(((total_loaded + event.loaded) / event.total) * file.size, total_size) + ' / ' +
-					format_size(total_size, total_size);
+				pb_total_progress.textContent = format_size((total_loaded + event.loaded),
+					total_size) + ' / ' + format_size(total_size, total_size);
 			}
 		});
 
