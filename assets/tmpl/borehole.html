@@ -131,24 +131,25 @@
 			{{- end}}
 
 		{{/* {{- if $.user }} */}}
-			<fieldset class="file-drop" id="file-drop" data-borehole-id="{{.ID}}">
+			<fieldset class="filedrop" id="filedrop" data-borehole-id="{{.ID}}">
 				<legend>Files</legend>
 				<div>
-					<span class="center-text">Drag or click to upload files</span>
+					<span class="filedrop-center-text" id="filedrop-upload-text">
+						Drag or <a href="#" id="filedrop-upload-link">click here</a> to upload files</span>
 				</div>
-				<div class="container">
-					<div class="error-div" id="error-div">
+				<div class="filedrop-container">
+					<div class="filedrop-error-div" id="filedrop-error-div">
 						<span>These files failed to upload:</span>
 					</div>
-					<div class="pb pb-file">
-						<span class="pb-text" id="pb-file-progress"></span>
-						<span class="pb-text" id="pb-file-name"></span>
+					<div class="filedrop-pb filedrop-pb-file">
+						<span class="filedrop-pb-text" id="filedrop-pb-file-progress"></span>
+						<span class="filedrop-pb-text" id="filedrop-pb-file-name"></span>
 					</div>
-					<div class="pb pb-total">
-						<span class="pb-text" id="pb-total-progress"></span>
-						<span class="pb-text" id="pb-total-count"></span>
+					<div class="filedrop-pb filedrop-pb-total">
+						<span class="filedrop-pb-text" id="filedrop-pb-total-progress"></span>
+						<span class="filedrop-pb-text" id="filedrop-pb-total-count"></span>
 					</div>
-				<input type="file" class="file-input" id="file-input" multiple>
+				<input type="file" class="filedrop-file-input" id="filedrop-file-input" multiple>
 				{{- range .Files}}
 					<div><a href="../file/{{.ID}}/{{.Name}}">
 					{{if gt (len .Name) 38}}
