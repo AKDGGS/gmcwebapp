@@ -111,11 +111,11 @@ function upload_files(files, uploaded_check) {
 				let percent_completed_file = Math.round((event.loaded / event.total) * 100);
 				let percent_completed_total = Math.round(((total_loaded + event.loaded) / total_size) * 100);
 				pb_file.style.width = percent_completed_file + '%';
-				pb_file_progress.textContent = format_size(Math.round((event.loaded / event.total) *
-					file.size), file.size) + ' / ' + format_size(file.size, file.size);
+				pb_file_progress.textContent = format_size(percent_completed_file / 100 *
+					file.size, file.size) + ' / ' + format_size(file.size, file.size);
 				pb_file_name.textContent = file.name;
 				pb_total.style.width = percent_completed_total + '%';
-				pb_total_progress.textContent = format_size((total_loaded + event.loaded) / event.total * total_size,
+				pb_total_progress.textContent = format_size(percent_completed_total / 100 * total_size,
 					total_size) + ' / ' + format_size(total_size, total_size);
 			}
 		});
@@ -147,6 +147,9 @@ function upload_files(files, uploaded_check) {
 
 function format_size(uploaded_amt, unit_size) {
 	if (unit_size < 1024) {
+		if (uploaded_amt > unit_size){
+			uploaded_amt = unit_size;
+		}
 		return uploaded_amt.toFixed(2) + ' B';
 	} else if (unit_size < 1048576) {
 		return (uploaded_amt / 1024).toFixed(0) + ' KB';
@@ -156,6 +159,7 @@ function format_size(uploaded_amt, unit_size) {
 		return (uploaded_amt / (1073741824)).toFixed(2) + ' GB';
 	}
 }
+
 
 function add_file_to_page(file) {
 	const file_div = document.createElement('div');
@@ -180,6 +184,8 @@ function add_file_to_page(file) {
 }
 
 function upload_error() {
+	const uploadText = document.getElementById('filedrop-upload-text');
+	uploadText.classList.remove('uploading');
 	uploading = false;
 	let error_div = document.querySelector('.filedrop-error-div');
 	error_div.style.display = 'flex';

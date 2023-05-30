@@ -86,11 +86,3 @@
  	text-overflow: ellipsis;
  	word-break: break-all;
 }
-
-/* .truncate {
-  display: block;
-  max-width: 250px;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-} */
