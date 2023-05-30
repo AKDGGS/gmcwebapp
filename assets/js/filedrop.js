@@ -15,6 +15,7 @@ let uploading = false;
 let all_files = [];
 let uploaded_files = [];
 let count = 0;
+let total_size = 0;
 
 drop_zone.addEventListener('dragover', (e) => {
 	e.preventDefault();
@@ -84,7 +85,8 @@ function upload_files(files, uploaded_check) {
 	pb_file.style.display = 'flex';
 	pb_total.style.display = 'flex';
 
-	let total_size = Array.from(files).reduce((a,b) => a + b.size, 0);
+	total_size = Array.from(files).reduce((a,b) => a + b.size, 0);
+
 	all_files = Array.from(files).map(a => a.name);
 
 	function nextFile() {
@@ -109,11 +111,11 @@ function upload_files(files, uploaded_check) {
 				let percent_completed_total = Math.round(((total_loaded + event.loaded) / total_size) * 100);
 				pb_file.style.width = percent_completed_file + '%';
 				pb_file_progress.textContent = format_size(percent_completed_file / 100 *
-					file.size, file.size) + ' / ' + format_size(file.size, file.size);
+					file.size) + ' / ' + format_size(file.size);
 				pb_file_name.textContent = file.name;
 				pb_total.style.width = percent_completed_total + '%';
-				pb_total_progress.textContent = format_size(percent_completed_total / 100 * total_size,
-					total_size) + ' / ' + format_size(total_size, total_size);
+				pb_total_progress.textContent = format_size(percent_completed_total / 100 * total_size)
+					+ ' / ' + format_size(total_size);
 			}
 		});
 
@@ -122,7 +124,7 @@ function upload_files(files, uploaded_check) {
 				total_loaded += file.size;
 				count += 1
 				pb_total_count.textContent =
-					count + ' / ' + files.length + " Files Transfered";
+					count + ' / ' + files.length + " Files Transferred";
 				add_file_to_page(file);
 				uploaded_files.push(file.name);
 			} else {
@@ -142,19 +144,12 @@ function upload_files(files, uploaded_check) {
 	nextFile()
 }
 
-function format_size(uploaded_amt, unit_size) {
-	if (uploaded_amt > unit_size){
-		uploaded_amt = unit_size;
+function format_size(size) {
+	if (size > total_size){
+		size = total_size;
 	}
-	if (unit_size < 1024) {
-		return uploaded_amt.toFixed(2) + ' B';
-	} else if (unit_size < 1048576) {
-		return (uploaded_amt / 1024).toFixed(0) + ' KB';
-	} else if (unit_size < 1073741824) {
-		return (uploaded_amt / (1048576)).toFixed(2) + ' MB';
-	} else {
-		return (uploaded_amt / (1073741824)).toFixed(2) + ' GB';
-	}
+	var i = size == 0 ? 0 : Math.floor(Math.log(size) / Math.log(1024));
+    return (size / Math.pow(1024, i)).toFixed(2) * 1 + ' ' + ['B', 'kB', 'MB', 'GB', 'TB'][i];
 }
 
 
