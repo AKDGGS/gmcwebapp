@@ -78,17 +78,14 @@ file_input.addEventListener('change', () => {
 
 function upload_files(files, uploaded_check) {
 	let file_count = 0;
-	let total_size = 0;
 	let total_loaded = 0;
 	count = 0;
 
 	pb_file.style.display = 'flex';
 	pb_total.style.display = 'flex';
 
-	for (let i = 0; i < files.length; i++) {
-		total_size += files[i].size;
-		all_files.push(files[i].name)
-	}
+	let total_size = Array.from(files).reduce((a,b) => a + b.size, 0);
+	all_files = Array.from(files).map(a => a.name);
 
 	function nextFile() {
 		if (file_count >= files.length) {
@@ -146,10 +143,10 @@ function upload_files(files, uploaded_check) {
 }
 
 function format_size(uploaded_amt, unit_size) {
+	if (uploaded_amt > unit_size){
+		uploaded_amt = unit_size;
+	}
 	if (unit_size < 1024) {
-		if (uploaded_amt > unit_size){
-			uploaded_amt = unit_size;
-		}
 		return uploaded_amt.toFixed(2) + ' B';
 	} else if (unit_size < 1048576) {
 		return (uploaded_amt / 1024).toFixed(0) + ' KB';
