@@ -130,12 +130,12 @@
 			</fieldset>
 			{{- end}}
 
-		{{- if $.user }}
+		{{/* {{- if $.user }} */}}
 			<fieldset class="filedrop" id="filedrop" data-borehole-id="{{.ID}}">
 				<legend>Files</legend>
 				<div>
 					<span class="filedrop-center-text" id="filedrop-upload-text">
-						Drag or <a href="#" id="filedrop-upload-link">click here</a> to upload files</span>
+						Drag or <a href="#" id="filedrop-upload-link">select</a> to upload files</span>
 				</div>
 				<div class="filedrop-container">
 					<div class="filedrop-error-div" id="filedrop-error-div">
@@ -160,7 +160,7 @@
 				{{- end}}
 				</div>
 			</fieldset>
-			{{- end}}
+			{{/* {{- end}} */}}
 
 			{{- if .Organizations}}
 

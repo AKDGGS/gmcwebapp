@@ -11,11 +11,10 @@ const pb_total = document.querySelector('.filedrop-pb-total');
 const pb_total_progress = document.getElementById('filedrop-pb-total-progress');
 const pb_total_count = document.getElementById('filedrop-pb-total-count');
 
-let uploading = false;
-let all_files = [];
-let uploaded_files = [];
-let count = 0;
-let total_size = 0;
+let pb_uploading = false;
+let pb_all_files = [];
+let pb_uploaded_files = [];
+let pb_count = 0;
 
 drop_zone.addEventListener('dragover', (e) => {
 	e.preventDefault();
@@ -23,10 +22,10 @@ drop_zone.addEventListener('dragover', (e) => {
 
 drop_zone.addEventListener('drop', (e) => {
 	e.preventDefault();
-	if (uploading) {
+	if (pb_uploading) {
 		return;
 	}
-	uploading = true;
+	pb_uploading = true;
 	const uploadText = document.getElementById('filedrop-upload-text');
 	uploadText.classList.add('uploading');
 	let error_div = document.querySelector('.filedrop-error-div');
@@ -40,17 +39,17 @@ drop_zone.addEventListener('drop', (e) => {
 	}
 
 	let files = e.dataTransfer.files;
-	pb_total_count.textContent = count + ' / ' + files.length + " Files Transfered";
+	pb_total_count.textContent = pb_count + ' / ' + files.length + " Files Transfered";
 	upload_files(files, () => {
 		const uploadText = document.getElementById('filedrop-upload-text');
 		uploadText.classList.remove('uploading');
-		uploading = false;
+		pb_uploading = false;
 	});
 });
 
 upload_link.addEventListener('click', (e) => {
 	e.preventDefault();
-	if (uploading) {
+	if (pb_uploading) {
 		console.log("uploading true");
 		return
 	}
@@ -68,33 +67,32 @@ upload_link.addEventListener('click', (e) => {
 
 file_input.addEventListener('change', () => {
 	let files = file_input.files;
-	count += 1;
+	pb_count += 1;
 	upload_files(files, () => {
 		const uploadText = document.getElementById('filedrop-upload-text');
 		uploadText.classList.remove('uploading');
-		uploading = false;
+		pb_uploading = false;
 	});
-	pb_total_count.textContent = count + ' / ' + files.length + " Files Transfered";
+	pb_total_count.textContent = pb_count + ' / ' + files.length + " Files Transfered";
 });
 
 function upload_files(files, uploaded_check) {
-	let file_count = 0;
 	let total_loaded = 0;
-	count = 0;
+	pb_count = 0;
 
 	pb_file.style.display = 'flex';
 	pb_total.style.display = 'flex';
 
-	total_size = Array.from(files).reduce((a,b) => a + b.size, 0);
+	let total_size = Array.from(files).reduce((a,b) => a + b.size, 0);
 
-	all_files = Array.from(files).map(a => a.name);
-
+	pb_all_files = Array.from(files).map(a => a.name);
+	let pb_start_time = Date.now();
 	function nextFile() {
-		if (file_count >= files.length) {
+		if (pb_count >= files.length) {
 			uploaded_check();
 			return;
 		}
-		let file = files[file_count];
+		let file = files[pb_count];
 		let form_data = new FormData();
 		form_data.append('file', file);
 		let borehole_id = drop_zone.getAttribute("borehole-id");
@@ -105,28 +103,31 @@ function upload_files(files, uploaded_check) {
 				form_data.append(n, drop_zone.dataset[n]);
 			}
 		});
+
 		xhr.upload.addEventListener('progress', (event) => {
 			if (event.lengthComputable) {
 				let percent_completed_file = Math.round((event.loaded / event.total) * 100);
-				let percent_completed_total = Math.round(((total_loaded + event.loaded) / total_size) * 100);
 				pb_file.style.width = percent_completed_file + '%';
-				pb_file_progress.textContent = format_size(percent_completed_file / 100 *
-					file.size) + ' / ' + format_size(file.size);
+				let elapsed_time_file = (Date.now() - pb_start_time) / 1000;
+				pb_file_progress.textContent = pb_size_formatter(Math.round(event.loaded / elapsed_time_file)) + '/S';
 				pb_file_name.textContent = file.name;
+
+				let percent_completed_total = Math.round(((total_loaded + event.loaded) / total_size) * 100);
 				pb_total.style.width = percent_completed_total + '%';
-				pb_total_progress.textContent = format_size(percent_completed_total / 100 * total_size)
-					+ ' / ' + format_size(total_size);
+				let elapsed_time_total = (Date.now() - pb_start_time) / 1000;
+				pb_total_progress.textContent = pb_size_formatter(Math.round(event.loaded / elapsed_time_total)) + '/S';
 			}
 		});
 
 		xhr.addEventListener('load', (event) => {
 			if (xhr.status == 200) {
 				total_loaded += file.size;
-				count += 1
+				let elapsed_time_total = (Date.now() - pb_start_time) / 1000;
+				pb_total_progress.textContent = pb_size_formatter(Math.round(total_size / elapsed_time_total)) + '/S';
 				pb_total_count.textContent =
-					count + ' / ' + files.length + " Files Transferred";
+					pb_count + ' / ' + files.length + " Files Transferred";
 				add_file_to_page(file);
-				uploaded_files.push(file.name);
+				pb_uploaded_files.push(file.name);
 			} else {
 				upload_error();
 			}
@@ -136,7 +137,7 @@ function upload_files(files, uploaded_check) {
 			upload_error();
 		});
 
-		file_count++
+		pb_count++
 		xhr.open('POST', 'upload');
 		xhr.addEventListener('load', nextFile);
 		xhr.send(form_data);
@@ -144,14 +145,10 @@ function upload_files(files, uploaded_check) {
 	nextFile()
 }
 
-function format_size(size) {
-	if (size > total_size){
-		size = total_size;
-	}
+function pb_size_formatter(size) {
 	var i = size == 0 ? 0 : Math.floor(Math.log(size) / Math.log(1024));
     return (size / Math.pow(1024, i)).toFixed(2) * 1 + ' ' + ['B', 'kB', 'MB', 'GB', 'TB'][i];
 }
-
 
 function add_file_to_page(file) {
 	const file_div = document.createElement('div');
@@ -166,7 +163,7 @@ function add_file_to_page(file) {
 	}
 	file_div.appendChild(file_link);
 
-	f_size = format_size(file.size, file.size);
+	f_size = pb_size_formatter(file.size);
 	const file_size = document.createTextNode(` (${f_size})`);
 	file_div.appendChild(file_size);
 
@@ -178,11 +175,11 @@ function add_file_to_page(file) {
 function upload_error() {
 	const uploadText = document.getElementById('filedrop-upload-text');
 	uploadText.classList.remove('uploading');
-	uploading = false;
+	pb_uploading = false;
 	let error_div = document.querySelector('.filedrop-error-div');
 	error_div.style.display = 'flex';
 
-	let failed_files = all_files.filter(file => !uploaded_files.includes(file));
+	let failed_files = pb_all_files.filter(file => !pb_uploaded_files.includes(file));
 	let le = document.createElement('ul');
 	failed_files.forEach(failedFile => {
 		let list_item = document.createElement('li');
