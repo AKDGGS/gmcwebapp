@@ -108,10 +108,6 @@ func (srv *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 		srv.ServeWellsDetailJSON(id, w, r)
 		return
 
-	case "filedrop":
-		srv.ServeFileDrop(w, r)
-		return
-
 	case "upload":
 		srv.ServeUpload(w, r)
 		return
