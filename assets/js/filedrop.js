@@ -1,193 +1,196 @@
-const drop_zone = document.getElementById('filedrop');
-const file_input = document.getElementById('filedrop-file-input');
+ function FileDrop() {
+ 	const drop_zone = document.getElementById('filedrop');
+ 	const file_input = document.getElementById('filedrop-file-input');
 
-const upload_link = document.getElementById('filedrop-upload-link');
+ 	const upload_link = document.getElementById('filedrop-upload-link');
 
-const pb_file = document.querySelector('.filedrop-pb-file');
-const pb_file_progress = document.getElementById('filedrop-pb-file-progress');
-const pb_file_name = document.getElementById('filedrop-pb-file-name');
+ 	const pb_file = document.querySelector('.filedrop-pb-file');
+ 	const pb_file_progress = document.getElementById('filedrop-pb-file-progress');
+ 	const pb_file_name = document.getElementById('filedrop-pb-file-name');
 
-const pb_total = document.querySelector('.filedrop-pb-total');
-const pb_total_progress = document.getElementById('filedrop-pb-total-progress');
-const pb_total_count = document.getElementById('filedrop-pb-total-count');
+ 	const pb_total = document.querySelector('.filedrop-pb-total');
+ 	const pb_total_progress = document.getElementById('filedrop-pb-total-progress');
+ 	const pb_total_count = document.getElementById('filedrop-pb-total-count');
 
-let pb_uploading = false;
-let pb_all_files = [];
-let pb_uploaded_files = [];
-let pb_count = 0;
+ 	let pb_uploading = false;
+ 	let pb_all_files = [];
+ 	let pb_uploaded_files = [];
+ 	let pb_count = 0;
 
-drop_zone.addEventListener('dragover', (e) => {
-	e.preventDefault();
-})
+ 	drop_zone.addEventListener('dragover', (e) => {
+ 		e.preventDefault();
+ 	})
 
-drop_zone.addEventListener('drop', (e) => {
-	e.preventDefault();
-	if (pb_uploading) {
-		return;
-	}
-	pb_uploading = true;
-	const uploadText = document.getElementById('filedrop-upload-text');
-	uploadText.classList.add('uploading');
-	let error_div = document.querySelector('.filedrop-error-div');
-	if (error_div) {
-		error_div.style.display = 'none';
-		error_div.failed_files = [];
-		let le = error_div.querySelector('ul');
-		if (le) {
-			error_div.removeChild(le);
-		}
-	}
+ 	drop_zone.addEventListener('drop', (e) => {
+ 		e.preventDefault();
+ 		if (pb_uploading) {
+ 			return;
+ 		}
+ 		pb_uploading = true;
+ 		const uploadText = document.getElementById('filedrop-upload-text');
+ 		uploadText.classList.add('uploading');
+ 		let error_div = document.querySelector('.filedrop-error-div');
+ 		if (error_div) {
+ 			error_div.style.display = 'none';
+ 			error_div.failed_files = [];
+ 			let le = error_div.querySelector('ul');
+ 			if (le) {
+ 				error_div.removeChild(le);
+ 			}
+ 		}
 
-	let files = e.dataTransfer.files;
-	pb_total_count.textContent = pb_count + ' / ' + files.length + " Files Transfered";
-	upload_files(files, () => {
-		const uploadText = document.getElementById('filedrop-upload-text');
-		uploadText.classList.remove('uploading');
-		pb_uploading = false;
-	});
-});
+ 		let files = e.dataTransfer.files;
+ 		pb_total_count.textContent = pb_count + ' / ' + files.length + " Files Transfered";
+ 		upload_files(files, () => {
+ 			const uploadText = document.getElementById('filedrop-upload-text');
+ 			uploadText.classList.remove('uploading');
+ 			pb_uploading = false;
+ 		});
+ 	});
 
-upload_link.addEventListener('click', (e) => {
-	e.preventDefault();
-	if (pb_uploading) {
-		console.log("uploading true");
-		return
-	}
-	let error_div = document.querySelector('.filedrop-error-div');
-	if (error_div) {
-		error_div.style.display = 'none';
-		error_div.failed_files = [];
-		let le = error_div.querySelector('ul');
-		if (le) {
-			error_div.removeChild(le);
-		}
-	}
-	file_input.click();
-});
+ 	upload_link.addEventListener('click', (e) => {
+ 		e.preventDefault();
+ 		if (pb_uploading) {
+ 			console.log("uploading true");
+ 			return
+ 		}
+ 		let error_div = document.querySelector('.filedrop-error-div');
+ 		if (error_div) {
+ 			error_div.style.display = 'none';
+ 			error_div.failed_files = [];
+ 			let le = error_div.querySelector('ul');
+ 			if (le) {
+ 				error_div.removeChild(le);
+ 			}
+ 		}
+ 		file_input.click();
+ 	});
 
-file_input.addEventListener('change', () => {
-	let files = file_input.files;
-	pb_count += 1;
-	upload_files(files, () => {
-		const uploadText = document.getElementById('filedrop-upload-text');
-		uploadText.classList.remove('uploading');
-		pb_uploading = false;
-	});
-	pb_total_count.textContent = pb_count + ' / ' + files.length + " Files Transfered";
-});
+ 	file_input.addEventListener('change', () => {
+ 		let files = file_input.files;
+ 		pb_count += 1;
+ 		upload_files(files, () => {
+ 			const uploadText = document.getElementById('filedrop-upload-text');
+ 			uploadText.classList.remove('uploading');
+ 			pb_uploading = false;
+ 		});
+ 		pb_total_count.textContent = pb_count + ' / ' + files.length + " Files Transfered";
+ 	});
 
-function upload_files(files, uploaded_check) {
-	let total_loaded = 0;
-	pb_count = 0;
+ 	function upload_files(files, uploaded_check) {
+ 		let total_loaded = 0;
+ 		pb_count = 0;
 
-	pb_file.style.display = 'flex';
-	pb_total.style.display = 'flex';
+ 		pb_file.style.display = 'flex';
+ 		pb_total.style.display = 'flex';
 
-	let total_size = Array.from(files).reduce((a,b) => a + b.size, 0);
+ 		let total_size = Array.from(files).reduce((a, b) => a + b.size, 0);
 
-	pb_all_files = Array.from(files).map(a => a.name);
-	let pb_start_time = Date.now();
-	function nextFile() {
-		if (pb_count >= files.length) {
-			uploaded_check();
-			return;
-		}
-		let file = files[pb_count];
-		let form_data = new FormData();
-		form_data.append('file', file);
-		let borehole_id = drop_zone.getAttribute("borehole-id");
-		form_data.append("borehole_id", borehole_id);
-		let xhr = new XMLHttpRequest();
-		['boreholeId', 'wellId'].forEach(n => {
-			if (drop_zone.dataset[n]) {
-				form_data.append(n, drop_zone.dataset[n]);
-			}
-		});
+ 		pb_all_files = Array.from(files).map(a => a.name);
+ 		let pb_start_time = Date.now();
 
-		xhr.upload.addEventListener('progress', (event) => {
-			if (event.lengthComputable) {
-				let percent_completed_file = Math.round((event.loaded / event.total) * 100);
-				pb_file.style.width = percent_completed_file + '%';
-				let elapsed_time_file = (Date.now() - pb_start_time) / 1000;
-				pb_file_progress.textContent = pb_size_formatter(Math.round(event.loaded / elapsed_time_file)) + '/S';
-				pb_file_name.textContent = file.name;
+ 		function nextFile() {
+ 			if (pb_count >= files.length) {
+ 				uploaded_check();
+ 				return;
+ 			}
+ 			let file = files[pb_count];
+ 			let form_data = new FormData();
+ 			form_data.append('file', file);
+ 			let borehole_id = drop_zone.getAttribute("borehole-id");
+ 			form_data.append("borehole_id", borehole_id);
+ 			let xhr = new XMLHttpRequest();
+ 			['boreholeId', 'wellId'].forEach(n => {
+ 				if (drop_zone.dataset[n]) {
+ 					form_data.append(n, drop_zone.dataset[n]);
+ 				}
+ 			});
 
-				let percent_completed_total = Math.round(((total_loaded + event.loaded) / total_size) * 100);
-				pb_total.style.width = percent_completed_total + '%';
-				let elapsed_time_total = (Date.now() - pb_start_time) / 1000;
-				pb_total_progress.textContent = pb_size_formatter(Math.round(event.loaded / elapsed_time_total)) + '/S';
-			}
-		});
+ 			xhr.upload.addEventListener('progress', (event) => {
+ 				if (event.lengthComputable) {
+ 					let percent_completed_file = Math.round((event.loaded / event.total) * 100);
+ 					pb_file.style.width = percent_completed_file + '%';
+ 					let elapsed_time_file = (Date.now() - pb_start_time) / 1000;
+ 					pb_file_progress.textContent = pb_size_formatter(Math.round(event.loaded / elapsed_time_file)) + '/S';
+ 					pb_file_name.textContent = file.name;
 
-		xhr.addEventListener('load', (event) => {
-			if (xhr.status == 200) {
-				total_loaded += file.size;
-				let elapsed_time_total = (Date.now() - pb_start_time) / 1000;
-				pb_total_progress.textContent = pb_size_formatter(Math.round(total_size / elapsed_time_total)) + '/S';
-				pb_total_count.textContent =
-					pb_count + ' / ' + files.length + " Files Transferred";
-				add_file_to_page(file);
-				pb_uploaded_files.push(file.name);
-			} else {
-				upload_error();
-			}
-		});
+ 					let percent_completed_total = Math.round(((total_loaded + event.loaded) / total_size) * 100);
+ 					pb_total.style.width = percent_completed_total + '%';
+ 					let elapsed_time_total = (Date.now() - pb_start_time) / 1000;
+ 					pb_total_progress.textContent = pb_size_formatter(Math.round(event.loaded / elapsed_time_total)) + '/S';
+ 				}
+ 			});
 
-		xhr.addEventListener('error', (event) => {
-			upload_error();
-		});
+ 			xhr.addEventListener('load', (event) => {
+ 				if (xhr.status == 200) {
+ 					total_loaded += file.size;
+ 					let elapsed_time_total = (Date.now() - pb_start_time) / 1000;
+ 					pb_total_progress.textContent = pb_size_formatter(Math.round(total_size / elapsed_time_total)) + '/S';
+ 					pb_total_count.textContent =
+ 						pb_count + ' / ' + files.length + " Files Transferred";
+ 					add_file_to_page(file);
+ 					pb_uploaded_files.push(file.name);
+ 				} else {
+ 					upload_error();
+ 				}
+ 			});
 
-		pb_count++
-		xhr.open('POST', 'upload');
-		xhr.addEventListener('load', nextFile);
-		xhr.send(form_data);
-	}
-	nextFile()
-}
+ 			xhr.addEventListener('error', (event) => {
+ 				upload_error();
+ 			});
 
-function pb_size_formatter(size) {
-	var i = size == 0 ? 0 : Math.floor(Math.log(size) / Math.log(1024));
-    return (size / Math.pow(1024, i)).toFixed(2) * 1 + ' ' + ['B', 'kB', 'MB', 'GB', 'TB'][i];
-}
+ 			pb_count++
+ 			xhr.open('POST', 'upload');
+ 			xhr.addEventListener('load', nextFile);
+ 			xhr.send(form_data);
+ 		}
+ 		nextFile()
+ 	}
 
-function add_file_to_page(file) {
-	const file_div = document.createElement('div');
-	const drop_zone = document.getElementById('filedrop');
-	const file_id = drop_zone.dataset.file_id;
-	const file_link = document.createElement('a');
-	file_link.href = `../file/${file_id}/${file.name}`;
-	if (file.name.length > 38) {
-		file_link.textContent = file.name.slice(0, 38) + '...';
-	} else {
-		file_link.textContent = file.name;
-	}
-	file_div.appendChild(file_link);
+ 	function pb_size_formatter(size) {
+ 		var i = size == 0 ? 0 : Math.floor(Math.log(size) / Math.log(1024));
+ 		return (size / Math.pow(1024, i)).toFixed(2) * 1 + ' ' + ['B', 'kB', 'MB', 'GB', 'TB'][i];
+ 	}
 
-	f_size = pb_size_formatter(file.size);
-	const file_size = document.createTextNode(` (${f_size})`);
-	file_div.appendChild(file_size);
+ 	function add_file_to_page(file) {
+ 		const file_div = document.createElement('div');
+ 		const drop_zone = document.getElementById('filedrop');
+ 		const file_id = drop_zone.dataset.file_id;
+ 		const file_link = document.createElement('a');
+ 		file_link.href = `../file/${file_id}/${file.name}`;
+ 		if (file.name.length > 38) {
+ 			file_link.textContent = file.name.slice(0, 38) + '...';
+ 		} else {
+ 			file_link.textContent = file.name;
+ 		}
+ 		file_div.appendChild(file_link);
 
-	const container = document.querySelector('.filedrop-container');
-	const progress_bar = container.querySelector('.filedrop-pb-total');
-	container.insertBefore(file_div, progress_bar.nextSibling);
-}
+ 		f_size = pb_size_formatter(file.size);
+ 		const file_size = document.createTextNode(` (${f_size})`);
+ 		file_div.appendChild(file_size);
 
-function upload_error() {
-	const uploadText = document.getElementById('filedrop-upload-text');
-	uploadText.classList.remove('uploading');
-	pb_uploading = false;
-	let error_div = document.querySelector('.filedrop-error-div');
-	error_div.style.display = 'flex';
+ 		const container = document.querySelector('.filedrop-container');
+ 		const progress_bar = container.querySelector('.filedrop-pb-total');
+ 		container.insertBefore(file_div, progress_bar.nextSibling);
+ 	}
 
-	let failed_files = pb_all_files.filter(file => !pb_uploaded_files.includes(file));
-	let le = document.createElement('ul');
-	failed_files.forEach(failedFile => {
-		let list_item = document.createElement('li');
-		list_item.textContent = failedFile;
-		le.appendChild(list_item);
-	});
-	error_div.appendChild(le);
+ 	function upload_error() {
+ 		const uploadText = document.getElementById('filedrop-upload-text');
+ 		uploadText.classList.remove('uploading');
+ 		pb_uploading = false;
+ 		let error_div = document.querySelector('.filedrop-error-div');
+ 		error_div.style.display = 'flex';
 
-	pb_file.style.display = "none";
-	pb_total.style.display = "none";
-}
+ 		let failed_files = pb_all_files.filter(file => !pb_uploaded_files.includes(file));
+ 		let le = document.createElement('ul');
+ 		failed_files.forEach(failedFile => {
+ 			let list_item = document.createElement('li');
+ 			list_item.textContent = failedFile;
+ 			le.appendChild(list_item);
+ 		});
+ 		error_div.appendChild(le);
+
+ 		pb_file.style.display = "none";
+ 		pb_total.style.display = "none";
+ 	}
+ }

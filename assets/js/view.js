@@ -91,3 +91,7 @@ if (document.getElementById('map')){
 		});
 	}
 }
+
+if (document.getElementById('filedrop')){
+		let filedrop = new FileDrop(document.getElementById('#filedrop'));
+}

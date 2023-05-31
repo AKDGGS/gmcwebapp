@@ -63,8 +63,8 @@ func (srv *Server) ServeBorehole(id int, w http.ResponseWriter, r *http.Request)
 		},
 		"scripts": []string{
 			"../ol/ol.js", "../ol/ol-layerswitcher.min.js",
-			"../js/mustache.js", "../js/map-defaults.js",
-			"../js/view.js", "../js/filedrop.js",
+			"../js/mustache.js", "../js/map-defaults.js", "../js/filedrop.js",
+			"../js/view.js",
 		},
 		"redirect": fmt.Sprintf("borehole/%d", id),
 		"user":     user,
