@@ -14,8 +14,8 @@ import (
 	fsutil "gmc/filestore/util"
 )
 
-func (srv *Server) ServeUpload(w http.ResponseWriter, r *http.Request) int {
-	var file_id int
+func (srv *Server) ServeUpload(w http.ResponseWriter, r *http.Request) int32 {
+	var file_id int32
 	err := r.ParseMultipartForm(33554432) // 32MB
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)

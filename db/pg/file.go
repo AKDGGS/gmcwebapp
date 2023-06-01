@@ -37,7 +37,7 @@ func (pg *Postgres) PutFile(file *model.File, precommitFunc func() error) error 
 		return err
 	}
 
-	var fileID int
+	var fileID int32
 
 	err = tx.QueryRow(context.Background(), insert_sql, file.Name, file.Description,
 		file.Size, file.Type, file.MD5).Scan(&fileID)

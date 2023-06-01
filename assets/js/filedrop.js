@@ -234,7 +234,7 @@ function FileDrop() {
 		filename_container.className = "filedrop-file-list-container";
 
 		const file_link = document.createElement('a');
-		file_link.href = `../file/${file_id}/${file.name}`;
+		file_link.href = `../file/${file_id}`;
 		file_link.textContent = file.name;
 
 		filename_container.appendChild(file_link);
