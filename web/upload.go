@@ -14,23 +14,24 @@ import (
 	fsutil "gmc/filestore/util"
 )
 
-func (srv *Server) ServeUpload(w http.ResponseWriter, r *http.Request) {
+func (srv *Server) ServeUpload(w http.ResponseWriter, r *http.Request) int {
+	var file_id int
 	err := r.ParseMultipartForm(33554432) // 32MB
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
-		return
+		return 0
 	}
 
 	if r.MultipartForm == nil || r.MultipartForm.File == nil {
 		http.Error(w, "Multipart form of file is nil", http.StatusBadRequest)
-		return
+		return 0
 	}
 
 	for _, fh := range r.MultipartForm.File["file"] {
 		file, err := fh.Open()
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
-			return
+			return 0
 		}
 		defer file.Close()
 
@@ -74,7 +75,9 @@ func (srv *Server) ServeUpload(w http.ResponseWriter, r *http.Request) {
 		if err != nil {
 			http.Error(w, "Error putting file in database or filestore: "+
 				err.Error(), http.StatusInternalServerError)
-			return
+			return 0
 		}
+		file_id = f.ID
 	}
+	return file_id
 }

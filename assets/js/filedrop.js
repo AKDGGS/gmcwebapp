@@ -1,6 +1,6 @@
 function FileDropInit(filedrop_element) {
 	let div_header = document.createElement('div');
-	div_header.className ='filedrop-header';
+	div_header.className = 'filedrop-header';
 	filedrop_element.appendChild(div_header);
 
 	let span = document.createElement('span');
@@ -64,12 +64,14 @@ function FileDropInit(filedrop_element) {
 	filedrop_container.appendChild(filedrop_pb_total);
 
 	// append file list container
-	let filedrop_file_list_container = filedrop_element.querySelector('.gmc-file-list-container');
-	filedrop_container.appendChild(filedrop_file_list_container);
+	let file_list_container = filedrop_element.querySelector('.file-list-container');
+	filedrop_container.appendChild(file_list_container);
+
+	let filedrop = new FileDrop(document.getElementById('filedrop'));
 }
 
 function FileDrop() {
-	const drop_zone = document.querySelector('.filedrop');
+	const drop_zone = document.getElementById('filedrop');
 	const file_input = document.querySelector('.filedrop-file-input');
 
 	const upload_link = document.querySelector('.filedrop-upload-link');
@@ -86,6 +88,7 @@ function FileDrop() {
 	let pb_all_files = [];
 	let pb_uploaded_files = [];
 	let pb_count = 0;
+	let file_id = 0;
 
 	drop_zone.addEventListener('dragover', (e) => {
 		e.preventDefault();
@@ -194,6 +197,7 @@ function FileDrop() {
 
 			xhr.addEventListener('load', (event) => {
 				if (xhr.status == 200) {
+					file_id = xhr.getResponseHeader("file_id");
 					total_loaded += file.size;
 					let elapsed_time_total = (Date.now() - pb_start_time) / 1000;
 					pb_total_progress.textContent = pb_size_formatter(Math.round(total_size / elapsed_time_total)) + '/S';
@@ -211,7 +215,7 @@ function FileDrop() {
 			});
 
 			pb_count++
-			xhr.open('POST', 'upload');
+			xhr.open('POST', '../upload');
 			xhr.addEventListener('load', nextFile);
 			xhr.send(form_data);
 		}
@@ -225,21 +229,21 @@ function FileDrop() {
 
 	function add_file_to_page(file) {
 		const file_div = document.createElement('div');
-		const drop_zone = document.querySelector('.filedrop');
-		const file_id = drop_zone.dataset.file_id;
+		const drop_zone = document.getElementById('filedrop');
+		const filename_container = document.createElement('div');
+		filename_container.className = "filedrop-file-list-container";
+
 		const file_link = document.createElement('a');
 		file_link.href = `../file/${file_id}/${file.name}`;
-		if (file.name.length > 38) {
-			file_link.textContent = file.name.slice(0, 38) + '...';
-		} else {
-			file_link.textContent = file.name;
-		}
-		file_div.appendChild(file_link);
+		file_link.textContent = file.name;
+
+		filename_container.appendChild(file_link);
 
 		f_size = pb_size_formatter(file.size);
 		const file_size = document.createTextNode(` (${f_size})`);
-		file_div.appendChild(file_size);
+		filename_container.appendChild(file_size);
 
+		file_div.appendChild(filename_container);
 		const container = document.querySelector('.filedrop-container');
 		const progress_bar = container.querySelector('.filedrop-pb-total');
 		container.insertBefore(file_div, progress_bar.nextSibling);

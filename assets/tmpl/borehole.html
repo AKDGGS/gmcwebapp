@@ -133,13 +133,13 @@
 			{{- if $.user }}
 			<fieldset >
 				<legend>Files</legend>
-				<div class="filedrop" data-borehole-id="{{.ID}}">
-				<div class="gmc-file-list-container">
+				<div id="filedrop" data-borehole-id="{{.ID}}">
+				<div class="file-list-container">
 					{{- range .Files}}
 					<div>
 					 <span class="gmc-file">
-					 	<a class='gmc-file-list' href="../file/{{.ID}}/{{.Name}}">
-					 	{{.Name}}</a> </span>({{.FormattedSize}})
+					 	<a href="../file/{{.ID}}/{{.Name}}">
+					 	{{.Name}}</a> ({{.FormattedSize}})</span>
 					</div>
 					{{- end}}
 				</div>

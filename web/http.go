@@ -109,11 +109,8 @@ func (srv *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 		return
 
 	case "upload":
-		srv.ServeUpload(w, r)
-		return
-
-	case "borehole/upload":
-		srv.ServeUpload(w, r)
+		file_id := srv.ServeUpload(w, r)
+		w.Header().Set("file_id", strconv.Itoa(file_id))
 		return
 	}
 

@@ -1,11 +1,11 @@
-.filedrop {
+#filedrop {
  	background-color: white;
 }
 
 .filedrop-header {
-	position: relative;
-	display: flex;
-	justify-content: center;
+ 	position: relative;
+ 	display: flex;
+ 	justify-content: center;
 }
 
 .filedrop-container {
@@ -57,14 +57,14 @@
 }
 
 .filedrop-center-text.uploading {
-	visibility: hidden;
+ 	visibility: hidden;
 }
 
 .filedrop-center-text.filedrop-uploading::before {
-    content: "Uploading...";
-		visibility: visible;
-		display: inline-block;
-		min-width: 400px;
+ 	content: "Uploading...";
+ 	visibility: visible;
+ 	display: inline-block;
+ 	min-width: 400px;
 }
 
 .filedrop-error-div {
@@ -75,7 +75,7 @@
  	background-color: #f4cecd;
  	text-align: left;
  	margin-bottom: 10px;
-	z-index: 99;
+ 	z-index: 99;
 }
 
 .filedrop-error-div li {
@@ -87,19 +87,9 @@
  	word-break: break-all;
 }
 
-.gmc-file-list-container {
-  display: inline-block;
-}
-
-.gmc-file-list {
-    display: inline-block;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-    max-width: 290px;
-}
-
-.gmc-file-list,
-.gmc-file {
-	vertical-align: bottom;
+.filedrop-file-list-container {
+ 	display: inline-block;
+ 	max-width: auto;
+ 	word-break: break-all;
+ 	word-wrap: break-word;
 }
