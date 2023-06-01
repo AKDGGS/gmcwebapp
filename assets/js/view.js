@@ -1,4 +1,4 @@
-if (document.getElementById('map')) {
+if (document.getElementById('map')){
 	let fmt = new ol.format.GeoJSON({
 		dataProjection: 'EPSG:4326',
 		featureProjection: 'EPSG:3857'
@@ -6,19 +6,14 @@ if (document.getElementById('map')) {
 	let content = document.getElementById('popup-content');
 	let popup = document.getElementById('popup');
 	let overlay = new ol.Overlay({
-		element: popup,
-		autoPan: {
-			animation: {
-				duration: 100
-			}
-		}
+		element: popup, autoPan: { animation: { duration: 100 }}
 	});
 	let template = document.getElementById('tmpl-popup');
 
 	popup.style.display = 'block';
 	let map = new ol.Map({
 		target: 'map',
-		overlays: [overlay],
+		overlays: [ overlay ],
 		layers: [
 			MAP_DEFAULTS.BaseLayers,
 			MAP_DEFAULTS.OverlayLayers,
@@ -51,9 +46,7 @@ if (document.getElementById('map')) {
 		controls: ol.control.defaults.defaults({
 			attribution: false
 		}).extend([
-			new ol.control.ScaleLine({
-				units: "us"
-			}),
+			new ol.control.ScaleLine({ units: "us" }),
 			new ol.control.LayerSwitcher({
 				tipLabel: 'Legend',
 				groupSelectStyle: 'none'
@@ -74,21 +67,21 @@ if (document.getElementById('map')) {
 	});
 
 	let closer = document.getElementById('popup-closer');
-	closer.addEventListener("click", function() {
+	closer.addEventListener("click", function(){
 		overlay.setPosition(undefined);
 		return false;
 	});
 
 	// Only enable popups if a template is provided
-	if (template != null) {
-		map.on('click', function(e) {
+	if(template != null){
+		map.on('click', function(e){
 			let fts = map.getFeaturesAtPixel(e.pixel);
-			if (fts.length < 1) {
+			if (fts.length < 1){
 				overlay.setPosition(undefined);
 				return
 			}
 			content.innerHTML = '';
-			for (const ft of fts) {
+			for(const ft of fts){
 				content.innerHTML += mustache.render(
 					template.innerHTML,
 					ft.getProperties(), {}, ['[[', ']]']
@@ -99,6 +92,6 @@ if (document.getElementById('map')) {
 	}
 }
 
-if (document.getElementById('filedrop')) {
+if(document.getElementById('filedrop')) {
 	FileDropInit(document.getElementById('filedrop'));
 }
