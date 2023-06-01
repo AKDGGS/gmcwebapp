@@ -167,6 +167,7 @@ function FileDrop() {
 			let file = files[pb_count];
 			let form_data = new FormData();
 			form_data.append('file', file);
+
 			let borehole_id = drop_zone.getAttribute("borehole-id");
 			form_data.append("borehole_id", borehole_id);
 			let xhr = new XMLHttpRequest();

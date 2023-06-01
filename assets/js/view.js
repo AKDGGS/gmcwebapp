@@ -92,7 +92,7 @@ if (document.getElementById('map')){
 	}
 }
 
-if (document.querySelector('.filedrop')){
+if(document.querySelector('.filedrop')){
 	FileDropInit(document.querySelector('.filedrop'));
 	let filedrop = new FileDrop(document.querySelector('.filedrop'));
 }
