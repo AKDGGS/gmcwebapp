@@ -130,34 +130,17 @@
 			</fieldset>
 			{{- end}}
 
-		{{- if $.user }}
-			<fieldset class="filedrop" id="filedrop" data-borehole-id="{{.ID}}">
+			{{- if $.user }}
+			<fieldset class="filedrop" data-borehole-id="{{.ID}}">
 				<legend>Files</legend>
-				<div>
-					<span class="filedrop-center-text" id="filedrop-upload-text">
-						Drag or <a href="#" id="filedrop-upload-link">select</a> to upload files</span>
-				</div>
-				<div class="filedrop-container">
-					<div class="filedrop-error-div" id="filedrop-error-div">
-						<span>These files failed to upload:</span>
+				<div class="gmc-file-list-container">
+					{{- range .Files}}
+					<div>
+					 <span class="gmc-file">
+					 	<a class='gmc-file-list' href="../file/{{.ID}}/{{.Name}}">
+					 	{{.Name}}</a> </span>({{.FormattedSize}})
 					</div>
-					<div class="filedrop-pb filedrop-pb-file">
-						<span class="filedrop-pb-text" id="filedrop-pb-file-progress"></span>
-						<span class="filedrop-pb-text" id="filedrop-pb-file-name"></span>
-					</div>
-					<div class="filedrop-pb filedrop-pb-total">
-						<span class="filedrop-pb-text" id="filedrop-pb-total-progress"></span>
-						<span class="filedrop-pb-text" id="filedrop-pb-total-count"></span>
-					</div>
-				<input type="file" class="filedrop-file-input" id="filedrop-file-input" multiple>
-				{{- range .Files}}
-					<div><a href="../file/{{.ID}}/{{.Name}}">
-					{{if gt (len .Name) 38}}
-        	{{slice .Name 0 38}}...
-      		{{else}}
-        	{{.Name}}
-      		{{end}}</a> ({{.FormattedSize}})</div>
-				{{- end}}
+					{{- end}}
 				</div>
 			</fieldset>
 			{{- end}}
