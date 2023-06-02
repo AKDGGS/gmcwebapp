@@ -1,30 +1,30 @@
-function FileDropInit(filedrop_element) {
+function FileDrop(drop_zone, file_list_container) {
 	let div_header = document.createElement('div');
 	div_header.className = 'filedrop-header';
-	filedrop_element.appendChild(div_header);
+	drop_zone.appendChild(div_header);
 
 	let span = document.createElement('span');
 	span.className = 'filedrop-center-text filedrop-upload-text';
 	span.textContent = 'Drag or ';
 	div_header.appendChild(span);
 
-	let anchor = document.createElement('a');
-	anchor.href = '#';
-	anchor.className = 'filedrop-upload-link';
-	anchor.textContent = 'select';
-	span.appendChild(anchor);
+	let upload_link = document.createElement('a');
+	upload_link.href = '#';
+	upload_link.className = 'filedrop-upload-link';
+	upload_link.textContent = 'select';
+	span.appendChild(upload_link);
 	span.appendChild(document.createTextNode(' to upload files'));
 
 	let filedrop_container = document.createElement('div');
 	filedrop_container.className = 'filedrop-container';
-	filedrop_element.appendChild(filedrop_container);
+	drop_zone.appendChild(filedrop_container);
 
 	// Add manual selection
-	let input = document.createElement('input');
-	input.type = 'file';
-	input.className = 'filedrop-file-input';
-	input.multiple = true;
-	filedrop_container.appendChild(input);
+	let file_input = document.createElement('input');
+	file_input.type = 'file';
+	file_input.className = 'filedrop-file-input';
+	file_input.multiple = true;
+	filedrop_container.appendChild(file_input);
 
 	//Add error div
 	let error_div = document.createElement('div');
@@ -36,53 +36,37 @@ function FileDropInit(filedrop_element) {
 	filedrop_container.appendChild(error_div);
 
 	//Add first progress bar
-	let filedrop_pb_file = document.createElement('div');
-	filedrop_pb_file.className = 'filedrop-pb filedrop-pb-file';
+	let pb_file = document.createElement('div');
+	pb_file.className = 'filedrop-pb filedrop-pb-file';
 
-	let filedrop_pb_file_progress = document.createElement('span');
-	filedrop_pb_file_progress.className = 'filedrop-pb-text filedrop-pb-file-progress';
-	filedrop_pb_file.appendChild(filedrop_pb_file_progress);
+	let pb_file_progress = document.createElement('span');
+	pb_file_progress.className = 'filedrop-pb-text filedrop-pb-file-progress';
+	pb_file.appendChild(pb_file_progress);
 
-	let filedrop_pb_filename = document.createElement('span');
-	filedrop_pb_filename.className = 'filedrop-pb-text filedrop-pb-file-name';
-	filedrop_pb_file.appendChild(filedrop_pb_filename);
+	let pb_file_name = document.createElement('span');
+	pb_file_name.className = 'filedrop-pb-text filedrop-pb-file-name';
+	pb_file.appendChild(pb_file_name);
 
-	filedrop_container.appendChild(filedrop_pb_file);
+	filedrop_container.appendChild(pb_file);
 
 	//Add second progress bar
-	let filedrop_pb_total = document.createElement('div');
-	filedrop_pb_total.className = 'filedrop-pb filedrop-pb-total';
+	let pb_total = document.createElement('div');
+	pb_total.className = 'filedrop-pb filedrop-pb-total';
 
-	let filedrop_pb_total_progress = document.createElement('span');
-	filedrop_pb_total_progress.className = 'filedrop-pb-text filedrop-pb-total-progress';
-	filedrop_pb_total.appendChild(filedrop_pb_total_progress);
+	let pb_total_progress = document.createElement('span');
+	pb_total_progress.className = 'filedrop-pb-text filedrop-pb-total-progress';
+	pb_total.appendChild(pb_total_progress);
 
-	let filedrop_pb_total_count = document.createElement('span');
-	filedrop_pb_total_count.className = 'filedrop-pb-text filedrop-pb-total-count';
-	filedrop_pb_total.appendChild(filedrop_pb_total_count);
+	let pb_total_count = document.createElement('span');
+	pb_total_count.className = 'filedrop-pb-text filedrop-pb-total-count';
+	pb_total.appendChild(pb_total_count);
 
-	filedrop_container.appendChild(filedrop_pb_total);
+	filedrop_container.appendChild(pb_total);
 
 	// append file list container
-	let file_list_container = filedrop_element.querySelector('.file-list-container');
-	filedrop_container.appendChild(file_list_container);
-
-	let filedrop = new FileDrop(document.getElementById('filedrop'));
-}
-
-function FileDrop() {
-	const drop_zone = document.getElementById('filedrop');
-	const file_input = document.querySelector('.filedrop-file-input');
-
-	const upload_link = document.querySelector('.filedrop-upload-link');
-
-	const pb_file = document.querySelector('.filedrop-pb-file');
-	const pb_file_progress = document.querySelector('.filedrop-pb-file-progress');
-	const pb_file_name = document.querySelector('.filedrop-pb-file-name');
-
-	const pb_total = document.querySelector('.filedrop-pb-total');
-	const pb_total_progress = document.querySelector('.filedrop-pb-total-progress');
-	const pb_total_count = document.querySelector('.filedrop-pb-total-count');
+	if (file_list_container){
+		filedrop_container.appendChild(file_list_container);
+	}
 
 	let pb_uploading = false;
 	let pb_all_files = [];
@@ -229,7 +213,7 @@ function FileDrop() {
 
 	function add_file_to_page(file) {
 		const file_div = document.createElement('div');
-		const drop_zone = document.getElementById('filedrop');
+		// const drop_zone = document.getElementById('filedrop');
 		const filename_container = document.createElement('div');
 		filename_container.className = "filedrop-file-list-container";
 

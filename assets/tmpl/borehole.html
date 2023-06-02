@@ -130,11 +130,11 @@
 			</fieldset>
 			{{- end}}
 
-		{{- if $.user }}
+		{{/* {{- if $.user }} */}}
 			<fieldset >
 				<legend>Files</legend>
 				<div id="filedrop" data-borehole-id="{{.ID}}">
-				<div class="file-list-container">
+				<!-- <div class="file-list-container" id="file-list-container">
 					{{- range .Files}}
 					<div>
 					 <span class="gmc-file">
@@ -142,10 +142,10 @@
 					 	{{.Name}}</a> ({{.FormattedSize}})</span>
 					</div>
 					{{- end}}
-				</div>
+				</div> -->
 				</div>
 			</fieldset>
-			{{- end}}
+			{{/* {{- end}} */}}
 
 			{{- if .Organizations}}
 

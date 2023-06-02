@@ -93,5 +93,5 @@ if (document.getElementById('map')){
 }
 
 if(document.getElementById('filedrop')) {
-	FileDropInit(document.getElementById('filedrop'));
+		let drop_zone = new FileDrop(document.getElementById('filedrop'), document.getElementById('file-list-container'));
 }
