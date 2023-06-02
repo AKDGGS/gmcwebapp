@@ -82,23 +82,6 @@
 				</table>
 			</fieldset>
 			{{- end}}
-			{{- if $.user }}
-
-			<fieldset>
-				<legend>Files</legend>
-				<div id="filedrop" data-shotline-id="{{.ID}}">
-				<div class="file-list-container" id="file-list-container">
-					{{- range .Files}}
-					<div>
-					 <span class="gmc-file">
-						<a href="../file/{{.ID}}">
-						{{.Name}}</a> ({{.FormattedSize}})</span>
-					</div>
-					{{- end}}
-				</div>
-				</div>
-			</fieldset>
-			{{- end}}
 			{{- if .URLs}}
 
 			<fieldset>

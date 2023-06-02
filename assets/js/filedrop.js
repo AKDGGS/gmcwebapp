@@ -156,7 +156,7 @@ function FileDrop(drop_zone, file_list_container) {
 
 			let xhr = new XMLHttpRequest();
 
-			['boreholeId', 'inventoryId', 'outcropId', 'prospectId', 'shotlineId', 'wellId'].forEach(n => {
+			['borehole_id', 'inventory_id', 'outcrop_id', 'prospect_id', 'shotline_id', 'well_id'].forEach(n => {
 				if (drop_zone.dataset[n]) {
 					form_data.append(n, drop_zone.dataset[n]);
 				}

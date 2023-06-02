@@ -51,8 +51,9 @@ func (srv *Server) ServeUpload(w http.ResponseWriter, r *http.Request) int32 {
 			Type: mt,
 		}
 
-		if _, ok := r.Form["boreholeId"]; ok {
-			borehole_id := r.FormValue("boreholeId")
+		if _, ok := r.Form["borehole_id"]; ok {
+
+			borehole_id := r.FormValue("borehole_id")
 			borehole_id_int, err := strconv.Atoi(borehole_id)
 			if err != nil {
 				os.Exit(1)
@@ -60,8 +61,8 @@ func (srv *Server) ServeUpload(w http.ResponseWriter, r *http.Request) int32 {
 			f.BoreholeIDs = append(f.BoreholeIDs, borehole_id_int)
 		}
 
-		if _, ok := r.Form["inventoryId"]; ok {
-			inventory_id := r.FormValue("inventoryId")
+		if _, ok := r.Form["inventory_id"]; ok {
+			inventory_id := r.FormValue("inventory_id")
 			inventory_id_int, err := strconv.Atoi(inventory_id)
 			if err != nil {
 				os.Exit(1)
@@ -69,8 +70,8 @@ func (srv *Server) ServeUpload(w http.ResponseWriter, r *http.Request) int32 {
 			f.InventoryIDs = append(f.InventoryIDs, inventory_id_int)
 		}
 
-		if _, ok := r.Form["outcropId"]; ok {
-			outcrop_id := r.FormValue("outcropId")
+		if _, ok := r.Form["outcrop_id"]; ok {
+			outcrop_id := r.FormValue("outcrop_id")
 			outcrop_id_int, err := strconv.Atoi(outcrop_id)
 			if err != nil {
 				os.Exit(1)
@@ -78,8 +79,8 @@ func (srv *Server) ServeUpload(w http.ResponseWriter, r *http.Request) int32 {
 			f.OutcropIDs = append(f.OutcropIDs, outcrop_id_int)
 		}
 
-		if _, ok := r.Form["prospectId"]; ok {
-			prospect_id := r.FormValue("prospectId")
+		if _, ok := r.Form["prospect_id"]; ok {
+			prospect_id := r.FormValue("prospect_id")
 			prospect_id_int, err := strconv.Atoi(prospect_id)
 			if err != nil {
 				os.Exit(1)
@@ -87,8 +88,8 @@ func (srv *Server) ServeUpload(w http.ResponseWriter, r *http.Request) int32 {
 			f.ProspectIDs = append(f.ProspectIDs, prospect_id_int)
 		}
 
-		if _, ok := r.Form["wellId"]; ok {
-			well_id := r.FormValue("wellId")
+		if _, ok := r.Form["well_id"]; ok {
+			well_id := r.FormValue("well_id")
 			well_id_int, err := strconv.Atoi(well_id)
 			if err != nil {
 				os.Exit(1)
