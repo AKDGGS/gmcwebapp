@@ -49,29 +49,70 @@ func (pg *Postgres) PutFile(file *model.File, precommitFunc func() error) error 
 
 	switch {
 	case len(file.BoreholeIDs) != 0:
-		insert_boreholefile_sql, err := assets.ReadString("pg/borehole/insert_boreholefile.sql")
+		insert_sql, err := assets.ReadString("pg/borehole/insert_boreholefile.sql")
 		if err != nil {
 			return err
 		}
 
 		for _, b := range file.BoreholeIDs {
 			if b != 0 {
-				_, err = tx.Exec(context.Background(), insert_boreholefile_sql, fileID, b)
+				_, err = tx.Exec(context.Background(), insert_sql, fileID, b)
 				if err != nil {
 					return err
 				}
 			}
 		}
+	case len(file.InventoryIDs) != 0:
+		insert_sql, err := assets.ReadString("pg/inventory/insert_inventoryfile.sql")
+		if err != nil {
+			return err
+		}
 
+		for _, b := range file.InventoryIDs {
+			if b != 0 {
+				_, err = tx.Exec(context.Background(), insert_sql, fileID, b)
+				if err != nil {
+					return err
+				}
+			}
+		}
+	case len(file.OutcropIDs) != 0:
+		insert_sql, err := assets.ReadString("pg/outcrop/insert_outcropfile.sql")
+		if err != nil {
+			return err
+		}
+
+		for _, b := range file.OutcropIDs {
+			if b != 0 {
+				_, err = tx.Exec(context.Background(), insert_sql, fileID, b)
+				if err != nil {
+					return err
+				}
+			}
+		}
+	case len(file.ProspectIDs) != 0:
+		insert_sql, err := assets.ReadString("pg/prospect/insert_prospectfile.sql")
+		if err != nil {
+			return err
+		}
+
+		for _, b := range file.ProspectIDs {
+			if b != 0 {
+				_, err = tx.Exec(context.Background(), insert_sql, fileID, b)
+				if err != nil {
+					return err
+				}
+			}
+		}
 	case len(file.WellIDs) != 0:
-		insert_wellfile_sql, err := assets.ReadString("pg/well/insert_wellfile.sql")
+		insert_sql, err := assets.ReadString("pg/well/insert_wellfile.sql")
 		if err != nil {
 			return err
 		}
 
 		for _, well := range file.WellIDs {
 			if well != 0 {
-				_, err = tx.Exec(context.Background(), insert_wellfile_sql, fileID, well)
+				_, err = tx.Exec(context.Background(), insert_sql, fileID, well)
 				if err != nil {
 					return err
 				}

@@ -137,7 +137,6 @@ function FileDrop(drop_zone, file_list_container) {
 	function upload_files(files, uploaded_check) {
 		let total_loaded = 0;
 		pb_count = 0;
-
 		pb_file.style.display = 'flex';
 		pb_total.style.display = 'flex';
 
@@ -155,10 +154,9 @@ function FileDrop(drop_zone, file_list_container) {
 			let form_data = new FormData();
 			form_data.append('file', file);
 
-			let borehole_id = drop_zone.getAttribute("borehole-id");
-			form_data.append("borehole_id", borehole_id);
 			let xhr = new XMLHttpRequest();
-			['boreholeId', 'wellId'].forEach(n => {
+
+			['boreholeId', 'inventoryId', 'outcropId', 'prospectId', 'shotlineId', 'wellId'].forEach(n => {
 				if (drop_zone.dataset[n]) {
 					form_data.append(n, drop_zone.dataset[n]);
 				}
@@ -213,7 +211,6 @@ function FileDrop(drop_zone, file_list_container) {
 
 	function add_file_to_page(file) {
 		const file_div = document.createElement('div');
-		// const drop_zone = document.getElementById('filedrop');
 		const filename_container = document.createElement('div');
 		filename_container.className = "filedrop-file-list-container";
 

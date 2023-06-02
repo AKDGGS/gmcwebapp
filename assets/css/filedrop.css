@@ -1,4 +1,6 @@
 #filedrop {
+	height: 100%;
+	width: 100%;
  	background-color: white;
 }
 
@@ -10,6 +12,7 @@
 
 .filedrop-container {
  	width: 400px;
+
  	margin: 20px auto 0 auto;
 }
 

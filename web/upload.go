@@ -51,12 +51,50 @@ func (srv *Server) ServeUpload(w http.ResponseWriter, r *http.Request) int32 {
 			Type: mt,
 		}
 
-		borehole_id := r.FormValue("boreholeId")
-		borehole_id_int, err := strconv.Atoi(borehole_id)
-		if err != nil {
-			os.Exit(1)
+		if _, ok := r.Form["boreholeId"]; ok {
+			borehole_id := r.FormValue("boreholeId")
+			borehole_id_int, err := strconv.Atoi(borehole_id)
+			if err != nil {
+				os.Exit(1)
+			}
+			f.BoreholeIDs = append(f.BoreholeIDs, borehole_id_int)
 		}
-		f.BoreholeIDs = append(f.BoreholeIDs, borehole_id_int)
+
+		if _, ok := r.Form["inventoryId"]; ok {
+			inventory_id := r.FormValue("inventoryId")
+			inventory_id_int, err := strconv.Atoi(inventory_id)
+			if err != nil {
+				os.Exit(1)
+			}
+			f.InventoryIDs = append(f.InventoryIDs, inventory_id_int)
+		}
+
+		if _, ok := r.Form["outcropId"]; ok {
+			outcrop_id := r.FormValue("outcropId")
+			outcrop_id_int, err := strconv.Atoi(outcrop_id)
+			if err != nil {
+				os.Exit(1)
+			}
+			f.OutcropIDs = append(f.OutcropIDs, outcrop_id_int)
+		}
+
+		if _, ok := r.Form["prospectId"]; ok {
+			prospect_id := r.FormValue("prospectId")
+			prospect_id_int, err := strconv.Atoi(prospect_id)
+			if err != nil {
+				os.Exit(1)
+			}
+			f.ProspectIDs = append(f.ProspectIDs, prospect_id_int)
+		}
+
+		if _, ok := r.Form["wellId"]; ok {
+			well_id := r.FormValue("wellId")
+			well_id_int, err := strconv.Atoi(well_id)
+			if err != nil {
+				os.Exit(1)
+			}
+			f.WellIDs = append(f.WellIDs, well_id_int)
+		}
 
 		err = srv.DB.PutFile(&f, func() error {
 			//Add the file to the filestore

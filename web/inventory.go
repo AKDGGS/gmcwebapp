@@ -65,11 +65,13 @@ func (srv *Server) ServeInventory(id int, w http.ResponseWriter, r *http.Request
 		"stylesheets": []string{
 			"../ol/ol.css", "../ol/ol-layerswitcher.min.css",
 			"../css/map-defaults.css", "../css/view.css",
+			"../css/filedrop.css",
 		},
 		"scripts": []string{
 			"../ol/ol.js", "../ol/ol-layerswitcher.min.js",
 			"../js/mustache.js", "../js/map-defaults.js",
-			"../js/view.js", "../js/stash.js",
+			"../js/filedrop.js", "../js/view.js",
+			"../js/stash.js",
 		},
 		"redirect": fmt.Sprintf("inventory/%d", id),
 		"user":     user,

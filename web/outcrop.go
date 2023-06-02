@@ -59,10 +59,12 @@ func (srv *Server) ServeOutcrop(id int, w http.ResponseWriter, r *http.Request) 
 		"stylesheets": []string{
 			"../ol/ol.css", "../ol/ol-layerswitcher.min.css",
 			"../css/map-defaults.css", "../css/view.css",
+			"../css/filedrop.css",
 		},
 		"scripts": []string{
 			"../ol/ol.js", "../ol/ol-layerswitcher.min.js",
-			"../js/mustache.js", "../js/map-defaults.js", "../js/view.js",
+			"../js/mustache.js", "../js/map-defaults.js",
+			"../js/filedrop.js", "../js/view.js",
 		},
 		"redirect": fmt.Sprintf("outcrop/%d", id),
 		"user":     user,

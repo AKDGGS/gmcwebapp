@@ -450,13 +450,21 @@
 				</table>
 			</fieldset>
 			{{- end}}
-			{{- if .Files}}
+			{{- if $.user }}
 
-			<fieldset class="File">
+			<fieldset>
 				<legend>Files</legend>
-				{{- range .Files}}
-				<div><a href="../file/{{.ID}}">{{.Name}}</a> ({{.FormattedSize}})</div>
-				{{- end}}
+				<div id="filedrop" data-inventory-id="{{.ID}}">
+				<div class="file-list-container" id="file-list-container">
+					{{- range .Files}}
+					<div>
+					 <span class="gmc-file">
+						<a href="../file/{{.ID}}">
+						{{.Name}}</a> ({{.FormattedSize}})</span>
+					</div>
+					{{- end}}
+				</div>
+				</div>
 			</fieldset>
 			{{- end}}
 			{{- if and $.user .Publications}}
