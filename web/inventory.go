@@ -40,10 +40,10 @@ func (srv *Server) ServeInventory(id int, w http.ResponseWriter, r *http.Request
 	}
 
 	// If can_publish is false, throw a 403
-	// if user == nil && inventory["can_publish"] == false {
-	// 	http.Error(w, "Access denied.", http.StatusForbidden)
-	// 	return
-	// }
+	if user == nil && inventory.CanPublish == false {
+		http.Error(w, "Access denied.", http.StatusForbidden)
+		return
+	}
 
 	inventoryParams := map[string]interface{}{
 		"inventory": inventory,
