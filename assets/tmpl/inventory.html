@@ -450,11 +450,12 @@
 				</table>
 			</fieldset>
 			{{- end}}
-			{{- if $.user }}
 
 			<fieldset>
 				<legend>Files</legend>
-				<div id="filedrop" data-inventory_id="{{.ID}}">
+				{{- if $.user }}
+					<div id="filedrop" data-inventory_id="{{.ID}}">
+				{{- end}}
 				<div class="file-list-container" id="file-list-container">
 					{{- range .Files}}
 					<div>
@@ -466,7 +467,7 @@
 				</div>
 				</div>
 			</fieldset>
-			{{- end}}
+
 			{{- if and $.user .Publications}}
 
 			<fieldset>

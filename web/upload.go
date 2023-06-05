@@ -15,8 +15,21 @@ import (
 )
 
 func (srv *Server) ServeUpload(w http.ResponseWriter, r *http.Request) int32 {
+	user, err := srv.Auths.CheckRequest(w, r)
+	if err != nil {
+		http.Error(
+			w, fmt.Sprintf("Authentication error: %s", err.Error()),
+			http.StatusBadRequest,
+		)
+		return 0
+	}
+	if user == nil {
+		http.Error(w, "Unauthorized", http.StatusUnauthorized)
+		return 0
+	}
+
 	var file_id int32
-	err := r.ParseMultipartForm(33554432) // 32MB
+	err = r.ParseMultipartForm(33554432) // 32MB
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return 0

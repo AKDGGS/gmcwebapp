@@ -197,7 +197,7 @@ function FileDrop(drop_zone, file_list_container) {
 			});
 
 			pb_count++
-			xhr.open('POST', '../upload');
+			xhr.open('POST', '../upload/');
 			xhr.addEventListener('load', nextFile);
 			xhr.send(form_data);
 		}

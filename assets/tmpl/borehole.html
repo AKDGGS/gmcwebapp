@@ -130,10 +130,11 @@
 			</fieldset>
 			{{- end}}
 
-		{{- if $.user }}
 			<fieldset >
 				<legend>Files</legend>
-				<div id="filedrop" data-borehole_id="{{.ID}}">
+				{{- if $.user }}
+					<div id="filedrop" data-borehole_id="{{.ID}}">
+				{{- end}}
 				<div class="file-list-container" id="file-list-container">
 					{{- range .Files}}
 					<div>
@@ -145,7 +146,6 @@
 				</div>
 				</div>
 			</fieldset>
-			{{- end}}
 
 			{{- if .Organizations}}
 
