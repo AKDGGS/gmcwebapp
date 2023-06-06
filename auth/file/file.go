@@ -96,7 +96,7 @@ func (pw *PasswordFile) readSource() error {
 		// Don't throw an error if the file doesn't exist,
 		// just don't load any users.
 		if errors.Is(err, os.ErrNotExist) {
-			fmt.Printf("WARNING: password file (%s) not found", pw.path)
+			fmt.Printf("WARNING: password file (%s) not found.\n", pw.path)
 			return nil
 		}
 		return err
