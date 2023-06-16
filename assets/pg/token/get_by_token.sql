@@ -1,3 +1,3 @@
 SELECT token_id as id, description
-	FROM token
-	WHERE token = $1
+FROM token
+WHERE token = $1
