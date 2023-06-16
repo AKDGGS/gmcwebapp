@@ -68,7 +68,7 @@ func (auths *Auths) CheckRequest(w http.ResponseWriter, r *http.Request) (*authu
 
 	// If the user can't be authenticate with a secure cookie,
 	// try to autenticate the request with a token
-	tk := r.Header.Get("Gmc-Token")
+	tk := r.Header.Get("GMC-Token")
 	user, err := auths.Check("", tk)
 	if err != nil {
 		return nil, err
