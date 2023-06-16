@@ -51,7 +51,6 @@ func (auths *Auths) CheckRequest(w http.ResponseWriter, r *http.Request) (*authu
 	if err != nil {
 		return nil, err
 	}
-
 	uj, err := cookie.GetValue(nil, r)
 	if err == nil {
 		user, err := authu.UnmarshalUser(uj)
@@ -65,6 +64,18 @@ func (auths *Auths) CheckRequest(w http.ResponseWriter, r *http.Request) (*authu
 			cookie.SetValue(w, uj)
 			return user, nil
 		}
+	}
+
+	// If the user can't be authenticate with a secure cookie,
+	// try to autenticate the request with a token
+	tk := r.Header.Get("Gmc-Token")
+	user, err := auths.Check("", tk)
+	if err != nil {
+		return nil, err
+	}
+
+	if user != nil {
+		return user, nil
 	}
 
 	return nil, nil

@@ -4,6 +4,7 @@ import (
 	"fmt"
 
 	"gmc/auth/file"
+	"gmc/auth/token"
 	authu "gmc/auth/util"
 	"gmc/config"
 )
@@ -23,6 +24,11 @@ func NewAuth(cfg config.AuthConfig) (Auth, error) {
 	switch cfg.Type {
 	case "file":
 		auth, err = file.New(cfg.Attrs)
+		if err != nil {
+			return nil, err
+		}
+	case "token":
+		auth, err = token.New(cfg.Attrs)
 		if err != nil {
 			return nil, err
 		}

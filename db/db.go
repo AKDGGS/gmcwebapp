@@ -46,6 +46,8 @@ type DB interface {
 	CreateToken(token *model.Token) error
 	// Removes a token
 	DeleteToken(id int) error
+	// Check token validity
+	CheckToken(t string) (*model.Token, error)
 
 	// Lists available keywords
 	ListKeywords() ([]string, error)

@@ -9,7 +9,7 @@ import (
 const dict = "ABCDEFGHIJKLMNOPQRSTUVWXYZ123456789$%*+-./:"
 
 type Token struct {
-	ID          int
+	ID          int32
 	Token       string
 	Description string
 }
