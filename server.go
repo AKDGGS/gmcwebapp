@@ -20,7 +20,7 @@ func serverCommand(cfg *config.Config, exec string) {
 		os.Exit(1)
 	}
 
-	auths, err := auth.NewAuths(cfg.SessionKeyBytes(), cfg.MaxAge, cfg.Auths)
+	auths, err := auth.NewAuths(cfg.SessionKeyBytes(), cfg.MaxAge, cfg.Auths, db)
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "%s: %s\n", exec, err.Error())
 		os.Exit(1)

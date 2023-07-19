@@ -7,6 +7,7 @@ import (
 	"gmc/auth/token"
 	authu "gmc/auth/util"
 	"gmc/config"
+	"gmc/db"
 )
 
 type Auth interface {
@@ -18,7 +19,7 @@ type Auth interface {
 	Check(string, string) (*authu.User, error)
 }
 
-func NewAuth(cfg config.AuthConfig) (Auth, error) {
+func NewAuth(cfg config.AuthConfig, db db.DB) (Auth, error) {
 	var auth Auth
 	var err error
 	switch cfg.Type {
@@ -28,7 +29,7 @@ func NewAuth(cfg config.AuthConfig) (Auth, error) {
 			return nil, err
 		}
 	case "token":
-		auth, err = token.New(cfg.Attrs)
+		auth, err = token.New(cfg.Attrs, db)
 		if err != nil {
 			return nil, err
 		}
@@ -46,7 +47,7 @@ type Auths struct {
 	auths  []Auth
 }
 
-func NewAuths(key []byte, maxage int, cfgs []config.AuthConfig) (*Auths, error) {
+func NewAuths(key []byte, maxage int, cfgs []config.AuthConfig, db db.DB) (*Auths, error) {
 	auths := &Auths{
 		key: key, maxage: maxage,
 		auths: make([]Auth, len(cfgs)),
@@ -54,11 +55,12 @@ func NewAuths(key []byte, maxage int, cfgs []config.AuthConfig) (*Auths, error) 
 
 	var err error
 	for i, v := range cfgs {
-		auths.auths[i], err = NewAuth(v)
+		auths.auths[i], err = NewAuth(v, db)
 		if err != nil {
 			return nil, err
 		}
 	}
+
 	return auths, nil
 }
 

@@ -1,45 +1,37 @@
 package token
 
 import (
-	"fmt"
-	"os"
-
 	authu "gmc/auth/util"
 	"gmc/db"
 )
 
-type TokenAuth struct {
+type DatabaseTokenAuth struct {
 	name  string
 	path  string
 	users map[string]*authu.User
+	db    db.DB
 }
 
-func New(cfg map[string]interface{}) (*TokenAuth, error) {
+func New(cfg map[string]interface{}, db db.DB) (*DatabaseTokenAuth, error) {
 	name, ok := cfg["name"].(string)
 	if !ok {
 		name = "token"
 	}
-	path := cfg["path"].(string)
 
-	a := &TokenAuth{
+	a := &DatabaseTokenAuth{
 		name:  name,
-		path:  path,
 		users: make(map[string]*authu.User),
+		db:    db,
 	}
 	return a, nil
 }
 
-func (a *TokenAuth) Name() string {
+func (a *DatabaseTokenAuth) Name() string {
 	return a.name
 }
 
-func (a *TokenAuth) Check(u string, p string) (*authu.User, error) {
-	db, err := db.New(a.path)
-	if err != nil {
-		fmt.Fprintf(os.Stderr, "%s\n", err.Error())
-		os.Exit(1)
-	}
-	t, err := db.CheckToken(p)
+func (a *DatabaseTokenAuth) Check(u string, p string) (*authu.User, error) {
+	t, err := a.db.CheckToken(p)
 	if err == nil {
 		return &authu.User{Username: t.Description, Password: []byte(p)}, nil
 	}
