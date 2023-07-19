@@ -30,7 +30,7 @@ func (a *DatabaseTokenAuth) Name() string {
 func (a *DatabaseTokenAuth) Check(u string, p string) (*authu.User, error) {
 	t, err := a.db.CheckToken(p)
 	if err == nil {
-		return &authu.User{Username: t.Description, Password: nil}, nil
+		return &authu.User{Username: t.Description}, nil
 	}
 	return nil, nil
 }
