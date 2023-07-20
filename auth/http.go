@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"net/http"
 	"regexp"
+	"strings"
 
 	"gmc/assets"
 	"gmc/auth/securecookie"
@@ -68,33 +69,30 @@ func (auths *Auths) CheckRequest(w http.ResponseWriter, r *http.Request) (*authu
 	}
 
 	if user == nil {
-		// If the user can't be authenticate with a secure cookie, and
-		// no username and password were provided,
-		// try to autenticate the request with a token
-		if tk := r.Header.Get("GMC-Token"); tk != "" {
-			user, err = auths.Check("", tk)
-			if err != nil {
-				return nil, err
+		if authorization := r.Header.Get("Authorization"); authorization != "" {
+			// If the user can't be authenticate with a secure cookie,
+			// try to autenticate the request with a token
+			if strings.HasPrefix(authorization, "Token ") {
+				tk := strings.TrimPrefix(authorization, "Token ")
+				user, err = auths.Check("", tk)
+				if err != nil {
+					return nil, err
+				}
+			} else {
+				// if there is no secure cookie and no token,
+				// check for an authorization header in the request
+				username, password, ok := r.BasicAuth()
+				if ok {
+					user, err = auths.Check(username, password)
+					if err != nil {
+						return nil, err
+					}
+				}
 			}
 		}
 
 		if user != nil {
 			return user, nil
-		}
-	}
-
-	// if there is no secure cookie,
-	// check for an authorization header in the request
-	if authorization := r.Header.Get("Authorization"); authorization != "" {
-		username, password, ok := r.BasicAuth()
-		if ok {
-			user, err = auths.Check(username, password)
-			if err != nil {
-				return nil, err
-			}
-			if user != nil {
-				return user, nil
-			}
 		}
 	}
 
