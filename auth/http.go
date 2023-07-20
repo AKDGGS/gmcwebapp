@@ -40,6 +40,7 @@ func (auths *Auths) Logout(w http.ResponseWriter, r *http.Request) error {
 }
 
 func (auths *Auths) CheckRequest(w http.ResponseWriter, r *http.Request) (*authu.User, error) {
+	var user *authu.User
 	// Try to authenticate the user with a secure cookie
 	cookie, err := securecookie.New(
 		"gmc-session", auths.key,
@@ -66,35 +67,35 @@ func (auths *Auths) CheckRequest(w http.ResponseWriter, r *http.Request) (*authu
 		}
 	}
 
+	if user == nil {
+		// If the user can't be authenticate with a secure cookie, and
+		// no username and password were provided,
+		// try to autenticate the request with a token
+		if tk := r.Header.Get("GMC-Token"); tk != "" {
+			user, err = auths.Check("", tk)
+			if err != nil {
+				return nil, err
+			}
+		}
+
+		if user != nil {
+			return user, nil
+		}
+	}
+
 	// if there is no secure cookie,
 	// check for an authorization header in the request
-	authorization := r.Header.Get("Authorization")
-	if authorization != "" {
+	if authorization := r.Header.Get("Authorization"); authorization != "" {
 		username, password, ok := r.BasicAuth()
 		if ok {
-			user, err := auths.Check(username, password)
+			user, err = auths.Check(username, password)
 			if err != nil {
 				return nil, err
 			}
 			if user != nil {
 				return user, nil
-			} else {
-				return nil, nil
 			}
 		}
-	}
-
-	// If the user can't be authenticate with a secure cookie, and
-	// no username and password were provided,
-	// try to autenticate the request with a token
-	tk := r.Header.Get("GMC-Token")
-	user, err := auths.Check("", tk)
-	if err != nil {
-		return nil, err
-	}
-
-	if user != nil {
-		return user, nil
 	}
 
 	return nil, nil
