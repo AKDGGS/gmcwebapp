@@ -73,9 +73,6 @@ func (pw *PasswordFile) Name() string {
 }
 
 func (pw *PasswordFile) Check(u string, p string) (*authu.User, error) {
-	if u == "" || p == "" {
-		return nil, nil
-	}
 	un, exists := pw.users[u]
 	if !exists {
 		return nil, nil
