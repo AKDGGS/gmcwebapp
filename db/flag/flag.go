@@ -24,9 +24,6 @@ const (
 	TRACKING
 	PROSPECT
 	SHOTPOINT
-	COLLECTION
-	CONTAINER
-	COREDIAMETER
 )
 
 // Option for everything
