@@ -301,6 +301,14 @@ func rowToStruct(r pgx.Rows, a interface{}) int {
 									rv.Field(j).Set(reflect.ValueOf(nf))
 								}
 							} else {
+								if rv.Field(j).Kind() == reflect.Struct {
+
+									for k := 0; k < rv.Field(j).NumField(); k++ {
+										if reflect.TypeOf(nf) == rv.Field(j).Field(k).Type() {
+											rv.Field(j).Field(k).Set(reflect.ValueOf(nf))
+										}
+									}
+								}
 								if reflect.TypeOf(nf) == rv.Field(j).Type() {
 									rv.Field(j).Set(reflect.ValueOf(nf))
 								}
