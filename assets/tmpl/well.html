@@ -165,7 +165,7 @@
 				<legend>Operators</legend>
 				<table class="tb-fields tb-columns">
 					<tbody>
-						{{- range $i, $f := .Organizations}}
+						{{- range $i, $o := .Organizations}}
 						{{- if eq $i 0}}
 						<tr>
 							<th>Current Operator</th>
@@ -178,8 +178,8 @@
 						</tr>
 						{{- end}}
 						<tr>
-							<td>{{.Name}}</td>
-							<td>{{.Type}}</td>
+							<td>{{$o.Name}}</td>
+							<td>{{$o.Type}}</td>
 						</tr>
 						{{- end}}
 					</tbody>
