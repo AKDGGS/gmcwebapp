@@ -10,10 +10,10 @@
 						</tr>
 						{{- end}}
 						{{- if $.user}}
-						{{- if .ContainerPathCache}}
+						{{- if .Container.PathCache}}
 						<tr>
 							<th>Location</th>
-							<td>{{.ContainerPathCache}}</td>
+							<td>{{.Container.PathCache}}</td>
 						</tr>
 						{{- end}}
 						{{- if .Barcode}}
@@ -59,11 +59,11 @@
 							<td>{{.PublishedSampleNumber}}{{- if .PublishedNumberHasSuffix}} Has Suffix{{else}} No Suffix{{- end}}</td>
 						</tr>
 						{{- end}}
-						{{- if .CollectionName}}
-						<tr>
-							<th>Collection</th>
-							<td>{{.CollectionName}}</td>
-						</tr>
+						{{- if .Collection}}
+			        <tr>
+			            <th>Collection</th>
+			            <td>{{.Collection.Name}}</td>
+			        </tr>
 						{{- end}}
 						{{- if .StateNumber }}
 						<tr>
@@ -122,17 +122,17 @@
 						{{- if .CoreDiameter}}
 						<tr>
 							<th>Core Diameter</th>
-							<td>{{.CoreDiameter}} {{.CoreDiameterUnit}}
-								{{- if .CoreDiameterName}} ({{.CoreDiameterName}}){{- end}}</td>
+							<td>{{.CoreDiameter.CoreDiameter}} {{.CoreDiameter.Unit}}
+								{{- if .CoreDiameter.Name}} ({{.CoreDiameter.Name}}){{- end}}</td>
 						</tr>
 						{{- end}}
-						{{- if .IntervalTop}}
+						{{- if ne .IntervalTop nil}}
 						<tr>
 							<th>Interval Top</th>
 							<td>{{.IntervalTop}} {{.IntervalUnit}}</td>
 						</tr>
 						{{- end}}
-						{{- if .IntervalBottom}}
+						{{- if ne .IntervalBottom nil}}
 						<tr>
 							<th>Interval Bottom</th>
 							<td>{{.IntervalBottom}} {{.IntervalUnit}}</td>

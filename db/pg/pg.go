@@ -215,17 +215,17 @@ func rowToStruct(r pgx.Rows, a interface{}) int {
 			columnValues, _ := r.Values()
 			for i, val := range columnValues {
 				fieldName := string(r.FieldDescriptions()[i].Name)
+				var parent string
+				if strings.Contains(fieldName, ".") {
+					index := strings.Index(fieldName[:], ".")
+					parent = fieldName[:index]
+					if index+1 < len(fieldName) {
+						fieldName = fieldName[index+1:]
+					}
+				}
 				for j := 0; j < rv.NumField(); j++ {
 					if !strings.EqualFold(fieldName, rv.Type().Field(j).Name) {
 						if rv.Field(j).Kind() == reflect.Struct {
-							var parent string
-							if strings.Contains(fieldName, ".") {
-								index := strings.Index(fieldName[:], ".")
-								parent = fieldName[:index]
-								if index+1 < len(fieldName) {
-									fieldName = fieldName[index+1:]
-								}
-							}
 							for k := 0; k < rv.Field(j).NumField(); k++ {
 								if !strings.EqualFold(parent, rv.Type().Field(j).Name) {
 									continue
@@ -233,6 +233,7 @@ func rowToStruct(r pgx.Rows, a interface{}) int {
 								if !strings.EqualFold(fieldName, rv.Field(j).Type().Field(k).Name) {
 									continue
 								}
+
 								if reflect.TypeOf(val) == rv.Field(j).Type().Field(k).Type {
 									rv.Field(j).Field(k).Set(reflect.ValueOf(val))
 								}

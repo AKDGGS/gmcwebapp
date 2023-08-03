@@ -1,6 +1,6 @@
 SELECT p.prospect_id AS "prospect.id",
 	p.name AS "prospect.name",
-	p.alt_names AS "prospect.altProspectNames",
+	p.alt_names AS "prospect.altNames",
 	p.ardf_number AS "prospect.ARDFNumber",
 	b.borehole_id AS id,
 	b.name,

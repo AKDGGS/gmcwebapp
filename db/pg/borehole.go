@@ -23,17 +23,6 @@ func (pg *Postgres) GetBorehole(id int, flags int) (*model.Borehole, error) {
 	if rowToStruct(rows, &borehole) == 0 {
 		return nil, nil
 	}
-	if (flags & dbf.PROSPECT) != 0 {
-		q, err = assets.ReadString("pg/prospect/by_borehole_id.sql")
-		if err != nil {
-			return nil, err
-		}
-		r, err := pg.pool.Query(context.Background(), q, id)
-		if err != nil {
-			return nil, err
-		}
-		rowToStruct(r, &borehole.Prospect)
-	}
 
 	if (flags & dbf.FILES) != 0 {
 		q, err = assets.ReadString("pg/file/by_borehole_id.sql")

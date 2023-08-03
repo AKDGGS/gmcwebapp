@@ -6,81 +6,74 @@ import (
 )
 
 type Inventory struct {
-	ID                    int32  `json:"id"`
-	ContainerPathCache    string `json:"container_path_cache"`
-	Barcode               string `json:"barcode"`
-	AltBarcode            string `json:"alt_barcode"`
-	CollectionID          int32  `json:"collection_id"`
-	CollectionName        string `json:"collection_name"`
-	CollectionDescription string `json:"collection_description"`
+	ID           int32      `json:"id"`
+	Barcode      string     `json:"barcode,omitempty"`
+	AltBarcode   string     `json:"alt_barcode,omitempty"`
+	CollectionID int32      `json:"collection_id,omitempty"`
+	Collection   Collection `json:"collection,omitempty"`
 
-	ContainerID         int32  `json:"container_id"`
-	ContainerName       string `json:"container_name"`
-	ContainerRemark     string `json:"container_remark"`
-	ContainerBarcode    string `json:"container_barcode"`
-	ContainerAltBarcode string `json:"container_alt_barcode"`
+	ContainerID int32     `json:"container_id,omitempty"`
+	Container   Container `json:"container,omitempty"`
 
-	SampleID                 int64    `json:"dggs_sample_id"`
-	SampleNumber             string   `json:"sample_number"`
-	SampleNumberPrefix       string   `json:"sample_number_prefix"`
-	AltSampleNumber          string   `json:"alt_sample_number"`
-	PublishedSampleNumber    string   `json:"published_sample_number"`
-	PublishedNumberHasSuffix bool     `json:"published_number_has_suffix"`
-	StateNumber              string   `json:"state_number"`
-	BoxNumber                string   `json:"box_number"`
-	SetNumber                string   `json:"set_number"`
-	SplitNumber              string   `json:"split_number"`
-	SlideNumber              string   `json:"slide_number"`
-	SlipNumber               int32    `json:"slip_number"`
-	LabNumber                string   `json:"lab_number"`
-	LabReportID              string   `json:"lab_report_id"`
-	MapNumber                string   `json:"map_number"`
-	Description              string   `json:"description"`
-	Remark                   string   `json:"remark"`
-	Tray                     int16    `json:"tray"`
+	SampleID                 int64    `json:"dggs_sample_id,omitempty"`
+	SampleNumber             string   `json:"sample_number,omitempty"`
+	SampleNumberPrefix       string   `json:"sample_number_prefix,omitempty"`
+	AltSampleNumber          string   `json:"alt_sample_number,omitempty"`
+	PublishedSampleNumber    string   `json:"published_sample_number,omitempty"`
+	PublishedNumberHasSuffix bool     `json:"published_number_has_suffix,omitempty"`
+	StateNumber              string   `json:"state_number,omitempty"`
+	BoxNumber                string   `json:"box_number,omitempty"`
+	SetNumber                string   `json:"set_number,omitempty"`
+	SplitNumber              string   `json:"split_number,omitempty"`
+	SlideNumber              string   `json:"slide_number,omitempty"`
+	SlipNumber               int32    `json:"slip_number,omitempty"`
+	LabNumber                string   `json:"lab_number,omitempty"`
+	LabReportID              string   `json:"lab_report_id,omitempty"`
+	MapNumber                string   `json:"map_number,omitempty"`
+	Description              string   `json:"description,omitempty"`
+	Remark                   string   `json:"remark,omitempty"`
+	Tray                     int16    `json:"tray,omitempty"`
 	IntervalTop              float64  `json:"interval_top"`
-	IntervalBottom           float64  `json:"interval_bottom"`
-	Keywords                 []string `json:"keywords"`
-	IntervalUnit             string   `json:"interval_unit"`
-	CoreNumber               string   `json:"core_number"`
+	IntervalBottom           float64  `json:"interval_bottom,omitempty"`
+	Keywords                 []string `json:"keywords,omitempty"`
+	IntervalUnit             string   `json:"interval_unit,omitempty"`
+	CoreNumber               string   `json:"core_number,omitempty"`
 
-	CoreDiameterId   int32   `json:"core_diameter_id"`
-	CoreDiameterName string  `json:"core_diameter_name"`
-	CoreDiameter     float64 `json:"core_diameter"`
-	CoreDiameterUnit string  `json:"core_diameter_unit"`
+	CoreDiameterID int32        `json:"core_diameter_id,omitempty"`
+	CoreDiameter   CoreDiameter `json:"core_diameter,omitempty"`
 
-	Weight          float64                `json:"weight"`
-	WeightUnit      string                 `json:"weight_unit"`
-	SampleFrequency string                 `json:"sample_frequency"`
-	Recovery        string                 `json:"recovery"`
-	CanPublish      bool                   `json:"can_publish"`
-	RadiationMSVH   float32                `json:"radiation_msvh"`
-	ReceivedDate    *time.Time             `json:"received_date"`
-	EnteredDate     *time.Time             `json:"entered_date"`
-	ModifiedDate    *time.Time             `json:"modified_date"`
-	ModifiedUser    string                 `json:"modified_user"`
-	Active          bool                   `json:"active"`
-	Stash           map[string]interface{} `json:"stash"`
-	GeoJSON         map[string]interface{} `json:"geojson"`
-	Boreholes       []Borehole             `json:"boreholes"`
-	Outcrops        []Outcrop              `json:"outcrops"`
-	Shotlines       []Shotline             `json:"shotlines"`
-	Wells           []Well                 `json:"wells"`
-	Organizations   []Organization         `json:"organizations"`
-	Notes           []Note                 `json:"notes"`
-	URLs            []URL                  `json:"urls"`
-	Files           []File                 `json:"files"`
-	Publications    []Publication          `json:"publications"`
-	ContainerLog    []ContainerLog         `json:"container_log"`
-	Qualities       []Qualities            `json:"qualities"`
+	Weight          float64                `json:"weight,omitempty"`
+	WeightUnit      string                 `json:"weight_unit,omitempty"`
+	SampleFrequency string                 `json:"sample_frequency,omitempty"`
+	Recovery        string                 `json:"recovery,omitempty"`
+	CanPublish      bool                   `json:"can_publish,omitempty"`
+	RadiationMSVH   float32                `json:"radiation_msvh,omitempty"`
+	ReceivedDate    *time.Time             `json:"received_date,omitempty"`
+	EnteredDate     *time.Time             `json:"entered_date,omitempty"`
+	ModifiedDate    *time.Time             `json:"modified_date,omitempty"`
+	ModifiedUser    string                 `json:"modified_user,omitempty"`
+	Active          bool                   `json:"active,omitempty"`
+	Stash           map[string]interface{} `json:"stash,omitempty"`
+	GeoJSON         map[string]interface{} `json:"geojson,omitempty"`
+	Boreholes       []Borehole             `json:"boreholes,omitempty"`
+	Outcrops        []Outcrop              `json:"outcrops,omitempty"`
+	Shotlines       []Shotline             `json:"shotlines,omitempty"`
+	Wells           []Well                 `json:"wells,omitempty"`
+	Organizations   []Organization         `json:"organizations,omitempty"`
+	Notes           []Note                 `json:"notes,omitempty"`
+	URLs            []URL                  `json:"urls,omitempty"`
+	Files           []File                 `json:"files,omitempty"`
+	Publications    []Publication          `json:"publications,omitempty"`
+	ContainerLog    []ContainerLog         `json:"container_log,omitempty"`
+	Qualities       []Qualities            `json:"qualities,omitempty"`
 }
 
 func (i *Inventory) MarshalJSON() ([]byte, error) {
 	type Alias Inventory
 	return json.Marshal(&struct {
-		ReceivedDate string `json:"received_date"`
-		EnteredDate  string `json:"entered_date"`
-		ModifiedDate string `json:"modified_date"`
+		ReceivedDate string `json:"received_date,omitempty"`
+		EnteredDate  string `json:"entered_date,omitempty"`
+		ModifiedDate string `json:"modified_date,omitempty"`
 		*Alias
 	}{
 		ReceivedDate: i.ReceivedDate.Format("01-02-2006"),
