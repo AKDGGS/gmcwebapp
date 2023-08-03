@@ -161,31 +161,31 @@
 			</fieldset>
 			{{- if .Organizations}}
 
-			<fieldset>
-				<legend>Operators</legend>
-				<table class="tb-fields tb-columns">
-					<tbody>
-						{{- range $i, $o := .Organizations}}
-						{{- if eq $i 0}}
-						<tr>
-							<th>Current Operator</th>
-							<th>Type</th>
-						</tr>
-							{{- else if eq $i 1}}
-						<tr class="tb-spacer-sm">
-							<th>Previous Operator(s)</th>
-							<th>Type</th>
-						</tr>
-						{{- end}}
-						<tr>
-							<td>{{$o.Name}}</td>
-							<td>{{$o.Type}}</td>
-						</tr>
-						{{- end}}
-					</tbody>
-				</table>
-			</fieldset>
+<fieldset>
+	<legend>Operators</legend>
+	<table class="tb-fields tb-columns">
+		<tbody>
+			{{- range $i, $f := .Organizations}}
+			{{- if eq $i 0}}
+			<tr>
+				<th>Current Operator</th>
+				<th>Type</th>
+			</tr>
+				{{- else if eq $i 1}}
+			<tr class="tb-spacer-sm">
+				<th>Previous Operator(s)</th>
+				<th>Type</th>
+			</tr>
 			{{- end}}
+			<tr>
+				<td>{{.Name}}</td>
+				<td>{{.Type}}</td>
+			</tr>
+			{{- end}}
+		</tbody>
+	</table>
+</fieldset>
+{{- end}}
 			{{- if .URLs}}
 
 			<fieldset>
