@@ -233,7 +233,6 @@ func rowToStruct(r pgx.Rows, a interface{}) int {
 								if !strings.EqualFold(fieldName, rv.Field(j).Type().Field(k).Name) {
 									continue
 								}
-
 								if reflect.TypeOf(val) == rv.Field(j).Type().Field(k).Type {
 									rv.Field(j).Field(k).Set(reflect.ValueOf(val))
 								}
@@ -291,7 +290,6 @@ func rowToStruct(r pgx.Rows, a interface{}) int {
 							n := val.(pgtype.Numeric)
 							var nf float64
 							n.AssignTo(&nf)
-
 							var ni int64
 							err := n.AssignTo(&ni)
 							if err == nil && float64(ni) == nf {
@@ -302,7 +300,6 @@ func rowToStruct(r pgx.Rows, a interface{}) int {
 								}
 							} else {
 								if rv.Field(j).Kind() == reflect.Struct {
-
 									for k := 0; k < rv.Field(j).NumField(); k++ {
 										if reflect.TypeOf(nf) == rv.Field(j).Field(k).Type() {
 											rv.Field(j).Field(k).Set(reflect.ValueOf(nf))
@@ -320,7 +317,7 @@ func rowToStruct(r pgx.Rows, a interface{}) int {
 								rv.Field(j).Set(reflect.ValueOf(&t))
 							}
 						default:
-							if reflect.TypeOf(val) == rv.Field(j).Type() {
+							if reflect.TypeOf(val) == rv.Field(j).Type() && strings.EqualFold(fieldName, string(r.FieldDescriptions()[i].Name)) {
 								rv.Field(j).Set(reflect.ValueOf(val))
 							}
 						}
