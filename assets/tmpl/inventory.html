@@ -1,4 +1,5 @@
 {{with .inventory }}
+			{{- $intervalUnit := .IntervalUnit}}
 			<fieldset class="fs-detail inventory_boxes">
 				<legend>Inventory Detail</legend>
 				<table class="tb-fields">
@@ -59,7 +60,7 @@
 							<td>{{.PublishedSampleNumber}}{{- if .PublishedNumberHasSuffix}} Has Suffix{{else}} No Suffix{{- end}}</td>
 						</tr>
 						{{- end}}
-						{{- if .Collection}}
+						{{- if .Collection.Name}}
 			        <tr>
 			            <th>Collection</th>
 			            <td>{{.Collection.Name}}</td>
@@ -119,23 +120,23 @@
 							<td>{{.CoreNumber}}</td>
 						</tr>
 						{{- end}}
-						{{- if .CoreDiameter}}
+						{{- if and .CoreDiameter .CoreDiameter.CoreDiameter}}
 						<tr>
 							<th>Core Diameter</th>
 							<td>{{.CoreDiameter.CoreDiameter}} {{.CoreDiameter.Unit}}
 								{{- if .CoreDiameter.Name}} ({{.CoreDiameter.Name}}){{- end}}</td>
 						</tr>
 						{{- end}}
-						{{- if ne .IntervalTop nil}}
+						{{- with .IntervalTop}}
 						<tr>
 							<th>Interval Top</th>
-							<td>{{.IntervalTop}} {{.IntervalUnit}}</td>
+							<td>{{.}} {{$intervalUnit}}</td>
 						</tr>
 						{{- end}}
-						{{- if ne .IntervalBottom nil}}
+						{{- with .IntervalBottom}}
 						<tr>
 							<th>Interval Bottom</th>
-							<td>{{.IntervalBottom}} {{.IntervalUnit}}</td>
+							<td>{{.}} {{$intervalUnit}}</td>
 						</tr>
 						{{- end}}
 						{{- if .Description}}
