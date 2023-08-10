@@ -1,6 +1,6 @@
 package model
 
 type MiningDistricts struct {
-	ID   int32  `json:"file_id"`
-	Name string `json:"name"`
+	ID   int32  `json:"file_id,omitempty"`
+	Name string `json:"name,omitempty"`
 }

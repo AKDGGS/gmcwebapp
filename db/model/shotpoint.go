@@ -1,8 +1,8 @@
 package model
 
 type Shotpoint struct {
-	ShotpointID int32                  `json:"shotpoint_id"`
-	ID          int32                  `json:"shotline_id"`
-	Number      float64                `json:"shotpoint_number"`
-	Stash       map[string]interface{} `json:"stash"`
+	ID         int32    `json:"shotpoint_id,omitempty"`
+	Number     float64  `json:"shotpoint_number,omitempty"`
+	ShotlineID int32    `json:"shotline_id,omitempty"`
+	Shotline   Shotline `json:"shotline,omitempty"`
 }

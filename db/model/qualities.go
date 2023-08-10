@@ -6,11 +6,11 @@ import (
 )
 
 type Qualities struct {
-	ID       int32      `json:"inventory_quality_id"`
-	Remark   string     `json:"remark"`
-	Date     *time.Time `json:"check_date"`
-	Username string     `json:"username"`
-	Issues   []string   `json:"issues"`
+	ID       int32      `json:"inventory_quality_id,omitempty"`
+	Remark   string     `json:"remark,omitempty"`
+	Date     *time.Time `json:"check_date,omitempty"`
+	Username string     `json:"username,omitempty"`
+	Issues   []string   `json:"issues,omitempty"`
 }
 
 func (q *Qualities) MarshalJSON() ([]byte, error) {

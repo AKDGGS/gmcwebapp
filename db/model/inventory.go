@@ -20,7 +20,7 @@ type Inventory struct {
 	SampleNumberPrefix       string   `json:"sample_number_prefix,omitempty"`
 	AltSampleNumber          string   `json:"alt_sample_number,omitempty"`
 	PublishedSampleNumber    string   `json:"published_sample_number,omitempty"`
-	PublishedNumberHasSuffix bool     `json:"published_number_has_suffix,omitempty"`
+	PublishedNumberHasSuffix bool     `json:"published_number_has_suffix"`
 	StateNumber              string   `json:"state_number,omitempty"`
 	BoxNumber                string   `json:"box_number,omitempty"`
 	SetNumber                string   `json:"set_number,omitempty"`
@@ -46,18 +46,18 @@ type Inventory struct {
 	WeightUnit      string                 `json:"weight_unit,omitempty"`
 	SampleFrequency string                 `json:"sample_frequency,omitempty"`
 	Recovery        string                 `json:"recovery,omitempty"`
-	CanPublish      bool                   `json:"can_publish,omitempty"`
+	CanPublish      bool                   `json:"can_publish"`
 	RadiationMSVH   float32                `json:"radiation_msvh,omitempty"`
 	ReceivedDate    *time.Time             `json:"received_date,omitempty"`
 	EnteredDate     *time.Time             `json:"entered_date,omitempty"`
 	ModifiedDate    *time.Time             `json:"modified_date,omitempty"`
 	ModifiedUser    string                 `json:"modified_user,omitempty"`
-	Active          bool                   `json:"active,omitempty"`
+	Active          bool                   `json:"active"`
 	Stash           map[string]interface{} `json:"stash,omitempty"`
 	GeoJSON         map[string]interface{} `json:"geojson,omitempty"`
 	Boreholes       []Borehole             `json:"boreholes,omitempty"`
 	Outcrops        []Outcrop              `json:"outcrops,omitempty"`
-	Shotlines       []Shotline             `json:"shotlines,omitempty"`
+	Shotpoints      []Shotpoint            `json:"shotpoints,omitempty"`
 	Wells           []Well                 `json:"wells,omitempty"`
 	Organizations   []Organization         `json:"organizations,omitempty"`
 	Notes           []Note                 `json:"notes,omitempty"`
@@ -70,15 +70,27 @@ type Inventory struct {
 
 func (i *Inventory) MarshalJSON() ([]byte, error) {
 	type Alias Inventory
+	receivedDate := ""
+	if i.ReceivedDate != nil {
+		receivedDate = i.ReceivedDate.Format("01-02-2006")
+	}
+	enteredDate := ""
+	if i.EnteredDate != nil {
+		enteredDate = i.EnteredDate.Format("01-02-2006")
+	}
+	modifiedDate := ""
+	if i.ModifiedDate != nil {
+		modifiedDate = i.ModifiedDate.Format("01-02-2006")
+	}
 	return json.Marshal(&struct {
 		ReceivedDate string `json:"received_date,omitempty"`
 		EnteredDate  string `json:"entered_date,omitempty"`
 		ModifiedDate string `json:"modified_date,omitempty"`
 		*Alias
 	}{
-		ReceivedDate: i.ReceivedDate.Format("01-02-2006"),
-		EnteredDate:  i.EnteredDate.Format("01-02-2006"),
-		ModifiedDate: i.ModifiedDate.Format("01-02-2006"),
+		ReceivedDate: receivedDate,
+		EnteredDate:  enteredDate,
+		ModifiedDate: modifiedDate,
 		Alias:        (*Alias)(i),
 	})
 }
