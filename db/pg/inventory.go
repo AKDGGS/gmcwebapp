@@ -111,7 +111,7 @@ func (pg *Postgres) GetInventory(id int, flags int) (*model.Inventory, error) {
 			return nil, err
 		}
 		defer rows.Close()
-		rowToStruct(rows, &inventory.Shotlines)
+		rowToStruct(rows, &inventory.Shotpoints)
 	}
 
 	if (flags & dbf.WELL) != 0 {
@@ -128,7 +128,6 @@ func (pg *Postgres) GetInventory(id int, flags int) (*model.Inventory, error) {
 	}
 
 	if (flags & dbf.QUALITY) != 0 {
-
 		q, err := assets.ReadString("pg/quality/by_inventory_id.sql")
 		if err != nil {
 			return nil, err
@@ -164,4 +163,88 @@ func (pg *Postgres) GetInventory(id int, flags int) (*model.Inventory, error) {
 		}
 	}
 	return &inventory, nil
+}
+
+func (pg *Postgres) GetInventoryByBarcode(barcode string, flags int) ([]model.Inventory, error) {
+	q, err := assets.ReadString("pg/inventory/by_barcode.sql")
+	if err != nil {
+		return nil, err
+	}
+	rows, err := pg.pool.Query(context.Background(), q, barcode)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	inventory := []model.Inventory{}
+
+	if rowToStruct(rows, &inventory) == 0 {
+		return nil, nil
+	}
+
+	for i := 0; i < len(inventory); i++ {
+		if (flags & dbf.BOREHOLE) != 0 {
+			q, err := assets.ReadString("pg/borehole/by_inventory_id.sql")
+			if err != nil {
+				return nil, err
+			}
+			rows, err := pg.pool.Query(context.Background(), q, inventory[i].ID)
+			if err != nil {
+				return nil, err
+			}
+			defer rows.Close()
+			rowToStruct(rows, &inventory[i].Boreholes)
+		}
+
+		if (flags & dbf.OUTCROP) != 0 {
+			q, err := assets.ReadString("pg/outcrop/by_inventory_id.sql")
+			if err != nil {
+				return nil, err
+			}
+			rows, err := pg.pool.Query(context.Background(), q, inventory[i].ID)
+			if err != nil {
+				return nil, err
+			}
+			defer rows.Close()
+			rowToStruct(rows, &inventory[i].Outcrops)
+		}
+
+		if (flags & dbf.SHOTPOINT) != 0 {
+			q, err := assets.ReadString("pg/shotline/by_inventory_id.sql")
+			if err != nil {
+				return nil, err
+			}
+			rows, err := pg.pool.Query(context.Background(), q, inventory[i].ID)
+			if err != nil {
+				return nil, err
+			}
+			defer rows.Close()
+			rowToStruct(rows, &inventory[i].Shotpoints)
+		}
+
+		if (flags & dbf.WELL) != 0 {
+			q, err := assets.ReadString("pg/well/by_inventory_id.sql")
+			if err != nil {
+				return nil, err
+			}
+			rows, err := pg.pool.Query(context.Background(), q, inventory[i].ID)
+			if err != nil {
+				return nil, err
+			}
+			defer rows.Close()
+			rowToStruct(rows, &inventory[i].Wells)
+		}
+		if (flags & dbf.QUALITY) != 0 {
+			q, err := assets.ReadString("pg/quality/by_inventory_id.sql")
+			if err != nil {
+				return nil, err
+			}
+			rows, err := pg.pool.Query(context.Background(), q, inventory[i].ID)
+			if err != nil {
+				return nil, err
+			}
+			defer rows.Close()
+			rowToStruct(rows, &inventory[i].Qualities)
+		}
+	}
+	return inventory, nil
 }

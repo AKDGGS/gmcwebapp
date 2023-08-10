@@ -28,6 +28,9 @@ type DB interface {
 	// Fetches the complete details for an Inventory
 	GetInventory(id int, flags int) (*model.Inventory, error)
 
+	// // Fetches the complete details for an Inventory by barcode
+	GetInventoryByBarcode(barcode string, flags int) ([]model.Inventory, error)
+
 	// Fetches stash for a specific inventory id
 	GetStash(id int) (map[string]interface{}, error)
 

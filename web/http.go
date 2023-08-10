@@ -112,6 +112,12 @@ func (srv *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 		file_id := srv.ServeUpload(w, r)
 		w.Header().Set("file_id", strconv.Itoa(int(file_id)))
 		return
+
+	case "inventory.json":
+		q := r.URL.Query()
+		barcode := q.Get("barcode")
+		srv.ServeInventoryDetailJSON(barcode, w, r)
+		return
 	}
 
 	sidx := strings.Index(path, "/")

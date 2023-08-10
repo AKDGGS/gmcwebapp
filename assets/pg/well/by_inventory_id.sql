@@ -15,7 +15,7 @@ SELECT w.well_id AS id,
 	w.completion_status AS completionStatus,
 	w.permit_number AS permitNumber,
 	w.unit::text,
-	json_agg(json_build_object('Name', o.name, 'Remark', o.remark, 'Type', ot.name, 'Current', wo.is_current) ORDER BY wo.is_current DESC) AS "Organizations"
+	json_agg(json_build_object('ID', o.organization_id, 'Name', o.name, 'Remark', o.remark, 'Type', ot.name, 'Current', wo.is_current) ORDER BY wo.is_current DESC) AS "Organizations"
 	FROM well AS w
 	LEFT OUTER JOIN well_operator AS wo
 		ON wo.well_id = w.well_id
