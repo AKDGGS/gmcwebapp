@@ -73,13 +73,11 @@
 							</td>
 						</tr>
 						{{- end}}
-						{{- if .MiningDistricts}}
+						{{- if .MiningDistrict}}
 
 						<tr>
 							<th>Mining District</th>
-							<td>{{- range $i, $md := .MiningDistricts}}{{- if ne $i 0}}, {{- end}}
-								<a href="../search#mining_district_id={{$md.ID}}">{{$md.Name}}</a>{{- end}}
-							</td>
+							<td><a href="../search#mining_district_id={{.ID}}">{{.MiningDistrict.Name}}</a></td>
 						</tr>
 						{{- end}}
 						<tr>

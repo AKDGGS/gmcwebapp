@@ -94,7 +94,7 @@ func (pg *Postgres) GetBorehole(id int, flags int) (*model.Borehole, error) {
 		}
 	}
 
-	if (flags & dbf.MINING_DISTRICTS) != 0 {
+	if (flags & dbf.MINING_DISTRICT) != 0 {
 		q, err = assets.ReadString("pg/mining_district/by_borehole_id.sql")
 		if err != nil {
 			return nil, err
@@ -103,7 +103,7 @@ func (pg *Postgres) GetBorehole(id int, flags int) (*model.Borehole, error) {
 		if err != nil {
 			return nil, err
 		}
-		rowToStruct(r, &borehole.MiningDistricts)
+		rowToStruct(r, &borehole.MiningDistrict)
 	}
 
 	if (flags & dbf.QUADRANGLES) != 0 {
