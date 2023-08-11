@@ -35,8 +35,8 @@ type Inventory struct {
 	Tray                     int16    `json:"tray,omitempty"`
 	IntervalTop              float64  `json:"interval_top"`
 	IntervalBottom           float64  `json:"interval_bottom,omitempty"`
-	Keywords                 []string `json:"keywords,omitempty"`
 	IntervalUnit             string   `json:"interval_unit,omitempty"`
+	Keywords                 []string `json:"keywords,omitempty"`
 	CoreNumber               string   `json:"core_number,omitempty"`
 
 	CoreDiameterID int32        `json:"core_diameter_id,omitempty"`

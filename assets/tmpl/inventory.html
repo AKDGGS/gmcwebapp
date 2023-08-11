@@ -1,5 +1,4 @@
 {{with .inventory }}
-			{{- $intervalUnit := .IntervalUnit}}
 			<fieldset class="fs-detail inventory_boxes">
 				<legend>Inventory Detail</legend>
 				<table class="tb-fields">
@@ -127,16 +126,16 @@
 								{{- if .CoreDiameter.Name}} ({{.CoreDiameter.Name}}){{- end}}</td>
 						</tr>
 						{{- end}}
-						{{- with .IntervalTop}}
+						{{- if ge .IntervalTop 0.0}}
 						<tr>
 							<th>Interval Top</th>
-							<td>{{.}} {{$intervalUnit}}</td>
+							<td>{{.IntervalTop}} {{.IntervalUnit}}</td>
 						</tr>
 						{{- end}}
-						{{- with .IntervalBottom}}
+						{{- if ge .IntervalBottom 0.0}}
 						<tr>
 							<th>Interval Bottom</th>
-							<td>{{.}} {{$intervalUnit}}</td>
+							<td>{{.IntervalBottom}} {{.IntervalUnit}}</td>
 						</tr>
 						{{- end}}
 						{{- if .Description}}
@@ -572,6 +571,5 @@
 				<div id="stash-dd"></div>
 			</fieldset>
 			{{- end}}
-
 
 {{- end}}
