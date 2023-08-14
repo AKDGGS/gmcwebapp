@@ -12,7 +12,7 @@ type Outcrop struct {
 	EnteredDate    *time.Time             `json:"entered_date,omitempty"`
 	ModifiedDate   *time.Time             `json:"modified_date,omitempty"`
 	ModifiedUser   string                 `json:"modified_user,omitempty"`
-	Year           int16                  `json:"year,omitempty"`
+	Year           *int16                 `json:"year,omitempty"`
 	Stash          map[string]interface{} `json:"stash,omitempty"`
 	KeywordSummary []KeywordSummary       `json:"keywords,omitempty"`
 	GeoJSON        interface{}            `json:"geojson,omitempty"`

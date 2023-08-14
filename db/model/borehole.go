@@ -11,9 +11,9 @@ type Borehole struct {
 	AltNames          string                 `json:"alt_name,omitempty"`
 	Onshore           bool                   `json:"is_onshore"`
 	CompletionDate    *time.Time             `json:"completion_date,omitempty"`
-	MeasuredDepth     float64                `json:"measured_depth,omitempty"`
+	MeasuredDepth     *float64               `json:"measured_depth,omitempty"`
 	MeasuredDepthUnit string                 `json:"measured_depth_unit,omitempty"`
-	Elevation         float64                `json:"elevation,omitempty"`
+	Elevation         *float64               `json:"elevation,omitempty"`
 	ElevationUnit     string                 `json:"elevation_unit,omitempty"`
 	Stash             map[string]interface{} `json:"stash,omitempty"`
 	EnteredDate       *time.Time             `json:"entered_date,omitempty"`

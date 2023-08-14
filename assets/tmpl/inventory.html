@@ -126,13 +126,13 @@
 								{{- if .CoreDiameter.Name}} ({{.CoreDiameter.Name}}){{- end}}</td>
 						</tr>
 						{{- end}}
-						{{- if ge .IntervalTop 0.0}}
+						{{- if .IntervalTop}}
 						<tr>
 							<th>Interval Top</th>
 							<td>{{.IntervalTop}} {{.IntervalUnit}}</td>
 						</tr>
 						{{- end}}
-						{{- if ge .IntervalBottom 0.0}}
+						{{- if .IntervalBottom}}
 						<tr>
 							<th>Interval Bottom</th>
 							<td>{{.IntervalBottom}} {{.IntervalUnit}}</td>

@@ -279,6 +279,22 @@ func rowToStruct(r pgx.Rows, a interface{}) int {
 						}
 					} else {
 						switch val.(type) {
+						case int16:
+							if rv.Field(j).Kind() == reflect.Ptr {
+								p := new(int16)
+								*p = val.(int16)
+								rv.Field(j).Set(reflect.ValueOf(p))
+							} else {
+								rv.Field(j).Set(reflect.ValueOf(val))
+							}
+						case int32:
+							if rv.Field(j).Kind() == reflect.Ptr {
+								p := new(int32)
+								*p = val.(int32)
+								rv.Field(j).Set(reflect.ValueOf(p))
+							} else {
+								rv.Field(j).Set(reflect.ValueOf(val))
+							}
 						case pgtype.TextArray:
 							s := val.(pgtype.TextArray)
 							var s_arr []string
@@ -290,27 +306,24 @@ func rowToStruct(r pgx.Rows, a interface{}) int {
 							n := val.(pgtype.Numeric)
 							var nf float64
 							n.AssignTo(&nf)
-							var ni int64
-							err := n.AssignTo(&ni)
-							if err == nil && float64(ni) == nf {
-								if reflect.TypeOf(ni) == rv.Field(j).Type() {
-									rv.Field(j).Set(reflect.ValueOf(ni))
-								} else if reflect.TypeOf(nf) == rv.Field(j).Type() {
+							switch rv.Field(j).Kind() {
+							case reflect.Ptr:
+								if reflect.TypeOf(nf) == rv.Field(j).Type() {
 									rv.Field(j).Set(reflect.ValueOf(nf))
+								} else if rv.Field(j).Type().Elem() == reflect.TypeOf(nf) {
+									rv.Field(j).Set(reflect.ValueOf(&nf))
 								}
-							} else {
-								if rv.Field(j).Kind() == reflect.Struct {
-									for k := 0; k < rv.Field(j).NumField(); k++ {
-										if reflect.TypeOf(nf) == rv.Field(j).Field(k).Type() {
-											rv.Field(j).Field(k).Set(reflect.ValueOf(nf))
-										}
+							case reflect.Struct:
+								for k := 0; k < rv.Field(j).NumField(); k++ {
+									if reflect.TypeOf(nf) == rv.Field(j).Field(k).Type() {
+										rv.Field(j).Field(k).Set(reflect.ValueOf(nf))
 									}
 								}
+							default:
 								if reflect.TypeOf(nf) == rv.Field(j).Type() {
 									rv.Field(j).Set(reflect.ValueOf(nf))
 								}
 							}
-
 						case time.Time:
 							t, ok := val.(time.Time)
 							if ok {

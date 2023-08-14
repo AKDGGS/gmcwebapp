@@ -26,15 +26,15 @@ type Inventory struct {
 	SetNumber                string   `json:"set_number,omitempty"`
 	SplitNumber              string   `json:"split_number,omitempty"`
 	SlideNumber              string   `json:"slide_number,omitempty"`
-	SlipNumber               int32    `json:"slip_number,omitempty"`
+	SlipNumber               *int32   `json:"slip_number,omitempty"`
 	LabNumber                string   `json:"lab_number,omitempty"`
 	LabReportID              string   `json:"lab_report_id,omitempty"`
 	MapNumber                string   `json:"map_number,omitempty"`
 	Description              string   `json:"description,omitempty"`
 	Remark                   string   `json:"remark,omitempty"`
-	Tray                     int16    `json:"tray,omitempty"`
-	IntervalTop              float64  `json:"interval_top"`
-	IntervalBottom           float64  `json:"interval_bottom,omitempty"`
+	Tray                     *int16   `json:"tray,omitempty"`
+	IntervalTop              *float64 `json:"interval_top"`
+	IntervalBottom           *float64 `json:"interval_bottom,omitempty"`
 	IntervalUnit             string   `json:"interval_unit,omitempty"`
 	Keywords                 []string `json:"keywords,omitempty"`
 	CoreNumber               string   `json:"core_number,omitempty"`
@@ -42,12 +42,12 @@ type Inventory struct {
 	CoreDiameterID int32        `json:"core_diameter_id,omitempty"`
 	CoreDiameter   CoreDiameter `json:"core_diameter,omitempty"`
 
-	Weight          float64                `json:"weight,omitempty"`
+	Weight          *float64               `json:"weight,omitempty"`
 	WeightUnit      string                 `json:"weight_unit,omitempty"`
 	SampleFrequency string                 `json:"sample_frequency,omitempty"`
 	Recovery        string                 `json:"recovery,omitempty"`
 	CanPublish      bool                   `json:"can_publish"`
-	RadiationMSVH   float32                `json:"radiation_msvh,omitempty"`
+	RadiationMSVH   *float64               `json:"radiation_msvh,omitempty"`
 	ReceivedDate    *time.Time             `json:"received_date,omitempty"`
 	EnteredDate     *time.Time             `json:"entered_date,omitempty"`
 	ModifiedDate    *time.Time             `json:"modified_date,omitempty"`
