@@ -24,4 +24,4 @@ LEFT JOIN point AS p
 	ON p.point_id = bp.point_id
 LEFT JOIN mining_district AS md
 	ON ST_Intersects(md.geog, p.geog)
-WHERE ib.inventory_id = $1;
+WHERE ib.inventory_id = $1
