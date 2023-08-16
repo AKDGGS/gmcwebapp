@@ -1,16 +1,12 @@
 package model
 
-import (
-	"time"
-)
-
 type Outcrop struct {
 	ID             int32                  `json:"outcrop_id,omitempty"`
 	Name           string                 `json:"name,omitempty"`
 	Number         string                 `json:"outcrop_number,omitempty"`
 	Onshore        bool                   `json:"is_onshore"`
-	EnteredDate    *time.Time             `json:"entered_date,omitempty"`
-	ModifiedDate   *time.Time             `json:"modified_date,omitempty"`
+	EnteredDate    *FormattedDate         `json:"entered_date,omitempty"`
+	ModifiedDate   *FormattedDate         `json:"modified_date,omitempty"`
 	ModifiedUser   string                 `json:"modified_user,omitempty"`
 	Year           *int16                 `json:"year,omitempty"`
 	Stash          map[string]interface{} `json:"stash,omitempty"`

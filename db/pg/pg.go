@@ -233,6 +233,7 @@ func rowToStruct(r pgx.Rows, a interface{}) int {
 								if !strings.EqualFold(fieldName, rv.Field(j).Type().Field(k).Name) {
 									continue
 								}
+
 								if reflect.TypeOf(val) == rv.Field(j).Type().Field(k).Type {
 									rv.Field(j).Field(k).Set(reflect.ValueOf(val))
 								}
@@ -327,7 +328,8 @@ func rowToStruct(r pgx.Rows, a interface{}) int {
 						case time.Time:
 							t, ok := val.(time.Time)
 							if ok {
-								rv.Field(j).Set(reflect.ValueOf(&t))
+								fd := model.FormattedDate{Time: t}
+								rv.Field(j).Set(reflect.ValueOf(&fd))
 							}
 						default:
 							if reflect.TypeOf(val) == rv.Field(j).Type() && strings.EqualFold(fieldName, string(r.FieldDescriptions()[i].Name)) {

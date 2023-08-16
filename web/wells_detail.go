@@ -1,6 +1,7 @@
 package web
 
 import (
+	"encoding/json"
 	"fmt"
 	"net/http"
 
@@ -33,7 +34,7 @@ func (srv *Server) ServeWellsDetailJSON(id int, w http.ResponseWriter, r *http.R
 		http.Error(w, "Well ID not found", http.StatusNotFound)
 		return
 	}
-	js, err := well.MarshalJSON()
+	js, err := json.Marshal(well)
 	if err != nil {
 		http.Error(
 			w, fmt.Sprintf("JSON error: %s", err.Error()),
