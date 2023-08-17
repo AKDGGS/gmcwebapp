@@ -1,18 +1,23 @@
 package model
 
+import (
+	"encoding/json"
+	"time"
+)
+
 type Borehole struct {
 	ID                int32                  `json:"borehole_id,omitempty"`
 	Name              string                 `json:"name,omitempty"`
 	AltNames          string                 `json:"alt_name,omitempty"`
 	Onshore           bool                   `json:"is_onshore"`
-	CompletionDate    *FormattedDate         `json:"completion_date,omitempty"`
+	CompletionDate    time.Time              `json:"completion_date,omitempty"`
 	MeasuredDepth     *float64               `json:"measured_depth,omitempty"`
 	MeasuredDepthUnit string                 `json:"measured_depth_unit,omitempty"`
 	Elevation         *float64               `json:"elevation,omitempty"`
 	ElevationUnit     string                 `json:"elevation_unit,omitempty"`
 	Stash             map[string]interface{} `json:"stash,omitempty"`
-	EnteredDate       *FormattedDate         `json:"entered_date,omitempty"`
-	ModifiedDate      *FormattedDate         `json:"modified_date,omitempty"`
+	EnteredDate       time.Time              `json:"entered_date,omitempty"`
+	ModifiedDate      time.Time              `json:"modified_date,omitempty"`
 	ModifiedUser      string                 `json:"modified_user,omitempty"`
 	KeywordSummary    []KeywordSummary       `json:"keywords,omitempty"`
 	GeoJSON           interface{}            `json:"geojson,omitempty"`
@@ -23,4 +28,31 @@ type Borehole struct {
 	Organizations     []Organization         `json:"organization,omitempty"`
 	Files             []File                 `json:"file,omitempty"`
 	Prospect          Prospect               `json:"prospect,omitempty"`
+}
+
+func (b *Borehole) MarshalJSON() ([]byte, error) {
+	type Alias Borehole
+	var completionDate string
+	if !b.CompletionDate.IsZero() {
+		completionDate = b.CompletionDate.Format("01-02-2006")
+	}
+	var enteredDate string
+	if !b.EnteredDate.IsZero() {
+		enteredDate = b.EnteredDate.Format("01-02-2006")
+	}
+	var modifiedDate string
+	if !b.ModifiedDate.IsZero() {
+		modifiedDate = b.ModifiedDate.Format("01-02-2006")
+	}
+	return json.Marshal(&struct {
+		CompletionDate string `json:"completion_date,omitempty"`
+		EnteredDate    string `json:"entered_date,omitempty"`
+		ModifiedDate   string `json:"modifiedDate ,omitempty"`
+		*Alias
+	}{
+		CompletionDate: completionDate,
+		EnteredDate:    enteredDate,
+		ModifiedDate:   modifiedDate,
+		Alias:          (*Alias)(b),
+	})
 }

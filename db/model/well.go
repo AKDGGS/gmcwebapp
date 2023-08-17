@@ -1,5 +1,10 @@
 package model
 
+import (
+	"encoding/json"
+	"time"
+)
+
 type Well struct {
 	ID               int32                  `json:"well_id,omitempty"`
 	Name             string                 `json:"name,omitempty"`
@@ -8,8 +13,8 @@ type Well struct {
 	APINumber        string                 `json:"api_number,omitempty"`
 	Onshore          bool                   `json:"is_onshore"`
 	Federal          bool                   `json:"is_federal"`
-	SpudDate         *FormattedDate         `json:"spud_date,omitempty"`
-	CompletionDate   *FormattedDate         `json:"completion_date,omitempty"`
+	SpudDate         time.Time              `json:"spud_date,omitempty"`
+	CompletionDate   time.Time              `json:"completion_date,omitempty"`
 	MeasuredDepth    *float64               `json:"measured_depth,omitempty"`
 	VerticalDepth    *float64               `json:"vertical_depth,omitempty"`
 	Elevation        *float64               `json:"elevation_depth,omitempty"`
@@ -26,4 +31,25 @@ type Well struct {
 	URLs             []URL                  `json:"url,omitempty"`
 	Organizations    []Organization         `json:"organization,omitempty"`
 	Files            []File                 `json:"file,omitempty"`
+}
+
+func (w *Well) MarshalJSON() ([]byte, error) {
+	type Alias Well
+	var spudDate string
+	if !w.SpudDate.IsZero() {
+		spudDate = w.SpudDate.Format("01-02-2006")
+	}
+	var completionDate string
+	if !w.CompletionDate.IsZero() {
+		completionDate = w.CompletionDate.Format("01-02-2006")
+	}
+	return json.Marshal(&struct {
+		SpudDate       string `json:"spud_date,omitempty"`
+		CompletionDate string `json:"completion_date,omitempty"`
+		*Alias
+	}{
+		SpudDate:       spudDate,
+		CompletionDate: completionDate,
+		Alias:          (*Alias)(w),
+	})
 }

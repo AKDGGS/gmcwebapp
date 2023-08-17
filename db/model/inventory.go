@@ -1,5 +1,10 @@
 package model
 
+import (
+	"encoding/json"
+	"time"
+)
+
 type Inventory struct {
 	ID           int32      `json:"id"`
 	Barcode      string     `json:"barcode,omitempty"`
@@ -43,9 +48,9 @@ type Inventory struct {
 	Recovery        string                 `json:"recovery,omitempty"`
 	CanPublish      bool                   `json:"can_publish"`
 	RadiationMSVH   *float64               `json:"radiation_msvh,omitempty"`
-	ReceivedDate    *FormattedDate         `json:"received_date,omitempty"`
-	EnteredDate     *FormattedDate         `json:"entered_date,omitempty"`
-	ModifiedDate    *FormattedDate         `json:"modified_date,omitempty"`
+	ReceivedDate    time.Time              `json:"received_date,omitempty"`
+	EnteredDate     time.Time              `json:"entered_date,omitempty"`
+	ModifiedDate    time.Time              `json:"modified_date,omitempty"`
 	ModifiedUser    string                 `json:"modified_user,omitempty"`
 	Active          bool                   `json:"active"`
 	Stash           map[string]interface{} `json:"stash,omitempty"`
@@ -61,4 +66,31 @@ type Inventory struct {
 	Publications    []Publication          `json:"publications,omitempty"`
 	ContainerLog    []ContainerLog         `json:"container_log,omitempty"`
 	Qualities       []Qualities            `json:"qualities,omitempty"`
+}
+
+func (i *Inventory) MarshalJSON() ([]byte, error) {
+	type Alias Inventory
+	var receivedDate string
+	if !i.ReceivedDate.IsZero() {
+		receivedDate = i.ReceivedDate.Format("01-02-2006")
+	}
+	var enteredDate string
+	if !i.EnteredDate.IsZero() {
+		enteredDate = i.EnteredDate.Format("01-02-2006")
+	}
+	var modifiedDate string
+	if !i.ModifiedDate.IsZero() {
+		modifiedDate = i.ModifiedDate.Format("01-02-2006")
+	}
+	return json.Marshal(&struct {
+		ReceivedDate string `json:"received_date,omitempty"`
+		EnteredDate  string `json:"entered_date,omitempty"`
+		ModifiedDate string `json:"modified_date,omitempty"`
+		*Alias
+	}{
+		ReceivedDate: receivedDate,
+		EnteredDate:  enteredDate,
+		ModifiedDate: modifiedDate,
+		Alias:        (*Alias)(i),
+	})
 }
