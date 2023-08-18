@@ -192,7 +192,6 @@ func rowToStruct(r pgx.Rows, a interface{}) int {
 	if !rv.CanSet() {
 		return 0
 	}
-
 	switch rv.Kind() {
 	case reflect.Slice:
 		var elem reflect.Value
@@ -227,13 +226,27 @@ func rowToStruct(r pgx.Rows, a interface{}) int {
 					if !strings.EqualFold(fieldName, rv.Type().Field(j).Name) {
 						if rv.Field(j).Kind() == reflect.Struct {
 							for k := 0; k < rv.Field(j).NumField(); k++ {
+								if strings.Contains(fieldName, ".") {
+									if rv.Field(j).Kind() == reflect.Struct {
+										fieldName = strings.Replace(fieldName, "_", "", -1)
+										for p := 0; p < rv.Field(j).NumField(); p++ {
+											if rv.Field(j).Field(p).Kind() == reflect.Struct {
+												for p1 := 0; p1 < rv.Field(j).Field(p).NumField(); p1++ {
+													if reflect.TypeOf(val) == rv.Field(j).Field(p).Type().Field(p1).Type {
+														rv.Field(j).Field(p).Field(p1).Set(reflect.ValueOf(val))
+													}
+												}
+											}
+										}
+									}
+									continue
+								}
 								if !strings.EqualFold(parent, rv.Type().Field(j).Name) {
 									continue
 								}
 								if !strings.EqualFold(fieldName, rv.Field(j).Type().Field(k).Name) {
 									continue
 								}
-
 								if reflect.TypeOf(val) == rv.Field(j).Type().Field(k).Type {
 									rv.Field(j).Field(k).Set(reflect.ValueOf(val))
 								}
