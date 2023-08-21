@@ -70,7 +70,7 @@ func (pg *Postgres) GetProspect(id int, flags int) (*model.Prospect, error) {
 		}
 	}
 
-	if (flags & dbf.MINING_DISTRICT) != 0 {
+	if (flags & dbf.MINING_DISTRICTS) != 0 {
 		q, err = assets.ReadString("pg/mining_district/by_prospect_id.sql")
 		if err != nil {
 			return nil, err
@@ -79,7 +79,7 @@ func (pg *Postgres) GetProspect(id int, flags int) (*model.Prospect, error) {
 		if err != nil {
 			return nil, err
 		}
-		rowToStruct(r, &prospect.MiningDistrict)
+		rowToStruct(r, &prospect.MiningDistricts)
 	}
 
 	if (flags & dbf.QUADRANGLES) != 0 {

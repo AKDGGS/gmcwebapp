@@ -96,7 +96,9 @@
 						{{- if .Quadrangles}}
 						<tr>
 							<th>Quadrangle</th>
-							<td>{{- range $i, $qd := .Quadrangles}}{{- if ne $i 0}}, {{- end}}<a href="../search#quadrangle_id={{$qd.ID}}">{{$qd.Name}}</a>{{- end}}</td>
+							<td>{{- range $i, $qd := .Quadrangles}}{{- if ne $i 0}}, {{- end}}
+								<a href="../search#quadrangle_id={{$qd.ID}}">{{$qd.Name}}</a>{{- end}}
+							</td>
 						</tr>
 						{{- end}}
 					</tbody>

@@ -21,7 +21,7 @@ type Borehole struct {
 	ModifiedUser      string                 `json:"modified_user,omitempty"`
 	KeywordSummary    []KeywordSummary       `json:"keywords,omitempty"`
 	GeoJSON           interface{}            `json:"geojson,omitempty"`
-	MiningDistrict    MiningDistrict         `json:"mining_district,omitempty"`
+	MiningDistricts   []MiningDistrict       `json:"mining_districts,omitempty"`
 	Quadrangles       []Quadrangle           `json:"quadrangles,omitempty"`
 	Notes             []Note                 `json:"note,omitempty"`
 	URLs              []URL                  `json:"url,omitempty"`

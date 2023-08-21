@@ -33,10 +33,10 @@
 							<td>{{range $i, $qd := .Quadrangles}}{{if ne $i 0}}, {{- end}}<a href="../search#quadrangle_id={{$qd.ID}}">{{$qd.Name}}</a>{{- end}}</td>
 						</tr>
 						{{- end}}
-						{{- if .MiningDistrict}}
+						{{- if .MiningDistricts}}
 						<tr>
 							<th>Mining District</th>
-							<td><a href="../search#mining_district_id={{.MiningDistrict.ID}}">{{.MiningDistrict.Name}}</a></td>
+							<td>{{range $i, $md := .MiningDistricts}}{{if ne $i 0}}, {{- end}}<a href="../search#mining_district_id={{$md.ID}}">{{$md.Name}}</a>{{- end}}</td>
 						</tr>
 						{{- end}}
 					</tbody>

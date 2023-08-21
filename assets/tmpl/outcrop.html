@@ -37,8 +37,10 @@
 						{{- end}}
 						{{- if .Quadrangles}}
 						<tr>
-							<th>Quadrangles</th>
-							<td>{{range $i, $qd := .Quadrangles}}{{if ne $i 0}}, {{- end}}<a href="../search#quadrangle_id={{$qd.ID}}">{{$qd.Name}}</a>{{- end}}</td>
+							<th>Quadrangle</th>
+							<td>{{- range $i, $qd := .Quadrangles}}{{- if ne $i 0}}, {{- end}}
+								<a href="../search#quadrangle_id={{$qd.ID}}">{{$qd.Name}}</a>{{- end}}
+							</td>
 						</tr>
 						{{- end}}
 					</tbody>
