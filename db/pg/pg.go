@@ -233,7 +233,7 @@ func rowToStruct(r pgx.Rows, a interface{}) int {
 											if rv.Field(j).Field(p).Kind() == reflect.Struct {
 												for p1 := 0; p1 < rv.Field(j).Field(p).NumField(); p1++ {
 													if reflect.TypeOf(val) == rv.Field(j).Field(p).Type().Field(p1).Type {
-														rv.Field(j).Field(p).Field(p1).Set(reflect.ValueOf(val))
+														setFieldValue(rv.Field(j).Field(p).Field(p1), rv.Field(j).Field(p).Type().Field(p1).Type, val, fieldName, string(r.FieldDescriptions()[i].Name))
 													}
 												}
 											}
@@ -248,111 +248,97 @@ func rowToStruct(r pgx.Rows, a interface{}) int {
 									continue
 								}
 								if reflect.TypeOf(val) == rv.Field(j).Type().Field(k).Type {
-									rv.Field(j).Field(k).Set(reflect.ValueOf(val))
+									setFieldValue(rv.Field(j).Field(k), rv.Field(j).Type().Field(k).Type, val, fieldName, rv.Field(j).Type().Field(k).Name)
+
 								}
 							}
 						}
 						continue
 					}
-					if reflect.ValueOf(val).Kind() == reflect.Slice {
-						var elem reflect.Value
-						switch typ := rv.Field(j).Type().Elem(); typ.Kind() {
-						case reflect.Ptr:
-							elem = reflect.New(typ.Elem())
-						case reflect.Struct:
-							elem = reflect.New(typ).Elem()
-						}
-						switch val.(type) {
-						case []interface{}:
-							rec, ok := val.([]interface{})
-							if !ok {
-								return 0
-							}
-							for i := 0; i < len(rec); i++ {
-								switch typ := rv.Field(j).Type().Elem(); typ.Kind() {
-								case reflect.Ptr:
-									elem = reflect.New(typ.Elem())
-								case reflect.Struct:
-									elem = reflect.New(typ).Elem()
-								}
-								switch rec[i].(type) {
-								case map[string]interface{}:
-									for k, v := range rec[i].(map[string]interface{}) {
-										if v != nil {
-											switch elem.FieldByName(k).Kind() {
-											case reflect.Int32:
-												elem.FieldByName(k).Set(reflect.ValueOf(int32(v.(float64))))
-											default:
-												elem.FieldByName(k).Set(reflect.ValueOf(v))
-											}
-										}
-									}
-								}
-								rv.Field(j).Set(reflect.Append(rv.Field(j), elem))
-							}
-						}
-					} else {
-						switch val.(type) {
-						case int16:
-							if rv.Field(j).Kind() == reflect.Ptr {
-								p := new(int16)
-								*p = val.(int16)
-								rv.Field(j).Set(reflect.ValueOf(p))
-							} else {
-								rv.Field(j).Set(reflect.ValueOf(val))
-							}
-						case int32:
-							if rv.Field(j).Kind() == reflect.Ptr {
-								p := new(int32)
-								*p = val.(int32)
-								rv.Field(j).Set(reflect.ValueOf(p))
-							} else {
-								rv.Field(j).Set(reflect.ValueOf(val))
-							}
-						case pgtype.TextArray:
-							s := val.(pgtype.TextArray)
-							var s_arr []string
-							s.AssignTo(&s_arr)
-							if reflect.TypeOf(s_arr) == rv.Field(j).Type() {
-								rv.Field(j).Set(reflect.ValueOf(s_arr))
-							}
-						case pgtype.Numeric:
-							n := val.(pgtype.Numeric)
-							var nf float64
-							n.AssignTo(&nf)
-							switch rv.Field(j).Kind() {
-							case reflect.Ptr:
-								if reflect.TypeOf(nf) == rv.Field(j).Type() {
-									rv.Field(j).Set(reflect.ValueOf(nf))
-								} else if rv.Field(j).Type().Elem() == reflect.TypeOf(nf) {
-									rv.Field(j).Set(reflect.ValueOf(&nf))
-								}
-							case reflect.Struct:
-								for k := 0; k < rv.Field(j).NumField(); k++ {
-									if reflect.TypeOf(nf) == rv.Field(j).Field(k).Type() {
-										rv.Field(j).Field(k).Set(reflect.ValueOf(nf))
-									}
-								}
-							default:
-								if reflect.TypeOf(nf) == rv.Field(j).Type() {
-									rv.Field(j).Set(reflect.ValueOf(nf))
-								}
-							}
-						case time.Time:
-							t, ok := val.(time.Time)
-							if ok {
-								rv.Field(j).Set(reflect.ValueOf(t))
-							}
-						default:
-							if reflect.TypeOf(val) == rv.Field(j).Type() && strings.EqualFold(fieldName, string(r.FieldDescriptions()[i].Name)) {
-								rv.Field(j).Set(reflect.ValueOf(val))
-							}
-						}
-					}
+					setFieldValue(rv.Field(j), rv.Type().Field(j).Type, val, fieldName, string(r.FieldDescriptions()[i].Name))
 				}
 			}
 			return 1
 		}
 	}
 	return 0
+}
+
+func setFieldValue(field reflect.Value, fieldType reflect.Type, val interface{}, fieldName string, columnName string) {
+	switch val.(type) {
+	case int16, int32:
+		if field.Kind() == reflect.Ptr {
+			p := reflect.New(reflect.TypeOf(val))
+			p.Elem().Set(reflect.ValueOf(val))
+			field.Set(p)
+		} else {
+			field.Set(reflect.ValueOf(val))
+		}
+	case pgtype.TextArray:
+		s := val.(pgtype.TextArray)
+		var s_arr []string
+		s.AssignTo(&s_arr)
+		if reflect.TypeOf(s_arr) == field.Type() {
+			field.Set(reflect.ValueOf(s_arr))
+		}
+	case pgtype.Numeric:
+		n := val.(pgtype.Numeric)
+		var nf float64
+		n.AssignTo(&nf)
+		switch field.Kind() {
+		case reflect.Ptr:
+			if reflect.TypeOf(nf) == field.Type() {
+				field.Set(reflect.ValueOf(nf))
+			} else if field.Type().Elem() == reflect.TypeOf(nf) {
+				field.Set(reflect.ValueOf(&nf))
+			}
+		case reflect.Struct:
+			for k := 0; k < field.NumField(); k++ {
+				if reflect.TypeOf(nf) == field.Field(k).Type() {
+					field.Field(k).Set(reflect.ValueOf(nf))
+				}
+			}
+		default:
+			if reflect.TypeOf(nf) == field.Type() {
+				field.Set(reflect.ValueOf(nf))
+			}
+		}
+	case time.Time:
+		t, ok := val.(time.Time)
+		if ok {
+			field.Set(reflect.ValueOf(t))
+		}
+	case []interface{}:
+		rec, ok := val.([]interface{})
+		if !ok {
+			return
+		}
+		for i := 0; i < len(rec); i++ {
+			var elem reflect.Value
+			switch typ := field.Type().Elem(); typ.Kind() {
+			case reflect.Ptr:
+				elem = reflect.New(typ.Elem())
+			case reflect.Struct:
+				elem = reflect.New(typ).Elem()
+			}
+			switch rec[i].(type) {
+			case map[string]interface{}:
+				for k, v := range rec[i].(map[string]interface{}) {
+					if v != nil {
+						switch elem.FieldByName(k).Kind() {
+						case reflect.Int32:
+							elem.FieldByName(k).Set(reflect.ValueOf(int32(v.(float64))))
+						default:
+							elem.FieldByName(k).Set(reflect.ValueOf(v))
+						}
+					}
+				}
+			}
+			field.Set(reflect.Append(field, elem))
+		}
+	default:
+		if reflect.TypeOf(val) == field.Type() && strings.EqualFold(fieldName, columnName) {
+			field.Set(reflect.ValueOf(val))
+		}
+	}
 }
