@@ -55,21 +55,20 @@ type Inventory struct {
 	Active          bool                   `json:"active"`
 	Stash           map[string]interface{} `json:"stash,omitempty"`
 
-	Boreholes     []Borehole     `json:"boreholes,omitempty"`
-	Outcrops      []Outcrop      `json:"outcrops,omitempty"`
-	Shotpoints    []Shotpoint    `json:"shotpoints,omitempty"`
-	Wells         []Well         `json:"wells,omitempty"`
-	Organizations []Organization `json:"organizations,omitempty"`
-	Notes         []Note         `json:"notes,omitempty"`
-	URLs          []URL          `json:"urls,omitempty"`
-	Files         []File         `json:"files,omitempty"`
-	Publications  []Publication  `json:"publications,omitempty"`
-	ContainerLog  []ContainerLog `json:"container_log,omitempty"`
-	Qualities     []Qualities    `json:"qualities,omitempty"`
-
 	//transient fields that are generated on-the-fly
 	//these fields don't exist in the database
-	GeoJSON map[string]interface{} `json:"geojson,omitempty"`
+	GeoJSON       map[string]interface{} `json:"geojson,omitempty"`
+	Boreholes     []Borehole             `json:"boreholes,omitempty"`
+	Outcrops      []Outcrop              `json:"outcrops,omitempty"`
+	Shotpoints    []Shotpoint            `json:"shotpoints,omitempty"`
+	Wells         []Well                 `json:"wells,omitempty"`
+	Organizations []Organization         `json:"organizations,omitempty"`
+	Notes         []Note                 `json:"notes,omitempty"`
+	URLs          []URL                  `json:"urls,omitempty"`
+	Files         []File                 `json:"files,omitempty"`
+	Publications  []Publication          `json:"publications,omitempty"`
+	ContainerLog  []ContainerLog         `json:"container_log,omitempty"`
+	Qualities     []Qualities            `json:"qualities,omitempty"`
 }
 
 func (i *Inventory) MarshalJSON() ([]byte, error) {

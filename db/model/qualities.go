@@ -20,7 +20,7 @@ func (q *Qualities) MarshalJSON() ([]byte, error) {
 		date = q.Date.Format("01-02-2006")
 	}
 	return json.Marshal(&struct {
-		Date string `json:"date,omitempty"`
+		Date string `json:"check_date,omitempty"`
 		*Alias
 	}{
 		Date:  date,
