@@ -15,9 +15,9 @@ SELECT bh.borehole_id AS id,
 	ph.name AS "prospect.name",
 	ph.alt_names AS "prospect.altNames",
 	ph.ardf_number AS "prospect.ARDFNumber",
-	md.mining_district_id AS "miningDistrict.id",
-	md.name AS "miningDistrict.name",
-	md.name AS "prospect.mining_district.name"
+	md.mining_district_id AS "miningDistricts.id",
+	md.name AS "miningDistricts.name",
+	md.name AS "prospect.mining_districts.name"
 FROM borehole AS bh
 LEFT OUTER JOIN prospect AS ph
 	ON ph.prospect_id = bh.prospect_id
