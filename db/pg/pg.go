@@ -218,7 +218,7 @@ func rowToStruct(r pgx.Rows, a interface{}) int {
 				parts := strings.Split(fieldName, ".")
 				slice_element := []string{}
 				for j := 0; j < len(parts); j++ {
-					strings.Replace(parts[j], "_", "", -1)
+					parts[j] = strings.Replace(parts[j], "_", "", -1)
 					slice_element = append(slice_element, parts[j])
 				}
 				slices = append(slices, slice_element)
@@ -289,7 +289,7 @@ func rowToStruct(r pgx.Rows, a interface{}) int {
 					if rv.Field(j).Kind() == reflect.Struct {
 						if strings.EqualFold(rv.Type().Field(j).Name, slice_element[0]) {
 							for k := 0; k < rv.Field(j).NumField(); k++ {
-								if len(slice_element) == 2 {
+								if len(slice_element) >= 2 {
 									if strings.EqualFold(rv.Field(j).Type().Field(k).Name, slice_element[1]) {
 										switch val.(type) {
 										case int16, int32:
@@ -341,89 +341,27 @@ func rowToStruct(r pgx.Rows, a interface{}) int {
 											if !strings.EqualFold(rv.Field(j).Type().Field(k).Name, slice_element[1]) {
 												continue
 											}
+											if rv.Field(j).Field(k).Kind() == reflect.Slice {
+												var elem reflect.Value
+												switch typ := rv.Field(j).Field(k).Type().Elem(); typ.Kind() {
+												case reflect.Ptr:
+													elem = reflect.New(typ.Elem())
+												case reflect.Struct:
+													elem = reflect.New(typ).Elem()
+												}
+												for l := 0; l < elem.NumField(); l++ {
+													if !strings.EqualFold(elem.Type().Field(l).Name, slice_element[2]) {
+														continue
+													}
+													if reflect.TypeOf(val) == elem.Field(l).Type() {
+														elem.Field(l).Set(reflect.ValueOf(val))
+													}
+												}
+												rv.Field(j).Field(k).Set(reflect.Append(rv.Field(j).Field(k), elem))
+											}
 											if reflect.TypeOf(val) == rv.Field(j).Field(k).Type() {
 												rv.Field(j).Field(k).Set(reflect.ValueOf(val))
 											}
-										}
-									}
-								}
-								if len(slice_element) == 3 {
-									if !strings.EqualFold(rv.Type().Field(j).Name, slice_element[0]) {
-										continue
-									}
-									if !strings.EqualFold(rv.Field(j).Type().Field(k).Name, slice_element[1]) {
-										continue
-									}
-									switch val.(type) {
-									case int16, int32:
-										if rv.Field(j).Field(k).Kind() == reflect.Ptr {
-											p := reflect.New(reflect.TypeOf(val))
-											p.Elem().Set(reflect.ValueOf(val))
-											rv.Field(j).Field(k).Set(p)
-										} else {
-											rv.Field(j).Field(k).Set(reflect.ValueOf(val))
-										}
-									case pgtype.TextArray:
-										s := val.(pgtype.TextArray)
-										var s_arr []string
-										s.AssignTo(&s_arr)
-										if reflect.TypeOf(s_arr) == rv.Field(j).Field(k).Type() {
-											rv.Field(j).Field(k).Set(reflect.ValueOf(s_arr))
-										}
-									case pgtype.Numeric:
-										n := val.(pgtype.Numeric)
-										var nf float64
-										n.AssignTo(&nf)
-										switch rv.Field(j).Field(k).Kind() {
-										case reflect.Ptr:
-											if reflect.TypeOf(nf) == rv.Field(j).Field(k).Type() {
-												rv.Field(j).Set(reflect.ValueOf(nf))
-											} else if rv.Field(j).Field(k).Type().Elem() == reflect.TypeOf(nf) {
-												rv.Field(j).Field(k).Set(reflect.ValueOf(&nf))
-											}
-										case reflect.Struct:
-											for l := 0; l < rv.Field(j).Field(k).Field(l).NumField(); l++ {
-												if reflect.TypeOf(nf) == rv.Field(j).Field(k).Field(l).Type() {
-													rv.Field(j).Field(k).Field(l).Set(reflect.ValueOf(nf))
-												}
-											}
-										default:
-											if reflect.TypeOf(nf) == rv.Field(j).Field(k).Type() {
-												rv.Field(j).Field(k).Set(reflect.ValueOf(nf))
-											}
-										}
-									case time.Time:
-										t, ok := val.(time.Time)
-										if ok {
-											rv.Field(j).Field(k).Set(reflect.ValueOf(t))
-										}
-									default:
-										if !strings.EqualFold(rv.Type().Field(j).Name, slice_element[0]) {
-											continue
-										}
-										if !strings.EqualFold(rv.Field(j).Type().Field(k).Name, slice_element[1]) {
-											continue
-										}
-										if rv.Field(j).Field(k).Kind() == reflect.Slice {
-											var elem reflect.Value
-											switch typ := rv.Field(j).Field(k).Type().Elem(); typ.Kind() {
-											case reflect.Ptr:
-												elem = reflect.New(typ.Elem())
-											case reflect.Struct:
-												elem = reflect.New(typ).Elem()
-											}
-											for l := 0; l < elem.NumField(); l++ {
-												if !strings.EqualFold(elem.Type().Field(l).Name, slice_element[2]) {
-													continue
-												}
-												if reflect.TypeOf(val) == elem.Field(l).Type() {
-													elem.Field(l).Set(reflect.ValueOf(val))
-												}
-											}
-											rv.Field(j).Field(k).Set(reflect.Append(rv.Field(j).Field(k), elem))
-										}
-										if reflect.TypeOf(val) == rv.Field(j).Field(k).Type() {
-											rv.Field(j).Field(k).Set(reflect.ValueOf(val))
 										}
 									}
 								}
