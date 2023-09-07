@@ -134,7 +134,7 @@
 				{{- end}}
 			</fieldset>
 			{{- end}}
-			{{- if and $.user .Notes}}
+			{{- if and $.user (gt (len .Notes) 0)}}
 
 			<fieldset>
 				<legend>Notes</legend>

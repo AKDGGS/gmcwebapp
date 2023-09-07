@@ -1,4 +1,6 @@
-SELECT f.file_id AS id, f.filename AS name, f.mimetype as type,
+SELECT f.file_id AS id,
+	f.filename AS name,
+	f.mimetype as type,
 	f.size::numeric AS size
 FROM prospect_file AS pf
 JOIN file AS f

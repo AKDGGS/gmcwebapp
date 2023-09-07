@@ -1,11 +1,10 @@
 SELECT iv.inventory_id AS id,
-	iv.parent_id AS parentID,
-
-	cl.collection_id AS collectionID,
+	cl.collection_id AS "collection.id",
 	cl.name AS "collection.name",
 	cl.description AS "collection.description",
+	cl.organization_id AS "collection.organizationID",
 
-	co.container_id AS containerID,
+	co.container_id AS "container.id",
 	co.name AS "container.name",
 	co.remark AS "container.remark",
 	co.barcode AS "container.barcode",
@@ -38,10 +37,10 @@ SELECT iv.inventory_id AS id,
 	COALESCE(iv.interval_unit::text, 'ft') AS intervalUnit,
 	iv.core_number AS coreNumber,
 
-	cd.core_diameter_id AS coreDiameterID,
+	cd.core_diameter_id AS "coreDiameter.id",
 	cd.name AS "coreDiameter.name",
 	cd.core_diameter AS "coreDiameter.coreDiameter",
-	COALESCE(cd.unit::text, 'ft') AS "coreDiameter.Unit",
+	COALESCE(cd.unit::text, 'ft') AS "coreDiameter.unit",
 
 	iv.weight AS weight,
 	iv.weight_unit::text AS weightUnit,

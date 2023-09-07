@@ -315,37 +315,45 @@
 				<legend>Shotpoint(s)</legend>
 				<table class="tb-fields">
 					<tbody>
+						{{- $hasNumber := false -}}
 						{{- range $i, $s := .Shotpoints}}
+						{{- if .Number}}
+							{{- $hasNumber = true}}
+						{{- end}}
 						{{- if eq $i 0}}
 						{{- if .Shotline.Name}}
-						<tr class="tb-spacer-sm">
-							<th>Shotline Name</th>
-							<td><a href="../shotline/{{.Shotline.ID}}">{{.Shotline.Name}}</a></td>
-							{{- end}}
-							{{- if .Shotline.AltNames}}
-							<tr>
-								<th>Shotline Alt. Name</th>
-								<td>{{.Shotline.AltNames}}</td>
+							<tr class="tb-spacer-sm">
+								<th>Name</th>
+								<td><a href="../shotline/{{.Shotline.ID}}">{{.Shotline.Name}}</a></td>
+								{{- if .Shotline.AltNames}}
+								<tr>
+									<th>Alt. Name</th>
+									<td>{{.Shotline.AltNames}}</td>
+								</tr>
+								{{- end}}
+								{{- if .Shotline.Year}}
+								<tr>
+									<th>Year</th>
+									<td>{{.Shotline.Year}}</td>
+								</tr>
+								{{- end}}
 							</tr>
-							{{- end}}
-							{{- if .Shotline.Year}}
-							<tr>
-								<th>Shotline Year</th>
-								<td>{{.Shotline.Year}}</td>
-							</tr>
-							{{- end}}
-						</tr>
 						{{- end}}
 						{{- end}}
-						<tr>
-							<th>Shotlpoint(s)</th>
-							<td>{{- range $i, $s := .Shotpoints}}{{- if ne $i 0}}, {{- end}}
-								{{$s.Number}}{{- end}}
-						</tr>
+						{{- end}}
+						{{- if $hasNumber -}}
+							<tr>
+								<th>Shotpoint(s)</th>
+								<td>{{- range $i, $s := .Shotpoints}}{{- if $s.Number}}
+									{{- if $i}}, {{end}}{{$s.Number}}{{- end}}{{- end}}
+								</td>
+							</tr>
+						{{- end}}
 					</tbody>
 				</table>
 			</fieldset>
 			{{- end}}
+
 			{{- if .Wells}}
 
 			<fieldset>
@@ -424,7 +432,7 @@
 				{{- end}}
 			</fieldset>
 			{{- end}}
-			{{- if and $.user .Notes}}
+			{{- if and $.user (gt (len .Notes) 0)}}
 
 			<fieldset>
 				<legend>Notes</legend>
@@ -528,7 +536,9 @@
 					<tbody>
 						{{- range .ContainerLog}}
 						<tr>
+							{{- if .Date}}
 							<td>{{.Date.Format "1/2/2006"}} <b>{{.Destination}}</b></td>
+							{{- end}}
 						</tr>
 					{{- end}}
 					</tbody>
@@ -551,7 +561,9 @@
 					<tbody>
 						{{- range .Qualities}}
 						<tr>
+							{{- if .Date}}
 							<td>{{.Date.Format "1/2/2006"}}</td>
+							{{- end}}
 							<td>{{.Username}}</td>
 							<td>{{- range $i, $is := .Issues}}{{- if ne $i 0}}, {{- end}}
 								{{$is}}{{- end}}
@@ -571,5 +583,4 @@
 				<div id="stash-dd"></div>
 			</fieldset>
 			{{- end}}
-
 {{- end}}

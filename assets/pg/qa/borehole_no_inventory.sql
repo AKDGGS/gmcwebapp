@@ -10,4 +10,4 @@ WHERE borehole_id NOT IN (
 	JOIN inventory AS i
 		ON i.inventory_id = ib.inventory_id
 	WHERE i.active
-)	
+)

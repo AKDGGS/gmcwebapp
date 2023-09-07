@@ -35,7 +35,7 @@
 							<td>{{.AltNames}}</td>
 						</tr>
 						{{- end}}
-						{{- if not .CompletionDate.IsZero}}
+						{{- if .CompletionDate}}
 						<tr>
 							<th>Completion Date</th>
 							<td>{{.CompletionDate.Format "1/2/2006"}}</td>
@@ -144,7 +144,6 @@
 				</div>
 				</div>
 			</fieldset>
-
 			{{- if .Organizations}}
 
 			<fieldset>
@@ -176,7 +175,7 @@
 				{{- end}}
 			</fieldset>
 			{{- end}}
-			{{- if and $.user .Notes}}
+			{{- if and $.user (gt (len .Notes) 0)}}
 
 			<fieldset>
 				<legend>Notes</legend>

@@ -162,32 +162,31 @@
 				</div>
 			</fieldset>
 			{{- if .Organizations}}
-
-<fieldset>
-	<legend>Operators</legend>
-	<table class="tb-fields tb-columns">
-		<tbody>
-			{{- range $i, $f := .Organizations}}
-			{{- if eq $i 0}}
-			<tr>
-				<th>Current Operator</th>
-				<th>Type</th>
-			</tr>
-				{{- else if eq $i 1}}
-			<tr class="tb-spacer-sm">
-				<th>Previous Operator(s)</th>
-				<th>Type</th>
-			</tr>
+			<fieldset>
+				<legend>Operators</legend>
+				<table class="tb-fields tb-columns">
+					<tbody>
+						{{- range $i, $f := .Organizations}}
+						{{- if eq $i 0}}
+						<tr>
+							<th>Current Operator</th>
+							<th>Type</th>
+						</tr>
+							{{- else if eq $i 1}}
+						<tr class="tb-spacer-sm">
+							<th>Previous Operator(s)</th>
+							<th>Type</th>
+						</tr>
+						{{- end}}
+						<tr>
+							<td>{{.Name}}</td>
+							<td>{{.Type}}</td>
+						</tr>
+						{{- end}}
+					</tbody>
+				</table>
+			</fieldset>
 			{{- end}}
-			<tr>
-				<td>{{.Name}}</td>
-				<td>{{.Type}}</td>
-			</tr>
-			{{- end}}
-		</tbody>
-	</table>
-</fieldset>
-{{- end}}
 			{{- if .URLs}}
 
 			<fieldset>
@@ -197,7 +196,7 @@
 				{{- end}}
 			</fieldset>
 			{{- end}}
-			{{- if and $.user .Notes}}
+			{{- if and $.user (gt (len .Notes) 0)}}
 
 			<fieldset>
 				<legend>Notes</legend>

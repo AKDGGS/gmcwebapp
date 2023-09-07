@@ -75,6 +75,7 @@ func (pg *Postgres) GetInventory(id int, flags int) (*model.Inventory, error) {
 		defer rows.Close()
 		rowToStruct(rows, &inventory.Publications)
 	}
+
 	if (flags & dbf.BOREHOLE) != 0 {
 		q, err := assets.ReadString("pg/borehole/by_inventory_id.sql")
 		if err != nil {
@@ -101,8 +102,8 @@ func (pg *Postgres) GetInventory(id int, flags int) (*model.Inventory, error) {
 		rowToStruct(rows, &inventory.Outcrops)
 	}
 
-	if (flags & dbf.SHOTLINE) != 0 {
-		q, err := assets.ReadString("pg/shotline/by_inventory_id.sql")
+	if (flags & dbf.SHOTPOINT) != 0 {
+		q, err := assets.ReadString("pg/shotpoint/by_inventory_id.sql")
 		if err != nil {
 			return nil, err
 		}
@@ -125,6 +126,21 @@ func (pg *Postgres) GetInventory(id int, flags int) (*model.Inventory, error) {
 		}
 		defer rows.Close()
 		rowToStruct(rows, &inventory.Wells)
+	}
+
+	if (flags & dbf.ORGANIZATION) != 0 {
+		for i := 0; i < len(inventory.Wells); i++ {
+			q, err := assets.ReadString("pg/organization/by_well_id.sql")
+			if err != nil {
+				return nil, err
+			}
+			rows, err := pg.pool.Query(context.Background(), q, inventory.Wells[i].ID)
+			if err != nil {
+				return nil, err
+			}
+			defer rows.Close()
+			rowToStruct(rows, &inventory.Wells[i].Organizations)
+		}
 	}
 
 	if (flags & dbf.QUALITY) != 0 {
@@ -209,7 +225,7 @@ func (pg *Postgres) GetInventoryByBarcode(barcode string, flags int) ([]model.In
 		}
 
 		if (flags & dbf.SHOTPOINT) != 0 {
-			q, err := assets.ReadString("pg/shotline/by_inventory_id.sql")
+			q, err := assets.ReadString("pg/shotpoint/by_inventory_id.sql")
 			if err != nil {
 				return nil, err
 			}
@@ -233,6 +249,22 @@ func (pg *Postgres) GetInventoryByBarcode(barcode string, flags int) ([]model.In
 			defer rows.Close()
 			rowToStruct(rows, &inventory[i].Wells)
 		}
+
+		if (flags & dbf.ORGANIZATION) != 0 {
+			for j := 0; j < len(inventory[i].Wells); j++ {
+				q, err := assets.ReadString("pg/organization/by_well_id.sql")
+				if err != nil {
+					return nil, err
+				}
+				rows, err := pg.pool.Query(context.Background(), q, inventory[i].Wells[j].ID)
+				if err != nil {
+					return nil, err
+				}
+				defer rows.Close()
+				rowToStruct(rows, &inventory[i].Wells[j].Organizations)
+			}
+		}
+
 		if (flags & dbf.QUALITY) != 0 {
 			q, err := assets.ReadString("pg/quality/by_inventory_id.sql")
 			if err != nil {

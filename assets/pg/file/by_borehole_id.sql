@@ -1,4 +1,6 @@
-SELECT f.file_id AS id, f.filename AS name, f.mimetype as type,
+SELECT f.file_id AS id,
+	f.filename AS name,
+	f.mimetype as type,
 	f.size::numeric AS size
 FROM borehole_file AS bf
 JOIN file AS f

@@ -1,6 +1,6 @@
 SELECT well_id AS id,
 	name,
-	alt_names AS altName,
+	alt_names AS altNames,
 	well_number AS number,
 	api_number AS APINumber,
 	is_onshore AS onshore,
