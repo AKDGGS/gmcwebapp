@@ -1,6 +1,6 @@
 SELECT f.file_id AS id,
 	f.filename AS name,
-	f.mimetype as type,
+	f.mimetype AS type,
 	f.size::numeric AS size
 FROM outcrop_file AS of
 JOIN file AS f

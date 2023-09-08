@@ -1,8 +1,8 @@
 SELECT container_id AS id,
 	name,
-	path_cache AS pathCache,
+	path_cache,
 	remark,
 	barcode,
-	alt_barcode AS altBarcode
+	alt_barcode
 FROM container
 WHERE container_id = $1

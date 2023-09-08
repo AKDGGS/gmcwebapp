@@ -1,8 +1,8 @@
 SELECT sl.shotline_id AS id,
-	sl.name AS name,
-	sl.alt_names AS altNames,
-	sl.year AS year,
-	sl.remark AS remark,
+	sl.name,
+	sl.alt_names,
+	sl.year,
+	sl.remark,
 FROM inventory_shotpoint AS isp
 JOIN shotpoint AS sp
 	ON sp.shotpoint_id = isp.shotpoint_id

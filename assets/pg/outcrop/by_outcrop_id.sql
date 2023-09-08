@@ -1,4 +1,4 @@
-SELECT outcrop_id as id,
+SELECT outcrop_id AS id,
 	name,
 	outcrop_number AS number,
 	is_onshore AS onshore,

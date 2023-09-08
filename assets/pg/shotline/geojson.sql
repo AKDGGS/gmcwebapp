@@ -12,7 +12,7 @@ FROM (
 	FROM shotline AS s
 	JOIN shotpoint AS sp
 		ON sp.shotline_id = s.shotline_id
-	JOIN shotpoint_point as spp
+	JOIN shotpoint_point AS spp
 		ON spp.shotpoint_id = sp.shotpoint_id
 	JOIN point AS p
 		ON p.point_id = spp.point_id

@@ -3,7 +3,7 @@ SELECT n.note_id AS id,
 	n.note_date AS date,
 	n.is_public AS public,
  	n.username,
- 	nt.note_type_id AS typeID,
+ 	nt.note_type_id AS type_id,
 	nt.name,
 	nt.description
 FROM note AS n

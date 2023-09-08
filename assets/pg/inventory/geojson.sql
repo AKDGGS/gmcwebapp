@@ -9,7 +9,7 @@ FROM ((
 		'geometry', ST_AsGeoJSON(p.geog, 5, 0)::jsonb
 	)) AS features
 	FROM inventory AS i
-	JOIN inventory_borehole as ib
+	JOIN inventory_borehole AS ib
 		ON ib.inventory_id = i.inventory_id
 	JOIN borehole_point AS bp
 		ON bp.borehole_id = ib.borehole_id
@@ -111,7 +111,7 @@ FROM ((
 		ON sp.shotpoint_id = isp.shotpoint_id
 	JOIN shotline AS sl
 		ON sl.shotline_id = sp.shotline_id
-	JOIN shotpoint_point as spp
+	JOIN shotpoint_point AS spp
 		ON spp.shotpoint_id = sp.shotpoint_id
 	JOIN point AS p
 		ON p.point_id = spp.point_id

@@ -1,6 +1,6 @@
 SELECT f.file_id AS id,
 	f.description,
-	f.mimetype as type,
+	f.mimetype AS type,
 	f.size::numeric AS size,
 	f.filename AS name
 	FROM inventory_file AS ivf
