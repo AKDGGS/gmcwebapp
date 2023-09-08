@@ -183,9 +183,7 @@ func (pg *Postgres) enumAddValues(enum string, values ...string) error {
 }
 
 func matchingStr(fieldName, ch string) bool {
-	if strings.Contains(ch, "_") {
-		ch = strings.ReplaceAll(ch, "_", "")
-	}
+	ch = strings.ReplaceAll(ch, "_", "")
 	return strings.EqualFold(fieldName, ch)
 }
 

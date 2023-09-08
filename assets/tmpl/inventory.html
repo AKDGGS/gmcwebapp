@@ -353,7 +353,6 @@
 				</table>
 			</fieldset>
 			{{- end}}
-
 			{{- if .Wells}}
 
 			<fieldset>
@@ -361,7 +360,6 @@
 				<table class="tb-fields">
 					<tbody>
 						{{- range $i, $w :=.Wells}}
-
 						{{if eq $i 0}}
 						{{- if .Name}}
 						<tr class="tb-spacer-sm">
@@ -475,7 +473,6 @@
 				</div>
 				</div>
 			</fieldset>
-
 			{{- if and $.user .Publications}}
 
 			<fieldset>
