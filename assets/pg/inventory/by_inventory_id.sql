@@ -2,7 +2,7 @@ SELECT iv.inventory_id AS id,
 	cl.collection_id AS "collection.id",
 	cl.name AS "collection.name",
 	cl.description AS "collection.description",
-	cl.organization_id AS "collection.organization_id",
+	cl.organization_id AS "collection.organization.id",
 
 	co.container_id AS "container.id",
 	co.name AS "container.name",
