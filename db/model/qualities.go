@@ -9,7 +9,7 @@ type Qualities struct {
 	ID       int32      `json:"id"`
 	Remark   *string    `json:"remark,omitempty"`
 	Date     *time.Time `json:"check_date"`
-	Username *string    `json:"username"`
+	Username string     `json:"username"`
 	Issues   []string   `json:"issues,omitempty"`
 }
 

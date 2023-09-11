@@ -7,7 +7,7 @@ import (
 
 type Outcrop struct {
 	ID            int32                  `json:"id,omitempty"`
-	Name          *string                `json:"name,omitempty"`
+	Name          string                 `json:"name,omitempty"`
 	Number        *string                `json:"outcrop_number,omitempty"`
 	Onshore       bool                   `json:"is_onshore"`
 	EnteredDate   *time.Time             `json:"entered_date,omitempty"`

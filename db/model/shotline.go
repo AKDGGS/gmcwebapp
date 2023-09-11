@@ -2,7 +2,7 @@ package model
 
 type Shotline struct {
 	ID       int32                  `json:"id"`
-	Name     *string                `json:"name"`
+	Name     string                 `json:"name"`
 	AltNames *string                `json:"alt_names,omitempty"`
 	Year     *int16                 `json:"year,omitempty"`
 	Remark   *string                `json:"remark,omitempty"`

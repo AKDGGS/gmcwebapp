@@ -101,6 +101,7 @@
 						<thead>
 							<tr>
 								<th>Date</th>
+								<th>Type</th>
 								<th>User</th>
 								<th>Public</th>
 								<th>Note</th>
@@ -110,6 +111,7 @@
 							{{- range .Notes}}
 							<tr>
 								<td>{{.Date.Format "1/2/2006"}}</td>
+								<td>{{.NoteType.Name}}</td>
 								<td>{{.Username}}</td>
 								<td>{{- if .Public}}Yes{{- else -}}No{{- end}}</td>
 								<td>{{.Note}}</td>

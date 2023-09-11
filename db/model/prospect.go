@@ -2,7 +2,7 @@ package model
 
 type Prospect struct {
 	ID         int32   `json:"id,omitempty"`
-	Name       *string `json:"name,omitempty"`
+	Name       string  `json:"name,omitempty"`
 	AltNames   *string `json:"alt_names,omitempty"`
 	ARDFNumber *string `json:"ardf_number,omitempty"`
 

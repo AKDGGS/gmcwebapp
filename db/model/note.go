@@ -6,14 +6,12 @@ import (
 )
 
 type Note struct {
-	ID          int32      `json:"id,omitempty"`
-	Note        *string    `json:"note,omitempty"`
-	Date        *time.Time `json:"date,omitempty"`
-	Public      bool       `json:"is_public"`
-	Username    *string    `json:"username,omitempty"`
-	TypeID      int32      `json:"type_id,omitempty"`
-	Name        *string    `json:"name,omitempty"`
-	Description *string    `json:"description,omitempty"`
+	ID       int32      `json:"id,omitempty"`
+	Note     string     `json:"note,omitempty"`
+	Date     *time.Time `json:"date,omitempty"`
+	Public   bool       `json:"is_public"`
+	Username string     `json:"username,omitempty"`
+	NoteType NoteType   `json:"note_type,omitempty"`
 }
 
 func (n *Note) MarshalJSON() ([]byte, error) {

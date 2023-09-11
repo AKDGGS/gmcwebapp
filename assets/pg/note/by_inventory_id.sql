@@ -3,9 +3,9 @@ SELECT n.note_id AS id,
 	n.note_date AS date,
 	n.is_public AS public,
 	n.username,
-	nt.note_type_id AS type_id,
-	nt.name,
-	nt.description
+	nt.note_type_id AS "note_type.id",
+	nt.name AS "note_type.name",
+	nt.description AS "note_type.description"
 FROM note AS n
 JOIN note_type AS nt
 	ON nt.note_type_id = n.note_type_id

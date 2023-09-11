@@ -7,7 +7,7 @@ import (
 
 type Well struct {
 	ID               int32                  `json:"id,omitempty"`
-	Name             *string                `json:"name,omitempty"`
+	Name             string                 `json:"name,omitempty"`
 	AltNames         *string                `json:"alt_names,omitempty"`
 	Number           *string                `json:"well_number,omitempty"`
 	APINumber        *string                `json:"api_number,omitempty"`
