@@ -221,7 +221,7 @@ func rowToStruct(r pgx.Rows, a interface{}) int {
 		}
 		ptrsFields := make([]interface{}, 0)
 		if r.Next() {
-			values, _ := r.Values()
+			values := r.RawValues()
 			for i, c := range columnNames {
 				if values[i] == nil {
 					ptrsFields = append(ptrsFields, nil)
