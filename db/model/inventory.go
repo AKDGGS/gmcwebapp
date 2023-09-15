@@ -6,12 +6,12 @@ import (
 )
 
 type Inventory struct {
-	ID         int32      `json:"id"`
-	Barcode    *string    `json:"barcode,omitempty"`
-	AltBarcode *string    `json:"alt_barcode,omitempty"`
-	Collection Collection `json:"collection,omitempty"`
+	ID         int32       `json:"id"`
+	Barcode    *string     `json:"barcode,omitempty"`
+	AltBarcode *string     `json:"alt_barcode,omitempty"`
+	Collection *Collection `json:"collection,omitempty"`
 
-	Container Container `json:"container,omitempty"`
+	Container *Container `json:"container,omitempty"`
 
 	SampleID                 *int64   `json:"dggs_sample_id,omitempty"`
 	SampleNumber             *string  `json:"sample_number,omitempty"`
@@ -37,7 +37,7 @@ type Inventory struct {
 	Keywords                 []string `json:"keywords,omitempty"`
 	CoreNumber               *string  `json:"core_number,omitempty"`
 
-	CoreDiameter CoreDiameter `json:"core_diameter,omitempty"`
+	CoreDiameter *CoreDiameter `json:"core_diameter,omitempty"`
 
 	Weight          *float64               `json:"weight,omitempty"`
 	WeightUnit      *string                `json:"weight_unit,omitempty"`

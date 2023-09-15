@@ -23,7 +23,7 @@ type Borehole struct {
 	URLs              []URL                  `json:"urls,omitempty"`
 	Organizations     []Organization         `json:"organizations,omitempty"`
 	Files             []File                 `json:"files,omitempty"`
-	Prospect          Prospect               `json:"prospects,omitempty"`
+	Prospect          *Prospect              `json:"prospects,omitempty"`
 
 	//transient fields that are generated on-the-fly
 	//these fields don't exist in the database
