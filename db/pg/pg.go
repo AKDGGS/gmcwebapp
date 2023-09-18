@@ -6,7 +6,6 @@ import (
 	"net/url"
 	"reflect"
 	"strings"
-	"time"
 
 	"gmc/assets"
 	"gmc/db/model"
@@ -223,9 +222,7 @@ func rowToStruct(r pgx.Rows, a interface{}) int {
 		for i := 0; i < rv.NumField(); i++ {
 			if rv.Field(i).Kind() == reflect.Ptr {
 				if rv.Field(i).Type().Elem().Kind() == reflect.Struct {
-					if rv.Field(i).Type().Elem() != reflect.TypeOf(time.Time{}) {
-						rv.Field(i).Set(reflect.New(rv.Field(i).Type().Elem()))
-					}
+					rv.Field(i).Set(reflect.New(rv.Field(i).Type().Elem()))
 				}
 			}
 		}

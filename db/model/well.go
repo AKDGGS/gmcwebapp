@@ -13,8 +13,8 @@ type Well struct {
 	APINumber        *string                `json:"api_number,omitempty"`
 	Onshore          bool                   `json:"is_onshore"`
 	Federal          bool                   `json:"is_federal"`
-	SpudDate         *time.Time             `json:"spud_date,omitempty"`
-	CompletionDate   *time.Time             `json:"completion_date,omitempty"`
+	SpudDate         time.Time              `json:"spud_date,omitempty"`
+	CompletionDate   time.Time              `json:"completion_date,omitempty"`
 	MeasuredDepth    *float64               `json:"measured_depth,omitempty"`
 	VerticalDepth    *float64               `json:"vertical_depth,omitempty"`
 	Elevation        *float64               `json:"elevation_depth,omitempty"`
@@ -39,11 +39,11 @@ type Well struct {
 func (w *Well) MarshalJSON() ([]byte, error) {
 	type Alias Well
 	var spudDate string
-	if w.SpudDate != nil && !w.SpudDate.IsZero() {
+	if !w.SpudDate.IsZero() {
 		spudDate = w.SpudDate.Format("01-02-2006")
 	}
 	var completionDate string
-	if w.CompletionDate != nil && !w.CompletionDate.IsZero() {
+	if !w.CompletionDate.IsZero() {
 		completionDate = w.CompletionDate.Format("01-02-2006")
 	}
 	return json.Marshal(&struct {

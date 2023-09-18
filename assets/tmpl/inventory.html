@@ -59,7 +59,7 @@
 							<td>{{.PublishedSampleNumber}}{{- if .PublishedNumberHasSuffix}} Has Suffix{{else}} No Suffix{{- end}}</td>
 						</tr>
 						{{- end}}
-						{{- if and .Collection .Collection.Name}}
+						{{- if .Collection.Name}}
 			        <tr>
 			            <th>Collection</th>
 			            <td>{{.Collection.Name}}</td>
@@ -189,13 +189,13 @@
 						</tr>
 						{{- end}}
 						{{- if $.user}}
-						{{- if .ReceivedDate}}
+						{{- if ne .ReceivedDate.IsZero true}}
 						<tr>
 							<th>Received Date</th>
 							<td>{{.ReceivedDate.Format "1/2/2006"}}</td>
 						</tr>
 						{{- end}}
-						{{- if .EnteredDate}}
+						{{- if ne .EnteredDate.IsZero true}}
 						<tr>
 							<th>Entered Date</th>
 							<td>{{.EnteredDate.Format "1/2/2006"}}</td>
@@ -207,7 +207,7 @@
 							<td>{{.ModifiedUser}}</td>
 						</tr>
 						{{- end}}
-						{{- if .ModifiedDate}}
+						{{- if ne .ModifiedDate.IsZero true}}
 						<tr>
 							<th>Modified Date</th>
 							<td>{{.ModifiedDate.Format "1/2/2006"}}</td>
@@ -309,7 +309,6 @@
 				</table>
 			</fieldset>
 			{{- end}}
-
 			{{- if .Shotpoints}}
 
 			<fieldset>

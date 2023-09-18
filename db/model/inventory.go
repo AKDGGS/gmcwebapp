@@ -45,9 +45,9 @@ type Inventory struct {
 	Recovery        *string                `json:"recovery,omitempty"`
 	CanPublish      bool                   `json:"can_publish"`
 	RadiationMSVH   *float64               `json:"radiation_msvh,omitempty"`
-	ReceivedDate    *time.Time             `json:"received_date,omitempty"`
-	EnteredDate     *time.Time             `json:"entered_date,omitempty"`
-	ModifiedDate    *time.Time             `json:"modified_date,omitempty"`
+	ReceivedDate    time.Time              `json:"received_date,omitempty"`
+	EnteredDate     time.Time              `json:"entered_date,omitempty"`
+	ModifiedDate    time.Time              `json:"modified_date,omitempty"`
 	ModifiedUser    *string                `json:"modified_user,omitempty"`
 	Active          bool                   `json:"active"`
 	Stash           map[string]interface{} `json:"stash,omitempty"`
@@ -71,15 +71,15 @@ type Inventory struct {
 func (i *Inventory) MarshalJSON() ([]byte, error) {
 	type Alias Inventory
 	var receivedDate string
-	if i.ReceivedDate != nil && !i.ReceivedDate.IsZero() {
+	if !i.ReceivedDate.IsZero() {
 		receivedDate = i.ReceivedDate.Format("01-02-2006")
 	}
 	var enteredDate string
-	if i.EnteredDate != nil && !i.EnteredDate.IsZero() {
+	if !i.EnteredDate.IsZero() {
 		enteredDate = i.EnteredDate.Format("01-02-2006")
 	}
 	var modifiedDate string
-	if i.ModifiedDate != nil && !i.ModifiedDate.IsZero() {
+	if !i.ModifiedDate.IsZero() {
 		modifiedDate = i.ModifiedDate.Format("01-02-2006")
 	}
 	return json.Marshal(&struct {
