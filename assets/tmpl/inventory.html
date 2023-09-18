@@ -340,7 +340,11 @@
 						<tr>
 							<th>Shotpoint(s)</th>
 							<td>{{- range $i, $s := .Shotpoints}}{{- if ne $i 0}}, {{- end}}
-								{{$s.Number}}{{- end}}
+								{{- if $s.Number}}
+								{{$s.Number}}
+								{{- end}}
+								{{- end}}
+							</td>
 						</tr>
 					</tbody>
 				</table>
