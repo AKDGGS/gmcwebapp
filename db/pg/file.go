@@ -49,7 +49,7 @@ func (pg *Postgres) PutFile(file *model.File, precommitFunc func() error) error 
 
 	switch {
 	case len(file.BoreholeIDs) != 0:
-		insert_sql, err := assets.ReadString("pg/borehole/insert_boreholefile.sql")
+		insert_sql, err := assets.ReadString("pg/file/insert_borehole.sql")
 		if err != nil {
 			return err
 		}
@@ -63,7 +63,7 @@ func (pg *Postgres) PutFile(file *model.File, precommitFunc func() error) error 
 			}
 		}
 	case len(file.InventoryIDs) != 0:
-		insert_sql, err := assets.ReadString("pg/inventory/insert_inventoryfile.sql")
+		insert_sql, err := assets.ReadString("pg/file/insert_inventory.sql")
 		if err != nil {
 			return err
 		}
@@ -77,7 +77,7 @@ func (pg *Postgres) PutFile(file *model.File, precommitFunc func() error) error 
 			}
 		}
 	case len(file.OutcropIDs) != 0:
-		insert_sql, err := assets.ReadString("pg/outcrop/insert_outcropfile.sql")
+		insert_sql, err := assets.ReadString("pg/file/insert_outcrop.sql")
 		if err != nil {
 			return err
 		}
@@ -91,7 +91,7 @@ func (pg *Postgres) PutFile(file *model.File, precommitFunc func() error) error 
 			}
 		}
 	case len(file.ProspectIDs) != 0:
-		insert_sql, err := assets.ReadString("pg/prospect/insert_prospectfile.sql")
+		insert_sql, err := assets.ReadString("pg/file/insert_prospect.sql")
 		if err != nil {
 			return err
 		}
@@ -105,7 +105,7 @@ func (pg *Postgres) PutFile(file *model.File, precommitFunc func() error) error 
 			}
 		}
 	case len(file.WellIDs) != 0:
-		insert_sql, err := assets.ReadString("pg/well/insert_wellfile.sql")
+		insert_sql, err := assets.ReadString("pg/file/insert_well.sql")
 		if err != nil {
 			return err
 		}
