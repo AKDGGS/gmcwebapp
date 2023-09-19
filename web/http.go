@@ -116,7 +116,7 @@ func (srv *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	case "inventory.json":
 		q := r.URL.Query()
 		barcode := q.Get("barcode")
-		srv.ServeInventoryDetailJSON(barcode, w, r)
+		srv.ServeInventoryDetail(barcode, w, r)
 		return
 	}
 

@@ -3,11 +3,12 @@ package web
 import (
 	"encoding/json"
 	"fmt"
-	dbf "gmc/db/flag"
 	"net/http"
+
+	dbf "gmc/db/flag"
 )
 
-func (srv *Server) ServeInventoryDetailJSON(barcode string, w http.ResponseWriter, r *http.Request) {
+func (srv *Server) ServeInventoryDetail(barcode string, w http.ResponseWriter, r *http.Request) {
 	user, err := srv.Auths.CheckRequest(w, r)
 	if err != nil {
 		http.Error(
