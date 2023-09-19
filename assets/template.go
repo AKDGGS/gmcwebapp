@@ -29,16 +29,6 @@ var stdFuncs template.FuncMap = template.FuncMap{
 			return in
 		}
 	},
-	"formattime": func(fmt string, in interface{}) interface{} {
-		switch v := in.(type) {
-		case time.Time:
-			return v.Format(fmt)
-		case nil:
-			return nil
-		default:
-			return in
-		}
-	},
 }
 
 type templateEntry struct {

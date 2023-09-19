@@ -35,13 +35,13 @@
 							<th>Federal</th>
 							<td>{{- if .Federal}}Yes{{- else}}No{{- end}}</td>
 						</tr>
-						{{- if .SpudDate}}
+						{{- if ne .SpudDate.IsZero true}}
 						<tr>
 							<th>Spud Date</th>
 							<td>{{.SpudDate.Format "1/2/2006"}}</td>
 						</tr>
 						{{- end}}
-						{{- if .CompletionDate}}
+						{{- if ne .CompletionDate.IsZero true}}
 						<tr>
 							<th>Completion Date</th>
 							<td>{{.CompletionDate.Format "1/2/2006"}}</td>
@@ -180,7 +180,7 @@
 						{{- end}}
 						<tr>
 							<td>{{.Name}}</td>
-							<td>{{.Type}}</td>
+							<td>{{.Type.Name}}</td>
 						</tr>
 						{{- end}}
 					</tbody>
@@ -213,7 +213,7 @@
 					<tbody>
 					{{- range .Notes}}
 						<tr>
-							<td>{{formattime "1/2/2006" .Date}}</td>
+							<td>{{.Date}}</td>
 							<td>{{.NoteType.Name}}</td>
 							<td>{{.Username}}</td>
 							<td>{{- if .Public}}Yes{{- else}}No{{- end}}</td>
