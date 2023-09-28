@@ -128,7 +128,7 @@
 			</fieldset>
 			{{- end}}
 
-			<fieldset >
+			<fieldset>
 				<legend>Files</legend>
 				{{- if $.user }}
 					<div id="filedrop" data-borehole_id="{{.ID}}">
@@ -175,7 +175,8 @@
 				{{- end}}
 			</fieldset>
 			{{- end}}
-			{{- if and $.user (gt (len .Notes) 0)}}
+			{{- if $.user}}
+			{{- if .Notes}}
 
 			<fieldset>
 				<legend>Notes</legend>
@@ -198,6 +199,7 @@
 							<td>{{- if .Public}}Yes{{- else}}No{{- end}}</td>
 							<td>{{.Note}}</td>
 						</tr>
+						{{- end}}
 						{{- end}}
 					</tbody>
 				</table>

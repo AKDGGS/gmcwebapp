@@ -55,7 +55,6 @@ func FilePut(exec string, cfg *config.Config, cmd string, args []string) {
 	for _, filename := range filenames {
 		file_info, err := os.Stat(filename)
 		if err != nil || file_info.Size() == 0 {
-			fmt.Println(filename, "does not exist or has a size of zero")
 			continue
 		}
 		// temporary code until we decide what to do with the MD5.

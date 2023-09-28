@@ -134,7 +134,8 @@
 				{{- end}}
 			</fieldset>
 			{{- end}}
-			{{- if and $.user (gt (len .Notes) 0)}}
+			{{- if $.user}}
+			{{- if .Notes}}
 
 			<fieldset>
 				<legend>Notes</legend>
@@ -154,12 +155,13 @@
 							<td>{{.Date.Format "1/2/2006"}}</td>
 							<td>{{.NoteType.Name}}</td>
 							<td>{{.Username}}</td>
-							<td>{{- if .Public}} Yes {{- else -}}No{{- end}} </td>
+							<td>{{- if .Public}}Yes{{- else -}}No{{- end}}</td>
 							<td>{{.Note}}</td>
 						</tr>
 						{{- end}}
 					</tbody>
 				</table>
 			</fieldset>
+			{{- end}}
 			{{- end}}
 {{end}}

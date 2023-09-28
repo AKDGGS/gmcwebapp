@@ -57,7 +57,7 @@ type Inventory struct {
 	GeoJSON       map[string]interface{} `json:"geojson,omitempty"`
 	Boreholes     []Borehole             `json:"boreholes,omitempty"`
 	Outcrops      []Outcrop              `json:"outcrops,omitempty"`
-	Shotpoints    []Shotpoint            `json:"shotpoints,omitempty"`
+	Shotlines     []Shotline             `json:"shotlines,omitempty"`
 	Wells         []Well                 `json:"wells,omitempty"`
 	Organizations []Organization         `json:"organizations,omitempty"`
 	Notes         []Note                 `json:"notes,omitempty"`

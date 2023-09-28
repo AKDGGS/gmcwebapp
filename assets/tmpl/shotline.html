@@ -93,32 +93,34 @@
 				{{- end}}
 			</fieldset>
 			{{- end}}
-			{{- if and $.user (gt (len .Notes) 0)}}
+			{{- if $.user}}
+			{{- if .Notes}}
 
-				<fieldset>
-					<legend>Notes</legend>
-					<table class="tb-fields tb-columns">
-						<thead>
-							<tr>
-								<th>Date</th>
-								<th>Type</th>
-								<th>User</th>
-								<th>Public</th>
-								<th>Note</th>
-							</tr>
-						</thead>
-						<tbody>
-							{{- range .Notes}}
-							<tr>
-								<td>{{.Date.Format "1/2/2006"}}</td>
-								<td>{{.NoteType.Name}}</td>
-								<td>{{.Username}}</td>
-								<td>{{- if .Public}}Yes{{- else -}}No{{- end}}</td>
-								<td>{{.Note}}</td>
-							</tr>
+			<fieldset>
+				<legend>Notes</legend>
+				<table class="tb-fields tb-columns">
+					<thead>
+						<tr>
+							<th>Date</th>
+							<th>Type</th>
+							<th>User</th>
+							<th>Public</th>
+							<th>Note</th>
+						</tr>
+					</thead>
+					<tbody>
+						{{- range .Notes}}
+						<tr>
+							<td>{{.Date.Format "1/2/2006"}}</td>
+							<td>{{.NoteType.Name}}</td>
+							<td>{{.Username}}</td>
+							<td>{{- if .Public}}Yes{{- else -}}No{{- end}}</td>
+							<td>{{.Note}}</td>
+						</tr>
 						{{- end}}
-						</tbody>
+					</tbody>
 					</table>
 				</fieldset>
-			{{- end}}
+				{{- end}}
+				{{- end}}
 {{- end}}

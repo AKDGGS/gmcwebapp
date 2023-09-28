@@ -309,45 +309,28 @@
 				</table>
 			</fieldset>
 			{{- end}}
-			{{- if .Shotpoints}}
+			{{- if .Shotlines}}
 
 			<fieldset>
-				<legend>Shotlines(s)</legend>
-				<table class="tb-fields">
-					<tbody>
-						{{- range $i, $s := .Shotpoints}}
-						{{- if eq $i 0}}
-						{{- if .Shotline.Name}}
-						<tr class="tb-spacer-sm">
-							<th>Shotline Name</th>
-							<td><a href="../shotline/{{.Shotline.ID}}">{{.Shotline.Name}}</a></td>
-							{{- end}}
-							{{- if .Shotline.AltNames}}
-							<tr>
-								<th>Shotline Alt. Name</th>
-								<td>{{.Shotline.AltNames}}</td>
-							</tr>
-							{{- end}}
-							{{- if .Shotline.Year}}
-							<tr>
-								<th>Shotline Year</th>
-								<td>{{.Shotline.Year}}</td>
-							</tr>
-							{{- end}}
-						</tr>
-						{{- end}}
-						{{- end}}
-						<tr>
-							<th>Shotpoint(s)</th>
-							<td>{{- range $i, $s := .Shotpoints}}{{- if ne $i 0}}, {{- end}}
-								{{- if $s.Number}}
-								{{$s.Number}}
-								{{- end}}
-								{{- end}}
-							</td>
-						</tr>
-					</tbody>
-				</table>
+			<legend>Shotpoints(s)</legend>
+			<table class="tb-fields">
+				<tbody>
+				{{- range $i, $sl :=.Shotlines}}
+				<tr class="tb-spacer-sm">
+					<th>Shotline Name</th>
+					<td><a href="../shotline/{{$sl.ID}}">{{$sl.Name}}</a></td>
+				</tr>
+				<tr>
+					<th>Shotpoint(s)</th>
+					<td>
+					{{ if $sl.Numbers}}
+						{{$sl.Numbers}}
+					{{ end}}
+					</td>
+				</tr>
+				{{- end}}
+				</tbody>
+			</table>
 			</fieldset>
 			{{- end}}
 			{{- if .Wells}}
@@ -427,7 +410,8 @@
 				{{- end}}
 			</fieldset>
 			{{- end}}
-			{{- if and $.user (gt (len .Notes) 0)}}
+			{{- if $.user}}
+			{{- if .Notes}}
 
 			<fieldset>
 				<legend>Notes</legend>
@@ -454,6 +438,7 @@
 					</tbody>
 				</table>
 			</fieldset>
+			{{- end}}
 			{{- end}}
 
 			<fieldset>
@@ -564,7 +549,9 @@
 							<td>{{- range $i, $is := .Issues}}{{- if ne $i 0}}, {{- end}}
 								{{$is}}{{- end}}
 							</td>
-							<td>{{.Remark}}</td>
+							{{- if .Remark}}
+								<td>{{.Remark}}</td>
+							{{- end}}
 						</tr>
 					</tbody>
 					{{- end}}

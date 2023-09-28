@@ -12,6 +12,7 @@ type Shotline struct {
 	//these fields don't exist in the database
 	ShotpointMin   *float64         `json:"shotpoint_min,omitempty"`
 	ShotpointMax   *float64         `json:"shotpoint_max,omitempty"`
+	Numbers        *string          `json:"numbers,omitempty"`
 	GeoJSON        interface{}      `json:"geojson,omitempty"`
 	KeywordSummary []KeywordSummary `json:"keywords,omitempty"`
 	Quadrangles    []Quadrangle     `json:"quadrangles,omitempty"`

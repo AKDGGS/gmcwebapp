@@ -102,8 +102,8 @@ func (pg *Postgres) GetInventory(id int, flags int) (*model.Inventory, error) {
 		rowToStruct(rows, &inventory.Outcrops)
 	}
 
-	if (flags & dbf.SHOTPOINT) != 0 {
-		q, err := assets.ReadString("pg/shotpoint/by_inventory_id.sql")
+	if (flags & dbf.SHOTLINE) != 0 {
+		q, err := assets.ReadString("pg/shotline/by_inventory_id.sql")
 		if err != nil {
 			return nil, err
 		}
@@ -112,7 +112,7 @@ func (pg *Postgres) GetInventory(id int, flags int) (*model.Inventory, error) {
 			return nil, err
 		}
 		defer rows.Close()
-		rowToStruct(rows, &inventory.Shotpoints)
+		rowToStruct(rows, &inventory.Shotlines)
 	}
 
 	if (flags & dbf.WELL) != 0 {
@@ -224,8 +224,8 @@ func (pg *Postgres) GetInventoryByBarcode(barcode string, flags int) ([]model.In
 			rowToStruct(rows, &inventory[i].Outcrops)
 		}
 
-		if (flags & dbf.SHOTPOINT) != 0 {
-			q, err := assets.ReadString("pg/shotpoint/by_inventory_id.sql")
+		if (flags & dbf.SHOTLINE) != 0 {
+			q, err := assets.ReadString("pg/shotline/by_inventory_id.sql")
 			if err != nil {
 				return nil, err
 			}
@@ -234,7 +234,7 @@ func (pg *Postgres) GetInventoryByBarcode(barcode string, flags int) ([]model.In
 				return nil, err
 			}
 			defer rows.Close()
-			rowToStruct(rows, &inventory[i].Shotpoints)
+			rowToStruct(rows, &inventory[i].Shotlines)
 		}
 
 		if (flags & dbf.WELL) != 0 {
