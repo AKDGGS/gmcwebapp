@@ -17,6 +17,10 @@ func (srv *Server) ServeInventoryDetail(barcode string, w http.ResponseWriter, r
 		)
 		return
 	}
+	if user == nil {
+		http.Error(w, "Password invalid", http.StatusForbidden)
+		return
+	}
 	flags := dbf.ALL
 	if user == nil {
 		flags = dbf.ALL_NOPRIVATE
