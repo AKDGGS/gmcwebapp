@@ -182,7 +182,7 @@ func (pg *Postgres) enumAddValues(enum string, values ...string) error {
 	return nil
 }
 
-func matchingStr(fieldName, ch string) bool {
+func structFieldMatcher(fieldName, ch string) bool {
 	ch = strings.ReplaceAll(ch, "_", "")
 	return strings.EqualFold(fieldName, ch)
 }
@@ -240,7 +240,7 @@ func rowToStruct(r pgx.Rows, a interface{}) int {
 						f = f.Elem()
 					}
 					f = f.FieldByNameFunc(func(fieldName string) bool {
-						return matchingStr(fieldName, string(ch))
+						return structFieldMatcher(fieldName, string(ch))
 					})
 					if !f.IsValid() {
 						break
