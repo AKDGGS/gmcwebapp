@@ -57,7 +57,7 @@ type Inventory struct {
 	GeoJSON       map[string]interface{} `json:"geojson,omitempty"`
 	Boreholes     []Borehole             `json:"boreholes,omitempty"`
 	Outcrops      []Outcrop              `json:"outcrops,omitempty"`
-	Shotlines     []Shotline             `json:"shotlines,omitempty"`
+	Shotpoints    []Shotpoint            `json:"shotpoints,omitempty"`
 	Wells         []Well                 `json:"wells,omitempty"`
 	Organizations []Organization         `json:"organizations,omitempty"`
 	Notes         []Note                 `json:"notes,omitempty"`
@@ -93,4 +93,21 @@ func (i *Inventory) MarshalJSON() ([]byte, error) {
 		ModifiedDate: modifiedDate,
 		Alias:        (*Alias)(i),
 	})
+}
+
+func (i *Inventory) Shotlines() []*Shotline {
+	var shotlines []*Shotline
+	sp_map := make(map[int32][]Shotpoint)
+	for _, sp := range i.Shotpoints {
+		shotline := sp.Shotline
+		if _, ok := sp_map[shotline.ID]; !ok {
+			shotlines = append(shotlines, shotline)
+			sp_map[shotline.ID] = []Shotpoint{}
+		}
+		sp_map[shotline.ID] = append(sp_map[shotline.ID], sp)
+	}
+	for _, sl := range shotlines {
+		sl.Shotpoints = sp_map[sl.ID]
+	}
+	return shotlines
 }

@@ -2,7 +2,12 @@ SELECT jsonb_build_object(
 	'type', 'FeatureCollection',
 	'features', jsonb_build_array(jsonb_build_object(
 		'type', 'Feature', 'geometry',
-		ST_AsGeoJSON(q.geog, 5, 0)::jsonb
+		ST_AsGeoJSON(
+			CASE
+				WHEN ST_NumPoints(q.geog) > 1 THEN ST_Simplify(q.geog,0.0001)
+				ELSE ST_PointN(q.geog, 1)
+			END
+		, 5, 0)::jsonb
 	))
 ) AS geojson
 FROM (
