@@ -84,14 +84,13 @@
 						</tr>
 						{{- end}}
 						{{- if .GeoJSON}}
-						{{- range $i, $f := .GeoJSON.features}}{{- if ne $i 0}}, {{- end}}{{- if (eq $f.geometry.type "Point" )}}
 						<tr>
 							<th>Lon/Lat</th>
-							<td>{{- range $i, $coor := $f.geometry.coordinates}}{{- if ne $i 0}}, {{- end}}
-								{{$coor}}{{- end}}
+							<td id="latlon"></td>
 						</tr>
-						{{- end}}
-						{{- end}}
+						<script>
+							var geojson = {{rawjs .GeoJSON}};
+						</script>
 						{{- end}}
 						{{- if .Quadrangles}}
 						<tr>
@@ -116,9 +115,6 @@
 					</div>
 					<div id="popup-content" class="ol-popup-content"></div>
 				</div>
-				<script>
-					var geojson = {{rawjs .GeoJSON}};
-				</script>
 			</fieldset>
 			<div class="flex-break"></div>
 			{{- end}}

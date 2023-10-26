@@ -95,3 +95,10 @@ if (document.getElementById('map')){
 if(document.getElementById('filedrop')) {
 		let drop_zone = new FileDrop(document.getElementById('filedrop'), document.getElementById('file-list-container'));
 }
+
+if(document.getElementById('latlon')) {
+	if(geojson != null && geojson.features.length > 0){
+		document.getElementById('latlon').innerHTML = geojson.features[0].geometry.coordinates[0]
+		+ ", " + geojson.features[0].geometry.coordinates[1];
+	}
+}
