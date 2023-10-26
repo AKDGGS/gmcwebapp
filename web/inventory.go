@@ -45,13 +45,13 @@ func (srv *Server) ServeInventory(id int, w http.ResponseWriter, r *http.Request
 		return
 	}
 
-	inventoryParams := map[string]interface{}{
+	inventory_params := map[string]interface{}{
 		"inventory": inventory,
 		"user":      user,
 	}
 
 	buf := bytes.Buffer{}
-	if err := assets.ExecuteTemplate("tmpl/inventory.html", &buf, inventoryParams); err != nil {
+	if err := assets.ExecuteTemplate("tmpl/inventory.html", &buf, inventory_params); err != nil {
 		http.Error(
 			w, fmt.Sprintf("Parse error: %s", err.Error()),
 			http.StatusInternalServerError,
