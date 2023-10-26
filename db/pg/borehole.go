@@ -20,7 +20,7 @@ func (pg *Postgres) GetBorehole(id int, flags int) (*model.Borehole, error) {
 	defer rows.Close()
 	borehole := model.Borehole{}
 
-	if rowToStruct(rows, &borehole) == 0 {
+	if rowsToStruct(rows, &borehole) == 0 {
 		return nil, nil
 	}
 
@@ -33,7 +33,7 @@ func (pg *Postgres) GetBorehole(id int, flags int) (*model.Borehole, error) {
 		if err != nil {
 			return nil, err
 		}
-		rowToStruct(r, &borehole.Files)
+		rowsToStruct(r, &borehole.Files)
 	}
 
 	if (flags & dbf.INVENTORY_SUMMARY) != 0 {
@@ -45,7 +45,7 @@ func (pg *Postgres) GetBorehole(id int, flags int) (*model.Borehole, error) {
 		if err != nil {
 			return nil, err
 		}
-		rowToStruct(r, &borehole.KeywordSummary)
+		rowsToStruct(r, &borehole.KeywordSummary)
 	}
 
 	if (flags & dbf.ORGANIZATION) != 0 {
@@ -57,7 +57,7 @@ func (pg *Postgres) GetBorehole(id int, flags int) (*model.Borehole, error) {
 		if err != nil {
 			return nil, err
 		}
-		rowToStruct(r, &borehole.Organizations)
+		rowsToStruct(r, &borehole.Organizations)
 	}
 
 	if (flags & dbf.URLS) != 0 {
@@ -69,7 +69,7 @@ func (pg *Postgres) GetBorehole(id int, flags int) (*model.Borehole, error) {
 		if err != nil {
 			return nil, err
 		}
-		rowToStruct(r, &borehole.URLs)
+		rowsToStruct(r, &borehole.URLs)
 	}
 
 	if (flags & dbf.NOTE) != 0 {
@@ -81,7 +81,7 @@ func (pg *Postgres) GetBorehole(id int, flags int) (*model.Borehole, error) {
 		if err != nil {
 			return nil, err
 		}
-		rowToStruct(r, &borehole.Notes)
+		rowsToStruct(r, &borehole.Notes)
 	}
 
 	if (flags & dbf.GEOJSON) != 0 {
@@ -103,7 +103,7 @@ func (pg *Postgres) GetBorehole(id int, flags int) (*model.Borehole, error) {
 		if err != nil {
 			return nil, err
 		}
-		rowToStruct(r, &borehole.MiningDistricts)
+		rowsToStruct(r, &borehole.MiningDistricts)
 	}
 
 	if (flags & dbf.QUADRANGLES) != 0 {
@@ -115,7 +115,7 @@ func (pg *Postgres) GetBorehole(id int, flags int) (*model.Borehole, error) {
 		if err != nil {
 			return nil, err
 		}
-		rowToStruct(r, &borehole.Quadrangles)
+		rowsToStruct(r, &borehole.Quadrangles)
 	}
 	return &borehole, nil
 }

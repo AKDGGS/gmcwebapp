@@ -19,7 +19,7 @@ func (pg *Postgres) GetFile(id int) (*model.File, error) {
 	defer rows.Close()
 
 	file := model.File{}
-	if rowToStruct(rows, &file) == 0 {
+	if rowsToStruct(rows, &file) == 0 {
 		return nil, nil
 	}
 	return &file, nil

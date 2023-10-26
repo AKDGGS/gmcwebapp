@@ -20,7 +20,7 @@ func (pg *Postgres) GetOutcrop(id int, flags int) (*model.Outcrop, error) {
 	defer rows.Close()
 	outcrop := model.Outcrop{}
 
-	if rowToStruct(rows, &outcrop) == 0 {
+	if rowsToStruct(rows, &outcrop) == 0 {
 		return nil, nil
 	}
 	if (flags & dbf.FILES) != 0 {
@@ -32,7 +32,7 @@ func (pg *Postgres) GetOutcrop(id int, flags int) (*model.Outcrop, error) {
 		if err != nil {
 			return nil, err
 		}
-		rowToStruct(r, &outcrop.Files)
+		rowsToStruct(r, &outcrop.Files)
 	}
 	if (flags & dbf.INVENTORY_SUMMARY) != 0 {
 		q, err = assets.ReadString("pg/keyword/group_by_outcrop_id.sql")
@@ -43,7 +43,7 @@ func (pg *Postgres) GetOutcrop(id int, flags int) (*model.Outcrop, error) {
 		if err != nil {
 			return nil, err
 		}
-		rowToStruct(r, &outcrop.KeywordSummary)
+		rowsToStruct(r, &outcrop.KeywordSummary)
 	}
 	if (flags & dbf.ORGANIZATION) != 0 {
 		q, err = assets.ReadString("pg/organization/by_outcrop_id.sql")
@@ -54,7 +54,7 @@ func (pg *Postgres) GetOutcrop(id int, flags int) (*model.Outcrop, error) {
 		if err != nil {
 			return nil, err
 		}
-		rowToStruct(r, &outcrop.Organizations)
+		rowsToStruct(r, &outcrop.Organizations)
 	}
 	if (flags & dbf.URLS) != 0 {
 		q, err = assets.ReadString("pg/url/by_outcrop_id.sql")
@@ -65,7 +65,7 @@ func (pg *Postgres) GetOutcrop(id int, flags int) (*model.Outcrop, error) {
 		if err != nil {
 			return nil, err
 		}
-		rowToStruct(r, &outcrop.URLs)
+		rowsToStruct(r, &outcrop.URLs)
 	}
 
 	if (flags & dbf.NOTE) != 0 {
@@ -77,7 +77,7 @@ func (pg *Postgres) GetOutcrop(id int, flags int) (*model.Outcrop, error) {
 		if err != nil {
 			return nil, err
 		}
-		rowToStruct(r, &outcrop.Notes)
+		rowsToStruct(r, &outcrop.Notes)
 	}
 	if (flags & dbf.GEOJSON) != 0 {
 		geojson, err := pg.queryRow("pg/outcrop/geojson.sql", id)
@@ -97,7 +97,7 @@ func (pg *Postgres) GetOutcrop(id int, flags int) (*model.Outcrop, error) {
 		if err != nil {
 			return nil, err
 		}
-		rowToStruct(r, &outcrop.Quadrangles)
+		rowsToStruct(r, &outcrop.Quadrangles)
 	}
 	return &outcrop, nil
 }

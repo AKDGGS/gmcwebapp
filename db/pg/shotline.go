@@ -20,7 +20,7 @@ func (pg *Postgres) GetShotline(id int, flags int) (*model.Shotline, error) {
 	defer rows.Close()
 	shotline := model.Shotline{}
 
-	if rowToStruct(rows, &shotline) == 0 {
+	if rowsToStruct(rows, &shotline) == 0 {
 		return nil, nil
 	}
 	if (flags & dbf.SHOTPOINT) != 0 {
@@ -32,7 +32,7 @@ func (pg *Postgres) GetShotline(id int, flags int) (*model.Shotline, error) {
 		if err != nil {
 			return nil, err
 		}
-		rowToStruct(r, &shotline.Shotpoints)
+		rowsToStruct(r, &shotline.Shotpoints)
 	}
 
 	if (flags & dbf.INVENTORY_SUMMARY) != 0 {
@@ -44,7 +44,7 @@ func (pg *Postgres) GetShotline(id int, flags int) (*model.Shotline, error) {
 		if err != nil {
 			return nil, err
 		}
-		rowToStruct(r, &shotline.KeywordSummary)
+		rowsToStruct(r, &shotline.KeywordSummary)
 	}
 	if (flags & dbf.URLS) != 0 {
 		q, err = assets.ReadString("pg/url/by_shotline_id.sql")
@@ -55,7 +55,7 @@ func (pg *Postgres) GetShotline(id int, flags int) (*model.Shotline, error) {
 		if err != nil {
 			return nil, err
 		}
-		rowToStruct(r, &shotline.URLs)
+		rowsToStruct(r, &shotline.URLs)
 	}
 	if (flags & dbf.NOTE) != 0 {
 		q, err = assets.ReadString("pg/note/by_shotline_id.sql")
@@ -66,7 +66,7 @@ func (pg *Postgres) GetShotline(id int, flags int) (*model.Shotline, error) {
 		if err != nil {
 			return nil, err
 		}
-		rowToStruct(r, &shotline.Notes)
+		rowsToStruct(r, &shotline.Notes)
 	}
 	if (flags & dbf.GEOJSON) != 0 {
 		geojson, err := pg.queryRow("pg/shotline/geojson.sql", id)
@@ -86,7 +86,7 @@ func (pg *Postgres) GetShotline(id int, flags int) (*model.Shotline, error) {
 		if err != nil {
 			return nil, err
 		}
-		rowToStruct(r, &shotline.Quadrangles)
+		rowsToStruct(r, &shotline.Quadrangles)
 	}
 	return &shotline, nil
 }

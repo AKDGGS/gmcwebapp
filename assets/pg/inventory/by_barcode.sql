@@ -52,8 +52,23 @@ SELECT iv.inventory_id AS id,
 	iv.entered_date,
 	iv.modified_date,
 	iv.modified_user,
-	iv.active
+	iv.active,
+	ARRAY_AGG(DISTINCT ib.borehole_id) FILTER (WHERE ib.borehole_id IS NOT NULL) AS borehole_ids,
+	ARRAY_AGG(DISTINCT io.outcrop_id) FILTER (WHERE io.outcrop_id IS NOT NULL) AS outcrop_ids,
+	ARRAY_AGG(DISTINCT isp.shotpoint_id) FILTER (WHERE isp.shotpoint_id IS NOT NULL) AS shotpoint_ids,
+	ARRAY_AGG(DISTINCT iw.well_id) FILTER (WHERE iw.well_id IS NOT NULL) AS well_ids,
+	ARRAY_AGG(DISTINCT iq.inventory_quality_id) FILTER (WHERE iq.inventory_quality_id IS NOT NULL) AS quality_ids
 FROM inventory AS iv
+LEFT OUTER JOIN inventory_borehole AS ib
+	ON ib.inventory_id = iv.inventory_id
+LEFT OUTER JOIN inventory_outcrop AS io
+	ON io.inventory_id = iv.inventory_id
+LEFT OUTER JOIN inventory_shotpoint AS isp
+	ON isp.inventory_id = iv.inventory_id
+LEFT OUTER JOIN inventory_well AS iw
+	ON iw.inventory_id = iv.inventory_id
+LEFT OUTER JOIN inventory_quality AS iq
+	ON iq.inventory_id = iv.inventory_id
 LEFT OUTER JOIN collection AS cl
 	ON cl.collection_id = iv.collection_id
 LEFT OUTER JOIN container AS co
@@ -76,4 +91,5 @@ WHERE iv.active AND (iv.barcode = $1
 				ON r.container_id = co.parent_container_id
 		) SELECT container_id FROM r
 	))
+	GROUP BY iv.inventory_id, cl.collection_id, co.container_id, cd.core_diameter_id
 LIMIT 100

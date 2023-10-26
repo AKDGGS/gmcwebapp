@@ -20,7 +20,7 @@ func (pg *Postgres) GetProspect(id int, flags int) (*model.Prospect, error) {
 	defer rows.Close()
 	prospect := model.Prospect{}
 
-	if rowToStruct(rows, &prospect) == 0 {
+	if rowsToStruct(rows, &prospect) == 0 {
 		return nil, nil
 	}
 	if (flags & dbf.BOREHOLE) != 0 {
@@ -33,7 +33,7 @@ func (pg *Postgres) GetProspect(id int, flags int) (*model.Prospect, error) {
 			return nil, err
 		}
 		defer rows.Close()
-		rowToStruct(rows, &prospect.Boreholes)
+		rowsToStruct(rows, &prospect.Boreholes)
 	}
 
 	if (flags & dbf.FILES) != 0 {
@@ -45,7 +45,7 @@ func (pg *Postgres) GetProspect(id int, flags int) (*model.Prospect, error) {
 		if err != nil {
 			return nil, err
 		}
-		rowToStruct(r, &prospect.Files)
+		rowsToStruct(r, &prospect.Files)
 	}
 
 	if (flags & dbf.INVENTORY_SUMMARY) != 0 {
@@ -57,7 +57,7 @@ func (pg *Postgres) GetProspect(id int, flags int) (*model.Prospect, error) {
 		if err != nil {
 			return nil, err
 		}
-		rowToStruct(r, &prospect.KeywordSummary)
+		rowsToStruct(r, &prospect.KeywordSummary)
 	}
 
 	if (flags & dbf.GEOJSON) != 0 {
@@ -79,7 +79,7 @@ func (pg *Postgres) GetProspect(id int, flags int) (*model.Prospect, error) {
 		if err != nil {
 			return nil, err
 		}
-		rowToStruct(r, &prospect.MiningDistricts)
+		rowsToStruct(r, &prospect.MiningDistricts)
 	}
 
 	if (flags & dbf.QUADRANGLES) != 0 {
@@ -91,7 +91,7 @@ func (pg *Postgres) GetProspect(id int, flags int) (*model.Prospect, error) {
 		if err != nil {
 			return nil, err
 		}
-		rowToStruct(r, &prospect.Quadrangles)
+		rowsToStruct(r, &prospect.Quadrangles)
 	}
 	return &prospect, nil
 }

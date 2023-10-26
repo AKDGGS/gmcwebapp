@@ -187,7 +187,7 @@ func structFieldMatcher(fieldName, ch string) bool {
 	return strings.EqualFold(fieldName, ch)
 }
 
-func rowToStruct(r pgx.Rows, a interface{}) int {
+func rowsToStruct(rows pgx.Rows, a interface{}) int {
 	rv := reflect.ValueOf(a)
 	if rv.Kind() == reflect.Ptr {
 		rv = rv.Elem()
@@ -205,7 +205,44 @@ func rowToStruct(r pgx.Rows, a interface{}) int {
 			elem = reflect.New(typ).Elem()
 		}
 		for rowCount := 0; ; {
-			if c := rowToStruct(r, elem.Addr().Interface()); c > 0 {
+			if c := rowsToStruct(rows, elem.Addr().Interface()); c > 0 {
+				rowCount += c
+				rv.Set(reflect.Append(rv, elem))
+				continue
+			}
+			if rowCount == 1 {
+				return rowToStruct(rows, a)
+			}
+			return rowCount
+		}
+	default:
+		if rows.Next() {
+			return rowToStruct(rows, a)
+		}
+		defer rows.Close()
+	}
+	return 0
+}
+
+func rowToStruct(rows pgx.Rows, a interface{}) int {
+	rv := reflect.ValueOf(a)
+	if rv.Kind() == reflect.Ptr {
+		rv = rv.Elem()
+	}
+	if !rv.CanSet() {
+		return 0
+	}
+	switch rv.Kind() {
+	case reflect.Slice:
+		var elem reflect.Value
+		switch typ := rv.Type().Elem(); typ.Kind() {
+		case reflect.Ptr:
+			elem = reflect.New(typ.Elem())
+		case reflect.Struct:
+			elem = reflect.New(typ).Elem()
+		}
+		for rowCount := 0; ; {
+			if c := rowToStruct(rows, elem.Addr().Interface()); c > 0 {
 				rowCount += c
 				rv.Set(reflect.Append(rv, elem))
 				continue
@@ -214,7 +251,7 @@ func rowToStruct(r pgx.Rows, a interface{}) int {
 		}
 	case reflect.Struct:
 		var columnNames [][]string
-		cols := r.FieldDescriptions()
+		cols := rows.FieldDescriptions()
 		for _, c := range cols {
 			parts := strings.Split(string(c.Name), ".")
 			columnNames = append(columnNames, parts)
@@ -226,36 +263,49 @@ func rowToStruct(r pgx.Rows, a interface{}) int {
 				}
 			}
 		}
-		ptrsFields := make([]interface{}, 0)
-		if r.Next() {
-			values := r.RawValues()
-			for i, c := range columnNames {
-				if values[i] == nil {
-					ptrsFields = append(ptrsFields, nil)
-					continue
+		ptrsFields := make([]interface{}, len(cols))
+		values, err := rows.Values()
+		if err != nil {
+			return 0
+		}
+		if values == nil {
+			return 0
+		}
+		for i, c := range columnNames {
+			if values[i] == nil {
+				ptrsFields[i] = nil
+				continue
+			}
+			f := rv
+			for _, ch := range c {
+				if f.Kind() == reflect.Ptr {
+					f = f.Elem()
 				}
-				f := rv
-				for _, ch := range c {
-					if f.Kind() == reflect.Ptr {
-						f = f.Elem()
-					}
-					f = f.FieldByNameFunc(func(fieldName string) bool {
-						return structFieldMatcher(fieldName, string(ch))
-					})
-					if !f.IsValid() {
-						break
-					}
+				f = f.FieldByNameFunc(func(fieldName string) bool {
+					return structFieldMatcher(fieldName, string(ch))
+				})
+				if !f.IsValid() {
+					break
 				}
 				if f.IsValid() {
-					ptrsFields = append(ptrsFields, f.Addr().Interface())
+					for j := 0; j < len(cols); j++ {
+						fieldName := string(cols[j].Name)
+						if strings.Contains(fieldName, ".") {
+							parts := strings.Split(fieldName, ".")
+							fieldName = parts[len(parts)-1]
+						}
+						if strings.EqualFold(string(fieldName), string(ch)) {
+							ptrsFields[i] = f.Addr().Interface()
+						}
+					}
 				}
 			}
-			err := r.Scan(ptrsFields...)
-			if err != nil {
-				return 0
-			}
-			return 1
 		}
+		err = rows.Scan(ptrsFields...)
+		if err != nil {
+			return 0
+		}
+		return 1
 	}
 	return 0
 }
