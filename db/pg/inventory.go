@@ -130,6 +130,30 @@ func (pg *Postgres) GetInventory(id int, flags int) (*model.Inventory, error) {
 	}
 
 	if (flags & dbf.ORGANIZATION) != 0 {
+		for i := 0; i < len(inventory.Boreholes); i++ {
+			q, err := assets.ReadString("pg/organization/by_borehole_id.sql")
+			if err != nil {
+				return nil, err
+			}
+			rows, err := pg.pool.Query(context.Background(), q, inventory.Boreholes[i].ID)
+			if err != nil {
+				return nil, err
+			}
+			defer rows.Close()
+			rowsToStruct(rows, &inventory.Boreholes[i].Organizations)
+		}
+		for i := 0; i < len(inventory.Outcrops); i++ {
+			q, err := assets.ReadString("pg/organization/by_outcrop_id.sql")
+			if err != nil {
+				return nil, err
+			}
+			rows, err := pg.pool.Query(context.Background(), q, inventory.Outcrops[i].ID)
+			if err != nil {
+				return nil, err
+			}
+			defer rows.Close()
+			rowsToStruct(rows, &inventory.Outcrops[i].Organizations)
+		}
 		for i := 0; i < len(inventory.Wells); i++ {
 			q, err := assets.ReadString("pg/organization/by_well_id.sql")
 			if err != nil {
