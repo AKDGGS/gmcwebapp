@@ -35,7 +35,10 @@ func (pg *Postgres) GetInventory(id int, flags int) (*model.Inventory, error) {
 			return nil, err
 		}
 		defer rows.Close()
-		rowsToStruct(rows, &inventory.Files)
+		_, err = rowsToStruct(rows, &inventory.Files)
+		if err != nil {
+			return nil, err
+		}
 	}
 
 	if (flags & dbf.URLS) != 0 {
@@ -48,7 +51,10 @@ func (pg *Postgres) GetInventory(id int, flags int) (*model.Inventory, error) {
 			return nil, err
 		}
 		defer rows.Close()
-		rowsToStruct(r, &inventory.URLs)
+		_, err = rowsToStruct(r, &inventory.URLs)
+		if err != nil {
+			return nil, err
+		}
 	}
 
 	if (flags & dbf.NOTE) != 0 {
@@ -61,7 +67,10 @@ func (pg *Postgres) GetInventory(id int, flags int) (*model.Inventory, error) {
 			return nil, err
 		}
 		defer rows.Close()
-		rowsToStruct(rows, &inventory.Notes)
+		_, err = rowsToStruct(rows, &inventory.Notes)
+		if err != nil {
+			return nil, err
+		}
 	}
 
 	if (flags & dbf.PUBLICATION) != 0 {
@@ -74,7 +83,10 @@ func (pg *Postgres) GetInventory(id int, flags int) (*model.Inventory, error) {
 			return nil, err
 		}
 		defer rows.Close()
-		rowsToStruct(rows, &inventory.Publications)
+		_, err = rowsToStruct(rows, &inventory.Publications)
+		if err != nil {
+			return nil, err
+		}
 	}
 
 	if (flags & dbf.BOREHOLE) != 0 {
@@ -87,7 +99,10 @@ func (pg *Postgres) GetInventory(id int, flags int) (*model.Inventory, error) {
 			return nil, err
 		}
 		defer rows.Close()
-		rowsToStruct(rows, &inventory.Boreholes)
+		_, err = rowsToStruct(rows, &inventory.Boreholes)
+		if err != nil {
+			return nil, err
+		}
 	}
 
 	if (flags & dbf.OUTCROP) != 0 {
@@ -100,7 +115,10 @@ func (pg *Postgres) GetInventory(id int, flags int) (*model.Inventory, error) {
 			return nil, err
 		}
 		defer rows.Close()
-		rowsToStruct(rows, &inventory.Outcrops)
+		_, err = rowsToStruct(rows, &inventory.Outcrops)
+		if err != nil {
+			return nil, err
+		}
 	}
 
 	if (flags & dbf.SHOTPOINT) != 0 {
@@ -113,7 +131,10 @@ func (pg *Postgres) GetInventory(id int, flags int) (*model.Inventory, error) {
 			return nil, err
 		}
 		defer rows.Close()
-		rowsToStruct(rows, &inventory.Shotpoints)
+		_, err = rowsToStruct(rows, &inventory.Shotpoints)
+		if err != nil {
+			return nil, err
+		}
 	}
 
 	if (flags & dbf.WELL) != 0 {
@@ -126,7 +147,10 @@ func (pg *Postgres) GetInventory(id int, flags int) (*model.Inventory, error) {
 			return nil, err
 		}
 		defer rows.Close()
-		rowsToStruct(rows, &inventory.Wells)
+		_, err = rowsToStruct(rows, &inventory.Wells)
+		if err != nil {
+			return nil, err
+		}
 	}
 
 	if (flags & dbf.ORGANIZATION) != 0 {
@@ -140,7 +164,10 @@ func (pg *Postgres) GetInventory(id int, flags int) (*model.Inventory, error) {
 				return nil, err
 			}
 			defer rows.Close()
-			rowsToStruct(rows, &inventory.Boreholes[i].Organizations)
+			_, err = rowsToStruct(rows, &inventory.Boreholes[i].Organizations)
+			if err != nil {
+				return nil, err
+			}
 		}
 		for i := 0; i < len(inventory.Outcrops); i++ {
 			q, err := assets.ReadString("pg/organization/by_outcrop_id.sql")
@@ -152,7 +179,10 @@ func (pg *Postgres) GetInventory(id int, flags int) (*model.Inventory, error) {
 				return nil, err
 			}
 			defer rows.Close()
-			rowsToStruct(rows, &inventory.Outcrops[i].Organizations)
+			_, err = rowsToStruct(rows, &inventory.Outcrops[i].Organizations)
+			if err != nil {
+				return nil, err
+			}
 		}
 		for i := 0; i < len(inventory.Wells); i++ {
 			q, err := assets.ReadString("pg/organization/by_well_id.sql")
@@ -164,7 +194,10 @@ func (pg *Postgres) GetInventory(id int, flags int) (*model.Inventory, error) {
 				return nil, err
 			}
 			defer rows.Close()
-			rowsToStruct(rows, &inventory.Wells[i].Organizations)
+			_, err = rowsToStruct(rows, &inventory.Wells[i].Organizations)
+			if err != nil {
+				return nil, err
+			}
 		}
 	}
 
@@ -178,7 +211,10 @@ func (pg *Postgres) GetInventory(id int, flags int) (*model.Inventory, error) {
 			return nil, err
 		}
 		defer rows.Close()
-		rowsToStruct(rows, &inventory.Qualities)
+		_, err = rowsToStruct(rows, &inventory.Qualities)
+		if err != nil {
+			return nil, err
+		}
 	}
 
 	if (flags & dbf.TRACKING) != 0 {
@@ -191,7 +227,10 @@ func (pg *Postgres) GetInventory(id int, flags int) (*model.Inventory, error) {
 			return nil, err
 		}
 		defer rows.Close()
-		rowsToStruct(rows, &inventory.ContainerLog)
+		_, err = rowsToStruct(rows, &inventory.ContainerLog)
+		if err != nil {
+			return nil, err
+		}
 	}
 
 	if (flags & dbf.GEOJSON) != 0 {

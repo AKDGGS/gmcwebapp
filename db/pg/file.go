@@ -23,7 +23,6 @@ func (pg *Postgres) GetFile(id int) (*model.File, error) {
 		return nil, err
 	}
 	return &file, nil
-	return &file, nil
 }
 
 func (pg *Postgres) PutFile(file *model.File, precommitFunc func() error) error {

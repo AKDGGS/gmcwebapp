@@ -33,7 +33,10 @@ func (pg *Postgres) GetBorehole(id int, flags int) (*model.Borehole, error) {
 		if err != nil {
 			return nil, err
 		}
-		rowsToStruct(r, &borehole.Files)
+		_, err = rowsToStruct(r, &borehole.Files)
+		if err != nil {
+			return nil, err
+		}
 	}
 
 	if (flags & dbf.INVENTORY_SUMMARY) != 0 {
@@ -45,7 +48,10 @@ func (pg *Postgres) GetBorehole(id int, flags int) (*model.Borehole, error) {
 		if err != nil {
 			return nil, err
 		}
-		rowsToStruct(r, &borehole.KeywordSummary)
+		_, err = rowsToStruct(r, &borehole.KeywordSummary)
+		if err != nil {
+			return nil, err
+		}
 	}
 
 	if (flags & dbf.ORGANIZATION) != 0 {
@@ -57,7 +63,10 @@ func (pg *Postgres) GetBorehole(id int, flags int) (*model.Borehole, error) {
 		if err != nil {
 			return nil, err
 		}
-		rowsToStruct(r, &borehole.Organizations)
+		_, err = rowsToStruct(r, &borehole.Organizations)
+		if err != nil {
+			return nil, err
+		}
 	}
 
 	if (flags & dbf.URLS) != 0 {
@@ -69,7 +78,10 @@ func (pg *Postgres) GetBorehole(id int, flags int) (*model.Borehole, error) {
 		if err != nil {
 			return nil, err
 		}
-		rowsToStruct(r, &borehole.URLs)
+		_, err = rowsToStruct(r, &borehole.URLs)
+		if err != nil {
+			return nil, err
+		}
 	}
 
 	if (flags & dbf.NOTE) != 0 {
@@ -81,7 +93,10 @@ func (pg *Postgres) GetBorehole(id int, flags int) (*model.Borehole, error) {
 		if err != nil {
 			return nil, err
 		}
-		rowsToStruct(r, &borehole.Notes)
+		_, err = rowsToStruct(r, &borehole.Notes)
+		if err != nil {
+			return nil, err
+		}
 	}
 
 	if (flags & dbf.GEOJSON) != 0 {
@@ -103,7 +118,10 @@ func (pg *Postgres) GetBorehole(id int, flags int) (*model.Borehole, error) {
 		if err != nil {
 			return nil, err
 		}
-		rowsToStruct(r, &borehole.MiningDistricts)
+		_, err = rowsToStruct(r, &borehole.MiningDistricts)
+		if err != nil {
+			return nil, err
+		}
 	}
 
 	if (flags & dbf.QUADRANGLES) != 0 {
@@ -115,7 +133,10 @@ func (pg *Postgres) GetBorehole(id int, flags int) (*model.Borehole, error) {
 		if err != nil {
 			return nil, err
 		}
-		rowsToStruct(r, &borehole.Quadrangles)
+		_, err = rowsToStruct(r, &borehole.Quadrangles)
+		if err != nil {
+			return nil, err
+		}
 	}
 	return &borehole, nil
 }
