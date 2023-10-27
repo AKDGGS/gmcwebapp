@@ -1,6 +1,6 @@
 SELECT o.organization_id AS id,
 	o.name,
-	ot.name AS type,
+	ot.name AS "type.name",
 	o.remark
 FROM organization AS o
 JOIN organization_type AS ot
