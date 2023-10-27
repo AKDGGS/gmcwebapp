@@ -311,47 +311,47 @@
 			{{- end}}
 			{{- if .Shotpoints}}
 
-						<fieldset>
-						<legend>Shotpoints(s)</legend>
-						<table class="tb-fields">
-							<tbody>
-								{{- range .Shotlines}}
-								<tr class="tb-spacer-sm">
-									<th>Shotline Name</th>
-									<td><a href="../shotline/{{.ID}}">{{.Name}}</a></td>
-									{{- if .AltNames}}
-									<tr>
-										<th>Shotline Alt. Name</th>
-										<td>{{.AltNames}}</td>
-									</tr>
-									{{- end}}
-									{{- if .Year}}
-									<tr>
-										<th>Shotline Year</th>
-										<td>{{.Year}}</td>
-									</tr>
-									{{- end}}
-									{{- if .Remark}}
-									<tr>
-										<th>Shotline Remark</th>
-										<td>{{.Remark}}</td>
-									</tr>
-									{{- end}}
-									<tr>
-										<th>Shotpoint(s)</th>
-										<td>
-											{{- range $i,$e := .Shotpoints}}
-											{{- if .Number}}
-												{{- if $i}}, {{end}}{{.Number}}
-											{{- end}}
-											{{- end}}
-										</td>
-							 		</tr>
-								{{- end}}
-							</tbody>
-						</table>
-						</fieldset>
+			<fieldset>
+			<legend>Shotpoints(s)</legend>
+			<table class="tb-fields">
+				<tbody>
+					{{- range .Shotlines}}
+					<tr class="tb-spacer-sm">
+						<th>Shotline Name</th>
+						<td><a href="../shotline/{{.ID}}">{{.Name}}</a></td>
+						{{- if .AltNames}}
+						<tr>
+							<th>Shotline Alt. Name</th>
+							<td>{{.AltNames}}</td>
+						</tr>
 						{{- end}}
+						{{- if .Year}}
+						<tr>
+							<th>Shotline Year</th>
+							<td>{{.Year}}</td>
+						</tr>
+						{{- end}}
+						{{- if .Remark}}
+						<tr>
+							<th>Shotline Remark</th>
+							<td>{{.Remark}}</td>
+						</tr>
+						{{- end}}
+						<tr>
+							<th>Shotpoint(s)</th>
+							<td>
+								{{- range $i,$e := .Shotpoints}}
+								{{- if .Number}}
+									{{- if $i}}, {{end}}{{.Number}}
+								{{- end}}
+								{{- end}}
+							</td>
+				 		</tr>
+					{{- end}}
+				</tbody>
+			</table>
+			</fieldset>
+			{{- end}}
 			{{- if .Wells}}
 
 			<fieldset>
