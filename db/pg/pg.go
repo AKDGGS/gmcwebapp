@@ -187,13 +187,13 @@ func structFieldMatcher(fieldName, ch string) bool {
 	return strings.EqualFold(fieldName, ch)
 }
 
-func rowsToStruct(rows pgx.Rows, a interface{}) int {
+func rowsToStruct(rows pgx.Rows, a interface{}) (int, error) {
 	rv := reflect.ValueOf(a)
 	if rv.Kind() == reflect.Ptr {
 		rv = rv.Elem()
 	}
 	if !rv.CanSet() {
-		return 0
+		return 0, fmt.Errorf("Cannot set value")
 	}
 	switch rv.Kind() {
 	case reflect.Slice:
@@ -205,7 +205,10 @@ func rowsToStruct(rows pgx.Rows, a interface{}) int {
 			elem = reflect.New(typ).Elem()
 		}
 		for rowCount := 0; ; {
-			if c := rowsToStruct(rows, elem.Addr().Interface()); c > 0 {
+			if c, err := rowsToStruct(rows, elem.Addr().Interface()); c > 0 {
+				if err != nil {
+					return 0, err
+				}
 				rowCount += c
 				rv.Set(reflect.Append(rv, elem))
 				continue
@@ -213,7 +216,7 @@ func rowsToStruct(rows pgx.Rows, a interface{}) int {
 			if rowCount == 1 {
 				return rowToStruct(rows, a)
 			}
-			return rowCount
+			return rowCount, nil
 		}
 	default:
 		if rows.Next() {
@@ -221,16 +224,16 @@ func rowsToStruct(rows pgx.Rows, a interface{}) int {
 		}
 		defer rows.Close()
 	}
-	return 0
+	return 0, nil
 }
 
-func rowToStruct(rows pgx.Rows, a interface{}) int {
+func rowToStruct(rows pgx.Rows, a interface{}) (int, error) {
 	rv := reflect.ValueOf(a)
 	if rv.Kind() == reflect.Ptr {
 		rv = rv.Elem()
 	}
 	if !rv.CanSet() {
-		return 0
+		return 0, fmt.Errorf("Cannot set value")
 	}
 	switch rv.Kind() {
 	case reflect.Slice:
@@ -242,12 +245,15 @@ func rowToStruct(rows pgx.Rows, a interface{}) int {
 			elem = reflect.New(typ).Elem()
 		}
 		for rowCount := 0; ; {
-			if c := rowToStruct(rows, elem.Addr().Interface()); c > 0 {
+			if c, err := rowToStruct(rows, elem.Addr().Interface()); c > 0 {
+				if err != nil {
+					return 0, err
+				}
 				rowCount += c
 				rv.Set(reflect.Append(rv, elem))
 				continue
 			}
-			return rowCount
+			return rowCount, nil
 		}
 	case reflect.Struct:
 		var columnNames [][]string
@@ -266,10 +272,10 @@ func rowToStruct(rows pgx.Rows, a interface{}) int {
 		ptrsFields := make([]interface{}, len(cols))
 		values, err := rows.Values()
 		if err != nil {
-			return 0
+			return 0, err
 		}
 		if values == nil {
-			return 0
+			return 0, fmt.Errorf("rows.Values() returned nil")
 		}
 		for i, c := range columnNames {
 			if values[i] == nil {
@@ -303,9 +309,9 @@ func rowToStruct(rows pgx.Rows, a interface{}) int {
 		}
 		err = rows.Scan(ptrsFields...)
 		if err != nil {
-			return 0
+			return 0, err
 		}
-		return 1
+		return 1, nil
 	}
-	return 0
+	return 0, nil
 }

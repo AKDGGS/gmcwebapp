@@ -20,8 +20,8 @@ func (pg *Postgres) GetOutcrop(id int, flags int) (*model.Outcrop, error) {
 	defer rows.Close()
 	outcrop := model.Outcrop{}
 
-	if rowsToStruct(rows, &outcrop) == 0 {
-		return nil, nil
+	if count, err := rowsToStruct(rows, &outcrop); err != nil || count == 0 {
+		return nil, err
 	}
 	if (flags & dbf.FILES) != 0 {
 		q, err = assets.ReadString("pg/file/by_outcrop_id.sql")
@@ -32,7 +32,10 @@ func (pg *Postgres) GetOutcrop(id int, flags int) (*model.Outcrop, error) {
 		if err != nil {
 			return nil, err
 		}
-		rowsToStruct(r, &outcrop.Files)
+		_, err = rowsToStruct(r, &outcrop.Files)
+		if err != nil {
+			return nil, err
+		}
 	}
 	if (flags & dbf.INVENTORY_SUMMARY) != 0 {
 		q, err = assets.ReadString("pg/keyword/group_by_outcrop_id.sql")
@@ -43,7 +46,10 @@ func (pg *Postgres) GetOutcrop(id int, flags int) (*model.Outcrop, error) {
 		if err != nil {
 			return nil, err
 		}
-		rowsToStruct(r, &outcrop.KeywordSummary)
+		_, err = rowsToStruct(r, &outcrop.KeywordSummary)
+		if err != nil {
+			return nil, err
+		}
 	}
 	if (flags & dbf.ORGANIZATION) != 0 {
 		q, err = assets.ReadString("pg/organization/by_outcrop_id.sql")
@@ -54,7 +60,10 @@ func (pg *Postgres) GetOutcrop(id int, flags int) (*model.Outcrop, error) {
 		if err != nil {
 			return nil, err
 		}
-		rowsToStruct(r, &outcrop.Organizations)
+		_, err = rowsToStruct(r, &outcrop.Organizations)
+		if err != nil {
+			return nil, err
+		}
 	}
 	if (flags & dbf.URLS) != 0 {
 		q, err = assets.ReadString("pg/url/by_outcrop_id.sql")
@@ -65,7 +74,10 @@ func (pg *Postgres) GetOutcrop(id int, flags int) (*model.Outcrop, error) {
 		if err != nil {
 			return nil, err
 		}
-		rowsToStruct(r, &outcrop.URLs)
+		_, err = rowsToStruct(r, &outcrop.URLs)
+		if err != nil {
+			return nil, err
+		}
 	}
 
 	if (flags & dbf.NOTE) != 0 {
@@ -77,7 +89,10 @@ func (pg *Postgres) GetOutcrop(id int, flags int) (*model.Outcrop, error) {
 		if err != nil {
 			return nil, err
 		}
-		rowsToStruct(r, &outcrop.Notes)
+		_, err = rowsToStruct(r, &outcrop.Notes)
+		if err != nil {
+			return nil, err
+		}
 	}
 	if (flags & dbf.GEOJSON) != 0 {
 		geojson, err := pg.queryRow("pg/outcrop/geojson.sql", id)
@@ -97,7 +112,10 @@ func (pg *Postgres) GetOutcrop(id int, flags int) (*model.Outcrop, error) {
 		if err != nil {
 			return nil, err
 		}
-		rowsToStruct(r, &outcrop.Quadrangles)
+		_, err = rowsToStruct(r, &outcrop.Quadrangles)
+		if err != nil {
+			return nil, err
+		}
 	}
 	return &outcrop, nil
 }

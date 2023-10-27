@@ -20,8 +20,8 @@ func (pg *Postgres) GetShotline(id int, flags int) (*model.Shotline, error) {
 	defer rows.Close()
 	shotline := model.Shotline{}
 
-	if rowsToStruct(rows, &shotline) == 0 {
-		return nil, nil
+	if count, err := rowsToStruct(rows, &shotline); err != nil || count == 0 {
+		return nil, err
 	}
 	if (flags & dbf.SHOTPOINT) != 0 {
 		q, err = assets.ReadString("pg/shotpoint/by_shotline_id.sql")
@@ -32,7 +32,10 @@ func (pg *Postgres) GetShotline(id int, flags int) (*model.Shotline, error) {
 		if err != nil {
 			return nil, err
 		}
-		rowsToStruct(r, &shotline.Shotpoints)
+		_, err = rowsToStruct(r, &shotline.Shotpoints)
+		if err != nil {
+			return nil, err
+		}
 	}
 
 	if (flags & dbf.INVENTORY_SUMMARY) != 0 {
@@ -44,7 +47,10 @@ func (pg *Postgres) GetShotline(id int, flags int) (*model.Shotline, error) {
 		if err != nil {
 			return nil, err
 		}
-		rowsToStruct(r, &shotline.KeywordSummary)
+		_, err = rowsToStruct(r, &shotline.KeywordSummary)
+		if err != nil {
+			return nil, err
+		}
 	}
 	if (flags & dbf.URLS) != 0 {
 		q, err = assets.ReadString("pg/url/by_shotline_id.sql")
@@ -55,7 +61,10 @@ func (pg *Postgres) GetShotline(id int, flags int) (*model.Shotline, error) {
 		if err != nil {
 			return nil, err
 		}
-		rowsToStruct(r, &shotline.URLs)
+		_, err = rowsToStruct(r, &shotline.URLs)
+		if err != nil {
+			return nil, err
+		}
 	}
 	if (flags & dbf.NOTE) != 0 {
 		q, err = assets.ReadString("pg/note/by_shotline_id.sql")
@@ -66,7 +75,10 @@ func (pg *Postgres) GetShotline(id int, flags int) (*model.Shotline, error) {
 		if err != nil {
 			return nil, err
 		}
-		rowsToStruct(r, &shotline.Notes)
+		_, err = rowsToStruct(r, &shotline.Notes)
+		if err != nil {
+			return nil, err
+		}
 	}
 	if (flags & dbf.GEOJSON) != 0 {
 		geojson, err := pg.queryRow("pg/shotline/geojson.sql", id)
@@ -86,7 +98,10 @@ func (pg *Postgres) GetShotline(id int, flags int) (*model.Shotline, error) {
 		if err != nil {
 			return nil, err
 		}
-		rowsToStruct(r, &shotline.Quadrangles)
+		_, err = rowsToStruct(r, &shotline.Quadrangles)
+		if err != nil {
+			return nil, err
+		}
 	}
 	return &shotline, nil
 }

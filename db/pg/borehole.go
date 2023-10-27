@@ -20,8 +20,8 @@ func (pg *Postgres) GetBorehole(id int, flags int) (*model.Borehole, error) {
 	defer rows.Close()
 	borehole := model.Borehole{}
 
-	if rowsToStruct(rows, &borehole) == 0 {
-		return nil, nil
+	if count, err := rowsToStruct(rows, &borehole); err != nil || count == 0 {
+		return nil, err
 	}
 
 	if (flags & dbf.FILES) != 0 {

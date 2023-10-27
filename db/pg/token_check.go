@@ -21,7 +21,7 @@ func (pg *Postgres) CheckToken(tok string) (*model.Token, error) {
 	defer rows.Close()
 	tk := model.Token{}
 
-	if rowsToStruct(rows, &tk) == 0 {
+	if count, err := rowsToStruct(rows, &tk); err != nil || count == 0 {
 		return nil, errors.New("No matches found")
 	}
 	return &tk, nil

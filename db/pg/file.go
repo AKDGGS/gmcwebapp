@@ -19,9 +19,10 @@ func (pg *Postgres) GetFile(id int) (*model.File, error) {
 	defer rows.Close()
 
 	file := model.File{}
-	if rowsToStruct(rows, &file) == 0 {
-		return nil, nil
+	if count, err := rowsToStruct(rows, &file); err != nil || count == 0 {
+		return nil, err
 	}
+	return &file, nil
 	return &file, nil
 }
 

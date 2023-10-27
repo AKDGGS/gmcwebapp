@@ -21,8 +21,8 @@ func (pg *Postgres) GetWell(id int, flags int) (*model.Well, error) {
 
 	well := model.Well{}
 
-	if rowsToStruct(rows, &well) == 0 {
-		return nil, nil
+	if count, err := rowsToStruct(rows, &well); err != nil || count == 0 {
+		return nil, err
 	}
 
 	if (flags & dbf.FILES) != 0 {
@@ -34,7 +34,10 @@ func (pg *Postgres) GetWell(id int, flags int) (*model.Well, error) {
 		if err != nil {
 			return nil, err
 		}
-		rowsToStruct(r, &well.Files)
+		_, err = rowsToStruct(r, &well.Files)
+		if err != nil {
+			return nil, err
+		}
 	}
 	if (flags & dbf.INVENTORY_SUMMARY) != 0 {
 		q, err = assets.ReadString("pg/keyword/group_by_well_id.sql")
@@ -45,7 +48,10 @@ func (pg *Postgres) GetWell(id int, flags int) (*model.Well, error) {
 		if err != nil {
 			return nil, err
 		}
-		rowsToStruct(r, &well.KeywordSummary)
+		_, err = rowsToStruct(r, &well.KeywordSummary)
+		if err != nil {
+			return nil, err
+		}
 	}
 
 	if (flags & dbf.ORGANIZATION) != 0 {
@@ -57,7 +63,10 @@ func (pg *Postgres) GetWell(id int, flags int) (*model.Well, error) {
 		if err != nil {
 			return nil, err
 		}
-		rowsToStruct(r, &well.Organizations)
+		_, err = rowsToStruct(r, &well.Organizations)
+		if err != nil {
+			return nil, err
+		}
 	}
 
 	if (flags & dbf.URLS) != 0 {
@@ -69,7 +78,10 @@ func (pg *Postgres) GetWell(id int, flags int) (*model.Well, error) {
 		if err != nil {
 			return nil, err
 		}
-		rowsToStruct(r, &well.URLs)
+		_, err = rowsToStruct(r, &well.URLs)
+		if err != nil {
+			return nil, err
+		}
 	}
 	if (flags & dbf.NOTE) != 0 {
 		q, err = assets.ReadString("pg/note/by_well_id.sql")
@@ -80,7 +92,10 @@ func (pg *Postgres) GetWell(id int, flags int) (*model.Well, error) {
 		if err != nil {
 			return nil, err
 		}
-		rowsToStruct(r, &well.Notes)
+		_, err = rowsToStruct(r, &well.Notes)
+		if err != nil {
+			return nil, err
+		}
 	}
 	if (flags & dbf.GEOJSON) != 0 {
 		geojson, err := pg.queryRow("pg/well/geojson.sql", id)
@@ -100,7 +115,10 @@ func (pg *Postgres) GetWell(id int, flags int) (*model.Well, error) {
 		if err != nil {
 			return nil, err
 		}
-		rowsToStruct(r, &well.Quadrangles)
+		_, err = rowsToStruct(r, &well.Quadrangles)
+		if err != nil {
+			return nil, err
+		}
 	}
 	return &well, nil
 }
