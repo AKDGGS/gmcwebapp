@@ -1,4 +1,4 @@
-{{with .well }}
+{{with .well}}
 			<fieldset class="fs-detail">
 				<legend>Web Detail</legend>
 				<table class="tb-fields">
@@ -140,10 +140,11 @@
 				</table>
 			</fieldset>
 			{{- end}}
+			{{- if or .Files $.user}}
 
 			<fieldset>
 				<legend>Files</legend>
-				{{- if $.user }}
+				{{- if $.user}}
 					<div id="filedrop" data-well_id="{{.ID}}">
 				{{- end}}
 				<div class="file-list-container" id="file-list-container">
@@ -157,7 +158,9 @@
 				</div>
 				</div>
 			</fieldset>
+			{{- end}}
 			{{- if .Organizations}}
+			
 			<fieldset>
 				<legend>Operators</legend>
 				<table class="tb-fields tb-columns">

@@ -6,7 +6,7 @@ const nextBtn = document.getElementById('next-btn');
 let template = document.getElementById('tmpl-popup');
 
 const overlay = new ol.Overlay({
-		element: popup, autoPan: { animation: { duration: 100 }}
+		element: popup, autoPan: {animation:{duration:100}}
 });
 let fts = [];
 let width = 2.5;

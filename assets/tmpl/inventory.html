@@ -1,4 +1,4 @@
-{{with .inventory }}
+{{with .inventory}}
 			<fieldset class="fs-detail inventory_boxes">
 				<legend>Inventory Detail</legend>
 				<table class="tb-fields">
@@ -60,12 +60,12 @@
 						</tr>
 						{{- end}}
 						{{- if .Collection.Name}}
-			        <tr>
-			            <th>Collection</th>
-			            <td>{{.Collection.Name}}</td>
-			        </tr>
+						<tr>
+							<th>Collection</th>
+							<td>{{.Collection.Name}}</td>
+						</tr>
 						{{- end}}
-						{{- if .StateNumber }}
+						{{- if .StateNumber}}
 						<tr>
 							<th>State Number</th>
 							<td>{{.StateNumber}}</td>
@@ -359,7 +359,6 @@
 				<table class="tb-fields">
 					<tbody>
 						{{- range $i, $w :=.Wells}}
-						{{if eq $i 0}}
 						{{- if .Name}}
 						<tr class="tb-spacer-sm">
 							<th>Well Name</th>
@@ -383,7 +382,6 @@
 							<th>API Number</th>
 							<td>{{.APINumber}}</td>
 						</tr>
-						{{- end}}
 						{{- end}}
 						{{- range $i, $o :=.Organizations}}
 						{{- if .Current}}
@@ -459,10 +457,11 @@
 			</fieldset>
 			{{- end}}
 			{{- end}}
+			{{- if or .Files $.user}}
 
 			<fieldset>
 				<legend>Files</legend>
-				{{- if $.user }}
+				{{- if $.user}}
 					<div id="filedrop" data-inventory_id="{{.ID}}">
 				{{- end}}
 				<div class="file-list-container" id="file-list-container">
@@ -476,7 +475,8 @@
 				</div>
 				</div>
 			</fieldset>
-			{{- if and $.user .Publications}}
+			{{- end}}
+			{{- if .Publications}}
 
 			<fieldset>
 				<legend>Publication(s)</legend>
@@ -528,7 +528,8 @@
 				</table>
 			</fieldset>
 			{{- end}}
-			{{- if and $.user .ContainerLog}}
+			{{- if $.user}}
+			{{- if .ContainerLog}}
 
 			<fieldset>
 				<legend>Tracking</legend>
@@ -545,7 +546,7 @@
 				</table>
 			</fieldset>
 			{{- end}}
-			{{- if and $.user .Qualities}}
+			{{- if .Qualities}}
 
 			<fieldset>
 				<legend>QA</legend>
@@ -577,7 +578,6 @@
 				</table>
 			</fieldset>
 			{{- end}}
-			{{- if $.user}}
 
 			<fieldset>
 				<legend>Stash</legend>

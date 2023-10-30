@@ -6,7 +6,7 @@ if (document.getElementById('map')){
 	let content = document.getElementById('popup-content');
 	let popup = document.getElementById('popup');
 	let overlay = new ol.Overlay({
-		element: popup, autoPan: { animation: { duration: 100 }}
+		element: popup, autoPan: {animation:{duration:100}}
 	});
 	let template = document.getElementById('tmpl-popup');
 

@@ -1,4 +1,4 @@
-{{with .borehole }}
+{{with .borehole}}
 			<fieldset class="fs-detail">
 				<legend>Borehole Detail</legend>
 				<table class="tb-fields">
@@ -122,23 +122,25 @@
 				</table>
 			</fieldset>
 			{{- end}}
+			{{- if or .Files $.user}}
 
 			<fieldset>
 				<legend>Files</legend>
-				{{- if $.user }}
+				{{- if $.user}}
 					<div id="filedrop" data-borehole_id="{{.ID}}">
 				{{- end}}
 				<div class="file-list-container" id="file-list-container">
 					{{- range .Files}}
 					<div>
-					 <span class="gmc-file">
-					 	<a href="../file/{{.ID}}">
-					 	{{.Name}}</a> ({{.FormattedSize}})</span>
+						<span class="gmc-file">
+						<a href="../file/{{.ID}}">
+						{{.Name}}</a> ({{.FormattedSize}})</span>
 					</div>
 					{{- end}}
 				</div>
 				</div>
 			</fieldset>
+			{{- end}}
 			{{- if .Organizations}}
 
 			<fieldset>

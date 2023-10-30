@@ -1,4 +1,4 @@
-{{with .prospect }}
+{{with .prospect}}
 			<fieldset class="fs-detail">
 				<legend>Prospect Detail</legend>
 				<table class="tb-fields">
@@ -105,10 +105,11 @@
 				</table>
 			</fieldset>
 			{{- end}}
+			{{- if or .Files $.user}}
 
 			<fieldset>
 				<legend>Files</legend>
-				{{- if $.user }}
+				{{- if $.user}}
 					<div id="filedrop" data-prospect_id="{{.ID}}">
 				{{- end}}
 				<div class="file-list-container" id="file-list-container">
@@ -122,4 +123,5 @@
 				</div>
 				</div>
 			</fieldset>
+			{{- end}}
 {{end}}
