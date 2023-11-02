@@ -197,14 +197,14 @@ func rowsToStruct(rows pgx.Rows, a interface{}) (int, error) {
 	}
 	switch rv.Kind() {
 	case reflect.Slice:
-		var elem reflect.Value
-		switch typ := rv.Type().Elem(); typ.Kind() {
-		case reflect.Ptr:
-			elem = reflect.New(typ.Elem())
-		case reflect.Struct:
-			elem = reflect.New(typ).Elem()
-		}
 		for rowCount := 0; ; {
+			var elem reflect.Value
+			switch typ := rv.Type().Elem(); typ.Kind() {
+			case reflect.Ptr:
+				elem = reflect.New(typ.Elem())
+			case reflect.Struct:
+				elem = reflect.New(typ).Elem()
+			}
 			if c, err := rowsToStruct(rows, elem.Addr().Interface()); c > 0 {
 				if err != nil {
 					return 0, err

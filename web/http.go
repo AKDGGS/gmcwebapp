@@ -118,6 +118,12 @@ func (srv *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 		barcode := q.Get("barcode")
 		srv.ServeInventoryDetail(barcode, w, r)
 		return
+
+	case "summary.json":
+		q := r.URL.Query()
+		barcode := q.Get("barcode")
+		srv.ServeSummaryDetail(barcode, w, r)
+		return
 	}
 
 	sidx := strings.Index(path, "/")
