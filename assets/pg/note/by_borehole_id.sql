@@ -1,6 +1,6 @@
 SELECT n.note_id AS id,
 	n.note,
-	n.note_date AS date,
+	n.note_date AS "date",
 	n.is_public AS public,
  	n.username,
 	nt.note_type_id AS "note_type.id",
