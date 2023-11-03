@@ -21,7 +21,7 @@ func (pg *Postgres) GetWell(id int, flags int) (*model.Well, error) {
 
 	well := model.Well{}
 
-	if count, err := rowsToStruct(rows, &well); err != nil || count == 0 {
+	if c, err := rowsToStruct(rows, &well); err != nil || c == 0 {
 		return nil, err
 	}
 

@@ -26,7 +26,7 @@ func (pg *Postgres) GetSummaryByBarcode(barcode string, flags int) (*model.Summa
 	}
 
 	// return nil if the barcode is not a container
-	if summary.Barcodes.BarcodeCount == 0 {
+	if summary.Barcodes.BarcodeTotal == 0 {
 		return nil, errors.New("Barcode not found")
 	}
 

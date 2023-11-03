@@ -20,7 +20,7 @@ func (pg *Postgres) GetOutcrop(id int, flags int) (*model.Outcrop, error) {
 	defer rows.Close()
 	outcrop := model.Outcrop{}
 
-	if count, err := rowsToStruct(rows, &outcrop); err != nil || count == 0 {
+	if c, err := rowsToStruct(rows, &outcrop); err != nil || c == 0 {
 		return nil, err
 	}
 	if (flags & dbf.FILES) != 0 {

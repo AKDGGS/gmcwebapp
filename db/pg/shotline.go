@@ -20,7 +20,7 @@ func (pg *Postgres) GetShotline(id int, flags int) (*model.Shotline, error) {
 	defer rows.Close()
 	shotline := model.Shotline{}
 
-	if count, err := rowsToStruct(rows, &shotline); err != nil || count == 0 {
+	if c, err := rowsToStruct(rows, &shotline); err != nil || c == 0 {
 		return nil, err
 	}
 	if (flags & dbf.SHOTPOINT) != 0 {

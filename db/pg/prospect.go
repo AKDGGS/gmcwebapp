@@ -20,7 +20,7 @@ func (pg *Postgres) GetProspect(id int, flags int) (*model.Prospect, error) {
 	defer rows.Close()
 	prospect := model.Prospect{}
 
-	if count, err := rowsToStruct(rows, &prospect); err != nil || count == 0 {
+	if c, err := rowsToStruct(rows, &prospect); err != nil || c == 0 {
 		return nil, err
 	}
 	if (flags & dbf.BOREHOLE) != 0 {
