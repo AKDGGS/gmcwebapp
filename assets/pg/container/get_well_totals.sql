@@ -1,8 +1,8 @@
-SELECT well, total
+SELECT well, well_total
 FROM (
 	SELECT we.well_id,
 		(we.name || COALESCE(' - ' || we.well_number, '')) AS well,
-		COUNT(DISTINCT COALESCE(iv.barcode, iv.alt_barcode)) AS total
+		COUNT(DISTINCT COALESCE(iv.barcode, iv.alt_barcode)) AS well_total
 	FROM container AS co
 	JOIN inventory AS iv ON iv.container_id = co.container_id
 	JOIN inventory_well AS ivw ON ivw.inventory_id = iv.inventory_id

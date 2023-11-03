@@ -1,6 +1,6 @@
-SELECT path_cache, total AS container_total
+SELECT path_cache, container_total
 FROM (
-	SELECT c.container_id, c.path_cache, COUNT(i.inventory_id) AS total
+	SELECT c.container_id, c.path_cache, COUNT(i.inventory_id) AS container_total
 	FROM inventory AS i
 	JOIN container AS c ON c.container_id = i.container_id
 	WHERE i.active AND i.container_id IN (

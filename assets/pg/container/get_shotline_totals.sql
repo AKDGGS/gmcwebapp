@@ -1,7 +1,7 @@
-SELECT shotline, total
+SELECT shotline, shotline_total
 FROM (
 	SELECT sl.shotline_id, sl.name AS shotline,
-		COUNT(DISTINCT COALESCE(iv.barcode, iv.alt_barcode)) AS total
+		COUNT(DISTINCT COALESCE(iv.barcode, iv.alt_barcode)) AS shotline_total
 	FROM inventory AS iv
 	JOIN inventory_shotpoint AS ivs
 		ON ivs.inventory_id = iv.inventory_id

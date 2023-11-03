@@ -1,8 +1,8 @@
-SELECT prospect, borehole, total
+SELECT prospect, borehole, borehole_total
 FROM (
 	SELECT ps.prospect_id, bh.borehole_id,
 		ps.name AS prospect, bh.name AS borehole,
-		COUNT(DISTINCT COALESCE(iv.barcode, iv.alt_barcode)) AS total
+		COUNT(DISTINCT COALESCE(iv.barcode, iv.alt_barcode)) AS borehole_total
 	FROM container AS co
 	JOIN inventory AS iv
 		ON iv.container_id = co.container_id

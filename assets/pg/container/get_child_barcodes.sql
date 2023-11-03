@@ -1,5 +1,5 @@
 SELECT ARRAY_AGG(barcode::text  ORDER BY barcode::text ) as barcodes,
-COUNT(barcode) AS barcode_count
+COUNT(barcode) AS barcode_total
 FROM (
 WITH RECURSIVE t AS (
 	SELECT 0 AS depth, container_id,

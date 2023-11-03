@@ -1,8 +1,8 @@
-SELECT outcrop, total
+SELECT outcrop, outcrop_total
 		FROM (
 			SELECT oc.outcrop_id,
 				(oc.name || COALESCE(' - ' || oc.outcrop_number, '')) AS outcrop,
-				COUNT(DISTINCT COALESCE(iv.barcode, iv.alt_barcode)) AS total
+				COUNT(DISTINCT COALESCE(iv.barcode, iv.alt_barcode)) AS outcrop_total
 			FROM container AS co
 			JOIN inventory AS iv ON iv.container_id = co.container_id
 			JOIN inventory_outcrop AS ivo ON ivo.inventory_id = iv.inventory_id

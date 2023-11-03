@@ -19,27 +19,27 @@ type Summary struct {
 
 	Barcodes struct {
 		Barcodes     []string `json:"barcodes,omitempty"`
-		BarcodeCount int32    `json:"barcode_count,omitempty"`
+		BarcodeTotal int32    `json:"barcode_total,omitempty"`
 	} `json:"barcodes,omitempty"`
 
 	Boreholes []struct {
-		Borehole *string `json:"borehole,omitempty"`
-		Prospect *string `json:"prospect,omitempty"`
-		Total    *int32  `json:"total,omitempty"`
+		Borehole      *string `json:"borehole,omitempty"`
+		Prospect      *string `json:"prospect,omitempty"`
+		BoreholeTotal *int32  `json:"borehole_total,omitempty"`
 	} `json:"boreholes,omitempty"`
 
 	Outcrops []struct {
-		Outcrop *string `json:"outcrop,omitempty"`
-		Total   *int32  `json:"total,omitempty"`
+		Outcrop      *string `json:"outcrop,omitempty"`
+		OutcropTotal *int32  `json:"outcrop_total,omitempty"`
 	} `json:"outcrops,omitempty"`
 
 	Shotlines []struct {
-		Shotline *string `json:"shotline,omitempty"`
-		Total    *int32  `json:"total,omitempty"`
+		Shotline      *string `json:"shotline,omitempty"`
+		ShotlineTotal *int32  `json:"shotline_total,omitempty"`
 	} `json:"shotlines,omitempty"`
 
 	Wells []struct {
-		Well  *string `json:"well,omitempty"`
-		Total *int32  `json:"total,omitempty"`
+		Well      *string `json:"well,omitempty"`
+		WellTotal *int32  `json:"well_total,omitempty"`
 	} `json:"wells,omitempty"`
 }
