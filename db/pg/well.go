@@ -21,8 +21,12 @@ func (pg *Postgres) GetWell(id int, flags int) (*model.Well, error) {
 
 	well := model.Well{}
 
-	if c, err := rowsToStruct(rows, &well); err != nil || c == 0 {
+	c, err := rowsToStruct(rows, &well)
+	if err != nil {
 		return nil, err
+	}
+	if c == 0 {
+		return nil, nil
 	}
 
 	if (flags & dbf.FILES) != 0 {

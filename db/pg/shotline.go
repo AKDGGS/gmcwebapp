@@ -20,8 +20,12 @@ func (pg *Postgres) GetShotline(id int, flags int) (*model.Shotline, error) {
 	defer rows.Close()
 	shotline := model.Shotline{}
 
-	if c, err := rowsToStruct(rows, &shotline); err != nil || c == 0 {
+	c, err := rowsToStruct(rows, &shotline)
+	if err != nil {
 		return nil, err
+	}
+	if c == 0 {
+		return nil, nil
 	}
 	if (flags & dbf.SHOTPOINT) != 0 {
 		q, err = assets.ReadString("pg/shotpoint/by_shotline_id.sql")

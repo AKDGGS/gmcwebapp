@@ -2,7 +2,6 @@ package pg
 
 import (
 	"context"
-	"errors"
 
 	"gmc/assets"
 	"gmc/db/model"
@@ -21,8 +20,12 @@ func (pg *Postgres) CheckToken(tok string) (*model.Token, error) {
 	defer rows.Close()
 	tk := model.Token{}
 
-	if c, err := rowsToStruct(rows, &tk); err != nil || c == 0 {
-		return nil, errors.New("No matches found")
+	c, err := rowsToStruct(rows, &tk)
+	if err != nil {
+		return nil, err
+	}
+	if c == 0 {
+		return nil, nil
 	}
 	return &tk, nil
 }

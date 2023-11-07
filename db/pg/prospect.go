@@ -20,8 +20,12 @@ func (pg *Postgres) GetProspect(id int, flags int) (*model.Prospect, error) {
 	defer rows.Close()
 	prospect := model.Prospect{}
 
-	if c, err := rowsToStruct(rows, &prospect); err != nil || c == 0 {
+	c, err := rowsToStruct(rows, &prospect)
+	if err != nil {
 		return nil, err
+	}
+	if c == 0 {
+		return nil, nil
 	}
 	if (flags & dbf.BOREHOLE) != 0 {
 		q, err := assets.ReadString("pg/borehole/by_prospect_id.sql")
