@@ -1,7 +1,6 @@
 package cmd
 
 import (
-	"errors"
 	"flag"
 	"fmt"
 	"io"
@@ -53,7 +52,7 @@ func FileGet(exec string, cfg *config.Config, cmd string, args []string) {
 			os.Exit(1)
 		}
 		if file == nil {
-			fmt.Fprintf(os.Stderr, "%s: %s\n", exec, errors.New("file not found"))
+			fmt.Fprintf(os.Stderr, "%s: %s\n", exec, fmt.Errorf("file not found"))
 			os.Exit(1)
 		}
 		outpath = filepath.Join(cwd, (file).Name)
