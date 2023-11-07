@@ -10,8 +10,22 @@ import (
 )
 
 func (pg *Postgres) GetSummaryByBarcode(barcode string, flags int) (*model.Summary, error) {
+	q, err := assets.ReadString("pg/container/get_count_by_barcode.sql")
+	if err != nil {
+		return nil, err
+	}
+	var container_flag int32
+	err = pg.pool.QueryRow(context.Background(), q, barcode).Scan(&container_flag)
+	if err != nil {
+		return nil, err
+	}
+	// return nil if the barcode is not a container (container_flag == 0)
+	if container_flag == 0 {
+		return nil, errors.New("Barcode not found")
+	}
+
 	summary := model.Summary{}
-	q, err := assets.ReadString("pg/container/get_child_barcodes.sql")
+	q, err = assets.ReadString("pg/container/get_child_barcodes.sql")
 	if err != nil {
 		return nil, err
 	}
@@ -23,11 +37,6 @@ func (pg *Postgres) GetSummaryByBarcode(barcode string, flags int) (*model.Summa
 	_, err = rowsToStruct(rows, &summary.Barcodes)
 	if err != nil {
 		return nil, err
-	}
-
-	// return nil if the barcode is not a container
-	if summary.Barcodes.BarcodeTotal == 0 {
-		return nil, errors.New("Barcode not found")
 	}
 
 	if (flags & dbf.CONTAINER_TOTAL) != 0 {
