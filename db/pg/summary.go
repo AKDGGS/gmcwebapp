@@ -2,7 +2,6 @@ package pg
 
 import (
 	"context"
-	"fmt"
 
 	"gmc/assets"
 	"gmc/db/model"
@@ -20,7 +19,7 @@ func (pg *Postgres) GetSummaryByBarcode(barcode string, flags int) (*model.Summa
 	}
 	// return nil if the barcode is not a container (barcode_count == 0)
 	if barcode_count == 0 {
-		return nil, fmt.Errorf("Barcode not found")
+		return nil, nil
 	}
 
 	summary := model.Summary{}

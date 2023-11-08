@@ -34,13 +34,13 @@ func (srv *Server) ServeInventoryDetail(barcode string, w http.ResponseWriter, r
 		return
 	}
 
-	// If no details are returned, throw a 404
+	var js []byte
+	// If no details are returned, return an empty JSON object
 	if invs == nil {
-		http.Error(w, "Inventory not found", http.StatusNotFound)
-		return
+		js = []byte("{}")
+	} else {
+		js, err = json.Marshal(invs)
 	}
-
-	js, err := json.Marshal(invs)
 	if err != nil {
 		http.Error(
 			w, fmt.Sprintf("JSON error: %s", err.Error()),

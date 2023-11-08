@@ -34,13 +34,13 @@ func (srv *Server) ServeSummaryDetail(barcode string, w http.ResponseWriter, r *
 		return
 	}
 
-	// If no details are returned, throw a 404
+	var js []byte
+	// If no details are returned, return an empty JSON object
 	if sum == nil {
-		http.Error(w, "Summary not found", http.StatusNotFound)
-		return
+		js = []byte("{}")
+	} else {
+		js, err = json.Marshal(sum)
 	}
-
-	js, err := json.Marshal(sum)
 	if err != nil {
 		http.Error(
 			w, fmt.Sprintf("JSON error: %s", err.Error()),

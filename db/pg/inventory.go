@@ -25,6 +25,8 @@ func (pg *Postgres) GetInventory(id int, flags int) (*model.Inventory, error) {
 	if err != nil {
 		return nil, err
 	}
+
+	//nothing returned by the database
 	if c == 0 {
 		return nil, nil
 	}
