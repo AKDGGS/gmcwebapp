@@ -2,7 +2,6 @@ package web
 
 import (
 	"fmt"
-	dbf "gmc/db/flag"
 	"net/http"
 )
 
@@ -20,12 +19,7 @@ func (srv *Server) ServeMove(dest string, container_list []string, w http.Respon
 		return
 	}
 
-	flags := dbf.ALL
-	if user == nil {
-		flags = dbf.ALL_NOPRIVATE
-	}
-
-	err = srv.DB.MoveByBarcode(dest, container_list, flags, user)
+	err = srv.DB.MoveByBarcode(dest, container_list, user)
 	if err != nil {
 		http.Error(
 			w, fmt.Sprintf("Error: %s", err.Error()),

@@ -48,7 +48,7 @@ type DB interface {
 	PutFile(*model.File, func() error) error
 
 	// Updates container_id (dest) for inventory in container_list
-	MoveByBarcode(dest string, container_list []string, flags int, user *authu.User) error
+	MoveByBarcode(dest string, container_list []string, user *authu.User) error
 
 	// List available tokens
 	ListTokens() ([]*model.Token, error)

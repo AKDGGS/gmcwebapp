@@ -9,7 +9,7 @@ import (
 	authu "gmc/auth/util"
 )
 
-func (pg *Postgres) MoveByBarcode(dest string, container_list []string, flags int, user *authu.User) error {
+func (pg *Postgres) MoveByBarcode(dest string, container_list []string, user *authu.User) error {
 	if nil == user {
 		return errors.New("Access denied.")
 	}
