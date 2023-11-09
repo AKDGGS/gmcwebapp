@@ -105,7 +105,7 @@ func (srv *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 			http.Error(w, "Invalid Well ID", http.StatusBadRequest)
 			return
 		}
-		srv.ServeWellsDetailJSON(id, w, r)
+		srv.ServeWellsDetail(id, w, r)
 		return
 
 	case "upload/":
@@ -129,7 +129,7 @@ func (srv *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	case "summary.json":
 		q := r.URL.Query()
 		barcode := q.Get("barcode")
-		srv.ServeSummaryDetail(barcode, w, r)
+		srv.ServeSummary(barcode, w, r)
 		return
 	}
 

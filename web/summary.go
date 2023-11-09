@@ -8,7 +8,7 @@ import (
 	dbf "gmc/db/flag"
 )
 
-func (srv *Server) ServeSummaryDetail(barcode string, w http.ResponseWriter, r *http.Request) {
+func (srv *Server) ServeSummary(barcode string, w http.ResponseWriter, r *http.Request) {
 	user, err := srv.Auths.CheckRequest(w, r)
 	if err != nil {
 		http.Error(

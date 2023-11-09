@@ -8,7 +8,7 @@ import (
 	dbf "gmc/db/flag"
 )
 
-func (srv *Server) ServeWellsDetailJSON(id int, w http.ResponseWriter, r *http.Request) {
+func (srv *Server) ServeWellsDetail(id int, w http.ResponseWriter, r *http.Request) {
 	user, err := srv.Auths.CheckRequest(w, r)
 	if err != nil {
 		http.Error(
