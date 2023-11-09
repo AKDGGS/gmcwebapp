@@ -119,6 +119,13 @@ func (srv *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 		srv.ServeInventoryDetail(barcode, w, r)
 		return
 
+	case "move.json":
+		q := r.URL.Query()
+		dest := q.Get("d")
+		container_list := q["c"]
+		srv.ServeMove(dest, container_list, w, r)
+		return
+
 	case "summary.json":
 		q := r.URL.Query()
 		barcode := q.Get("barcode")
