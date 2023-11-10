@@ -41,15 +41,15 @@ func (pg *Postgres) PutFile(file *model.File, precommitFunc func() error) error 
 		return err
 	}
 
-	var fileID int32
+	var file_id int32
 
 	err = tx.QueryRow(context.Background(), insert_sql, file.Name, file.Description,
-		file.Size, file.Type, file.MD5).Scan(&fileID)
+		file.Size, file.Type, file.MD5).Scan(&file_id)
 	if err != nil {
 		return err
 	}
 
-	file.ID = fileID
+	file.ID = file_id
 
 	switch {
 	case len(file.BoreholeIDs) != 0:
@@ -60,7 +60,7 @@ func (pg *Postgres) PutFile(file *model.File, precommitFunc func() error) error 
 
 		for _, b := range file.BoreholeIDs {
 			if b != 0 {
-				_, err = tx.Exec(context.Background(), insert_sql, fileID, b)
+				_, err = tx.Exec(context.Background(), insert_sql, file_id, b)
 				if err != nil {
 					return err
 				}
@@ -74,7 +74,7 @@ func (pg *Postgres) PutFile(file *model.File, precommitFunc func() error) error 
 
 		for _, b := range file.InventoryIDs {
 			if b != 0 {
-				_, err = tx.Exec(context.Background(), insert_sql, fileID, b)
+				_, err = tx.Exec(context.Background(), insert_sql, file_id, b)
 				if err != nil {
 					return err
 				}
@@ -88,7 +88,7 @@ func (pg *Postgres) PutFile(file *model.File, precommitFunc func() error) error 
 
 		for _, b := range file.OutcropIDs {
 			if b != 0 {
-				_, err = tx.Exec(context.Background(), insert_sql, fileID, b)
+				_, err = tx.Exec(context.Background(), insert_sql, file_id, b)
 				if err != nil {
 					return err
 				}
@@ -102,7 +102,7 @@ func (pg *Postgres) PutFile(file *model.File, precommitFunc func() error) error 
 
 		for _, b := range file.ProspectIDs {
 			if b != 0 {
-				_, err = tx.Exec(context.Background(), insert_sql, fileID, b)
+				_, err = tx.Exec(context.Background(), insert_sql, file_id, b)
 				if err != nil {
 					return err
 				}
@@ -116,7 +116,7 @@ func (pg *Postgres) PutFile(file *model.File, precommitFunc func() error) error 
 
 		for _, well := range file.WellIDs {
 			if well != 0 {
-				_, err = tx.Exec(context.Background(), insert_sql, fileID, well)
+				_, err = tx.Exec(context.Background(), insert_sql, file_id, well)
 				if err != nil {
 					return err
 				}
