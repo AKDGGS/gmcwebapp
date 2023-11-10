@@ -50,6 +50,9 @@ type DB interface {
 	// Updates container_id (dest) for inventory in container_list
 	MoveByBarcode(dest string, container_list []string, user *authu.User) error
 
+	//Insert a new inventory item
+	AddInventory(barcode string, remark string, container_id *int32, issues []string, user *authu.User) error
+
 	// List available tokens
 	ListTokens() ([]*model.Token, error)
 	// Creates a new token

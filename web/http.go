@@ -113,6 +113,12 @@ func (srv *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 		w.Header().Set("file_id", strconv.Itoa(int(file_id)))
 		return
 
+	case "summary.json":
+		q := r.URL.Query()
+		barcode := q.Get("barcode")
+		srv.ServeSummary(barcode, w, r)
+		return
+
 	case "inventory.json":
 		q := r.URL.Query()
 		barcode := q.Get("barcode")
@@ -126,10 +132,13 @@ func (srv *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 		srv.ServeMove(dest, container_list, w, r)
 		return
 
-	case "summary.json":
+	case "addinventory.json":
 		q := r.URL.Query()
 		barcode := q.Get("barcode")
-		srv.ServeSummary(barcode, w, r)
+		remark := q.Get("remark")
+		var container_id *int32
+		issues := q["i"]
+		srv.ServeAddInventory(barcode, remark, container_id, issues, w, r)
 		return
 	}
 
