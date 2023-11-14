@@ -6,13 +6,9 @@ import (
 	"strings"
 
 	"gmc/assets"
-	authu "gmc/auth/util"
 )
 
-func (pg *Postgres) MoveByBarcode(dest string, container_list []string, user *authu.User) error {
-	if nil == user {
-		return errors.New("Access denied.")
-	}
+func (pg *Postgres) MoveByBarcode(dest string, container_list []string, username string) error {
 	if dest == "" || len(strings.TrimSpace(dest)) < 1 {
 		return errors.New("Destination barcode cannot be empty")
 	}

@@ -126,10 +126,7 @@ func (srv *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 		return
 
 	case "move.json":
-		q := r.URL.Query()
-		dest := q.Get("d")
-		container_list := q["c"]
-		srv.ServeMove(dest, container_list, w, r)
+		srv.ServeMove(w, r)
 		return
 
 	case "addcontainer.json":

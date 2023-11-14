@@ -5,7 +5,7 @@ import (
 	"net/http"
 )
 
-func (srv *Server) ServeMove(dest string, container_list []string, w http.ResponseWriter, r *http.Request) {
+func (srv *Server) ServeMove(w http.ResponseWriter, r *http.Request) {
 	user, err := srv.Auths.CheckRequest(w, r)
 	if err != nil {
 		http.Error(
@@ -18,8 +18,10 @@ func (srv *Server) ServeMove(dest string, container_list []string, w http.Respon
 		http.Error(w, "Access denied.", http.StatusForbidden)
 		return
 	}
-
-	err = srv.DB.MoveByBarcode(dest, container_list, user)
+	q := r.URL.Query()
+	dest := q.Get("d")
+	container_list := q["c"]
+	err = srv.DB.MoveByBarcode(dest, container_list, user.Username)
 	if err != nil {
 		http.Error(
 			w, fmt.Sprintf("Error: %s", err.Error()),

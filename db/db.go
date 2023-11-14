@@ -5,7 +5,6 @@ import (
 	"net/url"
 	"strings"
 
-	authu "gmc/auth/util"
 	"gmc/db/model"
 	"gmc/db/pg"
 )
@@ -48,7 +47,7 @@ type DB interface {
 	PutFile(*model.File, func() error) error
 
 	// Updates container_id (dest) for inventory in container_list
-	MoveByBarcode(dest string, container_list []string, user *authu.User) error
+	MoveByBarcode(dest string, container_list []string, username string) error
 
 	//Insert a new container
 	AddContainer(barcode string, name string, remark string) error
