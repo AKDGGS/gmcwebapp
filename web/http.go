@@ -85,8 +85,7 @@ func (srv *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 		return
 
 	case "upload/":
-		file_id := srv.ServeUpload(w, r)
-		w.Header().Set("file_id", strconv.Itoa(int(file_id)))
+		srv.ServeUpload(w, r)
 		return
 
 	case "summary.json":
