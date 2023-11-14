@@ -6,13 +6,9 @@ import (
 	"strings"
 
 	"gmc/assets"
-	authu "gmc/auth/util"
 )
 
-func (pg *Postgres) AddInventory(barcode string, remark string, container_id *int32, issues []string, user *authu.User) error {
-	if nil == user {
-		return errors.New("Access denied.")
-	}
+func (pg *Postgres) AddInventory(barcode string, remark string, container_id *int32, issues []string, username string) error {
 	if barcode == "" || len(strings.TrimSpace(barcode)) < 1 {
 		return errors.New("Barcode cannot be empty")
 	}
@@ -26,7 +22,7 @@ func (pg *Postgres) AddInventory(barcode string, remark string, container_id *in
 		return err
 	}
 	var inventory_id int32
-	err = tx.QueryRow(context.Background(), q, barcode, remark, nil, nil).Scan(&inventory_id)
+	err = tx.QueryRow(context.Background(), q, barcode, remark, nil).Scan(&inventory_id)
 	if err != nil {
 		return err
 	}
@@ -34,7 +30,7 @@ func (pg *Postgres) AddInventory(barcode string, remark string, container_id *in
 	if err != nil {
 		return err
 	}
-	_, err = tx.Exec(context.Background(), q, inventory_id, nil, user.Username, issues)
+	_, err = tx.Exec(context.Background(), q, inventory_id, nil, username, issues)
 	if err != nil {
 		return err
 	}

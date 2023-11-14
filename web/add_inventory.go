@@ -5,7 +5,7 @@ import (
 	"net/http"
 )
 
-func (srv *Server) ServeAddInventory(barcode string, remark string, container_id *int32, issues []string, w http.ResponseWriter, r *http.Request) {
+func (srv *Server) ServeAddInventory(w http.ResponseWriter, r *http.Request) {
 	user, err := srv.Auths.CheckRequest(w, r)
 	if err != nil {
 		http.Error(
@@ -15,10 +15,17 @@ func (srv *Server) ServeAddInventory(barcode string, remark string, container_id
 		return
 	}
 	if user == nil {
-		http.Error(w, "Access denied.", http.StatusForbidden)
+		http.Error(w, "Access denied", http.StatusForbidden)
 		return
 	}
-	err = srv.DB.AddInventory(barcode, remark, container_id, issues, user)
+	q := r.URL.Query()
+	var container_id *int32
+	issues, ok := q["i"]
+	if !ok {
+		http.Error(w, "Issues list cannot be empty", http.StatusInternalServerError)
+		return
+	}
+	err = srv.DB.AddInventory(q.Get("barcode"), q.Get("remark"), container_id, issues, user.Username)
 	if err != nil {
 		http.Error(
 			w, fmt.Sprintf("Error: %s", err.Error()),

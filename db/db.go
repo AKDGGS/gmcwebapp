@@ -54,7 +54,7 @@ type DB interface {
 	AddContainer(barcode string, name string, remark string) error
 
 	//Insert a new inventory item
-	AddInventory(barcode string, remark string, container_id *int32, issues []string, user *authu.User) error
+	AddInventory(barcode string, remark string, container_id *int32, issues []string, username string) error
 
 	// List available tokens
 	ListTokens() ([]*model.Token, error)
