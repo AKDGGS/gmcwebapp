@@ -111,7 +111,7 @@ func (srv *Server) ServeUpload(w http.ResponseWriter, r *http.Request) error {
 				Content:      file,
 			})
 			if err != nil {
-				return fmt.Errorf("error putting file in filestore: %w", err)
+				return fmt.Errorf("Error putting file in filestore: %w", err)
 			}
 			return nil
 		})

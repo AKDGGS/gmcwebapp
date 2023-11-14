@@ -41,7 +41,7 @@ func (srv *Server) ServeWellsPointsJSON(w http.ResponseWriter, r *http.Request) 
 		gz, err := gzip.NewWriterLevel(&buf, gzip.BestCompression)
 		if err != nil {
 			http.Error(
-				w, fmt.Sprintf("gzip error: %s", err.Error()),
+				w, fmt.Sprintf("Gzip error: %s", err.Error()),
 				http.StatusInternalServerError,
 			)
 			return
@@ -50,7 +50,7 @@ func (srv *Server) ServeWellsPointsJSON(w http.ResponseWriter, r *http.Request) 
 
 		if _, err := gz.Write(js); err != nil {
 			http.Error(
-				w, fmt.Sprintf("gz write error: %s", err.Error()),
+				w, fmt.Sprintf("Gzip write error: %s", err.Error()),
 				http.StatusInternalServerError,
 			)
 			return
@@ -58,7 +58,7 @@ func (srv *Server) ServeWellsPointsJSON(w http.ResponseWriter, r *http.Request) 
 
 		if err := gz.Flush(); err != nil {
 			http.Error(
-				w, fmt.Sprintf("gz write error: %s", err.Error()),
+				w, fmt.Sprintf("Gzip write error: %s", err.Error()),
 				http.StatusInternalServerError,
 			)
 			return

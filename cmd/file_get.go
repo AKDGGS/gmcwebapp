@@ -20,7 +20,6 @@ func FileGet(exec string, cfg *config.Config, cmd string, args []string) {
 		fmt.Printf("Usage: %s %s <filename>\n",
 			exec, cmd)
 		flagset.PrintDefaults()
-		os.Exit(1)
 	}
 	flagset.Parse(args)
 

@@ -16,7 +16,7 @@ func (srv *Server) ServeQACount(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	if user == nil {
-		http.Error(w, "Access denied.", http.StatusForbidden)
+		http.Error(w, "Access denied", http.StatusForbidden)
 		return
 	}
 	q := r.URL.Query()

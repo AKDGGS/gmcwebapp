@@ -44,7 +44,7 @@ func (srv *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 		err := srv.Auths.CheckForm(w, r)
 		if err != nil {
 			http.Error(
-				w, fmt.Sprintf("error: %s", err.Error()),
+				w, fmt.Sprintf("Error: %s", err.Error()),
 				http.StatusInternalServerError,
 			)
 		}
@@ -54,7 +54,7 @@ func (srv *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 		err := srv.Auths.Logout(w, r)
 		if err != nil {
 			http.Error(
-				w, fmt.Sprintf("error: %s", err.Error()),
+				w, fmt.Sprintf("Error: %s", err.Error()),
 				http.StatusInternalServerError,
 			)
 		}

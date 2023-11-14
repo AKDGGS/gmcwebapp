@@ -13,7 +13,7 @@ func (pg *Postgres) MoveByBarcode(dest string, container_list []string, username
 		return errors.New("Destination barcode cannot be empty")
 	}
 	if container_list == nil || len(container_list) < 1 {
-		return errors.New("List of barcodes to be moved cannot be empty.")
+		return errors.New("List of barcodes to be moved cannot be empty")
 	}
 	q, err := assets.ReadString("pg/container/get_container_ids_by_barcode.sql")
 	if err != nil {

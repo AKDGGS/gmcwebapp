@@ -25,7 +25,6 @@ func FilePut(exec string, cfg *config.Config, cmd string, args []string) {
 		fmt.Printf("Usage: %s %s <filename>\n",
 			exec, cmd)
 		flagset.PrintDefaults()
-		os.Exit(1)
 	}
 	flagset.Parse(args)
 	if *well_id == 0 {
@@ -74,7 +73,7 @@ func FilePut(exec string, cfg *config.Config, cmd string, args []string) {
 			file_obj, err := os.Open(file.Name)
 			if err != nil {
 				fmt.Fprintf(os.Stderr, "%s: %s\n", exec, err.Error())
-				return err
+				os.Exit(1)
 			}
 
 			mt := mime.TypeByExtension(filepath.Ext(file_info.Name()))
@@ -91,14 +90,13 @@ func FilePut(exec string, cfg *config.Config, cmd string, args []string) {
 				Content:      file_obj,
 			})
 			if err != nil {
-				return fmt.Errorf("error putting file in filestore: %w", err)
+				return fmt.Errorf("Error putting file in filestore: %w", err)
 			}
 			return nil
 		})
 		if err != nil {
 			fmt.Fprintf(os.Stderr, "%s\n", err.Error())
 			os.Exit(1)
-			// return fmt.Errorf("error putting file in database or the filestore: %w", err)
 		}
 	}
 }
