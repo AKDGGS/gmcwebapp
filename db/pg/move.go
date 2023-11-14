@@ -24,12 +24,18 @@ func (pg *Postgres) MoveByBarcode(dest string, container_list []string, username
 		return err
 	}
 	defer rows.Close()
-	var dest_container_id int32
+	var container_ids []int32
 	for rows.Next() {
-		if err := rows.Scan(&dest_container_id); err != nil {
+		var container_id int32
+		if err := rows.Scan(&container_id); err != nil {
 			return err
 		}
+		container_ids = append(container_ids, container_id)
 	}
+	if len(container_ids) > 1 {
+		return errors.New("Destination barcode refers to multiple containers")
+	}
+	container_id := container_ids[0]
 	tx, err := pg.pool.Begin(context.Background())
 	if err != nil {
 		return err
@@ -40,7 +46,7 @@ func (pg *Postgres) MoveByBarcode(dest string, container_list []string, username
 		if err != nil {
 			return err
 		}
-		_, err = tx.Exec(context.Background(), q, dest_container_id, barcode)
+		_, err = tx.Exec(context.Background(), q, container_id, barcode)
 		if err != nil {
 			return err
 		}
@@ -48,12 +54,11 @@ func (pg *Postgres) MoveByBarcode(dest string, container_list []string, username
 		if err != nil {
 			return err
 		}
-		_, err = tx.Exec(context.Background(), q, dest_container_id, barcode)
+		_, err = tx.Exec(context.Background(), q, container_id, barcode)
 		if err != nil {
 			return err
 		}
 	}
-
 	// If the move is successful, commit the changes
 	if err := tx.Commit(context.Background()); err != nil {
 		return err
