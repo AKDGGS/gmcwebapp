@@ -5,7 +5,7 @@ import (
 	"net/http"
 )
 
-func (srv *Server) ServeAddContainer(barcode string, alt_barcode string, name string, remark string, w http.ResponseWriter, r *http.Request) {
+func (srv *Server) ServeAddContainer(w http.ResponseWriter, r *http.Request) {
 	user, err := srv.Auths.CheckRequest(w, r)
 	if err != nil {
 		http.Error(
@@ -18,7 +18,8 @@ func (srv *Server) ServeAddContainer(barcode string, alt_barcode string, name st
 		http.Error(w, "Access denied.", http.StatusForbidden)
 		return
 	}
-	err = srv.DB.AddContainer(barcode, alt_barcode, name, remark, user)
+	q := r.URL.Query()
+	err = srv.DB.AddContainer(q.Get("barcode"), q.Get("name"), q.Get("remark"))
 	if err != nil {
 		http.Error(
 			w, fmt.Sprintf("Error: %s", err.Error()),

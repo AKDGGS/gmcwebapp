@@ -133,12 +133,7 @@ func (srv *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 		return
 
 	case "addcontainer.json":
-		q := r.URL.Query()
-		barcode := q.Get("barcode")
-		var alt_barcode string
-		name := q.Get("name")
-		remark := q.Get("remark")
-		srv.ServeAddContainer(barcode, alt_barcode, name, remark, w, r)
+		srv.ServeAddContainer(w, r)
 		return
 
 	case "addinventory.json":

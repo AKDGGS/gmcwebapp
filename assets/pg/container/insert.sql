@@ -1,5 +1,11 @@
 INSERT INTO container (
-	container_type_id, barcode, alt_barcode, name, remark
-) VALUES (
-$1, $2, $3, $4, $5
+	barcode, name, remark, container_type_id
 )
+VALUES (
+	$1, $2, $3, (
+		SELECT container_type_id
+		FROM container_type
+		WHERE name = 'unknown'
+		LIMIT 1
+	)
+) RETURNING container_type_id;

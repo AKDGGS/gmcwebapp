@@ -51,7 +51,7 @@ type DB interface {
 	MoveByBarcode(dest string, container_list []string, user *authu.User) error
 
 	//Insert a new container
-	AddContainer(barcode string, alt_barcode string, name string, remark string, user *authu.User) error
+	AddContainer(barcode string, name string, remark string) error
 
 	//Insert a new inventory item
 	AddInventory(barcode string, remark string, container_id *int32, issues []string, user *authu.User) error
