@@ -8,7 +8,7 @@ import (
 	dbf "gmc/db/flag"
 )
 
-func (srv *Server) ServeInventoryDetail(barcode string, w http.ResponseWriter, r *http.Request) {
+func (srv *Server) ServeInventoryDetail(w http.ResponseWriter, r *http.Request) {
 	user, err := srv.Auths.CheckRequest(w, r)
 	if err != nil {
 		http.Error(
@@ -25,6 +25,8 @@ func (srv *Server) ServeInventoryDetail(barcode string, w http.ResponseWriter, r
 	if user == nil {
 		flags = dbf.ALL_NOPRIVATE
 	}
+	q := r.URL.Query()
+	barcode := q.Get("barcode")
 	invs, err := srv.DB.GetInventoryByBarcode(barcode, flags)
 	if err != nil {
 		http.Error(
@@ -33,7 +35,6 @@ func (srv *Server) ServeInventoryDetail(barcode string, w http.ResponseWriter, r
 		)
 		return
 	}
-
 	var js []byte
 	// If no details are returned, return an empty JSON object
 	if invs == nil {
@@ -48,7 +49,6 @@ func (srv *Server) ServeInventoryDetail(barcode string, w http.ResponseWriter, r
 		)
 		return
 	}
-
 	w.Header().Set("Content-Type", "application/json")
 	w.Header().Set("Content-Length", fmt.Sprintf("%d", len(js)))
 	w.Write(js)

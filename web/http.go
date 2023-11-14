@@ -61,33 +61,15 @@ func (srv *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 		return
 
 	case "stash.json":
-		q := r.URL.Query()
-		id, err := strconv.Atoi(q.Get("id"))
-		if err != nil {
-			http.Error(w, "Invalid Inventory ID", http.StatusBadRequest)
-			return
-		}
-		srv.ServeStash(id, w, r)
+		srv.ServeStash(w, r)
 		return
 
 	case "qa/qa_count.json":
-		q := r.URL.Query()
-		id, err := strconv.Atoi(q.Get("id"))
-		if err != nil {
-			http.Error(w, "Invalid Report ID", http.StatusBadRequest)
-			return
-		}
-		srv.ServeQACount(id, w, r)
+		srv.ServeQACount(w, r)
 		return
 
 	case "qa/qa_run.json":
-		q := r.URL.Query()
-		id, err := strconv.Atoi(q.Get("id"))
-		if err != nil {
-			http.Error(w, "Invalid Report ID", http.StatusBadRequest)
-			return
-		}
-		srv.ServeQARun(id, w, r)
+		srv.ServeQARun(w, r)
 		return
 
 	case "wells/":
@@ -99,13 +81,7 @@ func (srv *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 		return
 
 	case "wells/detail.json":
-		q := r.URL.Query()
-		id, err := strconv.Atoi(q.Get("id"))
-		if err != nil {
-			http.Error(w, "Invalid Well ID", http.StatusBadRequest)
-			return
-		}
-		srv.ServeWellsDetail(id, w, r)
+		srv.ServeWellsDetail(w, r)
 		return
 
 	case "upload/":
@@ -114,15 +90,11 @@ func (srv *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 		return
 
 	case "summary.json":
-		q := r.URL.Query()
-		barcode := q.Get("barcode")
-		srv.ServeSummary(barcode, w, r)
+		srv.ServeSummary(w, r)
 		return
 
 	case "inventory.json":
-		q := r.URL.Query()
-		barcode := q.Get("barcode")
-		srv.ServeInventoryDetail(barcode, w, r)
+		srv.ServeInventoryDetail(w, r)
 		return
 
 	case "move.json":

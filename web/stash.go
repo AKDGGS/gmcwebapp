@@ -4,9 +4,10 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/http"
+	"strconv"
 )
 
-func (srv *Server) ServeStash(id int, w http.ResponseWriter, r *http.Request) {
+func (srv *Server) ServeStash(w http.ResponseWriter, r *http.Request) {
 	user, err := srv.Auths.CheckRequest(w, r)
 	if err != nil {
 		http.Error(
@@ -19,7 +20,12 @@ func (srv *Server) ServeStash(id int, w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "Access denied.", http.StatusForbidden)
 		return
 	}
-
+	q := r.URL.Query()
+	id, err := strconv.Atoi(q.Get("id"))
+	if err != nil {
+		http.Error(w, "Invalid Inventory ID", http.StatusBadRequest)
+		return
+	}
 	stash, err := srv.DB.GetStash(id)
 	if err != nil {
 		http.Error(

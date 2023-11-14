@@ -6,10 +6,11 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/http"
+	"strconv"
 	"strings"
 )
 
-func (srv *Server) ServeQARun(id int, w http.ResponseWriter, r *http.Request) {
+func (srv *Server) ServeQARun(w http.ResponseWriter, r *http.Request) {
 	user, err := srv.Auths.CheckRequest(w, r)
 	if err != nil {
 		http.Error(
@@ -22,7 +23,12 @@ func (srv *Server) ServeQARun(id int, w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "Access denied.", http.StatusForbidden)
 		return
 	}
-
+	q := r.URL.Query()
+	id, err := strconv.Atoi(q.Get("id"))
+	if err != nil {
+		http.Error(w, "Invalid Report ID", http.StatusBadRequest)
+		return
+	}
 	re, err := srv.DB.RunQAReport(id)
 	if err != nil {
 		http.Error(

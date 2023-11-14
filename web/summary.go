@@ -8,7 +8,7 @@ import (
 	dbf "gmc/db/flag"
 )
 
-func (srv *Server) ServeSummary(barcode string, w http.ResponseWriter, r *http.Request) {
+func (srv *Server) ServeSummary(w http.ResponseWriter, r *http.Request) {
 	user, err := srv.Auths.CheckRequest(w, r)
 	if err != nil {
 		http.Error(
@@ -25,6 +25,8 @@ func (srv *Server) ServeSummary(barcode string, w http.ResponseWriter, r *http.R
 	if user == nil {
 		flags = dbf.ALL_NOPRIVATE
 	}
+	q := r.URL.Query()
+	barcode := q.Get("barcode")
 	sum, err := srv.DB.GetSummaryByBarcode(barcode, flags)
 	if err != nil {
 		http.Error(
@@ -33,7 +35,6 @@ func (srv *Server) ServeSummary(barcode string, w http.ResponseWriter, r *http.R
 		)
 		return
 	}
-
 	var js []byte
 	// If no details are returned, return an empty JSON object
 	if sum == nil {

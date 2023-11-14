@@ -4,11 +4,12 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/http"
+	"strconv"
 
 	dbf "gmc/db/flag"
 )
 
-func (srv *Server) ServeWellsDetail(id int, w http.ResponseWriter, r *http.Request) {
+func (srv *Server) ServeWellsDetail(w http.ResponseWriter, r *http.Request) {
 	user, err := srv.Auths.CheckRequest(w, r)
 	if err != nil {
 		http.Error(
@@ -20,6 +21,12 @@ func (srv *Server) ServeWellsDetail(id int, w http.ResponseWriter, r *http.Reque
 	flags := dbf.INVENTORY_SUMMARY
 	if user != nil {
 		flags |= dbf.PRIVATE
+	}
+	q := r.URL.Query()
+	id, err := strconv.Atoi(q.Get("id"))
+	if err != nil {
+		http.Error(w, "Invalid Well ID", http.StatusBadRequest)
+		return
 	}
 	well, err := srv.DB.GetWell(id, flags)
 	if err != nil {

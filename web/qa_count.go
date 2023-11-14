@@ -3,9 +3,10 @@ package web
 import (
 	"fmt"
 	"net/http"
+	"strconv"
 )
 
-func (srv *Server) ServeQACount(id int, w http.ResponseWriter, r *http.Request) {
+func (srv *Server) ServeQACount(w http.ResponseWriter, r *http.Request) {
 	user, err := srv.Auths.CheckRequest(w, r)
 	if err != nil {
 		http.Error(
@@ -18,7 +19,12 @@ func (srv *Server) ServeQACount(id int, w http.ResponseWriter, r *http.Request) 
 		http.Error(w, "Access denied.", http.StatusForbidden)
 		return
 	}
-
+	q := r.URL.Query()
+	id, err := strconv.Atoi(q.Get("id"))
+	if err != nil {
+		http.Error(w, "Invalid Report ID", http.StatusBadRequest)
+		return
+	}
 	c, err := srv.DB.CountQAReport(id)
 	if err != nil {
 		http.Error(
