@@ -100,6 +100,10 @@ func (srv *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 		srv.ServeMove(w, r)
 		return
 
+	case "movecontents.json":
+		srv.ServeMoveContents(w, r)
+		return
+
 	case "addcontainer.json":
 		srv.ServeAddContainer(w, r)
 		return

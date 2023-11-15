@@ -49,6 +49,9 @@ type DB interface {
 	// Updates container_id (dest) for inventory in container_list
 	MoveByBarcode(dest string, container_list []string, username string) error
 
+	// Updates container_id (dest) for inventory in container_list
+	MoveContents(src string, dest string) error
+
 	//Insert a new container
 	AddContainer(barcode string, name string, remark string) error
 
