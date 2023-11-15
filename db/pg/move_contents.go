@@ -8,7 +8,7 @@ import (
 	"gmc/assets"
 )
 
-func (pg *Postgres) MoveContents(src string, dest string) error {
+func (pg *Postgres) MoveInventoryAndContainersContents(src string, dest string) error {
 	if src == "" || len(strings.TrimSpace(src)) < 1 {
 		return errors.New("Source barcode cannot be empty")
 	}

@@ -5,7 +5,7 @@ import (
 	"net/http"
 )
 
-func (srv *Server) ServeMoveContents(w http.ResponseWriter, r *http.Request) {
+func (srv *Server) ServeMoveInventoryAndContainersContents(w http.ResponseWriter, r *http.Request) {
 	user, err := srv.Auths.CheckRequest(w, r)
 	if err != nil {
 		http.Error(
@@ -21,7 +21,7 @@ func (srv *Server) ServeMoveContents(w http.ResponseWriter, r *http.Request) {
 	q := r.URL.Query()
 	src := q.Get("src")
 	dest := q.Get("dest")
-	err = srv.DB.MoveContents(src, dest)
+	err = srv.DB.MoveInventoryAndContainersContents(src, dest)
 	if err != nil {
 		http.Error(
 			w, fmt.Sprintf("Error: %s", err.Error()),

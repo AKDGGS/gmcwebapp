@@ -5,7 +5,7 @@ import (
 	"net/http"
 )
 
-func (srv *Server) ServeMove(w http.ResponseWriter, r *http.Request) {
+func (srv *Server) ServeMoveInventoryAndContainers(w http.ResponseWriter, r *http.Request) {
 	user, err := srv.Auths.CheckRequest(w, r)
 	if err != nil {
 		http.Error(
@@ -21,7 +21,7 @@ func (srv *Server) ServeMove(w http.ResponseWriter, r *http.Request) {
 	q := r.URL.Query()
 	dest := q.Get("d")
 	container_list := q["c"]
-	err = srv.DB.MoveByBarcode(dest, container_list, user.Username)
+	err = srv.DB.MoveInventoryAndContainers(dest, container_list, user.Username)
 	if err != nil {
 		http.Error(
 			w, fmt.Sprintf("Error: %s", err.Error()),

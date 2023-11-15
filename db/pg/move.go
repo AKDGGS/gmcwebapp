@@ -8,7 +8,7 @@ import (
 	"gmc/assets"
 )
 
-func (pg *Postgres) MoveByBarcode(dest string, container_list []string, username string) error {
+func (pg *Postgres) MoveInventoryAndContainers(dest string, container_list []string, username string) error {
 	if dest == "" || len(strings.TrimSpace(dest)) < 1 {
 		return errors.New("Destination barcode cannot be empty")
 	}

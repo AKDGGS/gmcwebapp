@@ -97,11 +97,11 @@ func (srv *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 		return
 
 	case "move.json":
-		srv.ServeMove(w, r)
+		srv.ServeMoveInventoryAndContainers(w, r)
 		return
 
 	case "movecontents.json":
-		srv.ServeMoveContents(w, r)
+		srv.ServeMoveInventoryAndContainersContents(w, r)
 		return
 
 	case "addcontainer.json":
