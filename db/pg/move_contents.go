@@ -32,6 +32,9 @@ func (pg *Postgres) MoveInventoryAndContainersContents(src string, dest string) 
 		}
 		container_ids = append(container_ids, container_id)
 	}
+	if len(container_ids) == 0 {
+		return errors.New("Destination barcode not found")
+	}
 	if len(container_ids) > 1 {
 		return errors.New("Destination barcode refers to multiple containers")
 	}
