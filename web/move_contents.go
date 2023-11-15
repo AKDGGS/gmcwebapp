@@ -29,4 +29,8 @@ func (srv *Server) ServeMoveInventoryAndContainersContents(w http.ResponseWriter
 		)
 		return
 	}
+	js := []byte(`{"success":true}`)
+	w.Header().Set("Content-Type", "application/json")
+	w.Header().Set("Content-Length", fmt.Sprintf("%d", len(js)))
+	w.Write(js)
 }
