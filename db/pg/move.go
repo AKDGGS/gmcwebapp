@@ -42,7 +42,7 @@ func (pg *Postgres) MoveInventoryAndContainers(dest string, container_list []str
 	}
 	defer tx.Rollback(context.Background())
 	for _, barcode := range container_list {
-		q, err := assets.ReadString("pg/move/container_by_barcode.sql")
+		q, err := assets.ReadString("pg/container/move_container_by_barcode.sql")
 		if err != nil {
 			return err
 		}
@@ -50,7 +50,7 @@ func (pg *Postgres) MoveInventoryAndContainers(dest string, container_list []str
 		if err != nil {
 			return err
 		}
-		q, err = assets.ReadString("pg/move/inventory_by_barcode.sql")
+		q, err = assets.ReadString("pg/container/move_inventory_by_barcode.sql")
 		if err != nil {
 			return err
 		}
