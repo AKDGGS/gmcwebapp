@@ -20,11 +20,7 @@ func (srv *Server) ServeAddInventory(w http.ResponseWriter, r *http.Request) {
 	}
 	q := r.URL.Query()
 	var container_id *int32
-	issues, ok := q["i"]
-	if !ok {
-		http.Error(w, "Issues list cannot be empty", http.StatusInternalServerError)
-		return
-	}
+	issues := q["i"]
 	err = srv.DB.AddInventory(q.Get("barcode"), q.Get("remark"), container_id, issues, user.Username)
 	if err != nil {
 		http.Error(
