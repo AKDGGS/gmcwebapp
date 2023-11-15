@@ -41,7 +41,7 @@ func (pg *Postgres) MoveInventoryAndContainersContents(src string, dest string) 
 		return err
 	}
 	defer tx.Rollback(context.Background())
-	q, err = assets.ReadString("pg/container/move_container_by_parent_barcode.sql")
+	q, err = assets.ReadString("pg/container/move_by_parent_barcode.sql")
 	if err != nil {
 		return err
 	}
@@ -49,7 +49,7 @@ func (pg *Postgres) MoveInventoryAndContainersContents(src string, dest string) 
 	if err != nil {
 		return err
 	}
-	q, err = assets.ReadString("pg/inventory/move_inventory_by_container_barcode.sql")
+	q, err = assets.ReadString("pg/inventory/move_by_container_barcode.sql")
 	if err != nil {
 		return err
 	}
