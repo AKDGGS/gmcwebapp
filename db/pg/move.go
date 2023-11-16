@@ -15,7 +15,7 @@ func (pg *Postgres) MoveInventoryAndContainers(dest string, container_list []str
 	if container_list == nil || len(container_list) < 1 {
 		return errors.New("List of barcodes to be moved cannot be empty")
 	}
-	q, err := assets.ReadString("pg/container/get_container_ids_by_barcode.sql")
+	q, err := assets.ReadString("pg/container/get_container_id_by_barcode.sql")
 	if err != nil {
 		return err
 	}
@@ -24,21 +24,16 @@ func (pg *Postgres) MoveInventoryAndContainers(dest string, container_list []str
 		return err
 	}
 	defer rows.Close()
-	var container_ids []int32
+	var dest_cid *int32
+	var cid_count int32
 	for rows.Next() {
-		var container_id int32
-		if err := rows.Scan(&container_id); err != nil {
+		if err := rows.Scan(&dest_cid, &cid_count); err != nil {
 			return err
 		}
-		container_ids = append(container_ids, container_id)
 	}
-	if len(container_ids) == 0 {
-		return errors.New("Destination barcode cannot be found")
+	if cid_count != 1 {
+		return errors.New("There was an problem with the destination")
 	}
-	if len(container_ids) > 1 {
-		return errors.New("Destination barcode refers to multiple containers")
-	}
-	container_id := container_ids[0]
 	tx, err := pg.pool.Begin(context.Background())
 	if err != nil {
 		return err
@@ -49,7 +44,7 @@ func (pg *Postgres) MoveInventoryAndContainers(dest string, container_list []str
 		if err != nil {
 			return err
 		}
-		_, err = tx.Exec(context.Background(), q, container_id, barcode)
+		_, err = tx.Exec(context.Background(), q, dest_cid, barcode)
 		if err != nil {
 			return err
 		}
@@ -57,7 +52,7 @@ func (pg *Postgres) MoveInventoryAndContainers(dest string, container_list []str
 		if err != nil {
 			return err
 		}
-		_, err = tx.Exec(context.Background(), q, container_id, barcode)
+		_, err = tx.Exec(context.Background(), q, dest_cid, barcode)
 		if err != nil {
 			return err
 		}
