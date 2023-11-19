@@ -15,30 +15,31 @@ func (pg *Postgres) MoveInventoryAndContainersContents(src string, dest string) 
 	if dest == "" || len(strings.TrimSpace(dest)) < 1 {
 		return errors.New("Destination barcode cannot be empty")
 	}
-	q, err := assets.ReadString("pg/container/get_container_ids_by_barcode.sql")
+	q, err := assets.ReadString("pg/container/get_dest_container_id_and_validate_src_and_dest_for_move_content.sql")
 	if err != nil {
 		return err
 	}
-	rows, err := pg.pool.Query(context.Background(), q, dest)
+	rows, err := pg.pool.Query(context.Background(), q, src, dest)
 	if err != nil {
 		return err
 	}
-	defer rows.Close()
-	var container_ids []int32
+	var dest_cid *int32
+	var cid_count int32
+	var src_valid bool
 	for rows.Next() {
-		var container_id int32
-		if err := rows.Scan(&container_id); err != nil {
+		if err := rows.Scan(&dest_cid, &cid_count, &src_valid); err != nil {
 			return err
 		}
-		container_ids = append(container_ids, container_id)
 	}
-	if len(container_ids) == 0 {
-		return errors.New("Destination barcode not found")
+	if dest_cid == nil {
+		return errors.New("The destination barcode does not exist")
 	}
-	if len(container_ids) > 1 {
-		return errors.New("Destination barcode refers to multiple containers")
+	if !src_valid {
+		return errors.New("There is a problem with the source barcode")
 	}
-	container_id := container_ids[0]
+	if cid_count > 1 {
+		return errors.New("The destination barcode refers to more than one inventory id")
+	}
 	tx, err := pg.pool.Begin(context.Background())
 	if err != nil {
 		return err
@@ -48,7 +49,7 @@ func (pg *Postgres) MoveInventoryAndContainersContents(src string, dest string) 
 	if err != nil {
 		return err
 	}
-	_, err = tx.Exec(context.Background(), q, src, container_id)
+	rc, err := tx.Exec(context.Background(), q, src, *dest_cid)
 	if err != nil {
 		return err
 	}
@@ -56,9 +57,12 @@ func (pg *Postgres) MoveInventoryAndContainersContents(src string, dest string) 
 	if err != nil {
 		return err
 	}
-	_, err = tx.Exec(context.Background(), q, src, container_id)
+	ic, err := tx.Exec(context.Background(), q, src, dest_cid)
 	if err != nil {
 		return err
+	}
+	if (ic.RowsAffected() + rc.RowsAffected()) == 0 {
+		return errors.New("The source barcode is empty")
 	}
 	// If the move is successful, commit the changes
 	if err := tx.Commit(context.Background()); err != nil {
