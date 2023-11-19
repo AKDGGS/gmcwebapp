@@ -20,8 +20,8 @@ func (srv *Server) ServeMoveInventoryAndContainers(w http.ResponseWriter, r *htt
 	}
 	q := r.URL.Query()
 	dest := q.Get("d")
-	container_list := q["c"]
-	err = srv.DB.MoveInventoryAndContainers(dest, container_list, user.Username)
+	barcodes_to_move := q["c"]
+	err = srv.DB.MoveInventoryAndContainers(dest, barcodes_to_move, user.Username)
 	if err != nil {
 		http.Error(
 			w, fmt.Sprintf("Error: %s", err.Error()),

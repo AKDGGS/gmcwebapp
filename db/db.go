@@ -46,10 +46,10 @@ type DB interface {
 	// Put file
 	PutFile(*model.File, func() error) error
 
-	// Updates container_id (dest) for inventory in container_list
-	MoveInventoryAndContainers(dest string, container_list []string, username string) error
+	// Updates container_id (dest) for inventory in barcodes_to_move
+	MoveInventoryAndContainers(dest string, barcodes_to_move []string, username string) error
 
-	// Updates container_id (dest) for inventory in container_list
+	// Updates container_id (dest) for inventory in source
 	MoveInventoryAndContainersContents(src string, dest string) error
 
 	//Insert a new container

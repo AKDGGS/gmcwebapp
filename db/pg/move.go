@@ -8,11 +8,11 @@ import (
 	"gmc/assets"
 )
 
-func (pg *Postgres) MoveInventoryAndContainers(dest string, container_list []string, username string) error {
+func (pg *Postgres) MoveInventoryAndContainers(dest string, barcodes_to_move []string, username string) error {
 	if dest == "" || len(strings.TrimSpace(dest)) < 1 {
 		return errors.New("Destination barcode cannot be empty")
 	}
-	if container_list == nil || len(container_list) < 1 {
+	if barcodes_to_move == nil || len(barcodes_to_move) < 1 {
 		return errors.New("List of barcodes to be moved cannot be empty")
 	}
 	q, err := assets.ReadString("pg/container/get_container_id_by_barcode.sql")
@@ -32,14 +32,27 @@ func (pg *Postgres) MoveInventoryAndContainers(dest string, container_list []str
 		}
 	}
 	if cid_count != 1 {
-		return errors.New("There was an problem with the destination")
+		return errors.New("There was an problem with the destination barcode")
+	}
+	q, err = assets.ReadString("pg/move/validate_barcodes_to_move.sql")
+	if err != nil {
+		return err
+	}
+	var barcodes_valid bool
+	err = pg.pool.QueryRow(context.Background(), q, barcodes_to_move).Scan(&barcodes_valid)
+	if err != nil {
+		return err
+	}
+	defer rows.Close()
+	if !barcodes_valid {
+		return errors.New("At least one of the barcodes you are moving doesn't exist")
 	}
 	tx, err := pg.pool.Begin(context.Background())
 	if err != nil {
 		return err
 	}
 	defer tx.Rollback(context.Background())
-	for _, barcode := range container_list {
+	for _, barcode := range barcodes_to_move {
 		q, err := assets.ReadString("pg/container/move_by_barcode.sql")
 		if err != nil {
 			return err
