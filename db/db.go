@@ -49,16 +49,19 @@ type DB interface {
 	// Updates container_id (dest) for inventory in barcodes_to_move
 	MoveInventoryAndContainers(dest string, barcodes_to_move []string, username string) error
 
+	// Adds Audit to db
+	Audit(remark string, container_list []string) error
+
 	// Updates container_id (dest) for inventory in source
 	MoveInventoryAndContainersContents(src string, dest string) error
 
-	//Insert a new container
+	// Insert a new container
 	AddContainer(barcode string, name string, remark string) error
 
-	//Insert a new inventory item
+	// Insert a new inventory item
 	AddInventory(barcode string, remark string, container_id *int32, issues []string, username string) error
 
-	//Insert issues
+	// Insert issues
 	AddInventoryQuality(barcode string, remark string, issues []string, username string) error
 
 	// Update barcode

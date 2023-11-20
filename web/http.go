@@ -100,6 +100,10 @@ func (srv *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 		srv.ServeMoveInventoryAndContainers(w, r)
 		return
 
+	case "audit.json":
+		srv.ServeAudit(w, r)
+		return
+
 	case "movecontents.json":
 		srv.ServeMoveInventoryAndContainersContents(w, r)
 		return
