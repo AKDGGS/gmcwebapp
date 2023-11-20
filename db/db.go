@@ -58,6 +58,9 @@ type DB interface {
 	//Insert a new inventory item
 	AddInventory(barcode string, remark string, container_id *int32, issues []string, username string) error
 
+	//Insert issues
+	AddInventoryQuality(barcode string, remark string, issues []string, username string) error
+
 	// Update barcode
 	RecodeInventoryAndContainer(old_barcode string, new_barcode string) error
 

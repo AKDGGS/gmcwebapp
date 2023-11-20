@@ -112,6 +112,10 @@ func (srv *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 		srv.ServeAddInventory(w, r)
 		return
 
+	case "addinventoryquality.json":
+		srv.ServeAddInventoryQuality(w, r)
+		return
+
 	case "recode.json":
 		srv.ServeRecodeInventoryAndContainer(w, r)
 		return
