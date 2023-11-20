@@ -21,7 +21,7 @@ func (srv *Server) ServeAudit(w http.ResponseWriter, r *http.Request) {
 	q := r.URL.Query()
 	remark := q.Get("remark")
 	container_list := q["c"]
-	err = srv.DB.Audit(remark, container_list)
+	err = srv.DB.AddAudit(remark, container_list)
 	if err != nil {
 		http.Error(
 			w, fmt.Sprintf("Error: %s", err.Error()),

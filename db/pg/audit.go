@@ -6,7 +6,7 @@ import (
 	"strings"
 )
 
-func (pg *Postgres) Audit(remark string, container_list []string) error {
+func (pg *Postgres) AddAudit(remark string, container_list []string) error {
 	if remark != "" {
 		remark = strings.TrimSpace(remark)
 	}

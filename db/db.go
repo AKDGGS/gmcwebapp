@@ -50,7 +50,7 @@ type DB interface {
 	MoveInventoryAndContainers(dest string, barcodes_to_move []string, username string) error
 
 	// Adds Audit to db
-	Audit(remark string, container_list []string) error
+	AddAudit(remark string, container_list []string) error
 
 	// Updates container_id (dest) for inventory in source
 	MoveInventoryAndContainersContents(src string, dest string) error
