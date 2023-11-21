@@ -88,40 +88,40 @@ func (srv *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 		srv.ServeUpload(w, r)
 		return
 
-	case "summary.json":
-		srv.ServeSummary(w, r)
+	case "api/summary.json":
+		srv.ServeAPISummary(w, r)
 		return
 
-	case "inventory.json":
-		srv.ServeInventoryDetail(w, r)
+	case "api/inventory.json":
+		srv.ServeAPIInventoryDetail(w, r)
 		return
 
-	case "move.json":
-		srv.ServeMoveInventoryAndContainers(w, r)
+	case "api/move.json":
+		srv.ServeAPIMoveInventoryAndContainers(w, r)
 		return
 
-	case "audit.json":
-		srv.ServeAudit(w, r)
+	case "api/add_audit.json":
+		srv.ServeAPIAudit(w, r)
 		return
 
-	case "movecontents.json":
-		srv.ServeMoveInventoryAndContainersContents(w, r)
+	case "api/move_contents.json":
+		srv.ServeAPIMoveInventoryAndContainersContents(w, r)
 		return
 
-	case "addcontainer.json":
-		srv.ServeAddContainer(w, r)
+	case "api/add_container.json":
+		srv.ServeAPIAddContainer(w, r)
 		return
 
-	case "addinventory.json":
-		srv.ServeAddInventory(w, r)
+	case "api/add_inventory.json":
+		srv.ServeAPIAddInventory(w, r)
 		return
 
-	case "addinventoryquality.json":
-		srv.ServeAddInventoryQuality(w, r)
+	case "api/add_inventory_quality.json":
+		srv.ServeAPIAddInventoryQuality(w, r)
 		return
 
-	case "recode.json":
-		srv.ServeRecodeInventoryAndContainer(w, r)
+	case "api/recode.json":
+		srv.ServeAPIRecodeInventoryAndContainer(w, r)
 		return
 	}
 

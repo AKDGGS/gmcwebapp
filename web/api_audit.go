@@ -5,7 +5,7 @@ import (
 	"net/http"
 )
 
-func (srv *Server) ServeAddInventory(w http.ResponseWriter, r *http.Request) {
+func (srv *Server) ServeAPIAudit(w http.ResponseWriter, r *http.Request) {
 	user, err := srv.Auths.CheckRequest(w, r)
 	if err != nil {
 		http.Error(
@@ -19,9 +19,9 @@ func (srv *Server) ServeAddInventory(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	q := r.URL.Query()
-	var container_id *int32
-	issues := q["i"]
-	err = srv.DB.AddInventory(q.Get("barcode"), q.Get("remark"), container_id, issues, user.Username)
+	remark := q.Get("remark")
+	container_list := q["c"]
+	err = srv.DB.AddAudit(remark, container_list)
 	if err != nil {
 		http.Error(
 			w, fmt.Sprintf("Error: %s", err.Error()),
@@ -29,8 +29,4 @@ func (srv *Server) ServeAddInventory(w http.ResponseWriter, r *http.Request) {
 		)
 		return
 	}
-	js := []byte(`{"success":true}`)
-	w.Header().Set("Content-Type", "application/json")
-	w.Header().Set("Content-Length", fmt.Sprintf("%d", len(js)))
-	w.Write(js)
 }

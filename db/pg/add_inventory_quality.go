@@ -3,8 +3,9 @@ package pg
 import (
 	"context"
 	"errors"
-	"gmc/assets"
 	"strings"
+
+	"gmc/assets"
 )
 
 func (pg *Postgres) AddInventoryQuality(barcode string, remark string, issues []string, username string) error {

@@ -5,7 +5,7 @@ import (
 	"net/http"
 )
 
-func (srv *Server) ServeAudit(w http.ResponseWriter, r *http.Request) {
+func (srv *Server) ServeAPIRecodeInventoryAndContainer(w http.ResponseWriter, r *http.Request) {
 	user, err := srv.Auths.CheckRequest(w, r)
 	if err != nil {
 		http.Error(
@@ -19,9 +19,9 @@ func (srv *Server) ServeAudit(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	q := r.URL.Query()
-	remark := q.Get("remark")
-	container_list := q["c"]
-	err = srv.DB.AddAudit(remark, container_list)
+	old_barcode := q.Get("old")
+	new_barcode := q.Get("new")
+	err = srv.DB.RecodeInventoryAndContainer(old_barcode, new_barcode)
 	if err != nil {
 		http.Error(
 			w, fmt.Sprintf("Error: %s", err.Error()),

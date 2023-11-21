@@ -2,8 +2,9 @@ package pg
 
 import (
 	"context"
-	"gmc/assets"
 	"strings"
+
+	"gmc/assets"
 )
 
 func (pg *Postgres) AddAudit(remark string, container_list []string) error {

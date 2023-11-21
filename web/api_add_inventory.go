@@ -5,7 +5,7 @@ import (
 	"net/http"
 )
 
-func (srv *Server) ServeMoveInventoryAndContainers(w http.ResponseWriter, r *http.Request) {
+func (srv *Server) ServeAPIAddInventory(w http.ResponseWriter, r *http.Request) {
 	user, err := srv.Auths.CheckRequest(w, r)
 	if err != nil {
 		http.Error(
@@ -19,9 +19,9 @@ func (srv *Server) ServeMoveInventoryAndContainers(w http.ResponseWriter, r *htt
 		return
 	}
 	q := r.URL.Query()
-	dest := q.Get("d")
-	barcodes_to_move := q["c"]
-	err = srv.DB.MoveInventoryAndContainers(dest, barcodes_to_move, user.Username)
+	var container_id *int32
+	issues := q["i"]
+	err = srv.DB.AddInventory(q.Get("barcode"), q.Get("remark"), container_id, issues, user.Username)
 	if err != nil {
 		http.Error(
 			w, fmt.Sprintf("Error: %s", err.Error()),

@@ -1,14 +1,11 @@
 package web
 
 import (
-	"encoding/json"
 	"fmt"
 	"net/http"
-
-	dbf "gmc/db/flag"
 )
 
-func (srv *Server) ServeInventoryDetail(w http.ResponseWriter, r *http.Request) {
+func (srv *Server) ServeAPIMoveInventoryAndContainersContents(w http.ResponseWriter, r *http.Request) {
 	user, err := srv.Auths.CheckRequest(w, r)
 	if err != nil {
 		http.Error(
@@ -21,13 +18,10 @@ func (srv *Server) ServeInventoryDetail(w http.ResponseWriter, r *http.Request) 
 		http.Error(w, "Access denied", http.StatusForbidden)
 		return
 	}
-	flags := dbf.ALL
-	if user == nil {
-		flags = dbf.ALL_NOPRIVATE
-	}
 	q := r.URL.Query()
-	barcode := q.Get("barcode")
-	invs, err := srv.DB.GetInventoryByBarcode(barcode, flags)
+	src := q.Get("src")
+	dest := q.Get("dest")
+	err = srv.DB.MoveInventoryAndContainersContents(src, dest)
 	if err != nil {
 		http.Error(
 			w, fmt.Sprintf("Error: %s", err.Error()),
@@ -35,20 +29,7 @@ func (srv *Server) ServeInventoryDetail(w http.ResponseWriter, r *http.Request) 
 		)
 		return
 	}
-	var js []byte
-	// If no details are returned, return an empty JSON object
-	if invs == nil {
-		js = []byte("{}")
-	} else {
-		js, err = json.Marshal(invs)
-	}
-	if err != nil {
-		http.Error(
-			w, fmt.Sprintf("JSON error: %s", err.Error()),
-			http.StatusInternalServerError,
-		)
-		return
-	}
+	js := []byte(`{"success":true}`)
 	w.Header().Set("Content-Type", "application/json")
 	w.Header().Set("Content-Length", fmt.Sprintf("%d", len(js)))
 	w.Write(js)
