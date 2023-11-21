@@ -19,10 +19,7 @@ func (srv *Server) ServeAPIAddInventoryQuality(w http.ResponseWriter, r *http.Re
 		return
 	}
 	q := r.URL.Query()
-	barcode := q.Get("barcode")
-	remark := q.Get("remark")
-	issues := q["i"]
-	err = srv.DB.AddInventoryQuality(barcode, remark, issues, user.Username)
+	err = srv.DB.AddInventoryQuality(q.Get("barcode"), q.Get("remark"), q["i"], user.Username)
 	if err != nil {
 		http.Error(
 			w, fmt.Sprintf("Error: %s", err.Error()),

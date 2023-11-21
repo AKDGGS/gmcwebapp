@@ -19,9 +19,7 @@ func (srv *Server) ServeAPIAudit(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	q := r.URL.Query()
-	remark := q.Get("remark")
-	container_list := q["c"]
-	err = srv.DB.AddAudit(remark, container_list)
+	err = srv.DB.AddAudit(q.Get("remark"), q["c"])
 	if err != nil {
 		http.Error(
 			w, fmt.Sprintf("Error: %s", err.Error()),
