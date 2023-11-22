@@ -15,7 +15,7 @@ func (pg *Postgres) MoveInventoryAndContainers(dest string, barcodes_to_move []s
 	if barcodes_to_move == nil || len(barcodes_to_move) < 1 {
 		return errors.New("List of barcodes to be moved cannot be empty")
 	}
-	q, err := assets.ReadString("pg/container/get_container_id_by_barcode.sql")
+	q, err := assets.ReadString("pg/container/get_id_by_barcode.sql")
 	if err != nil {
 		return err
 	}
@@ -32,7 +32,7 @@ func (pg *Postgres) MoveInventoryAndContainers(dest string, barcodes_to_move []s
 		}
 	}
 	if cid_count != 1 {
-		return errors.New("There was an problem with the destination barcode")
+		return errors.New("The destination doesn't refer to one piece of inventory")
 	}
 	q, err = assets.ReadString("pg/move/validate_barcodes_to_move.sql")
 	if err != nil {

@@ -12,7 +12,7 @@ func (pg *Postgres) AddInventoryQuality(barcode string, remark string, issues []
 	if barcode == "" || len(strings.TrimSpace(barcode)) < 1 {
 		return errors.New("Barcode cannot be empty")
 	}
-	q, err := assets.ReadString("pg/inventory/get_inventory_ids_by_barcode.sql")
+	q, err := assets.ReadString("pg/inventory/get_ids_by_barcode.sql")
 	if err != nil {
 		return err
 	}

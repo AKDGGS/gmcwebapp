@@ -15,7 +15,7 @@ func (pg *Postgres) MoveInventoryAndContainersContents(src string, dest string) 
 	if dest == "" || len(strings.TrimSpace(dest)) < 1 {
 		return errors.New("Destination barcode cannot be empty")
 	}
-	q, err := assets.ReadString("pg/container/get_dest_container_id_and_validate_src_and_dest_for_move_content.sql")
+	q, err := assets.ReadString("pg/container/get_dest_container_id_and_validate_src_and_dest.sql")
 	if err != nil {
 		return err
 	}
@@ -35,7 +35,7 @@ func (pg *Postgres) MoveInventoryAndContainersContents(src string, dest string) 
 		return errors.New("The destination barcode does not exist")
 	}
 	if !src_valid {
-		return errors.New("There is a problem with the source barcode")
+		return errors.New("The source barcode is not valid")
 	}
 	if cid_count > 1 {
 		return errors.New("The destination barcode refers to more than one inventory id")

@@ -37,7 +37,7 @@ func (pg *Postgres) GetSummaryByBarcode(barcode string, flags int) (*model.Summa
 		return nil, err
 	}
 
-	q, err = assets.ReadString("pg/container/get_container_totals.sql")
+	q, err = assets.ReadString("pg/container/get_totals.sql")
 	if err != nil {
 		return nil, err
 	}
