@@ -1,4 +1,4 @@
-package main
+package cmd
 
 import (
 	"fmt"
@@ -13,7 +13,7 @@ import (
 	"gmc/web"
 )
 
-func serverCommand(cfg *config.Config, exec string) {
+func ServerCommand(cfg *config.Config, exec string) {
 	db, err := db.New(cfg.DatabaseURL)
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "%s: %s\n", exec, err.Error())

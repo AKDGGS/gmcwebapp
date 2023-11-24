@@ -7,7 +7,7 @@ import (
 	"strings"
 
 	"gmc/assets"
-	cli "gmc/cmd"
+	"gmc/cmd"
 	"gmc/config"
 )
 
@@ -31,10 +31,8 @@ func main() {
 		fmt.Printf("      manage keywords\n")
 		fmt.Printf("  issue, issues, iss\n")
 		fmt.Printf("      manage quality issues\n")
-		fmt.Printf("  get\n")
-		fmt.Printf("      downloads file\n")
-		fmt.Printf("  put\n")
-		fmt.Printf("      uploads files\n\n")
+		fmt.Printf("  file, f\n")
+		fmt.Printf("      manage files\n")
 		fmt.Printf("See '%s <command> --help' for information ", exec)
 		fmt.Printf("on a specific command\n")
 	}
@@ -58,35 +56,34 @@ func main() {
 		assets.SetExternal(*assetpath)
 	}
 
-	cmd := strings.ToLower(flag.Arg(0))
-	switch cmd {
+	cm := strings.ToLower(flag.Arg(0))
+	switch cm {
 	case "database", "db":
-		cli.DatabaseCommand(cfg, exec, cmd, flag.Args()[1:])
+		cmd.DatabaseCommand(cfg, exec, cm, flag.Args()[1:])
 
 	case "server", "start":
-		serverCommand(cfg, exec)
+		cmd.ServerCommand(cfg, exec)
 
 	case "genkey", "keygen":
-		genkeyCommand()
+		cmd.GenKeyCommand()
 
 	case "token", "tk":
-		tokenCommand(cfg, exec, cmd, flag.Args()[1:])
+		cmd.TokenCommand(cfg, exec, cm, flag.Args()[1:])
 
 	case "keywords", "keyword", "kw":
-		cli.KeywordCommand(cfg, exec, cmd, flag.Args()[1:])
+		cmd.KeywordCommand(cfg, exec, cm, flag.Args()[1:])
 
 	case "issues", "issue", "iss":
-		cli.IssueCommand(cfg, exec, cmd, flag.Args()[1:])
+		cmd.IssueCommand(cfg, exec, cm, flag.Args()[1:])
 
-	case "file":
-		cli.FileCommand(cfg, exec, cmd, flag.Args()[1:])
+	case "file", "f":
+		cmd.FileCommand(cfg, exec, cm, flag.Args()[1:])
 
 	case "--help", "help":
 		flag.Usage()
-		os.Exit(0)
 
 	default:
-		fmt.Fprintf(os.Stderr, "%s: '%s' is not a recognized command\n", exec, cmd)
+		fmt.Fprintf(os.Stderr, "%s: '%s' is not a recognized command\n", exec, cm)
 		flag.Usage()
 		os.Exit(1)
 	}

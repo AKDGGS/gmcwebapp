@@ -1,4 +1,4 @@
-package main
+package cmd
 
 import (
 	"crypto/rand"
@@ -7,7 +7,7 @@ import (
 	"os"
 )
 
-func genkeyCommand() {
+func GenKeyCommand() {
 	keyb := make([]byte, 32)
 	_, err := rand.Read(keyb)
 	if err != nil {

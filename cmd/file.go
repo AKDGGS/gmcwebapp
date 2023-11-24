@@ -8,10 +8,11 @@ import (
 	"gmc/config"
 )
 
-func FileCommand(cfg *config.Config, exec string, cmd string, args []string) error {
+func FileCommand(cfg *config.Config, exec, cmd string, args []string) {
 	if len(args) < 1 {
 		fmt.Fprintf(os.Stderr, "%s %s: subcommand missing\n", exec, cmd)
 		printFileUsage(exec, cmd)
+		os.Exit(1)
 	}
 
 	switch subcmd := strings.ToLower(args[0]); subcmd {
@@ -27,7 +28,6 @@ func FileCommand(cfg *config.Config, exec string, cmd string, args []string) err
 		printFileUsage(exec, cmd)
 		os.Exit(1)
 	}
-	return nil
 }
 
 func printFileUsage(exec, cmd string) {

@@ -29,11 +29,13 @@ func FilePut(exec string, cfg *config.Config, cmd string, args []string) {
 	flagset.Parse(args)
 	if *well_id == 0 {
 		fmt.Fprintf(os.Stderr, "-well_id flag is required\n")
+		flagset.Usage()
 		os.Exit(1)
 	}
 
 	if len(flagset.Args()) < 1 {
 		fmt.Fprintf(os.Stderr, "filename required\n")
+		flagset.Usage()
 		os.Exit(1)
 	}
 

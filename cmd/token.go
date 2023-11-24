@@ -1,4 +1,4 @@
-package main
+package cmd
 
 import (
 	"flag"
@@ -16,7 +16,7 @@ import (
 	"github.com/boombuler/barcode/qr"
 )
 
-func tokenCommand(cfg *config.Config, exec string, cmd string, args []string) {
+func TokenCommand(cfg *config.Config, exec string, cmd string, args []string) {
 	printUsage := func() {
 		fmt.Printf("Usage: %s [args] %s <subcommand> ...\n", exec, cmd)
 		fmt.Printf("Subcommands:\n")
