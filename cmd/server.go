@@ -13,23 +13,23 @@ import (
 	"gmc/web"
 )
 
-func ServerCommand(cfg *config.Config, exec string) {
+func ServerCommand(cfg *config.Config, exec string) int {
 	db, err := db.New(cfg.DatabaseURL)
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "%s: %s\n", exec, err.Error())
-		os.Exit(1)
+		return 1
 	}
 
 	auths, err := auth.NewAuths(cfg.SessionKeyBytes(), cfg.MaxAge, cfg.Auths, db)
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "%s: %s\n", exec, err.Error())
-		os.Exit(1)
+		return 1
 	}
 
 	stor, err := filestore.New(cfg.FileStore)
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "%s: %s\n", exec, err.Error())
-		os.Exit(1)
+		return 1
 	}
 
 	srv := web.Server{Config: cfg, DB: db, FileStore: stor, Auths: auths}
@@ -37,7 +37,7 @@ func ServerCommand(cfg *config.Config, exec string) {
 		expath, err := filepath.Abs(exec)
 		if err != nil {
 			fmt.Fprintf(os.Stderr, "absolute path error: %s\n", err.Error())
-			os.Exit(1)
+			return 1
 		}
 
 		go func() {
@@ -63,6 +63,8 @@ func ServerCommand(cfg *config.Config, exec string) {
 
 	if err = srv.Start(); err != nil {
 		fmt.Fprintf(os.Stderr, "%s: %s\n", exec, err.Error())
-		os.Exit(1)
+		return 1
 	}
+
+	return 0
 }

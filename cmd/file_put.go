@@ -17,8 +17,8 @@ import (
 	fsutil "gmc/filestore/util"
 )
 
-func FilePut(exec string, cfg *config.Config, cmd string, args []string) {
-	flagset := flag.NewFlagSet(cmd, flag.ExitOnError)
+func FilePut(exec string, cfg *config.Config, cmd string, args []string) int {
+	flagset := flag.NewFlagSet(cmd, flag.ContinueOnError)
 	well_id := flagset.Int("well_id", 0, "Well ID linked to file")
 	flagset.SetOutput(os.Stdout)
 	flagset.Usage = func() {
@@ -26,17 +26,21 @@ func FilePut(exec string, cfg *config.Config, cmd string, args []string) {
 			exec, cmd)
 		flagset.PrintDefaults()
 	}
-	flagset.Parse(args)
+	if err := flagset.Parse(args); err == flag.ErrHelp {
+		flagset.Usage()
+		return 0
+	}
+
 	if *well_id == 0 {
 		fmt.Fprintf(os.Stderr, "-well_id flag is required\n")
 		flagset.Usage()
-		os.Exit(1)
+		return 1
 	}
 
 	if len(flagset.Args()) < 1 {
 		fmt.Fprintf(os.Stderr, "filename required\n")
 		flagset.Usage()
-		os.Exit(1)
+		return 1
 	}
 
 	filenames := flagset.Args()
@@ -44,13 +48,13 @@ func FilePut(exec string, cfg *config.Config, cmd string, args []string) {
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "%s: %s\n", exec, err.Error())
 		flagset.Usage()
-		os.Exit(1)
+		return 1
 	}
 
 	fs, err := filestore.New(cfg.FileStore)
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "%s: %s\n", exec, err.Error())
-		os.Exit(1)
+		return 1
 	}
 
 	for _, filename := range filenames {
@@ -74,8 +78,7 @@ func FilePut(exec string, cfg *config.Config, cmd string, args []string) {
 		err = db.PutFile(&file, func() error {
 			file_obj, err := os.Open(file.Name)
 			if err != nil {
-				fmt.Fprintf(os.Stderr, "%s: %s\n", exec, err.Error())
-				os.Exit(1)
+				return err
 			}
 
 			mt := mime.TypeByExtension(filepath.Ext(file_info.Name()))
@@ -98,7 +101,8 @@ func FilePut(exec string, cfg *config.Config, cmd string, args []string) {
 		})
 		if err != nil {
 			fmt.Fprintf(os.Stderr, "%s\n", err.Error())
-			os.Exit(1)
+			return 1
 		}
 	}
+	return 0
 }

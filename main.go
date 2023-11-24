@@ -59,33 +59,33 @@ func main() {
 	cm := strings.ToLower(flag.Arg(0))
 	switch cm {
 	case "database", "db":
-		cmd.DatabaseCommand(cfg, exec, cm, flag.Args()[1:])
+		os.Exit(cmd.DatabaseCommand(cfg, exec, cm, flag.Args()[1:]))
 
 	case "server", "start":
-		cmd.ServerCommand(cfg, exec)
+		os.Exit(cmd.ServerCommand(cfg, exec))
 
 	case "genkey", "keygen":
-		cmd.GenKeyCommand()
+		os.Exit(cmd.GenKeyCommand())
 
 	case "token", "tk":
-		cmd.TokenCommand(cfg, exec, cm, flag.Args()[1:])
+		os.Exit(cmd.TokenCommand(cfg, exec, cm, flag.Args()[1:]))
 
 	case "keywords", "keyword", "kw":
-		cmd.KeywordCommand(cfg, exec, cm, flag.Args()[1:])
+		os.Exit(cmd.KeywordCommand(cfg, exec, cm, flag.Args()[1:]))
 
 	case "issues", "issue", "iss":
-		cmd.IssueCommand(cfg, exec, cm, flag.Args()[1:])
+		os.Exit(cmd.IssueCommand(cfg, exec, cm, flag.Args()[1:]))
 
 	case "file", "f":
-		cmd.FileCommand(cfg, exec, cm, flag.Args()[1:])
+		os.Exit(cmd.FileCommand(cfg, exec, cm, flag.Args()[1:]))
 
 	case "--help", "help":
 		flag.Usage()
+		os.Exit(0)
 
 	default:
 		fmt.Fprintf(os.Stderr, "%s: '%s' is not a recognized command\n", exec, cm)
 		flag.Usage()
 		os.Exit(1)
 	}
-	os.Exit(0)
 }
