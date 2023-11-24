@@ -2,7 +2,7 @@ package pg
 
 import (
 	"context"
-	"errors"
+	"fmt"
 	"strings"
 
 	"gmc/assets"
@@ -10,10 +10,10 @@ import (
 
 func (pg *Postgres) MoveInventoryAndContainers(dest string, container_list []string, username string) error {
 	if dest == "" || len(strings.TrimSpace(dest)) < 1 {
-		return errors.New("Destination barcode cannot be empty")
+		return fmt.Errorf("Destination barcode cannot be empty")
 	}
 	if container_list == nil || len(container_list) < 1 {
-		return errors.New("List of barcodes to be moved cannot be empty")
+		return fmt.Errorf("List of barcodes to be moved cannot be empty")
 	}
 	q, err := assets.ReadString("pg/container/get_container_ids_by_barcode.sql")
 	if err != nil {
@@ -33,7 +33,7 @@ func (pg *Postgres) MoveInventoryAndContainers(dest string, container_list []str
 		container_ids = append(container_ids, container_id)
 	}
 	if len(container_ids) > 1 {
-		return errors.New("Destination barcode refers to multiple containers")
+		return fmt.Errorf("Destination barcode refers to multiple containers")
 	}
 	container_id := container_ids[0]
 	tx, err := pg.pool.Begin(context.Background())

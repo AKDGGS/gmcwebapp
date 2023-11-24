@@ -2,7 +2,7 @@ package pg
 
 import (
 	"context"
-	"errors"
+	"fmt"
 	"strings"
 
 	"gmc/assets"
@@ -10,7 +10,7 @@ import (
 
 func (pg *Postgres) AddContainer(barcode string, name string, remark string) error {
 	if barcode == "" || len(strings.TrimSpace(barcode)) < 1 {
-		return errors.New("Barcode cannot be empty")
+		return fmt.Errorf("Barcode cannot be empty")
 	}
 	tx, err := pg.pool.Begin(context.Background())
 	if err != nil {
