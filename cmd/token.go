@@ -1,4 +1,4 @@
-package main
+package cmd
 
 import (
 	"flag"
@@ -16,7 +16,7 @@ import (
 	"github.com/boombuler/barcode/qr"
 )
 
-func tokenCommand(cfg *config.Config, exec string, cmd string, args []string) {
+func TokenCommand(cfg *config.Config, exec string, cmd string, args []string) int {
 	printUsage := func() {
 		fmt.Printf("Usage: %s [args] %s <subcommand> ...\n", exec, cmd)
 		fmt.Printf("Subcommands:\n")
@@ -31,32 +31,31 @@ func tokenCommand(cfg *config.Config, exec string, cmd string, args []string) {
 	if len(args) < 1 {
 		fmt.Fprintf(os.Stderr, "%s %s: subcommand missing\n", exec, cmd)
 		printUsage()
-		os.Exit(1)
+		return 1
 	}
 
 	subcmd := strings.ToLower(args[0])
 	switch subcmd {
-	case "--help", "help":
+	case "-help", "--help", "help":
 		printUsage()
-		os.Exit(0)
 
 	default:
 		fmt.Fprintf(os.Stderr, "%s %s '%s' is not a recognized subcommand\n",
 			exec, cmd, subcmd)
 		printUsage()
-		os.Exit(1)
+		return 1
 
 	case "list", "ls":
 		db, err := db.New(cfg.DatabaseURL)
 		if err != nil {
 			fmt.Fprintf(os.Stderr, "%s: %s\n", exec, err.Error())
-			os.Exit(1)
+			return 1
 		}
 
 		tokens, err := db.ListTokens()
 		if err != nil {
 			fmt.Fprintf(os.Stderr, "%s: %s\n", exec, err.Error())
-			os.Exit(1)
+			return 1
 		}
 
 		for _, tk := range tokens {
@@ -66,29 +65,29 @@ func tokenCommand(cfg *config.Config, exec string, cmd string, args []string) {
 	case "delete", "del", "rm":
 		if len(args) < 2 {
 			fmt.Fprintf(os.Stderr, "%s: token removal requires an ID\n", exec)
-			os.Exit(1)
+			return 1
 		}
 
 		db, err := db.New(cfg.DatabaseURL)
 		if err != nil {
 			fmt.Fprintf(os.Stderr, "%s: %s\n", exec, err.Error())
-			os.Exit(1)
+			return 1
 		}
 
 		id, err := strconv.Atoi(args[1])
 		if err != nil {
 			fmt.Fprintf(os.Stderr, "%s: invalid token ID\n", exec)
-			os.Exit(1)
+			return 1
 		}
 
 		err = db.DeleteToken(id)
 		if err != nil {
 			fmt.Fprintf(os.Stderr, "%s: %s\n", exec, err.Error())
-			os.Exit(1)
+			return 1
 		}
 
 	case "create", "add":
-		ffs := flag.NewFlagSet("token create", flag.ExitOnError)
+		ffs := flag.NewFlagSet("token create", flag.ContinueOnError)
 		ffs.SetOutput(os.Stdout)
 		ffs.Usage = func() {
 			fmt.Fprintf(ffs.Output(), "Usage: %s %s %s [args]\n", exec, cmd, subcmd)
@@ -102,19 +101,23 @@ func tokenCommand(cfg *config.Config, exec string, cmd string, args []string) {
 		width := ffs.Int("width", 750, "width of QR code image")
 		height := ffs.Int("height", 750, "height of QR code image")
 		desc := ffs.String("description", "", "description of new token (required)")
-		ffs.Parse(args[1:])
+
+		if err := ffs.Parse(args[1:]); err == flag.ErrHelp {
+			ffs.Usage()
+			return 0
+		}
 
 		if desc == nil || *desc == "" {
 			fmt.Fprintf(os.Stderr, "%s: token create requires description\n",
 				os.Args[0])
 			ffs.Usage()
-			os.Exit(1)
+			return 1
 		}
 
 		db, err := db.New(cfg.DatabaseURL)
 		if err != nil {
 			fmt.Fprintf(os.Stderr, "%s: %s\n", os.Args[0], err.Error())
-			os.Exit(1)
+			return 1
 		}
 
 		tk := &model.Token{Description: *desc}
@@ -123,34 +126,36 @@ func tokenCommand(cfg *config.Config, exec string, cmd string, args []string) {
 		err = db.CreateToken(tk)
 		if err != nil {
 			fmt.Fprintf(os.Stderr, "%s: %s\n", exec, err.Error())
-			os.Exit(1)
+			return 1
 		}
 
 		if img == nil || *img == "" {
 			fmt.Printf("Generated token: %s\n", tk.Token)
-			os.Exit(0)
+			return 0
 		}
 
 		qrcode, err := qr.Encode(tk.Token, qr.H, qr.AlphaNumeric)
 		if err != nil {
 			fmt.Fprintf(os.Stderr, "%s: %s\n", exec, err.Error())
-			os.Exit(1)
+			return 1
 		}
 		qrcode, err = barcode.Scale(qrcode, *width, *height)
 		if err != nil {
 			fmt.Fprintf(os.Stderr, "%s: %s\n", exec, err.Error())
-			os.Exit(1)
+			return 1
 		}
 		fout, err := os.Create(*img)
 		if err != nil {
 			fmt.Fprintf(os.Stderr, "%s: %s\n", exec, err.Error())
-			os.Exit(1)
+			return 1
 		}
 		defer fout.Close()
 		err = png.Encode(fout, qrcode)
 		if err != nil {
 			fmt.Fprintf(os.Stderr, "%s: %s\n", exec, err.Error())
-			os.Exit(1)
+			return 1
 		}
 	}
+
+	return 0
 }

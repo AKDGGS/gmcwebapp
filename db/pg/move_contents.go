@@ -3,6 +3,7 @@ package pg
 import (
 	"context"
 	"errors"
+	"fmt"
 	"strings"
 
 	"gmc/assets"
@@ -10,10 +11,10 @@ import (
 
 func (pg *Postgres) MoveInventoryAndContainersContents(src string, dest string) error {
 	if src == "" || len(strings.TrimSpace(src)) < 1 {
-		return errors.New("Source barcode cannot be empty")
+		return fmt.Errorf("Source barcode cannot be empty")
 	}
 	if dest == "" || len(strings.TrimSpace(dest)) < 1 {
-		return errors.New("Destination barcode cannot be empty")
+		return fmt.Errorf("Destination barcode cannot be empty")
 	}
 	q, err := assets.ReadString("pg/container/get_dest_container_id_and_validate_src_and_dest.sql")
 	if err != nil {
@@ -32,13 +33,13 @@ func (pg *Postgres) MoveInventoryAndContainersContents(src string, dest string) 
 		}
 	}
 	if dest_cid == nil {
-		return errors.New("The destination barcode does not exist")
+		return fmt.Errorf("The destination barcode does not exist")
 	}
 	if !src_valid {
-		return errors.New("The source barcode is not valid")
+		return fmt.Errorf("The source barcode is not valid")
 	}
 	if cid_count > 1 {
-		return errors.New("The destination barcode refers to more than one inventory id")
+		return fmt.Errorf("The destination barcode refers to more than one inventory id")
 	}
 	tx, err := pg.pool.Begin(context.Background())
 	if err != nil {

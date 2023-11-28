@@ -8,26 +8,27 @@ import (
 	"gmc/config"
 )
 
-func FileCommand(cfg *config.Config, exec string, cmd string, args []string) error {
+func FileCommand(cfg *config.Config, exec, cmd string, args []string) int {
 	if len(args) < 1 {
 		fmt.Fprintf(os.Stderr, "%s %s: subcommand missing\n", exec, cmd)
 		printFileUsage(exec, cmd)
+		return 1
 	}
 
 	switch subcmd := strings.ToLower(args[0]); subcmd {
-	case "--help", "help":
+	case "-help", "--help", "help":
 		printFileUsage(exec, cmd)
 	case "put":
-		FilePut(exec, cfg, fmt.Sprintf("%s %s", cmd, subcmd), args[1:])
+		return FilePut(exec, cfg, fmt.Sprintf("%s %s", cmd, subcmd), args[1:])
 	case "get":
-		FileGet(exec, cfg, fmt.Sprintf("%s %s", cmd, subcmd), args[1:])
+		return FileGet(exec, cfg, fmt.Sprintf("%s %s", cmd, subcmd), args[1:])
 	default:
 		fmt.Fprintf(os.Stderr, "%s %s '%s' is not a recognized subcommand\n",
 			exec, cmd, subcmd)
 		printFileUsage(exec, cmd)
-		os.Exit(1)
+		return 1
 	}
-	return nil
+	return 0
 }
 
 func printFileUsage(exec, cmd string) {
