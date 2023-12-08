@@ -96,3 +96,15 @@ func (d *Dir) PutFile(f *fsutil.File) error {
 func (d *Dir) Shutdown() {
 	// Do nothing
 }
+
+func (d *Dir) DeleteFile(f *fsutil.File) error {
+	err := os.Remove(filepath.Join(d.path, f.Name))
+	if err != nil {
+		return fmt.Errorf("error deleting file: %w", err)
+	}
+	err = os.Remove(filepath.Dir(filepath.Join(d.path, f.Name)))
+	if err != nil {
+		return fmt.Errorf("error deleting directory: %w", err)
+	}
+	return nil
+}

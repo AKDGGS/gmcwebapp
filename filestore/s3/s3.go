@@ -131,3 +131,18 @@ func (s3 *S3) PutFile(file *fsutil.File) error {
 func (s3 *S3) Shutdown() {
 	// Do nothing
 }
+
+func (s3 *S3) DeleteFile(file *fsutil.File) error {
+	exists, err := s3.client.BucketExists(context.Background(), s3.bucket)
+	if err != nil {
+		return err
+	}
+	if !exists {
+		return nil
+	}
+	err = s3.client.RemoveObject(context.Background(), s3.bucket, file.Name, minio.RemoveObjectOptions{})
+	if err != nil {
+		return err
+	}
+	return nil
+}
