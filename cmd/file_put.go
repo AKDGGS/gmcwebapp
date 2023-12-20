@@ -19,6 +19,10 @@ import (
 
 func FilePut(exec string, cfg *config.Config, cmd string, args []string) int {
 	flagset := flag.NewFlagSet(cmd, flag.ContinueOnError)
+	borehole_id := flagset.Int("borehole_id", 0, "Borehole ID linked to file")
+	inventory_id := flagset.Int("inventory_id", 0, "Inventory ID linked to file")
+	outcrop_id := flagset.Int("outcrop_id", 0, "Outcrop ID linked to file")
+	prospect_id := flagset.Int("prospect_id", 0, "Prospect ID linked to file")
 	well_id := flagset.Int("well_id", 0, "Well ID linked to file")
 	flagset.SetOutput(os.Stdout)
 	flagset.Usage = func() {
@@ -28,11 +32,10 @@ func FilePut(exec string, cfg *config.Config, cmd string, args []string) int {
 	}
 	if err := flagset.Parse(args); err == flag.ErrHelp {
 		flagset.Usage()
-		return 0
+		return 1
 	}
-
-	if *well_id == 0 {
-		fmt.Fprintf(os.Stderr, "-well_id flag is required\n")
+	if *borehole_id == 0 && *inventory_id == 0 && *outcrop_id == 0 && *prospect_id == 0 && *well_id == 0 {
+		fmt.Fprintf(os.Stderr, "linking flag (-well_id, -outcrop_id) is required\n")
 		flagset.Usage()
 		return 1
 	}
@@ -60,11 +63,12 @@ func FilePut(exec string, cfg *config.Config, cmd string, args []string) int {
 	for _, filename := range filenames {
 		file_info, err := os.Stat(filename)
 		if err != nil || file_info.Size() == 0 {
-			continue
+			return 1
 		}
 		// temporary code until we decide what to do with the MD5.
-		rand.Seed(time.Now().UnixNano())
-		MD5 := strconv.FormatInt(rand.Int63(), 10)
+		source := rand.NewSource(time.Now().UnixNano())
+		random := rand.New(source)
+		MD5 := strconv.FormatInt(random.Int63(), 10)
 
 		file := model.File{
 			Name: file_info.Name(),
@@ -72,11 +76,14 @@ func FilePut(exec string, cfg *config.Config, cmd string, args []string) int {
 			MD5:  MD5,
 		}
 
+		file.BoreholeIDs = append(file.BoreholeIDs, *borehole_id)
+		file.InventoryIDs = append(file.InventoryIDs, *inventory_id)
+		file.OutcropIDs = append(file.OutcropIDs, *outcrop_id)
+		file.ProspectIDs = append(file.ProspectIDs, *prospect_id)
 		file.WellIDs = append(file.WellIDs, *well_id)
-
 		// Add the file to the database
 		err = db.PutFile(&file, func() error {
-			file_obj, err := os.Open(file.Name)
+			file_obj, err := os.Open(filename)
 			if err != nil {
 				return err
 			}

@@ -46,6 +46,9 @@ type DB interface {
 	// Put file
 	PutFile(*model.File, func() error) error
 
+	// Delete a file from the file and linking tables
+	DeleteFile(file *model.File, rm_links bool) error
+
 	// Updates container_id (dest) for inventory in barcodes_to_move
 	MoveInventoryAndContainers(dest string, barcodes_to_move []string, username string) error
 
