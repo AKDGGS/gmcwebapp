@@ -43,8 +43,9 @@ func (srv *Server) ServeUpload(w http.ResponseWriter, r *http.Request) error {
 		}
 		defer file.Close()
 		// temporary code until we decide what to do with the MD5.
-		rand.Seed(time.Now().UnixNano())
-		MD5 := strconv.FormatInt(rand.Int63(), 10)
+		source := rand.NewSource(time.Now().UnixNano())
+		random := rand.New(source)
+		MD5 := strconv.FormatInt(random.Int63(), 10)
 
 		mt := mime.TypeByExtension(filepath.Ext(fh.Filename))
 		if mt == "" {
