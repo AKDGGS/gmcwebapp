@@ -225,14 +225,14 @@
 					</tbody>
 				</table>
 			</fieldset>
-			{{- if .GeoJSON}}
+			{{- if .GeoJSON.features}}
 
 			<fieldset class="fs-map">
 				<legend>Geospatial</legend>
 				<div id="map"></div>
 				<div id="popup" class="ol-popup">
 					<div class="ol-popup-top">
-						<div class="ol-popup-top-title">Borehole(s)</div>
+						<div id="popup-title"></div>
 						<div id="popup-closer">&#215;</div>
 					</div>
 					<div id="popup-content" class="ol-popup-content"></div>
@@ -242,6 +242,118 @@
 				</script>
 			</fieldset>
 			<div class="flex-break"></div>
+
+			<script id="tmpl-popup" type="x-tmpl-mustache">
+				<table>
+					<tbody>
+						<tr>
+							<th>Name</th>
+							[[#borehole_id]]
+							<td><a href="../borehole/[[borehole_id]]">[[name]]</a></td>
+							[[/borehole_id]]
+							[[#outcrop_id]]
+							<td><a href="../outcrop/[[outcrop_id]]">[[name]]</a></td>
+							[[/outcrop_id]]
+							[[#shotline_id]]
+							<td><a href="../shotline/[[shotline_id]]">[[name]]</a></td>
+							[[/shotline_id]]
+							[[#well_id]]
+							<td><a href="../well/[[well_id]]">[[name]]</a></td>
+							[[/well_id]]
+						</tr>
+						[[#alt_names]]
+						<tr>
+							<th>Alt. Names</th>
+							<td>[[alt_names]]</td>
+						</tr>
+						[[/alt_names]]
+						[[#number]]
+						<tr>
+							<th>Number</th>
+							<td>[[number]]</td>
+						</tr>
+						[[/number]]
+						[[#year]]
+						<tr>
+							<th>Year</th>
+							<td>[[year]]</td>
+						</tr>
+						[[/year]]
+						[[#onshore]]
+						<tr>
+							<th>Onshore</th>
+							<td>[[onshore]]</td>
+						</tr>
+						[[/onshore]]
+						[[#federal]]
+						<tr>
+							<th>Federal</th>
+							<td>[[federal]]</td>
+						</tr>
+						[[/federal]]
+						[[#completion_date]]
+						<tr>
+							<th>Completion Date</th>
+							<td>[[completion_date]]</td>
+						</tr>
+						[[/completion_date]]
+						[[#measured_depth]]
+						<tr>
+							<th>Measured Depth</th>
+							<td>[[measured_depth]]</td>
+						</tr>
+						[[/measured_depth]]
+						[[#vertical_depth]]
+						<tr>
+							<th>Vertical Depth</th>
+							<td>[[vertical_depth]]</td>
+						</tr>
+						[[/vertical_depth]]
+						[[#elevation]]
+						<tr>
+							<th>Elevation</th>
+							<td>[[elevation]]</td>
+						</tr>
+						[[/elevation]]
+						[[#elevation_kb]]
+						<tr>
+							<th>Elevation KB</th>
+							<td>[[elevation_kb]]</td>
+						</tr>
+						[[/elevation_kb]]
+						[[#remark]]
+						<tr>
+							<th>Remark</th>
+							<td>[[remark]]</td>
+						</tr>
+						[[/remark]]
+						[[#shotpoint_min]]
+						<tr>
+							<th>Shotpoints</th>
+							<td>[[shotpoint_min]][[#shotpoint_max]] - [[shotpoint_max]][[/shotpoint_max]]</td>
+						</tr>
+						[[/shotpoint_min]]
+						[[#permit_status]]
+						<tr>
+							<th>Permit Status</th>
+							<td>[[permit_status]]</td>
+						</tr>
+						[[/permit_status]]
+						[[#permit_date]]
+						<tr>
+							<th>Permit Date</th>
+							<td>[[permit_date]]</td>
+						</tr>
+						[[/permit_date]]
+						[[#completion_status]]
+						<tr>
+							<th>Completion Status</th>
+							<td>[[completion_status]]</td>
+						</tr>
+						[[/completion_status]]
+					</tbody>
+				</table>
+			</script>
 			{{- end}}
 			{{- if .Boreholes}}
 

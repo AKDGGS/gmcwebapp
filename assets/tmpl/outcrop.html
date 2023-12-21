@@ -52,13 +52,27 @@
 				<div id="map"></div>
 				<div id="popup" class="ol-popup">
 					<div class="ol-popup-top">
-						<div class="ol-popup-top-title">Outcrop(s)</div>
+						<div id="popup-title"></div>
 						<div id="popup-closer">&#215;</div>
 					</div>
 					<div id="popup-content" class="ol-popup-content"></div>
 				</div>
+				<script>
+					var geojson = {{rawjs .GeoJSON}};
+				</script>
 			</fieldset>
 			<div class="flex-break"></div>
+
+			<script id="tmpl-popup" type="x-tmpl-mustache">
+				<table>
+					<tbody>
+						<tr>
+							<th>Name</th>
+							<td>[[name]]</td>
+						</tr>
+					</tbody>
+				</table>
+			</script>
 			{{- end}}
 			{{- if .KeywordSummary}}
 

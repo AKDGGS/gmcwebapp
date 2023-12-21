@@ -11,6 +11,77 @@ if (document.getElementById('map')){
 	let template = document.getElementById('tmpl-popup');
 
 	popup.style.display = 'block';
+	let styles = {
+	'borehole': new ol.style.Style({
+		image: new ol.style.Circle({
+			radius: 5,
+			fill: new ol.style.Fill({
+				color: 'rgba(99, 186, 0, 0.25)'
+			}),
+			stroke: new ol.style.Stroke({
+				color: 'rgba(99, 186, 0, 255)',
+				width: 3
+			})
+		})
+	}),
+	'outcrop': new ol.style.Style({
+		image: new ol.style.Circle({
+			radius: 5,
+			fill: new ol.style.Fill({
+				color: 'rgba(230, 177, 1, 0.25)'
+			}),
+			stroke: new ol.style.Stroke({
+				color: 'rgba(230, 177, 1, 255)',
+				width: 3
+			})
+		})
+	}),
+	'shotline': new ol.style.Style({
+			stroke: new ol.style.Stroke({
+				color: 'rgba(255, 138, 134, 255)',
+				width: 3
+			})
+	}),
+	'well': new ol.style.Style({
+		image: new ol.style.Circle({
+			radius: 5,
+			fill: new ol.style.Fill({
+				color: 'rgba(146, 203, 255, 0.25)'
+			}),
+			stroke: new ol.style.Stroke({
+				color: 'rgba(46, 145, 230, 255)',
+				width: 3
+			})
+		})
+	}),
+	'line_string': new ol.style.Style({
+			stroke: new ol.style.Stroke({
+				color: 'rgba(44, 126, 167, 255)',
+				width: 3
+			})
+	}),
+	'point': new ol.style.Style({
+		image: new ol.style.Circle({
+			radius: 5,
+			fill: new ol.style.Fill({
+				color: 'rgba(44, 126, 167, 0.25)'
+			}),
+			stroke: new ol.style.Stroke({
+				color: 'rgba(44, 126, 167, 255)',
+				width: 3
+			})
+		})
+	}),
+};
+const style_map = {
+	'borehole_id': 'borehole',
+	'outcrop_id': 'outcrop',
+	'shotline_id': 'shotline',
+	'well_id': 'well',
+	'LineString': 'line_string',
+	'Point': 'point'
+};
+
 	let map = new ol.Map({
 		target: 'map',
 		overlays: [ overlay ],
@@ -18,25 +89,12 @@ if (document.getElementById('map')){
 			MAP_DEFAULTS.BaseLayers,
 			MAP_DEFAULTS.OverlayLayers,
 			new ol.layer.Vector({
-				style: new ol.style.Style({
-					fill: new ol.style.Fill({
-						color: 'rgba(44, 126, 167, 0.25)'
-					}),
-					stroke: new ol.style.Stroke({
-						color: 'rgba(44, 126, 167, 255)',
-						width: 5
-					}),
-					image: new ol.style.Circle({
-						radius: 5,
-						fill: new ol.style.Fill({
-							color: 'rgba(44, 126, 167, 0.25)'
-						}),
-						stroke: new ol.style.Stroke({
-							color: 'rgba(44, 126, 167, 255)',
-							width: 2
-						})
-					})
-				}),
+				style: function(feature) {
+					let style_key = Object.keys(style_map).find(key => feature.get(key) || feature.getGeometry().getType() === key);
+					if (style_key) {
+						feature.setStyle(styles[style_map[style_key]]);
+					}
+				},
 				source: new ol.source.Vector({
 					features: fmt.readFeatures(geojson)
 				})
@@ -74,6 +132,7 @@ if (document.getElementById('map')){
 
 	// Only enable popups if a template is provided
 	if(template != null){
+		let title_element = document.getElementById('popup-title');
 		map.on('click', function(e){
 			let fts = map.getFeaturesAtPixel(e.pixel);
 			if (fts.length < 1){
@@ -82,6 +141,16 @@ if (document.getElementById('map')){
 			}
 			content.innerHTML = '';
 			for(const ft of fts){
+				console.log(ft)
+				if (ft.values_.borehole_id) {
+					title_element.textContent = 'Borehole(s)';
+				} else if (ft.values_.outcrop_id) {
+					title_element.textContent = 'Outcrop(s)';
+				} else if (ft.values_.shotline_id) {
+					title_element.textContent = 'Shotline(s)';
+				} else if (ft.values_.well_id) {
+					title_element.textContent = 'Well(s)';
+				}
 				content.innerHTML += mustache.render(
 					template.innerHTML,
 					ft.getProperties(), {}, ['[[', ']]']
@@ -93,7 +162,7 @@ if (document.getElementById('map')){
 }
 
 if(document.getElementById('filedrop')) {
-		let drop_zone = new FileDrop(document.getElementById('filedrop'), document.getElementById('file-list-container'));
+	let drop_zone = new FileDrop(document.getElementById('filedrop'), document.getElementById('file-list-container'));
 }
 
 if(document.getElementById('latlon')) {

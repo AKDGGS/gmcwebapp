@@ -42,11 +42,12 @@ table { max-width: 600px; }
 	padding: 4px 8px;
 	text-align: left;
 }
-#popup-closer { font-weight: bold; font-size: 20px; cursor: pointer; }
+#popup-closer { font-weight: bold; font-size: 20px; cursor: pointer;
+	position: absolute; right: 0; padding-right: 7px;}
 
 .file-list-container {
- 	display: inline-block;
- 	max-width: auto;
- 	word-break: break-all;
- 	word-wrap: break-word;
+	display: inline-block;
+	max-width: auto;
+	word-break: break-all;
+	word-wrap: break-word;
 }

@@ -92,13 +92,45 @@
 				<div id="map"></div>
 				<div id="popup" class="ol-popup">
 					<div class="ol-popup-top">
-						<div class="ol-popup-top-title">Borehole(s)</div>
+						<div id="popup-title"></div>
 						<div id="popup-closer">&#215;</div>
 					</div>
 					<div id="popup-content" class="ol-popup-content"></div>
 				</div>
+				<script>
+					var geojson = {{rawjs .GeoJSON}};
+				</script>
 			</fieldset>
 			<div class="flex-break"></div>
+
+			<script id="tmpl-popup" type="x-tmpl-mustache">
+				<table>
+					<tbody>
+						<tr>
+							<th>Name</th>
+							<td>[[name]]</td>
+						</tr>
+						[[#alt_names]]
+						<tr>
+							<th>Alt. Names</th>
+							<td>[[alt_names]]</td>
+						</tr>
+						[[/alt_names]]
+						[[#onshore]]
+						<tr>
+							<th>Onshore</th>
+							<td>[[onshore]]</td>
+						</tr>
+						[[/onshore]]
+						[[#completion_date]]
+						<tr>
+							<th>Completion Date</th>
+							<td>[[completion_date]]</td>
+						</tr>
+						[[/completion_date]]
+					</tbody>
+				</table>
+			</script>
 			{{- end}}
 			{{- if .KeywordSummary}}
 

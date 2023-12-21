@@ -4,10 +4,17 @@ SELECT jsonb_build_object(
 ) AS geojson
 FROM (
 	SELECT jsonb_agg(jsonb_build_object(
-			'type', 'Feature',
-			'id', b.borehole_id,
-			'geometry', ST_AsGeoJSON(p.geog, 5, 0)::jsonb
-		) ORDER BY LOWER(b.name)
+		'type', 'Feature',
+		'id', b.borehole_id,
+		'geometry', ST_AsGeoJSON(p.geog, 5, 0)::jsonb,
+		'properties', jsonb_strip_nulls(jsonb_build_object(
+			'borehole_id', b.borehole_id,
+			'name', b.name,
+			'alt_names', b.alt_names,
+			'completion_date', to_char(b.completion_date, 'MM/DD/YY'),
+			'onshore', b.is_onshore
+		))
+	) ORDER BY LOWER(b.name)
 	) AS features
 	FROM borehole AS b
 	JOIN borehole_point AS bp

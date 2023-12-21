@@ -1,26 +1,44 @@
 SELECT jsonb_build_object(
 	'type', 'FeatureCollection',
-	'features', jsonb_build_array(jsonb_build_object(
-		'type', 'Feature', 'geometry',
-		ST_AsGeoJSON(
-			CASE
-				WHEN ST_NumPoints(q.geog) > 1 THEN ST_Simplify(q.geog,0.0001)
-				ELSE ST_PointN(q.geog, 1)
-			END
-		, 5, 0)::jsonb
-	))
-) AS geojson
+	'features', jsonb_build_array(
+		jsonb_build_object(
+			'type', 'Feature',
+			'geometry',
+			ST_AsGeoJSON(
+				CASE
+					WHEN ST_NumPoints(q.geog) > 1 THEN ST_Simplify(q.geog,0.0001)
+					ELSE ST_PointN(q.geog, 1)
+				END, 5, 0)::jsonb,
+			'properties', jsonb_strip_nulls(jsonb_build_object(
+				'shotline_id', q.shotline_id,
+				'name', q.name,
+				'alt_names', q.alt_names,
+				'year', q.year,
+				'remark', q.remark,
+				'shotpoint_min', q.shotpoint_min,
+				'shotpoint_max', q.shotpoint_max
+			))
+		)
+	)) AS geojson
 FROM (
 	SELECT ST_Makeline(
 		p.geog::geometry ORDER BY sp.shotpoint_number DESC
-	) AS geog
-	FROM shotline AS s
+	) AS geog,
+		sl.shotline_id AS shotline_id,
+		sl.name AS name,
+		sl.alt_names as alt_names,
+		sl.year as year,
+		sl.remark as remark,
+		MIN(sp.shotpoint_number) AS shotpoint_min,
+		MAX(sp.shotpoint_number) AS shotpoint_max
+	FROM shotline AS sl
 	JOIN shotpoint AS sp
-		ON sp.shotline_id = s.shotline_id
+		ON sp.shotline_id = sl.shotline_id
 	JOIN shotpoint_point AS spp
 		ON spp.shotpoint_id = sp.shotpoint_id
 	JOIN point AS p
 		ON p.point_id = spp.point_id
-	WHERE s.shotline_id = $1
+	WHERE sl.shotline_id = $1
+	GROUP BY sl.shotline_id, sl.name
 ) AS q
 WHERE q.geog IS NOT NULL

@@ -51,7 +51,7 @@
 				<div id="map"></div>
 				<div id="popup" class="ol-popup">
 					<div class="ol-popup-top">
-						<div class="ol-popup-top-title">Shotline(s)</div>
+						<div id="popup-title"></div>
 						<div id="popup-closer">&#215;</div>
 					</div>
 					<div id="popup-content" class="ol-popup-content"></div>
@@ -61,6 +61,47 @@
 				</script>
 			</fieldset>
 			<div class="flex-break"></div>
+
+			<script id="tmpl-popup" type="x-tmpl-mustache">
+				<table>
+					<tbody>
+						<tr>
+							<th>Name</th>
+							<td>[[name]]</td>
+						</tr>
+						[[#alt_names]]
+						<tr>
+							<th>Alt. Names</th>
+							<td>[[alt_names]]</td>
+						</tr>
+						[[/alt_names]]
+						[[#year]]
+						<tr>
+							<th>Year</th>
+							<td>[[year]]</td>
+						</tr>
+						[[/year]]
+						[[#remark]]
+						<tr>
+							<th>Remark</th>
+							<td>[[remark]]</td>
+						</tr>
+						[[/remark]]
+						[[#shotpoint_min]]
+						<tr>
+							<th>Shotpoints</th>
+							<td>[[shotpoint_min]][[#shotpoint_max]] - [[shotpoint_max]][[/shotpoint_max]]</td>
+						</tr>
+						[[/shotpoint_min]]
+						[[#number]]
+						<tr>
+							<th>Number</th>
+							<td>[[number]]</td>
+						</tr>
+						[[/number]]
+					</tbody>
+				</table>
+			</script>
 			{{- end}}
 			{{- if .KeywordSummary}}
 
