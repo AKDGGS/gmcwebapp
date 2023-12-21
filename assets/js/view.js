@@ -19,35 +19,29 @@ if (document.getElementById('map')){
 			MAP_DEFAULTS.OverlayLayers,
 			new ol.layer.Vector({
 				style: function(feature) {
-					let color;
-					if (feature.get('borehole_id')) {
-					 color = '99, 186, 0';
-					} else if (feature.get('outcrop_id')) {
-						color = '230, 177, 1';
-					} else if (feature.get('shotline_id')) {
-					 color = '255, 138, 134';
-					} else if (feature.get('well_id')) {
-						color = '46, 145, 230';
-					} else {
-						color = 44, 126, 167;
-					}
+					let c = ((f) => {
+						if(f.get('borehole_id')) return '99, 186, 0';
+						if(f.get('outcrop_id')) return '230, 177, 1';
+						if(f.get('shotline_id')) return '255, 138, 134';
+						if(f.get('well_id')) return '46, 145, 230';
+						return '44, 126, 167';
+					})(feature);
 					return new ol.style.Style({
-						image: new ol.style.Circle({
-							radius: 5,
-							fill: new ol.style.Fill({
-									color: 'rgba(' + color + ', 0.25)'
-							}),
-							stroke: new ol.style.Stroke({
-									color: 'rgba(' + color + ', 1)',
-									width: 3
-							})
-						}),
+						fill: new ol.style.Fill({ color: `rgba(${c}, 0.25)` }),
 						stroke: new ol.style.Stroke({
-							color: 'rgba(' + color + ', 1)',
-							width: 3
+							color: `rgba(${c}, 1)`,
+							width: 5
+						}),
+						image: new ol.style.Circle({
+							fill: new ol.style.Fill({ color: `rgba(${c}, 0.25)` }),
+							stroke: new ol.style.Stroke({
+								color: `rgba(${c}, 1)`,
+								width: 2
+							}),
+							radius: 5
 						})
 					});
-		    },
+				},
 				source: new ol.source.Vector({
 					features: fmt.readFeatures(geojson)
 				})
@@ -94,7 +88,6 @@ if (document.getElementById('map')){
 			}
 			content.innerHTML = '';
 			for(const ft of fts){
-				console.log(ft)
 				if (ft.values_.borehole_id) {
 					title_element.textContent = 'Borehole(s)';
 				} else if (ft.values_.outcrop_id) {
