@@ -11,23 +11,6 @@ if (document.getElementById('map')){
 	let template = document.getElementById('tmpl-popup');
 
 	popup.style.display = 'block';
-	let base_style = new ol.style.Style({
-		image: new ol.style.Circle({
-			radius: 5,
-			fill: new ol.style.Fill({
-				color: 'rgba(44, 126, 167, 0.25)'
-			}),
-			stroke: new ol.style.Stroke({
-				color: 'rgba(44, 126, 167, 1)',
-				width: 3
-			})
-		}),
-		stroke: new ol.style.Stroke({
-			color: 'rgba(44, 126, 167, 1)',
-			width: 3
-		})
-	});
-
 	let map = new ol.Map({
 		target: 'map',
 		overlays: [ overlay ],
@@ -36,31 +19,34 @@ if (document.getElementById('map')){
 			MAP_DEFAULTS.OverlayLayers,
 			new ol.layer.Vector({
 				style: function(feature) {
-					let clone = base_style.clone();
 					let color;
 					if (feature.get('borehole_id')) {
 					 color = '99, 186, 0';
 					} else if (feature.get('outcrop_id')) {
 						color = '230, 177, 1';
 					} else if (feature.get('shotline_id')) {
-					 clone.getStroke().setColor('rgba(255, 138, 134, 1)')
+					 color = '255, 138, 134';
 					} else if (feature.get('well_id')) {
 						color = '46, 145, 230';
+					} else {
+						color = 44, 126, 167;
 					}
-					if (color != null) {
-					let circle = new ol.style.Circle({
-						 radius: 5,
-						 fill: new ol.style.Fill({
-								 color: 'rgba(' + color + ', 0.25)'
-						 }),
-						 stroke: new ol.style.Stroke({
-								 color: 'rgba(' + color + ', 1)',
-								 width: 3
-						 })
+					return new ol.style.Style({
+						image: new ol.style.Circle({
+							radius: 5,
+							fill: new ol.style.Fill({
+									color: 'rgba(' + color + ', 0.25)'
+							}),
+							stroke: new ol.style.Stroke({
+									color: 'rgba(' + color + ', 1)',
+									width: 3
+							})
+						}),
+						stroke: new ol.style.Stroke({
+							color: 'rgba(' + color + ', 1)',
+							width: 3
+						})
 					});
-					clone.setImage(circle);
-				}
-				return clone;
 		    },
 				source: new ol.source.Vector({
 					features: fmt.readFeatures(geojson)
@@ -96,7 +82,6 @@ if (document.getElementById('map')){
 		overlay.setPosition(undefined);
 		return false;
 	});
-
 
 	// Only enable popups if a template is provided
 	if(template != null){
