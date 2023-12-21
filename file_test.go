@@ -24,7 +24,12 @@ type params struct {
 }
 
 func TestFile(t *testing.T) {
-	cfg, err := config.Load("config/gmc.test.yaml")
+	config_dir, err := os.UserConfigDir()
+	if err != nil {
+		t.Fatal("Error:", err)
+		return
+	}
+	cfg, err := config.Load(filepath.Join(config_dir, "gmc.test.yaml"))
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -122,7 +127,12 @@ func TestFile(t *testing.T) {
 }
 
 func TestFsPutGetFile(t *testing.T) {
-	cfg, err := config.Load("config/gmc.test.yaml")
+	config_dir, err := os.UserConfigDir()
+	if err != nil {
+		t.Fatal("Error:", err)
+		return
+	}
+	cfg, err := config.Load(filepath.Join(config_dir, "gmc.test.yaml"))
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -223,7 +233,12 @@ func TestFsPutGetFile(t *testing.T) {
 }
 
 func TestDBPutGetFile(t *testing.T) {
-	cfg, err := config.Load("config/gmc.test.yaml")
+	config_dir, err := os.UserConfigDir()
+	if err != nil {
+		t.Fatal("Error:", err)
+		return
+	}
+	cfg, err := config.Load(filepath.Join(config_dir, "gmc.test.yaml"))
 	if err != nil {
 		t.Fatal(err)
 	}
