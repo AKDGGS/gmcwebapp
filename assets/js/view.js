@@ -11,76 +11,22 @@ if (document.getElementById('map')){
 	let template = document.getElementById('tmpl-popup');
 
 	popup.style.display = 'block';
-	let styles = {
-	'borehole': new ol.style.Style({
-		image: new ol.style.Circle({
-			radius: 5,
-			fill: new ol.style.Fill({
-				color: 'rgba(99, 186, 0, 0.25)'
-			}),
-			stroke: new ol.style.Stroke({
-				color: 'rgba(99, 186, 0, 255)',
-				width: 3
-			})
-		})
-	}),
-	'outcrop': new ol.style.Style({
-		image: new ol.style.Circle({
-			radius: 5,
-			fill: new ol.style.Fill({
-				color: 'rgba(230, 177, 1, 0.25)'
-			}),
-			stroke: new ol.style.Stroke({
-				color: 'rgba(230, 177, 1, 255)',
-				width: 3
-			})
-		})
-	}),
-	'shotline': new ol.style.Style({
-			stroke: new ol.style.Stroke({
-				color: 'rgba(255, 138, 134, 255)',
-				width: 3
-			})
-	}),
-	'well': new ol.style.Style({
-		image: new ol.style.Circle({
-			radius: 5,
-			fill: new ol.style.Fill({
-				color: 'rgba(146, 203, 255, 0.25)'
-			}),
-			stroke: new ol.style.Stroke({
-				color: 'rgba(46, 145, 230, 255)',
-				width: 3
-			})
-		})
-	}),
-	'line_string': new ol.style.Style({
-			stroke: new ol.style.Stroke({
-				color: 'rgba(44, 126, 167, 255)',
-				width: 3
-			})
-	}),
-	'point': new ol.style.Style({
+	let base_style = new ol.style.Style({
 		image: new ol.style.Circle({
 			radius: 5,
 			fill: new ol.style.Fill({
 				color: 'rgba(44, 126, 167, 0.25)'
 			}),
 			stroke: new ol.style.Stroke({
-				color: 'rgba(44, 126, 167, 255)',
+				color: 'rgba(44, 126, 167, 1)',
 				width: 3
 			})
+		}),
+		stroke: new ol.style.Stroke({
+			color: 'rgba(44, 126, 167, 1)',
+			width: 3
 		})
-	}),
-};
-const style_map = {
-	'borehole_id': 'borehole',
-	'outcrop_id': 'outcrop',
-	'shotline_id': 'shotline',
-	'well_id': 'well',
-	'LineString': 'line_string',
-	'Point': 'point'
-};
+	});
 
 	let map = new ol.Map({
 		target: 'map',
@@ -90,11 +36,32 @@ const style_map = {
 			MAP_DEFAULTS.OverlayLayers,
 			new ol.layer.Vector({
 				style: function(feature) {
-					let style_key = Object.keys(style_map).find(key => feature.get(key) || feature.getGeometry().getType() === key);
-					if (style_key) {
-						feature.setStyle(styles[style_map[style_key]]);
+					let clone = base_style.clone();
+					let color;
+					if (feature.get('borehole_id')) {
+					 color = '99, 186, 0';
+					} else if (feature.get('outcrop_id')) {
+						color = '230, 177, 1';
+					} else if (feature.get('shotline_id')) {
+					 clone.getStroke().setColor('rgba(255, 138, 134, 1)')
+					} else if (feature.get('well_id')) {
+						color = '46, 145, 230';
 					}
-				},
+					if (color != null) {
+					let circle = new ol.style.Circle({
+						 radius: 5,
+						 fill: new ol.style.Fill({
+								 color: 'rgba(' + color + ', 0.25)'
+						 }),
+						 stroke: new ol.style.Stroke({
+								 color: 'rgba(' + color + ', 1)',
+								 width: 3
+						 })
+					});
+					clone.setImage(circle);
+				}
+				return clone;
+		    },
 				source: new ol.source.Vector({
 					features: fmt.readFeatures(geojson)
 				})
@@ -129,6 +96,7 @@ const style_map = {
 		overlay.setPosition(undefined);
 		return false;
 	});
+
 
 	// Only enable popups if a template is provided
 	if(template != null){
