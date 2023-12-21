@@ -27,7 +27,6 @@ func TestFile(t *testing.T) {
 	config_dir, err := os.UserConfigDir()
 	if err != nil {
 		t.Fatal("Error:", err)
-		return
 	}
 	cfg, err := config.Load(filepath.Join(config_dir, "gmc.test.yaml"))
 	if err != nil {
@@ -130,7 +129,6 @@ func TestFsPutGetFile(t *testing.T) {
 	config_dir, err := os.UserConfigDir()
 	if err != nil {
 		t.Fatal("Error:", err)
-		return
 	}
 	cfg, err := config.Load(filepath.Join(config_dir, "gmc.test.yaml"))
 	if err != nil {
@@ -236,7 +234,6 @@ func TestDBPutGetFile(t *testing.T) {
 	config_dir, err := os.UserConfigDir()
 	if err != nil {
 		t.Fatal("Error:", err)
-		return
 	}
 	cfg, err := config.Load(filepath.Join(config_dir, "gmc.test.yaml"))
 	if err != nil {
