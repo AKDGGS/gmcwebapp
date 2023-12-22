@@ -105,31 +105,25 @@
 
 			<script id="tmpl-popup" type="x-tmpl-mustache">
 				<table>
-					<tbody>
-						<tr>
-							<th>Name</th>
-							<td>[[name]]</td>
-						</tr>
-						[[#alt_names]]
-						<tr>
-							<th>Alt. Names</th>
-							<td>[[alt_names]]</td>
-						</tr>
-						[[/alt_names]]
-						[[#onshore]]
-						<tr>
-							<th>Onshore</th>
-							<td>[[onshore]]</td>
-						</tr>
-						[[/onshore]]
-						[[#completion_date]]
-						<tr>
-							<th>Completion Date</th>
-							<td>[[completion_date]]</td>
-						</tr>
-						[[/completion_date]]
-					</tbody>
-				</table>
+						<tbody>
+							<tr>
+								<th>Name</th>
+								<td>[[name]]</td>
+							</tr>
+							[[#nearby_boreholes.length]]
+							<tr>
+							  <th>Nearby Boreholes</th>
+							</tr>
+							[[/nearby_boreholes.length]]
+							[[#nearby_boreholes]]
+							<tr>
+							  [[#.]]
+							    <td id="tmpl-popup-nearby-neighbors"><a href="../borehole/[[borehole_id]]">[[name]]</a> ([[distance]] miles)</td>
+							  [[/.]]
+							</tr>
+							[[/nearby_boreholes]]
+						</tbody>
+					</table>
 			</script>
 			{{- end}}
 			{{- if .KeywordSummary}}
