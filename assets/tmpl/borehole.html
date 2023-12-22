@@ -4,24 +4,24 @@
 				<table class="tb-fields">
 					<tbody>
 						{{- if .Prospect}}
-							{{- if .Prospect.Name}}
-							<tr>
-								<th>Prospect Name</th>
-								<td><a href="../prospect/{{.Prospect.ID}}">{{.Prospect.Name}}</a></td>
-							</tr>
-							{{- end}}
-							{{- if .Prospect.AltNames}}
-							<tr>
-								<th>Alternative Prospect Name(s)</th>
-								<td>{{.Prospect.AltNames}}</td>
-							</tr>
-							{{- end}}
-							{{- if .Prospect.ARDFNumber}}
-							<tr>
-								<th>ARDF Number</th>
-								<td><a href="http://mrdata.usgs.gov/ardf/show-ardf.php?ardf_num={{.Prospect.ARDFNumber}}">{{.Prospect.ARDFNumber}}</a></td>
-							</tr>
-							{{- end}}
+						{{- if .Prospect.Name}}
+						<tr>
+							<th>Prospect Name</th>
+							<td><a href="../prospect/{{.Prospect.ID}}">{{.Prospect.Name}}</a></td>
+						</tr>
+						{{- end}}
+						{{- if .Prospect.AltNames}}
+						<tr>
+							<th>Alternative Prospect Name(s)</th>
+							<td>{{.Prospect.AltNames}}</td>
+						</tr>
+						{{- end}}
+						{{- if .Prospect.ARDFNumber}}
+						<tr>
+							<th>ARDF Number</th>
+							<td><a href="http://mrdata.usgs.gov/ardf/show-ardf.php?ardf_num={{.Prospect.ARDFNumber}}">{{.Prospect.ARDFNumber}}</a></td>
+						</tr>
+						{{- end}}
 						{{- end}}
 						{{- if .Name}}
 						<tr>
@@ -92,17 +92,13 @@
 				<div id="map"></div>
 				<div id="popup" class="ol-popup">
 					<div class="ol-popup-top">
-						<div id="popup-title"></div>
-						<div id="popup-closer">&#215;</div>
+					<div id="popup-title"></div>
+					<div id="popup-closer">&#215;</div>
 					</div>
 					<div id="popup-content" class="ol-popup-content"></div>
 				</div>
-				<script>
-					var geojson = {{rawjs .GeoJSON}};
-				</script>
 			</fieldset>
 			<div class="flex-break"></div>
-
 			<script id="tmpl-popup" type="x-tmpl-mustache">
 				<table>
 						<tbody>
@@ -112,14 +108,14 @@
 							</tr>
 							[[#nearby_boreholes.length]]
 							<tr>
-							  <th>Nearby Boreholes</th>
+								<th>Nearby Boreholes</th>
 							</tr>
 							[[/nearby_boreholes.length]]
 							[[#nearby_boreholes]]
 							<tr>
-							  [[#.]]
-							    <td id="tmpl-popup-nearby-neighbors"><a href="../borehole/[[borehole_id]]">[[name]]</a> ([[distance]] miles)</td>
-							  [[/.]]
+								[[#.]]
+								<td id="tmpl-popup-nearby-neighbors"><a href="../borehole/[[borehole_id]]">[[name]]</a> ([[distance]] miles)</td>
+								[[/.]]
 							</tr>
 							[[/nearby_boreholes]]
 						</tbody>
