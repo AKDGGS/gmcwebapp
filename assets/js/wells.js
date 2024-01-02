@@ -117,6 +117,12 @@ let map = new ol.Map({
 	])
 });
 
+map.on('pointermove', function (e) {
+	map.getTargetElement().style.cursor = map.hasFeatureAtPixel(e.pixel)
+		? 'pointer'
+		: '';
+});
+
 //Allows the overlay to be visible.
 //The overlay needs to be hidden by default to prevent it being
 //displayed at startup

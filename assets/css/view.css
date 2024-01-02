@@ -5,7 +5,7 @@ fieldset, legend {
 fieldset { margin: 8px 8px 0 8px; }
 legend { padding: 0 8px; }
 table { max-width: 600px; }
-#map { flex: 1; min-width: 400px; min-height: 400px;cursor: pointer;}
+#map { flex: 1; min-width: 400px; min-height: 400px;}
 .files div:not(:last-of-type) { margin-bottom: 16px; }
 .apptmpl-content { display: flex; flex-wrap: wrap;}
 .apptmpl-content fieldset { flex-grow: 1;}

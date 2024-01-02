@@ -71,6 +71,12 @@ if (document.getElementById('map')){
 		])
 	});
 
+	map.on('pointermove', function (e) {
+		map.getTargetElement().style.cursor = map.hasFeatureAtPixel(e.pixel)
+			? 'pointer'
+			: '';
+	});
+
 	let closer = document.getElementById('popup-closer');
 	closer.addEventListener("click", function(){
 		overlay.setPosition(undefined);
