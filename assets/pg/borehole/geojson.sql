@@ -19,14 +19,14 @@ FROM (
 					SELECT jsonb_build_object(
 						'borehole_id', b2.borehole_id,
 						'name', b2.name,
-						'distance', ROUND((ST_Distance(p.geog, p2.geog)/1609.344)::numeric, 2)
+						'distance', ROUND((ST_Distance(p.geog, p2.geog)/1609.344)::numeric, 2)  -- meters to mile conversion
 					) AS nearby_boreholes
 					FROM borehole AS b2
 					JOIN borehole_point AS bp2
 						ON bp2.borehole_id = b2.borehole_id
 					JOIN point AS p2
 						ON p2.point_id = bp2.point_id
-					WHERE ST_DWithin(p.geog, p2.geog, 2414.016) AND b2.borehole_id != b.borehole_id -- 1.5 * 1609.344
+					WHERE ST_DWithin(p.geog, p2.geog, 2414.016) AND b2.borehole_id != b.borehole_id -- 1.5 (distance threshold) * 1609.344
 					ORDER BY ST_Distance(p.geog, p2.geog)
 					LIMIT 10
 				) sub
