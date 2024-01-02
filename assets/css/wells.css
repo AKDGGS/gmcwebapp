@@ -7,7 +7,7 @@
 .apptmpl-content .content {
 	flex: 1 1 auto;
 }
-#map { height: 100%; }
+#map { height: 100%; cursor: pointer;}
 .indent {padding-left: 10px;}
 .ol-popup {
 	position: relative;
@@ -82,4 +82,3 @@
 		font-size: 18px;
 	}
 }
-
