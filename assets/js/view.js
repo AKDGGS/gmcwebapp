@@ -119,7 +119,12 @@ if(document.getElementById('filedrop')) {
 
 if(document.getElementById('latlon')) {
 	if(geojson != null && geojson.features.length > 0){
-		document.getElementById('latlon').innerHTML = geojson.features[0].geometry.coordinates[0]
-		+ ", " + geojson.features[0].geometry.coordinates[1];
+		for (let i = 0; i < geojson.features.length; i++) {
+			if (geojson.features[i].geometry.coordinates.length == 2){
+				document.getElementById('latlon').innerHTML = geojson.features[i].geometry.coordinates[0]
+				+ ", " + geojson.features[i].geometry.coordinates[1];
+			}
+		}
+
 	}
 }
