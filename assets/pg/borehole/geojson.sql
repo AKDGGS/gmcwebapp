@@ -5,7 +5,6 @@ SELECT jsonb_build_object(
 FROM (
 	SELECT jsonb_agg(jsonb_build_object(
 		'type', 'Feature',
-		'id', b1.borehole_id,
 		'geometry', ST_AsGeoJSON(p1.geog, 5, 0)::jsonb,
 		'properties', jsonb_strip_nulls(jsonb_build_object(
 			'borehole_id', b1.borehole_id,
