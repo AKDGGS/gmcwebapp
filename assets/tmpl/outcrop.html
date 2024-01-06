@@ -65,13 +65,25 @@
 
 			<script id="tmpl-popup" type="x-tmpl-mustache">
 				<table>
-					<tbody>
-						<tr>
-							<th>Name</th>
-							<td>[[name]]</td>
-						</tr>
-					</tbody>
-				</table>
+						<tbody>
+							<tr>
+								<th>Name</th>
+								<td>[[name]]</td>
+							</tr>
+							[[#nearby_outcrops.length]]
+							<tr>
+								<th>Nearby Outcrops</th>
+							</tr>
+							[[/nearby_outcrops.length]]
+							[[#nearby_outcrops]]
+							<tr>
+								[[#.]]
+								<td id="tmpl-popup-nearby-neighbors"><a href="../outcrop/[[outcrop_id]]">[[name]]</a> ([[distance]] miles)</td>
+								[[/.]]
+							</tr>
+							[[/nearby_outcrops]]
+						</tbody>
+					</table>
 			</script>
 			{{- end}}
 			{{- if .KeywordSummary}}

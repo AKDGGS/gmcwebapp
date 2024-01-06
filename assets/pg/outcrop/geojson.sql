@@ -1,99 +1,63 @@
+WITH unified_outcrops AS (
+	SELECT o1.outcrop_id, o1.name, p1.geog
+	FROM outcrop AS o1
+	JOIN outcrop_point AS op1 ON op1.outcrop_id = o1.outcrop_id
+	JOIN point AS p1 ON p1.point_id = op1.point_id
+
+	UNION ALL
+
+	SELECT o1.outcrop_id, o1.name, plss.geog
+	FROM outcrop AS o1
+	JOIN outcrop_plss AS oplss ON oplss.outcrop_id = o1.outcrop_id
+	JOIN plss ON plss.plss_id = oplss.plss_id
+
+	UNION ALL
+
+	SELECT o1.outcrop_id, o1.name, place.geog
+	FROM outcrop AS o1
+	JOIN outcrop_place AS oplace ON oplace.outcrop_id = o1.outcrop_id
+	JOIN place ON place.place_id = oplace.place_id
+
+	UNION ALL
+
+	SELECT o1.outcrop_id, o1.name, region.geog
+	FROM outcrop AS o1
+	JOIN outcrop_region AS oregion ON oregion.outcrop_id = o1.outcrop_id
+	JOIN region ON region.region_id = oregion.region_id
+
+	UNION ALL
+
+	SELECT o1.outcrop_id, o1.name, quadrangle.geog
+	FROM outcrop AS o1
+	JOIN outcrop_quadrangle AS oquad ON oquad.outcrop_id = o1.outcrop_id
+	JOIN quadrangle ON quadrangle.quadrangle_id = oquad.quadrangle_id
+)
+
 SELECT jsonb_build_object(
 	'type', 'FeatureCollection',
-	'features', q.features
+	'features', jsonb_agg(jsonb_build_object(
+		'type', 'Feature',
+		'geometry', ST_AsGeoJSON(o1.geog, 5, 0)::jsonb,
+		'properties', jsonb_strip_nulls(jsonb_build_object(
+			'outcrop_id', o1.outcrop_id,
+			'name', o1.name,
+			'nearby_outcrops', (
+				SELECT jsonb_agg(jsonb_build_object(
+					'outcrop_id', nearby_outcrops.outcrop_id,
+					'name', nearby_outcrops.name,
+					'distance', nearby_outcrops.distance
+				))
+				FROM (
+					SELECT o2.outcrop_id, o2.name,
+					ROUND((ST_Distance(o1.geog, o2.geog)/1609.344)::numeric, 2) AS distance
+					FROM unified_outcrops AS o2
+					WHERE o1.outcrop_id != o2.outcrop_id AND ST_DWithin(o1.geog, o2.geog, 2414.016)
+					ORDER BY distance
+					LIMIT 10
+				) AS nearby_outcrops
+			)
+		))
+	))
 ) AS geojson
-FROM ((
-	-- Outcrop Point
-	SELECT jsonb_agg(jsonb_build_object(
-		'type', 'Feature',
-		'geometry', ST_AsGeoJSON(p.geog, 5, 0)::jsonb,
-		'properties', jsonb_strip_nulls(jsonb_build_object(
-			'outcrop_id', o.outcrop_id,
-			'name', o.name,
-			'number', o.outcrop_number,
-			'year', o.year,
-			'onshore', o.is_onshore
-		))
-	)) AS features
-	FROM outcrop AS o
-	JOIN outcrop_point AS op ON op.outcrop_id = o.outcrop_id
-	JOIN point AS p ON p.point_id = op.point_id
-	WHERE o.outcrop_id = $1 AND p.geog IS NOT NULL
-
-	) UNION ALL (
-
-	-- Outcrop PLSS
-	SELECT jsonb_agg(jsonb_build_object(
-		'type', 'Feature',
-		'geometry', ST_AsGeoJSON(p.geog, 5, 0)::jsonb,
-		'properties', jsonb_strip_nulls(jsonb_build_object(
-			'outcrop_id', o.outcrop_id,
-			'name', o.name,
-			'number', o.outcrop_number,
-			'year', o.year,
-			'onshore', o.is_onshore
-		))
-	)) AS features
-	FROM outcrop AS o
-	JOIN outcrop_plss AS op ON op.outcrop_id = o.outcrop_id
-	JOIN plss AS p ON p.plss_id = op.plss_id
-	WHERE o.outcrop_id = $1 AND p.geog IS NOT NULL
-
-	) UNION ALL (
-
-	SELECT jsonb_agg(jsonb_build_object(
-		'type', 'Feature',
-		'geometry', ST_AsGeoJSON(p.geog, 5, 0)::jsonb,
-		'properties', jsonb_strip_nulls(jsonb_build_object(
-			'outcrop_id', o.outcrop_id,
-			'name', o.name,
-			'number', o.outcrop_number,
-			'year', o.year,
-			'onshore', o.is_onshore
-		))
-	)) AS features
-	FROM outcrop AS o
-	JOIN outcrop_place AS op ON op.outcrop_id = o.outcrop_id
-	JOIN place AS p ON p.place_id = op.place_id
-	WHERE o.outcrop_id = $1 AND p.geog IS NOT NULL
-
-	) UNION ALL (
-
-	-- Outcrop Region
-	SELECT jsonb_agg(jsonb_build_object(
-		'type', 'Feature',
-		'geometry', ST_AsGeoJSON(p.geog, 5, 0)::jsonb,
-		'properties', jsonb_strip_nulls(jsonb_build_object(
-			'outcrop_id', o.outcrop_id,
-			'name', o.name,
-			'number', o.outcrop_number,
-			'year', o.year,
-			'onshore', o.is_onshore
-		))
-	)) AS features
-	FROM outcrop AS o
-	JOIN outcrop_region AS op ON op.outcrop_id = o.outcrop_id
-	JOIN region AS p ON p.region_id = op.region_id
-	WHERE o.outcrop_id = $1 AND p.geog IS NOT NULL
-
-	) UNION ALL (
-
-	-- Outcrop Quadrangle
-	SELECT jsonb_agg(jsonb_build_object(
-			'type', 'Feature',
-			'geometry', ST_AsGeoJSON(q.geog, 5, 0)::jsonb,
-			'properties', jsonb_strip_nulls(jsonb_build_object(
-				'outcrop_id', o.outcrop_id,
-				'name', o.name,
-				'number', o.outcrop_number,
-				'year', o.year,
-				'onshore', o.is_onshore
-			))
-	)) AS features
-	FROM outcrop AS o
-	JOIN outcrop_quadrangle AS oq ON oq.outcrop_id = o.outcrop_id
-	JOIN quadrangle AS q ON q.quadrangle_id = oq.quadrangle_id
-	WHERE o.outcrop_id = $1 AND q.geog IS NOT NULL
-	)
-) AS q
-WHERE q.features IS NOT NULL
+FROM unified_outcrops AS o1
+WHERE o1.outcrop_id = $1 AND o1.geog IS NOT NULL;
