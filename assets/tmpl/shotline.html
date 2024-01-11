@@ -64,43 +64,25 @@
 
 			<script id="tmpl-popup" type="x-tmpl-mustache">
 				<table>
-					<tbody>
-						<tr>
-							<th>Name</th>
-							<td>[[name]]</td>
-						</tr>
-						[[#alt_names]]
-						<tr>
-							<th>Alt. Names</th>
-							<td>[[alt_names]]</td>
-						</tr>
-						[[/alt_names]]
-						[[#year]]
-						<tr>
-							<th>Year</th>
-							<td>[[year]]</td>
-						</tr>
-						[[/year]]
-						[[#remark]]
-						<tr>
-							<th>Remark</th>
-							<td>[[remark]]</td>
-						</tr>
-						[[/remark]]
-						[[#shotpoint_min]]
-						<tr>
-							<th>Shotpoints</th>
-							<td>[[shotpoint_min]][[#shotpoint_max]] - [[shotpoint_max]][[/shotpoint_max]]</td>
-						</tr>
-						[[/shotpoint_min]]
-						[[#number]]
-						<tr>
-							<th>Number</th>
-							<td>[[number]]</td>
-						</tr>
-						[[/number]]
-					</tbody>
-				</table>
+						<tbody>
+							<tr>
+								<th>Name</th>
+								<td>[[name]]</td>
+							</tr>
+							[[#nearby_shotlines.length]]
+							<tr>
+								<th>Nearby Shotlines</th>
+							</tr>
+							[[/nearby_shotlines.length]]
+							[[#nearby_shotlines]]
+							<tr>
+								[[#.]]
+								<td id="tmpl-popup-nearby-neighbors"><a href="../shotline/[[shotline_id]]">[[name]]</a> ([[distance]] miles)</td>
+								[[/.]]
+							</tr>
+							[[/nearby_shotlines]]
+						</tbody>
+					</table>
 			</script>
 			{{- end}}
 			{{- if .KeywordSummary}}
