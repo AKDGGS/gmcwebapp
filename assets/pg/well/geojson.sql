@@ -1,59 +1,60 @@
 SELECT jsonb_build_object(
 	'type', 'FeatureCollection',
-	'features', q.features
-) AS geojson
-FROM ((
-	-- Well Point
-	SELECT jsonb_agg(jsonb_build_object(
-			'type', 'Feature',
-			'geometry', ST_AsGeoJSON(p.geog, 5, 0)::jsonb,
-			'properties', jsonb_strip_nulls(jsonb_build_object(
-				'well_id', w.well_id,
-				'name', w.name,
-				'well_number', w.well_number,
-				'api_number', w.api_number
+	'features', jsonb_agg( jsonb_build_object(
+		'type', 'Feature',
+		'geometry', ST_AsGeoJSON(w1.geog, 5, 0):: jsonb,
+		'properties', jsonb_strip_nulls(jsonb_build_object(
+			'well_id', w1.well_id,
+			'name', w1.name,
+			'nearby_wells', (
+				SELECT jsonb_agg(jsonb_build_object(
+					'well_id', nearby_wells.well_id,
+					'name', nearby_wells.name, 'distance',
+					nearby_wells.distance
+				))
+				FROM (
+					SELECT
+					w2.well_id, w2.name,
+					ROUND((ST_Distance(w1.geog, w2.geog)/ 1609.344):: numeric, 2) AS distance
+					FROM (
+						SELECT w1.well_id, w1.name, p1.geog
+						FROM well AS w1
+						JOIN well_point AS wp1 ON wp1.well_id = w1.well_id
+						JOIN point AS p1 ON p1.point_id = wp1.point_id
+
+						UNION ALL
+
+						SELECT w1.well_id, w1.name, place.geog
+						FROM well AS w1
+						JOIN well_place AS wplace ON wplace.well_id = w1.well_id
+						JOIN place ON place.place_id = wplace.place_id
+					) AS w2
+					WHERE w1.well_id != w2.well_id AND ST_DWithin(w1.geog, w2.geog, 2414.016)
+					ORDER BY distance
+					LIMIT 10)
+					AS nearby_wells
+				))
 			))
-		)) AS features
-		FROM well AS w
-		JOIN well_point AS wp ON wp.well_id = w.well_id
-		JOIN point AS p ON p.point_id = wp.point_id
-		WHERE w.well_id = $1 AND p.geog IS NOT NULL
+		)
+	) AS geojson
+FROM (
+	SELECT w1.well_id, w1.name, p1.geog
+	FROM well AS w1
+	JOIN well_point AS wp1 ON wp1.well_id = w1.well_id
+	JOIN point AS p1 ON p1.point_id = wp1.point_id
 
-	) UNION ALL (
+	UNION ALL
 
-	-- Well Place
-	SELECT jsonb_agg(jsonb_build_object(
-		'type', 'Feature',
-		'geometry', ST_AsGeoJSON(pl.geog, 5, 0)::jsonb,
-		'properties', jsonb_strip_nulls(jsonb_build_object(
-			'well_id', w.well_id,
-			'name', w.name,
-			'well_number', w.well_number,
-			'api_number', w.api_number
-		))
-	)) AS features
-		FROM well AS w
-		JOIN well_place AS wpl ON wpl.well_id = w.well_id
-		JOIN place AS pl ON pl.place_id = wpl.place_id
-		WHERE w.well_id = $1 AND pl.geog IS NOT NULL
+	SELECT w1.well_id, w1.name, place.geog
+	FROM well AS w1
+	JOIN well_place AS wplace ON wplace.well_id = w1.well_id
+	JOIN place ON place.place_id = wplace.place_id
 
-	) UNION ALL (
+	UNION ALL
 
-	-- Well Region
-	SELECT jsonb_agg(jsonb_build_object(
-		'type', 'Feature',
-		'geometry', ST_AsGeoJSON(r.geog, 5, 0)::jsonb,
-		'properties', jsonb_strip_nulls(jsonb_build_object(
-			'well_id', w.well_id,
-			'name', w.name,
-			'well_number', w.well_number,
-			'api_number', w.api_number
-		))
-	)) AS features
-		FROM well AS w
-		JOIN well_region AS wr ON wr.well_id = w.well_id
-		JOIN region AS r ON r.region_id = wr.region_id
-		WHERE w.well_id = $1 AND r.geog IS NOT NULL
-	)
-) AS q
-WHERE q.features IS NOT NULL
+	SELECT w1.well_id, w1.name, region.geog
+	FROM well AS w1
+	JOIN well_region AS wregion ON wregion.well_id = w1.well_id
+	JOIN region ON region.region_id = wregion.region_id
+) AS w1
+WHERE w1.well_id = $1 AND w1.geog IS NOT NULL;

@@ -123,25 +123,25 @@
 
 			<script id="tmpl-popup" type="x-tmpl-mustache">
 				<table>
-					<tbody>
-						<tr>
-							<th>Name</th>
-							<td>[[name]]</td>
-						</tr>
-						[[#well_number]]
-						<tr>
-							<th>Well Number</th>
-							<td>[[well_number]]</td>
-						</tr>
-						[[/well_number]]
-						[[#api_number]]
-						<tr>
-							<th>API Number</th>
-							<td><div><a href="../search#q=api:{{.APINumber}}">{{.APINumber}}</a></div></td>
-						</tr>
-						[[/api_number]]
-					</tbody>
-				</table>
+						<tbody>
+							<tr>
+								<th>Name</th>
+								<td>[[name]]</td>
+							</tr>
+							[[#nearby_wells.length]]
+							<tr>
+								<th>Nearby Wells</th>
+							</tr>
+							[[/nearby_wells.length]]
+							[[#nearby_wells]]
+							<tr>
+								[[#.]]
+								<td id="tmpl-popup-nearby-neighbors"><a href="../well/[[well_id]]">[[name]]</a> ([[distance]] miles)</td>
+								[[/.]]
+							</tr>
+							[[/nearby_wells]]
+						</tbody>
+					</table>
 			</script>
 			{{- end}}
 			{{- if .KeywordSummary}}
