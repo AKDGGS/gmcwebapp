@@ -9,8 +9,8 @@ SELECT jsonb_build_object(
 			'nearby_outcrops', (
 				SELECT jsonb_agg(jsonb_build_object(
 					'outcrop_id', nearby_outcrops.outcrop_id,
-					'name', nearby_outcrops.name, 'distance',
-					nearby_outcrops.distance
+					'name', nearby_outcrops.name,
+					'distance',	nearby_outcrops.distance
 				))
 				FROM (
 					SELECT
