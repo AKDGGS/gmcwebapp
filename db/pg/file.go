@@ -57,7 +57,6 @@ func (pg *Postgres) PutFile(file *model.File, precommitFunc func() error) error 
 		if err != nil {
 			return err
 		}
-
 		for _, b := range file.BoreholeIDs {
 			if b != 0 {
 				_, err = tx.Exec(context.Background(), insert_sql, file_id, b)
@@ -72,7 +71,6 @@ func (pg *Postgres) PutFile(file *model.File, precommitFunc func() error) error 
 		if err != nil {
 			return err
 		}
-
 		for _, b := range file.InventoryIDs {
 			if b != 0 {
 				_, err = tx.Exec(context.Background(), insert_sql, file_id, b)
@@ -82,13 +80,11 @@ func (pg *Postgres) PutFile(file *model.File, precommitFunc func() error) error 
 			}
 		}
 	}
-
 	if len(file.OutcropIDs) > 0 {
 		insert_sql, err := assets.ReadString("pg/file/insert_outcrop.sql")
 		if err != nil {
 			return err
 		}
-
 		for _, b := range file.OutcropIDs {
 			if b != 0 {
 				_, err = tx.Exec(context.Background(), insert_sql, file_id, b)
@@ -103,7 +99,6 @@ func (pg *Postgres) PutFile(file *model.File, precommitFunc func() error) error 
 		if err != nil {
 			return err
 		}
-
 		for _, b := range file.ProspectIDs {
 			if b != 0 {
 				_, err = tx.Exec(context.Background(), insert_sql, file_id, b)
@@ -118,7 +113,6 @@ func (pg *Postgres) PutFile(file *model.File, precommitFunc func() error) error 
 		if err != nil {
 			return err
 		}
-
 		for _, well := range file.WellIDs {
 			if well != 0 {
 				_, err = tx.Exec(context.Background(), insert_sql, file_id, well)
