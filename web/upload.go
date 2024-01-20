@@ -35,7 +35,7 @@ func (srv *Server) ServeUpload(w http.ResponseWriter, r *http.Request) error {
 		http.Error(w, "Multipart form of file is nil", http.StatusBadRequest)
 		return err
 	}
-	for _, fh := range r.MultipartForm.File["file"] {
+	for _, fh := range r.MultipartForm.File["content"] {
 		file, err := fh.Open()
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
@@ -101,6 +101,13 @@ func (srv *Server) ServeUpload(w http.ResponseWriter, r *http.Request) error {
 				return err
 			}
 			f.WellIDs = append(f.WellIDs, well_id_int)
+		}
+		if _, ok := r.Form["barcode"]; ok {
+			f.Barcodes = r.Form["barcode"]
+		}
+		if v, ok := r.Form["description"]; ok && len(v) == 1 {
+			s := r.Form["description"]
+			f.Description = &s[0]
 		}
 		err = srv.DB.PutFile(&f, func() error {
 			//Add the file to the filestore

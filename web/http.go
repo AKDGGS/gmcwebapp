@@ -123,6 +123,10 @@ func (srv *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	case "api/recode.json":
 		srv.ServeAPIRecodeInventoryAndContainer(w, r)
 		return
+
+	case "api/upload.json":
+		srv.ServeUpload(w, r)
+		return
 	}
 
 	sidx := strings.Index(path, "/")

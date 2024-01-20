@@ -152,7 +152,7 @@ function FileDrop(drop_zone, file_list_container) {
 			}
 			let file = files[pb_count];
 			let form_data = new FormData();
-			form_data.append('file', file);
+			form_data.append('content', file);
 
 			let xhr = new XMLHttpRequest();
 
