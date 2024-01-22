@@ -55,48 +55,48 @@ func (srv *Server) ServeUpload(w http.ResponseWriter, r *http.Request) error {
 		MD5:  MD5,
 		Type: mt,
 	}
-	if borehole_id := r.FormValue("borehole_id"); borehole_id != "" {
-		borehole_id_int, err := strconv.Atoi(borehole_id)
+	if bid := r.FormValue("borehole_id"); bid != "" {
+		borehole_id_int, err := strconv.Atoi(bid)
 		if err != nil {
 			http.Error(w, "Invalid Borehole ID", http.StatusBadRequest)
 			return err
 		}
 		f.BoreholeIDs = append(f.BoreholeIDs, borehole_id_int)
 	}
-	if inventory_id := r.FormValue("inventory_id"); inventory_id != "" {
-		inventory_id_int, err := strconv.Atoi(inventory_id)
+	if iid := r.FormValue("inventory_id"); iid != "" {
+		inventory_id_int, err := strconv.Atoi(iid)
 		if err != nil {
 			http.Error(w, "Invalid Inventory ID", http.StatusBadRequest)
 			return err
 		}
 		f.InventoryIDs = append(f.InventoryIDs, inventory_id_int)
 	}
-	if outcrop_id := r.FormValue("outcrop_id"); outcrop_id != "" {
-		outcrop_id_int, err := strconv.Atoi(outcrop_id)
+	if oid := r.FormValue("outcrop_id"); oid != "" {
+		outcrop_id_int, err := strconv.Atoi(oid)
 		if err != nil {
 			http.Error(w, "Invalid Outcrop ID", http.StatusBadRequest)
 			return err
 		}
 		f.OutcropIDs = append(f.OutcropIDs, outcrop_id_int)
 	}
-	if prospect_id := r.FormValue("prospect_id"); prospect_id != "" {
-		prospect_id_int, err := strconv.Atoi(prospect_id)
+	if pid := r.FormValue("prospect_id"); pid != "" {
+		prospect_id_int, err := strconv.Atoi(pid)
 		if err != nil {
 			http.Error(w, "Invalid Prospect ID", http.StatusBadRequest)
 			return err
 		}
 		f.ProspectIDs = append(f.ProspectIDs, prospect_id_int)
 	}
-	if well_id := r.FormValue("well_id"); well_id != "" {
-		well_id_int, err := strconv.Atoi(well_id)
+	if wid := r.FormValue("well_id"); wid != "" {
+		well_id_int, err := strconv.Atoi(wid)
 		if err != nil {
 			http.Error(w, "Invalid Well ID", http.StatusBadRequest)
 			return err
 		}
 		f.WellIDs = append(f.WellIDs, well_id_int)
 	}
-	if barcode := r.FormValue("barcode"); barcode != "" {
-		f.Barcodes = append(f.Barcodes, barcode)
+	if b := r.FormValue("barcode"); b != "" {
+		f.Barcodes = append(f.Barcodes, b)
 	}
 	if d := r.FormValue("description"); d != "" {
 		f.Description = &d
