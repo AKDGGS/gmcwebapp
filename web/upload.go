@@ -35,100 +35,98 @@ func (srv *Server) ServeUpload(w http.ResponseWriter, r *http.Request) error {
 		http.Error(w, "Multipart form of file is nil", http.StatusBadRequest)
 		return err
 	}
-	for _, fh := range r.MultipartForm.File["content"] {
-		file, err := fh.Open()
+	file, fh, err := r.FormFile("content")
+	if err != nil {
+		return err
+	}
+	defer file.Close()
+	// temporary code until we decide what to do with the MD5.
+	source := rand.NewSource(time.Now().UnixNano())
+	random := rand.New(source)
+	MD5 := strconv.FormatInt(random.Int63(), 10)
+
+	mt := mime.TypeByExtension(filepath.Ext(fh.Filename))
+	if mt == "" {
+		mt = "application/octet-stream"
+	}
+	f := model.File{
+		Name: fh.Filename,
+		Size: fh.Size,
+		MD5:  MD5,
+		Type: mt,
+	}
+	if _, ok := r.Form["borehole_id"]; ok {
+		borehole_id := r.FormValue("borehole_id")
+		borehole_id_int, err := strconv.Atoi(borehole_id)
 		if err != nil {
-			http.Error(w, err.Error(), http.StatusInternalServerError)
+			http.Error(w, "Invalid Borehole ID", http.StatusBadRequest)
 			return err
 		}
-		defer file.Close()
-		// temporary code until we decide what to do with the MD5.
-		source := rand.NewSource(time.Now().UnixNano())
-		random := rand.New(source)
-		MD5 := strconv.FormatInt(random.Int63(), 10)
-
-		mt := mime.TypeByExtension(filepath.Ext(fh.Filename))
-		if mt == "" {
-			mt = "application/octet-stream"
+		f.BoreholeIDs = append(f.BoreholeIDs, borehole_id_int)
+	}
+	if _, ok := r.Form["inventory_id"]; ok {
+		inventory_id := r.FormValue("inventory_id")
+		inventory_id_int, err := strconv.Atoi(inventory_id)
+		if err != nil {
+			http.Error(w, "Invalid Inventory ID", http.StatusBadRequest)
+			return err
 		}
-		f := model.File{
-			Name: fh.Filename,
-			Size: fh.Size,
-			MD5:  MD5,
-			Type: mt,
+		f.InventoryIDs = append(f.InventoryIDs, inventory_id_int)
+	}
+	if _, ok := r.Form["outcrop_id"]; ok {
+		outcrop_id := r.FormValue("outcrop_id")
+		outcrop_id_int, err := strconv.Atoi(outcrop_id)
+		if err != nil {
+			http.Error(w, "Invalid Outcrop ID", http.StatusBadRequest)
+			return err
 		}
-		if _, ok := r.Form["borehole_id"]; ok {
-			borehole_id := r.FormValue("borehole_id")
-			borehole_id_int, err := strconv.Atoi(borehole_id)
-			if err != nil {
-				http.Error(w, "Invalid Borehole ID", http.StatusBadRequest)
-				return err
-			}
-			f.BoreholeIDs = append(f.BoreholeIDs, borehole_id_int)
+		f.OutcropIDs = append(f.OutcropIDs, outcrop_id_int)
+	}
+	if _, ok := r.Form["prospect_id"]; ok {
+		prospect_id := r.FormValue("prospect_id")
+		prospect_id_int, err := strconv.Atoi(prospect_id)
+		if err != nil {
+			http.Error(w, "Invalid Prospect ID", http.StatusBadRequest)
+			return err
 		}
-		if _, ok := r.Form["inventory_id"]; ok {
-			inventory_id := r.FormValue("inventory_id")
-			inventory_id_int, err := strconv.Atoi(inventory_id)
-			if err != nil {
-				http.Error(w, "Invalid Inventory ID", http.StatusBadRequest)
-				return err
-			}
-			f.InventoryIDs = append(f.InventoryIDs, inventory_id_int)
+		f.ProspectIDs = append(f.ProspectIDs, prospect_id_int)
+	}
+	if _, ok := r.Form["well_id"]; ok {
+		well_id := r.FormValue("well_id")
+		well_id_int, err := strconv.Atoi(well_id)
+		if err != nil {
+			http.Error(w, "Invalid Well ID", http.StatusBadRequest)
+			return err
 		}
-		if _, ok := r.Form["outcrop_id"]; ok {
-			outcrop_id := r.FormValue("outcrop_id")
-			outcrop_id_int, err := strconv.Atoi(outcrop_id)
-			if err != nil {
-				http.Error(w, "Invalid Outcrop ID", http.StatusBadRequest)
-				return err
-			}
-			f.OutcropIDs = append(f.OutcropIDs, outcrop_id_int)
-		}
-		if _, ok := r.Form["prospect_id"]; ok {
-			prospect_id := r.FormValue("prospect_id")
-			prospect_id_int, err := strconv.Atoi(prospect_id)
-			if err != nil {
-				http.Error(w, "Invalid Prospect ID", http.StatusBadRequest)
-				return err
-			}
-			f.ProspectIDs = append(f.ProspectIDs, prospect_id_int)
-		}
-		if _, ok := r.Form["well_id"]; ok {
-			well_id := r.FormValue("well_id")
-			well_id_int, err := strconv.Atoi(well_id)
-			if err != nil {
-				http.Error(w, "Invalid Well ID", http.StatusBadRequest)
-				return err
-			}
-			f.WellIDs = append(f.WellIDs, well_id_int)
-		}
-		if _, ok := r.Form["barcode"]; ok {
-			f.Barcodes = r.Form["barcode"]
-		}
-		if v, ok := r.Form["description"]; ok && len(v) == 1 {
-			s := r.Form["description"]
-			f.Description = &s[0]
-		}
-		err = srv.DB.PutFile(&f, func() error {
-			//Add the file to the filestore
-			err := srv.FileStore.PutFile(&fsutil.File{
-				Name:         fmt.Sprintf("%d/%s", f.ID, fh.Filename),
-				Size:         fh.Size,
-				LastModified: time.Now(),
-				ContentType:  mt,
-				Content:      file,
-			})
-			if err != nil {
-				return fmt.Errorf("Error putting file in filestore: %w", err)
-			}
-			return nil
+		f.WellIDs = append(f.WellIDs, well_id_int)
+	}
+	if _, ok := r.Form["barcode"]; ok {
+		barcode := r.FormValue("barcode")
+		f.Barcodes = append(f.Barcodes, barcode)
+	}
+	if _, ok := r.Form["description"]; ok {
+		description := r.FormValue("description")
+		f.Description = &description
+	}
+	err = srv.DB.PutFile(&f, func() error {
+		//Add the file to the filestore
+		err := srv.FileStore.PutFile(&fsutil.File{
+			Name:         fmt.Sprintf("%d/%s", f.ID, fh.Filename),
+			Size:         fh.Size,
+			LastModified: time.Now(),
+			ContentType:  mt,
+			Content:      file,
 		})
 		if err != nil {
-			http.Error(w, "Error putting file in database or filestore: "+
-				err.Error(), http.StatusInternalServerError)
-			return err
+			return fmt.Errorf("Error putting file in filestore: %w", err)
 		}
-		w.Header().Set("file_id", strconv.Itoa(int(f.ID)))
+		return nil
+	})
+	if err != nil {
+		http.Error(w, "Error putting file in database or filestore: "+
+			err.Error(), http.StatusInternalServerError)
+		return err
 	}
+	w.Header().Set("file_id", strconv.Itoa(int(f.ID)))
 	return nil
 }
