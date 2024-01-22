@@ -55,8 +55,7 @@ func (srv *Server) ServeUpload(w http.ResponseWriter, r *http.Request) error {
 		MD5:  MD5,
 		Type: mt,
 	}
-	if _, ok := r.Form["borehole_id"]; ok {
-		borehole_id := r.FormValue("borehole_id")
+	if borehole_id := r.FormValue("borehole_id"); borehole_id != "" {
 		borehole_id_int, err := strconv.Atoi(borehole_id)
 		if err != nil {
 			http.Error(w, "Invalid Borehole ID", http.StatusBadRequest)
@@ -64,8 +63,7 @@ func (srv *Server) ServeUpload(w http.ResponseWriter, r *http.Request) error {
 		}
 		f.BoreholeIDs = append(f.BoreholeIDs, borehole_id_int)
 	}
-	if _, ok := r.Form["inventory_id"]; ok {
-		inventory_id := r.FormValue("inventory_id")
+	if inventory_id := r.FormValue("inventory_id"); inventory_id != "" {
 		inventory_id_int, err := strconv.Atoi(inventory_id)
 		if err != nil {
 			http.Error(w, "Invalid Inventory ID", http.StatusBadRequest)
@@ -73,8 +71,7 @@ func (srv *Server) ServeUpload(w http.ResponseWriter, r *http.Request) error {
 		}
 		f.InventoryIDs = append(f.InventoryIDs, inventory_id_int)
 	}
-	if _, ok := r.Form["outcrop_id"]; ok {
-		outcrop_id := r.FormValue("outcrop_id")
+	if outcrop_id := r.FormValue("outcrop_id"); outcrop_id != "" {
 		outcrop_id_int, err := strconv.Atoi(outcrop_id)
 		if err != nil {
 			http.Error(w, "Invalid Outcrop ID", http.StatusBadRequest)
@@ -82,8 +79,7 @@ func (srv *Server) ServeUpload(w http.ResponseWriter, r *http.Request) error {
 		}
 		f.OutcropIDs = append(f.OutcropIDs, outcrop_id_int)
 	}
-	if _, ok := r.Form["prospect_id"]; ok {
-		prospect_id := r.FormValue("prospect_id")
+	if prospect_id := r.FormValue("prospect_id"); prospect_id != "" {
 		prospect_id_int, err := strconv.Atoi(prospect_id)
 		if err != nil {
 			http.Error(w, "Invalid Prospect ID", http.StatusBadRequest)
@@ -91,8 +87,7 @@ func (srv *Server) ServeUpload(w http.ResponseWriter, r *http.Request) error {
 		}
 		f.ProspectIDs = append(f.ProspectIDs, prospect_id_int)
 	}
-	if _, ok := r.Form["well_id"]; ok {
-		well_id := r.FormValue("well_id")
+	if well_id := r.FormValue("well_id"); well_id != "" {
 		well_id_int, err := strconv.Atoi(well_id)
 		if err != nil {
 			http.Error(w, "Invalid Well ID", http.StatusBadRequest)
@@ -100,13 +95,11 @@ func (srv *Server) ServeUpload(w http.ResponseWriter, r *http.Request) error {
 		}
 		f.WellIDs = append(f.WellIDs, well_id_int)
 	}
-	if _, ok := r.Form["barcode"]; ok {
-		barcode := r.FormValue("barcode")
+	if barcode := r.FormValue("barcode"); barcode != "" {
 		f.Barcodes = append(f.Barcodes, barcode)
 	}
-	if _, ok := r.Form["description"]; ok {
-		description := r.FormValue("description")
-		f.Description = &description
+	if d := r.FormValue("description"); d != "" {
+		f.Description = &d
 	}
 	err = srv.DB.PutFile(&f, func() error {
 		//Add the file to the filestore
