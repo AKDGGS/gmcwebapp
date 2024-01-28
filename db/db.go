@@ -31,6 +31,9 @@ type DB interface {
 	// Fetches the complete details for an Inventory by barcode
 	GetInventoryByBarcode(barcode string, flags int) ([]*model.Inventory, error)
 
+	// Get a flattened version of all inventory appropriate for search indexing
+	GetFlatInventory(func(*model.FlatInventory) error) error
+
 	// Fetches the complete details for a Summary by barcode
 	GetSummaryByBarcode(barcode string, flags int) (*model.Summary, error)
 
