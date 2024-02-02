@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"net/http"
 
+	dbe "gmc/db/errors"
 	dbf "gmc/db/flag"
 )
 
@@ -29,10 +30,14 @@ func (srv *Server) ServeAPISummary(w http.ResponseWriter, r *http.Request) {
 	barcode := q.Get("barcode")
 	sum, err := srv.DB.GetSummaryByBarcode(barcode, flags)
 	if err != nil {
-		http.Error(
-			w, fmt.Sprintf("Error: %s", err.Error()),
-			http.StatusInternalServerError,
-		)
+		if err == dbe.ErrBarcodeNotContainer {
+			http.Error(w, err.Error(), http.StatusBadRequest)
+		} else {
+			http.Error(
+				w, fmt.Sprintf("Error: %s", err.Error()),
+				http.StatusInternalServerError,
+			)
+		}
 		return
 	}
 	var js []byte
@@ -49,7 +54,6 @@ func (srv *Server) ServeAPISummary(w http.ResponseWriter, r *http.Request) {
 		)
 		return
 	}
-
 	w.Header().Set("Content-Type", "application/json")
 	w.Header().Set("Content-Length", fmt.Sprintf("%d", len(js)))
 	w.Write(js)
