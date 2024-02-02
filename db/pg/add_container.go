@@ -2,17 +2,31 @@ package pg
 
 import (
 	"context"
-	"fmt"
 	"strings"
 
 	"gmc/assets"
+	dbe "gmc/db/errors"
 )
 
 func (pg *Postgres) AddContainer(barcode string, name string, remark string) error {
 	if barcode == "" || len(strings.TrimSpace(barcode)) < 1 {
-		return fmt.Errorf("Barcode cannot be empty")
+		return dbe.ErrBarcodeCannotBeEmpty
 	}
-	q, err := assets.ReadString("pg/container/insert.sql")
+	q, err := assets.ReadString("pg/container/get_count_by_barcode_inc_inventory.sql")
+	if err != nil {
+		return err
+	}
+	var count int
+	err = pg.pool.QueryRow(context.Background(), q, barcode).Scan(&count)
+	if err != nil {
+		return err
+	}
+
+	if count > 0 {
+		return dbe.ErrBarcodeExists
+	}
+
+	q, err = assets.ReadString("pg/container/insert.sql")
 	if err != nil {
 		return err
 	}

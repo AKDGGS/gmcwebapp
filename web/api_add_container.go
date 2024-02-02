@@ -3,6 +3,8 @@ package web
 import (
 	"fmt"
 	"net/http"
+
+	dbe "gmc/db/errors"
 )
 
 func (srv *Server) ServeAPIAddContainer(w http.ResponseWriter, r *http.Request) {
@@ -21,10 +23,16 @@ func (srv *Server) ServeAPIAddContainer(w http.ResponseWriter, r *http.Request) 
 	q := r.URL.Query()
 	err = srv.DB.AddContainer(q.Get("barcode"), q.Get("name"), q.Get("remark"))
 	if err != nil {
-		http.Error(
-			w, fmt.Sprintf("Error: %s", err.Error()),
-			http.StatusInternalServerError,
-		)
+		if err == dbe.ErrBarcodeCannotBeEmpty {
+			http.Error(w, err.Error(), http.StatusBadRequest)
+		} else if err == dbe.ErrBarcodeExists {
+			http.Error(w, err.Error(), http.StatusBadRequest)
+		} else {
+			http.Error(
+				w, fmt.Sprintf("Error: %s", err.Error()),
+				http.StatusInternalServerError,
+			)
+		}
 		return
 	}
 	js := []byte(`{"success":true}`)
