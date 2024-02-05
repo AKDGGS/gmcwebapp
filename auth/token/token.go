@@ -33,5 +33,5 @@ func (a *DatabaseTokenAuth) Check(u string, p string) (*authu.User, error) {
 	if err == nil {
 		return &authu.User{Username: t.Description}, nil
 	}
-	return nil, nil
+	return nil, err
 }
