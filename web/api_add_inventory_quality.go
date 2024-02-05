@@ -23,13 +23,14 @@ func (srv *Server) ServeAPIAddInventoryQuality(w http.ResponseWriter, r *http.Re
 	q := r.URL.Query()
 	err = srv.DB.AddInventoryQuality(q.Get("barcode"), q.Get("remark"), q["i"], user.Username)
 	if err != nil {
-		if err == dbe.ErrNotFoundInInventory {
-			http.Error(w, err.Error(), http.StatusBadRequest)
-		} else if err == dbe.ErrMultipleIDs {
-			http.Error(w, err.Error(), http.StatusBadRequest)
-		} else if err == dbe.ErrInventoryQualityInsertFailed {
+		switch err {
+		case dbe.ErrNotFoundInInventory:
+			http.Error(w, err.Error(), http.StatusNotFound)
+		case dbe.ErrMultipleIDs:
 			http.Error(w, err.Error(), http.StatusInternalServerError)
-		} else {
+		case dbe.ErrInventoryQualityInsertFailed:
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+		default:
 			http.Error(
 				w, fmt.Sprintf("Error: %s", err.Error()),
 				http.StatusInternalServerError,
