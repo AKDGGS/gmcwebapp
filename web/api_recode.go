@@ -3,6 +3,8 @@ package web
 import (
 	"fmt"
 	"net/http"
+
+	dbe "gmc/db/errors"
 )
 
 func (srv *Server) ServeAPIRecodeInventoryAndContainer(w http.ResponseWriter, r *http.Request) {
@@ -23,10 +25,19 @@ func (srv *Server) ServeAPIRecodeInventoryAndContainer(w http.ResponseWriter, r 
 	new_barcode := q.Get("new")
 	err = srv.DB.RecodeInventoryAndContainer(old_barcode, new_barcode)
 	if err != nil {
-		http.Error(
-			w, fmt.Sprintf("Error: %s", err.Error()),
-			http.StatusInternalServerError,
-		)
+		switch err {
+		case dbe.ErrOldBarcodeCannotBeEmpty:
+			http.Error(w, err.Error(), http.StatusBadRequest)
+		case dbe.ErrNewBarcodeCannotBeEmpty:
+			http.Error(w, err.Error(), http.StatusBadRequest)
+		case dbe.ErrNothingRecoded:
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+		default:
+			http.Error(
+				w, fmt.Sprintf("Error: %s", err.Error()),
+				http.StatusInternalServerError,
+			)
+		}
 		return
 	}
 }
