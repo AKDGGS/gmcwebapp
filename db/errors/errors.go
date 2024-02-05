@@ -24,6 +24,9 @@ var ErrAuditParamsEmpty = errors.New("Both the remark and the items list are emp
 var ErrNothingMoved = errors.New("Move failed")
 var ErrNothingRecoded = errors.New("Record failed")
 
+// Upload
+var ErrUploadToFileStoreFailed = errors.New("Upload to filestore failed")
+
 // Not found
 var ErrBarcodeNotFound = errors.New("Barcode not found")
 var ErrDestinationNotFound = errors.New("The destination barcode not found")
@@ -36,3 +39,6 @@ var ErrBarcodeNotContainer = errors.New("Barcode is not a container")
 var ErrMultipleIDs = errors.New("Multiple IDs returned")
 var ErrDestinationMultipleContainers = errors.New("The destination barcode refers to multiple containers")
 var ErrSourceNotValid = errors.New("The source barcode not valid")
+
+// Miscellaneous
+var ErrSrcNoInv = errors.New("The source has no inventory")
