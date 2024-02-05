@@ -48,10 +48,19 @@ func (srv *Server) ServeAPIInventoryDetail(w http.ResponseWriter, r *http.Reques
 		js, err = json.Marshal(invs)
 	}
 	if err != nil {
-		http.Error(
-			w, fmt.Sprintf("JSON error: %s", err.Error()),
-			http.StatusInternalServerError,
-		)
+		switch err {
+		case dbe.ErrBarcodeCannotBeEmpty:
+			http.Error(w, err.Error(), http.StatusBadRequest)
+		case dbe.ErrInventoryInsertFailed:
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+		case dbe.ErrInventoryQualityInsertFailed:
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+		default:
+			http.Error(
+				w, fmt.Sprintf("Error: %s", err.Error()),
+				http.StatusInternalServerError,
+			)
+		}
 		return
 	}
 

@@ -2,7 +2,6 @@ package pg
 
 import (
 	"context"
-	"fmt"
 	"strings"
 
 	"gmc/assets"
@@ -11,7 +10,7 @@ import (
 
 func (pg *Postgres) AddInventory(barcode string, remark string, container_id *int32, issues []string, username string) error {
 	if barcode == "" || len(strings.TrimSpace(barcode)) < 1 {
-		return fmt.Errorf("Barcode cannot be empty")
+		return dbe.ErrBarcodeCannotBeEmpty
 	}
 	tx, err := pg.pool.Begin(context.Background())
 	if err != nil {
