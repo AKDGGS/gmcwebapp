@@ -204,6 +204,6 @@ func (srv *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 		srv.ServeInventory(id, w, r)
 
 	default:
-		http.Error(w, "File not found", http.StatusNotFound)
+		http.Error(w, "Requested page not found. Check the URL.", http.StatusNotFound)
 	}
 }
