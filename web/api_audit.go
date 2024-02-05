@@ -23,11 +23,12 @@ func (srv *Server) ServeAPIAudit(w http.ResponseWriter, r *http.Request) {
 	q := r.URL.Query()
 	err = srv.DB.AddAudit(q.Get("remark"), q["c"])
 	if err != nil {
-		if err == dbe.ErrAuditParamsEmpty {
+		switch err {
+		case dbe.ErrAuditParamsEmpty:
 			http.Error(w, err.Error(), http.StatusBadRequest)
-		} else if err == dbe.ErrAuditInsertFailed {
+		case dbe.ErrAuditInsertFailed:
 			http.Error(w, err.Error(), http.StatusInternalServerError)
-		} else {
+		default:
 			http.Error(
 				w, fmt.Sprintf("Error: %s", err.Error()),
 				http.StatusInternalServerError,
