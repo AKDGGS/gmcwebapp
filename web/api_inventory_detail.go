@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"net/http"
 
+	dbe "gmc/db/errors"
 	dbf "gmc/db/flag"
 )
 
@@ -29,10 +30,14 @@ func (srv *Server) ServeAPIInventoryDetail(w http.ResponseWriter, r *http.Reques
 	barcode := q.Get("barcode")
 	invs, err := srv.DB.GetInventoryByBarcode(barcode, flags)
 	if err != nil {
-		http.Error(
-			w, fmt.Sprintf("Error: %s", err.Error()),
-			http.StatusInternalServerError,
-		)
+		if err == dbe.ErrBarcodeNotFound {
+			http.Error(w, err.Error(), http.StatusBadRequest)
+		} else {
+			http.Error(
+				w, fmt.Sprintf("Error: %s", err.Error()),
+				http.StatusInternalServerError,
+			)
+		}
 		return
 	}
 	var js []byte

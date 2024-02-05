@@ -5,6 +5,7 @@ import (
 	"strings"
 
 	"gmc/assets"
+	dbe "gmc/db/errors"
 	dbf "gmc/db/flag"
 	"gmc/db/model"
 )
@@ -28,7 +29,7 @@ func (pg *Postgres) GetInventory(id int, flags int) (*model.Inventory, error) {
 
 	//nothing returned by the database
 	if c == 0 {
-		return nil, nil
+		return nil, dbe.ErrBarcodeNotFound
 	}
 
 	if (flags & dbf.FILES) != 0 {
@@ -328,6 +329,10 @@ func (pg *Postgres) GetInventoryByBarcode(barcode string, flags int) ([]*model.I
 				}
 			}
 		}
+	}
+
+	if len(inventory) == 0 {
+		return nil, dbe.ErrBarcodeNotFound
 	}
 
 	if len(borehole_ids) > 0 {
