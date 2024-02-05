@@ -2,19 +2,18 @@ package pg
 
 import (
 	"context"
-	"errors"
-	"fmt"
 	"strings"
 
 	"gmc/assets"
+	dbe "gmc/db/errors"
 )
 
 func (pg *Postgres) MoveInventoryAndContainersContents(src string, dest string) error {
 	if src == "" || len(strings.TrimSpace(src)) < 1 {
-		return fmt.Errorf("Source barcode cannot be empty")
+		return dbe.ErrSourceBarcodeEmpty
 	}
 	if dest == "" || len(strings.TrimSpace(dest)) < 1 {
-		return fmt.Errorf("Destination barcode cannot be empty")
+		return dbe.ErrDestinationBarcodeEmpty
 	}
 	q, err := assets.ReadString("pg/container/get_dest_container_id_and_validate_src_and_dest.sql")
 	if err != nil {
@@ -33,13 +32,13 @@ func (pg *Postgres) MoveInventoryAndContainersContents(src string, dest string) 
 		}
 	}
 	if dest_cid == nil {
-		return fmt.Errorf("The destination barcode does not exist")
+		return dbe.ErrDestinationNotFound
 	}
 	if !src_valid {
-		return fmt.Errorf("The source barcode is not valid")
+		return dbe.ErrSourceNotValid
 	}
 	if cid_count > 1 {
-		return fmt.Errorf("The destination barcode refers to more than one inventory id")
+		return dbe.ErrDestinationMultipleContainers
 	}
 	tx, err := pg.pool.Begin(context.Background())
 	if err != nil {
@@ -63,7 +62,7 @@ func (pg *Postgres) MoveInventoryAndContainersContents(src string, dest string) 
 		return err
 	}
 	if (ic.RowsAffected() + rc.RowsAffected()) == 0 {
-		return errors.New("The source barcode is empty")
+		return dbe.ErrNothingMoved
 	}
 	// If the move is successful, commit the changes
 	if err := tx.Commit(context.Background()); err != nil {
