@@ -31,7 +31,9 @@ type DB interface {
 	// Fetches the complete details for an Inventory by barcode
 	GetInventoryByBarcode(barcode string, flags int) ([]*model.Inventory, error)
 
-	// Get a flattened version of all inventory appropriate for search indexing
+	// Get a flattened version of all inventory appropriate
+	// for search indexing, calling function parameter for
+	// each individual item
 	GetFlatInventory(func(*model.FlatInventory) error) error
 
 	// Fetches the complete details for a Summary by barcode
@@ -110,7 +112,8 @@ type DB interface {
 	// if the schema already exists, or the initialization fails.
 	SchemaInit() error
 	// Removes schema from configured database.
-	// WARNING: This is destructive and intended only for use in development.
+	// WARNING: This is destructive and intended only for use in
+	// development.
 	SchemaDrop() error
 
 	// Shutdown this database connection

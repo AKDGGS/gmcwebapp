@@ -11,15 +11,16 @@ import (
 )
 
 type Config struct {
-	ListenAddress string          `yaml:"listen_address"`
-	DatabaseURL   string          `yaml:"database_url"`
-	BasePath      string          `yaml:"base_path"`
-	FileStore     FileStoreConfig `yaml:"file_store"`
-	SessionKey    string          `yaml:"session_key"`
-	keybytes      []byte          `yaml:"-"`
-	MaxAge        int             `yaml:"session_max_age"`
-	AutoShutdown  bool            `yaml:"auto_shutdown"`
-	Auths         []AuthConfig    `yaml:"authentication"`
+	ListenAddress  string               `yaml:"listen_address"`
+	DatabaseURL    string               `yaml:"database_url"`
+	BasePath       string               `yaml:"base_path"`
+	SessionKey     string               `yaml:"session_key"`
+	keybytes       []byte               `yaml:"-"`
+	MaxAge         int                  `yaml:"session_max_age"`
+	AutoShutdown   bool                 `yaml:"auto_shutdown"`
+	FileStore      FileStoreConfig      `yaml:"file_store"`
+	SearchProvider SearchProviderConfig `yaml:"search_provider"`
+	Auths          []AuthConfig         `yaml:"authentication"`
 }
 
 func (c *Config) SessionKeyBytes() []byte {
@@ -32,6 +33,11 @@ type FileStoreConfig struct {
 }
 
 type AuthConfig struct {
+	Type  string                 `yaml:"type"`
+	Attrs map[string]interface{} `yaml:",inline"`
+}
+
+type SearchProviderConfig struct {
 	Type  string                 `yaml:"type"`
 	Attrs map[string]interface{} `yaml:",inline"`
 }
