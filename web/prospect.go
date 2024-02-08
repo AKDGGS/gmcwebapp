@@ -5,12 +5,13 @@ import (
 	"fmt"
 	"html/template"
 	"net/http"
+	"strconv"
 
 	"gmc/assets"
 	dbf "gmc/db/flag"
 )
 
-func (srv *Server) ServeProspect(id int, w http.ResponseWriter, r *http.Request) {
+func (srv *Server) ServeProspect(w http.ResponseWriter, r *http.Request) {
 	user, err := srv.Auths.CheckRequest(w, r)
 	if err != nil {
 		http.Error(
@@ -23,6 +24,12 @@ func (srv *Server) ServeProspect(id int, w http.ResponseWriter, r *http.Request)
 	flags := dbf.ALL
 	if user == nil {
 		flags = dbf.ALL_NOPRIVATE
+	}
+
+	id, err := strconv.Atoi(r.PathValue("id"))
+	if err != nil {
+		http.Error(w, "invalid prospect id", http.StatusBadRequest)
+		return
 	}
 
 	prospect, err := srv.DB.GetProspect(id, flags)

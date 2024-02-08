@@ -1,6 +1,6 @@
 module gmc
 
-go 1.17
+go 1.22
 
 require (
 	github.com/boombuler/barcode v1.0.1

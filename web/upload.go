@@ -13,33 +13,33 @@ import (
 	fsutil "gmc/filestore/util"
 )
 
-func (srv *Server) ServeUpload(w http.ResponseWriter, r *http.Request) error {
+func (srv *Server) ServeUpload(w http.ResponseWriter, r *http.Request) {
 	user, err := srv.Auths.CheckRequest(w, r)
 	if err != nil {
 		http.Error(
-			w, fmt.Sprintf("Authentication error: %s", err.Error()),
+			w, fmt.Sprintf("authentication error: %s", err.Error()),
 			http.StatusBadRequest,
 		)
-		return err
+		return
 	}
 	if user == nil {
-		http.Error(w, "Access denied", http.StatusUnauthorized)
-		return err
+		http.Error(w, "access denied", http.StatusUnauthorized)
+		return
 	}
 	err = r.ParseMultipartForm(33554432) // 32MB
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
-		return err
+		return
 	}
 	if r.MultipartForm == nil || r.MultipartForm.File == nil {
-		http.Error(w, "Multipart form of file is nil", http.StatusBadRequest)
-		return err
+		http.Error(w, "multipart form of file is nil", http.StatusBadRequest)
+		return
 	}
 	for _, fh := range r.MultipartForm.File["file"] {
 		file, err := fh.Open()
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
-			return err
+			return
 		}
 		defer file.Close()
 		// temporary code until we decide what to do with the MD5.
@@ -57,50 +57,45 @@ func (srv *Server) ServeUpload(w http.ResponseWriter, r *http.Request) error {
 			MD5:  MD5,
 			Type: mt,
 		}
-		if _, ok := r.Form["borehole_id"]; ok {
-			borehole_id := r.FormValue("borehole_id")
-			borehole_id_int, err := strconv.Atoi(borehole_id)
+		if id := r.FormValue("borehole_id"); id != "" {
+			borehole_id, err := strconv.Atoi(id)
 			if err != nil {
-				http.Error(w, "Invalid Borehole ID", http.StatusBadRequest)
-				return err
+				http.Error(w, "invalid borehole_id", http.StatusBadRequest)
+				return
 			}
-			f.BoreholeIDs = append(f.BoreholeIDs, borehole_id_int)
+			f.BoreholeIDs = append(f.BoreholeIDs, borehole_id)
 		}
-		if _, ok := r.Form["inventory_id"]; ok {
-			inventory_id := r.FormValue("inventory_id")
-			inventory_id_int, err := strconv.Atoi(inventory_id)
+		if id := r.FormValue("inventory_id"); id != "" {
+			inventory_id, err := strconv.Atoi(id)
 			if err != nil {
-				http.Error(w, "Invalid Inventory ID", http.StatusBadRequest)
-				return err
+				http.Error(w, "invalid inventory_id", http.StatusBadRequest)
+				return
 			}
-			f.InventoryIDs = append(f.InventoryIDs, inventory_id_int)
+			f.InventoryIDs = append(f.InventoryIDs, inventory_id)
 		}
-		if _, ok := r.Form["outcrop_id"]; ok {
-			outcrop_id := r.FormValue("outcrop_id")
-			outcrop_id_int, err := strconv.Atoi(outcrop_id)
+		if id := r.FormValue("outcrop_id"); id != "" {
+			outcrop_id, err := strconv.Atoi(id)
 			if err != nil {
-				http.Error(w, "Invalid Outcrop ID", http.StatusBadRequest)
-				return err
+				http.Error(w, "invalid outcrop_id", http.StatusBadRequest)
+				return
 			}
-			f.OutcropIDs = append(f.OutcropIDs, outcrop_id_int)
+			f.OutcropIDs = append(f.OutcropIDs, outcrop_id)
 		}
-		if _, ok := r.Form["prospect_id"]; ok {
-			prospect_id := r.FormValue("prospect_id")
-			prospect_id_int, err := strconv.Atoi(prospect_id)
+		if id := r.FormValue("prospect_id"); id != "" {
+			prospect_id, err := strconv.Atoi(id)
 			if err != nil {
-				http.Error(w, "Invalid Prospect ID", http.StatusBadRequest)
-				return err
+				http.Error(w, "invalid prospect_id", http.StatusBadRequest)
+				return
 			}
-			f.ProspectIDs = append(f.ProspectIDs, prospect_id_int)
+			f.ProspectIDs = append(f.ProspectIDs, prospect_id)
 		}
-		if _, ok := r.Form["well_id"]; ok {
-			well_id := r.FormValue("well_id")
-			well_id_int, err := strconv.Atoi(well_id)
+		if id := r.FormValue("well_id"); id != "" {
+			well_id, err := strconv.Atoi(id)
 			if err != nil {
-				http.Error(w, "Invalid Well ID", http.StatusBadRequest)
-				return err
+				http.Error(w, "invalid well_id", http.StatusBadRequest)
+				return
 			}
-			f.WellIDs = append(f.WellIDs, well_id_int)
+			f.WellIDs = append(f.WellIDs, well_id)
 		}
 		err = srv.DB.PutFile(&f, func() error {
 			//Add the file to the filestore
@@ -112,16 +107,17 @@ func (srv *Server) ServeUpload(w http.ResponseWriter, r *http.Request) error {
 				Content:      file,
 			})
 			if err != nil {
-				return fmt.Errorf("Error putting file in filestore: %w", err)
+				return err
 			}
 			return nil
 		})
 		if err != nil {
-			http.Error(w, "Error putting file in database or filestore: "+
-				err.Error(), http.StatusInternalServerError)
-			return err
+			http.Error(w,
+				fmt.Sprintf("error putting file in database or filestore: %s", err),
+				http.StatusInternalServerError,
+			)
+			return
 		}
 		w.Header().Set("file_id", strconv.Itoa(int(f.ID)))
 	}
-	return nil
 }

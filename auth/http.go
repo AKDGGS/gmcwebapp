@@ -14,7 +14,7 @@ import (
 
 var redirect_rx *regexp.Regexp = regexp.MustCompile(`^(?:\.|borehole|inventory|outcrop|prospect|shotline|well|wells|qa)\/?\d*$`)
 
-func (auths *Auths) Logout(w http.ResponseWriter, r *http.Request) error {
+func (auths *Auths) Logout(w http.ResponseWriter, r *http.Request) {
 	cookie, err := securecookie.New(
 		"gmc-session", auths.key,
 		securecookie.Params{
@@ -23,7 +23,11 @@ func (auths *Auths) Logout(w http.ResponseWriter, r *http.Request) error {
 		},
 	)
 	if err != nil {
-		return err
+		http.Error(
+			w, fmt.Sprintf("error: %s", err.Error()),
+			http.StatusInternalServerError,
+		)
+		return
 	}
 
 	cookie.Delete(w)
@@ -33,11 +37,14 @@ func (auths *Auths) Logout(w http.ResponseWriter, r *http.Request) error {
 		redirect = "."
 	}
 	if !redirect_rx.MatchString(redirect) {
-		return fmt.Errorf("invalid redirect")
+		http.Error(
+			w, fmt.Sprintf("error: invalid redirect"),
+			http.StatusInternalServerError,
+		)
+		return
 	}
 
 	http.Redirect(w, r, redirect, http.StatusFound)
-	return nil
 }
 
 func (auths *Auths) CheckRequest(w http.ResponseWriter, r *http.Request) (*authu.User, error) {
@@ -99,7 +106,7 @@ func (auths *Auths) CheckRequest(w http.ResponseWriter, r *http.Request) (*authu
 	return nil, nil
 }
 
-func (auths *Auths) CheckForm(w http.ResponseWriter, r *http.Request) error {
+func (auths *Auths) CheckForm(w http.ResponseWriter, r *http.Request) {
 	// Try to authenticate the user with a secure cookie
 	cookie, err := securecookie.New(
 		"gmc-session", auths.key,
@@ -109,14 +116,22 @@ func (auths *Auths) CheckForm(w http.ResponseWriter, r *http.Request) error {
 		},
 	)
 	if err != nil {
-		return err
+		http.Error(
+			w, fmt.Sprintf("error: %s", err.Error()),
+			http.StatusInternalServerError,
+		)
+		return
 	}
 
 	uj, err := cookie.GetValue(nil, r)
 	if err == nil {
 		user, err := authu.UnmarshalUser(uj)
 		if err != nil {
-			return err
+			http.Error(
+				w, fmt.Sprintf("error: %s", err.Error()),
+				http.StatusInternalServerError,
+			)
+			return
 		}
 
 		if user != nil {
@@ -125,7 +140,7 @@ func (auths *Auths) CheckForm(w http.ResponseWriter, r *http.Request) error {
 			cookie.SetValue(w, uj)
 
 			http.Redirect(w, r, ".", http.StatusFound)
-			return nil
+			return
 		}
 	}
 
@@ -133,7 +148,11 @@ func (auths *Auths) CheckForm(w http.ResponseWriter, r *http.Request) error {
 	// try to read a POSTed username and password to authenticate with
 	err = r.ParseForm()
 	if err != nil {
-		return err
+		http.Error(
+			w, fmt.Sprintf("error: %s", err.Error()),
+			http.StatusInternalServerError,
+		)
+		return
 	}
 
 	username := r.FormValue("username")
@@ -144,7 +163,11 @@ func (auths *Auths) CheckForm(w http.ResponseWriter, r *http.Request) error {
 		redirect = r.URL.Query().Get("redirect")
 	}
 	if !redirect_rx.MatchString(redirect) {
-		return fmt.Errorf("invalid redirect")
+		http.Error(
+			w, fmt.Sprintf("error: invalid redirect"),
+			http.StatusInternalServerError,
+		)
+		return
 	}
 
 	params := map[string]interface{}{}
@@ -156,25 +179,37 @@ func (auths *Auths) CheckForm(w http.ResponseWriter, r *http.Request) error {
 
 		user, err := auths.Check(username, password)
 		if err != nil {
-			return err
+			http.Error(
+				w, fmt.Sprintf("error: %s", err.Error()),
+				http.StatusInternalServerError,
+			)
+			return
 		}
 
 		if user != nil {
 			uj, err := authu.MarshalUser(user)
 			if err != nil {
-				return err
+				http.Error(
+					w, fmt.Sprintf("error: %s", err.Error()),
+					http.StatusInternalServerError,
+				)
+				return
 			}
 
 			err = cookie.SetValue(w, uj)
 			if err != nil {
-				return err
+				http.Error(
+					w, fmt.Sprintf("error: %s", err.Error()),
+					http.StatusInternalServerError,
+				)
+				return
 			}
 
 			if redirect == "" {
 				redirect = "."
 			}
 			http.Redirect(w, r, redirect, http.StatusFound)
-			return nil
+			return
 		}
 
 		params["error"] = "Invalid username or password"
@@ -188,11 +223,10 @@ func (auths *Auths) CheckForm(w http.ResponseWriter, r *http.Request) error {
 			w, fmt.Sprintf("parse error: %s", err.Error()),
 			http.StatusInternalServerError,
 		)
-		return nil
+		return
 	}
 
 	w.Header().Set("Content-Length", fmt.Sprintf("%d", buf.Len()))
 	w.Header().Set("Content-Type", "text/html; charset=utf-8")
 	w.Write(buf.Bytes())
-	return nil
 }

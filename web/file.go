@@ -4,14 +4,21 @@ import (
 	"fmt"
 	"net/http"
 	"os"
+	"strconv"
 )
 
-func (srv *Server) ServeFile(id int, w http.ResponseWriter, r *http.Request) {
+func (srv *Server) ServeFile(w http.ResponseWriter, r *http.Request) {
+	id, err := strconv.Atoi(r.PathValue("id"))
+	if err != nil {
+		http.Error(w, "invalid file id", http.StatusBadRequest)
+		return
+	}
+
 	// Fetch the file details from the database
 	db_file, err := srv.DB.GetFile(id)
 	if err != nil {
 		http.Error(
-			w, fmt.Sprintf("Query error: %s", err.Error()),
+			w, fmt.Sprintf("query error: %s", err.Error()),
 			http.StatusInternalServerError,
 		)
 		return
@@ -23,7 +30,7 @@ func (srv *Server) ServeFile(id int, w http.ResponseWriter, r *http.Request) {
 	))
 	if err != nil {
 		if _, ok := err.(*os.PathError); ok {
-			http.Error(w, "File not found (FileStore)", http.StatusNotFound)
+			http.Error(w, "file not found (filestore)", http.StatusNotFound)
 		} else {
 			http.Error(
 				w, fmt.Sprintf("file fetch error: %s", err.Error()),

@@ -26,7 +26,11 @@ type staticEntry struct {
 var staticLock sync.RWMutex
 var staticCache map[string]*staticEntry = make(map[string]*staticEntry)
 
-func ServeStatic(name string, w http.ResponseWriter, r *http.Request) {
+func ServeStatic(w http.ResponseWriter, r *http.Request) {
+	ServeStaticPath(r.URL.Path[1:], w, r.Header)
+}
+
+func ServeStaticPath(name string, w http.ResponseWriter, h http.Header) {
 	s, err := Stat(name)
 	if err != nil {
 		if errors.Is(err, fs.ErrNotExist) {
@@ -104,7 +108,7 @@ func ServeStatic(name string, w http.ResponseWriter, r *http.Request) {
 
 	var content *[]byte
 	var etag *string
-	gzok := strings.Contains(r.Header.Get("Accept-Encoding"), "gzip") && curEntry.GZContent != nil
+	gzok := strings.Contains(h.Get("Accept-Encoding"), "gzip") && curEntry.GZContent != nil
 	if gzok {
 		content = curEntry.GZContent
 		etag = &curEntry.GZETag
@@ -113,7 +117,7 @@ func ServeStatic(name string, w http.ResponseWriter, r *http.Request) {
 		etag = &curEntry.ETag
 	}
 
-	retag := r.Header.Get("If-None-Match")
+	retag := h.Get("If-None-Match")
 	if *etag == retag {
 		w.WriteHeader(http.StatusNotModified)
 		return

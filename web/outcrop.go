@@ -5,12 +5,13 @@ import (
 	"fmt"
 	"html/template"
 	"net/http"
+	"strconv"
 
 	"gmc/assets"
 	dbf "gmc/db/flag"
 )
 
-func (srv *Server) ServeOutcrop(id int, w http.ResponseWriter, r *http.Request) {
+func (srv *Server) ServeOutcrop(w http.ResponseWriter, r *http.Request) {
 	user, err := srv.Auths.CheckRequest(w, r)
 	if err != nil {
 		http.Error(
@@ -23,6 +24,12 @@ func (srv *Server) ServeOutcrop(id int, w http.ResponseWriter, r *http.Request) 
 	flags := dbf.ALL
 	if user == nil {
 		flags = dbf.ALL_NOPRIVATE
+	}
+
+	id, err := strconv.Atoi(r.PathValue("id"))
+	if err != nil {
+		http.Error(w, "invalid outcrop id", http.StatusBadRequest)
+		return
 	}
 
 	outcrop, err := srv.DB.GetOutcrop(id, flags)
