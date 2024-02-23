@@ -61,6 +61,9 @@ func (pg *Postgres) MoveInventoryAndContainersContents(src string, dest string) 
 	if err != nil {
 		return err
 	}
+	if ic.RowsAffected() == 0 {
+		return dbe.ErrSrcNoInv
+	}
 	if (ic.RowsAffected() + rc.RowsAffected()) == 0 {
 		return dbe.ErrNothingMoved
 	}
