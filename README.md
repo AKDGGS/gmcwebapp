@@ -21,8 +21,7 @@ execution, so changes to the file require a restart. Support for
 additional file stores can be added by implementing `gmc/auth/Auth`.
 
 ## Development
-Development requires a minimum of Go 1.16 as go:embed is used extensively.
-Building is as simple as `go build` in the project directory. For developers it
+Development requires a minimum of Go 1.22. For developers it
 is recommended to configure `auto_shutdown` to true, and to start the
 application (on Linux) from the project directory with
 `while true; do ./gmc -assets assets start; done` - this will enable
