@@ -6,6 +6,8 @@ import (
 	"gmc/search/util"
 
 	elastic "github.com/elastic/go-elasticsearch/v8"
+	"github.com/elastic/go-elasticsearch/v8/typedapi/indices/create"
+	"github.com/elastic/go-elasticsearch/v8/typedapi/types"
 )
 
 type Elastic struct {
@@ -46,4 +48,29 @@ func (es *Elastic) Shutdown() {}
 func (es *Elastic) NewInventoryIndex() (util.InventoryIndex, error) {
 	ii := ElasticInventoryIndex{}
 	return &ii, nil
+}
+
+func (es *Elastic) createIndex(name string, tmap *types.TypeMapping) error {
+	_, err := es.client.Indices.Create(name).Request(
+		&create.Request{Mappings: tmap},
+	).Do(nil)
+	return err
+}
+
+func (es *Elastic) deleteIndex(name string) error {
+	_, err := es.client.Indices.Delete(name).Do(nil)
+	return err
+}
+
+func (es *Elastic) getIndicesFromAlias(name string) ([]string, error) {
+	r, err := es.client.Indices.GetAlias().Name("stupid").Do(nil)
+	if err != nil {
+		return nil, err
+	}
+
+	indexes := []string{}
+	for k, _ := range r {
+		indexes = append(indexes, k)
+	}
+	return indexes, nil
 }
