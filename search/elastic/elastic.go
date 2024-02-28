@@ -63,7 +63,7 @@ func (es *Elastic) deleteIndex(name string) error {
 }
 
 func (es *Elastic) getIndicesFromAlias(name string) ([]string, error) {
-	r, err := es.client.Indices.GetAlias().Name("stupid").Do(nil)
+	r, err := es.client.Indices.GetAlias().Name(name).Do(nil)
 	if err != nil {
 		return nil, err
 	}
@@ -73,4 +73,21 @@ func (es *Elastic) getIndicesFromAlias(name string) ([]string, error) {
 		indexes = append(indexes, k)
 	}
 	return indexes, nil
+}
+
+func (es *Elastic) replaceAlias(name, index string) error {
+	old, err := es.getIndicesFromAlias(name)
+	if err != nil {
+		return err
+	}
+
+	_, err = es.client.Indices.UpdateAliases().Actions(
+		types.IndicesAction{Add: &types.AddAction{
+			Alias: &name, Index: &index,
+		}},
+		types.IndicesAction{Remove: &types.RemoveAction{
+			Alias: &name, Indices: old,
+		}},
+	).Do(nil)
+	return err
 }
