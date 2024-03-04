@@ -10,11 +10,18 @@ import (
 	"gmc/config"
 	"gmc/db"
 	"gmc/filestore"
+	"gmc/search"
 	"gmc/web"
 )
 
 func ServerCommand(cfg *config.Config, exec string) int {
 	db, err := db.New(cfg.DatabaseURL)
+	if err != nil {
+		fmt.Fprintf(os.Stderr, "%s: %s\n", exec, err.Error())
+		return 1
+	}
+
+	sea, err := search.New(cfg.SearchProvider)
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "%s: %s\n", exec, err.Error())
 		return 1
@@ -32,7 +39,9 @@ func ServerCommand(cfg *config.Config, exec string) int {
 		return 1
 	}
 
-	srv := web.Server{Config: cfg, DB: db, FileStore: stor, Auths: auths}
+	srv := web.Server{
+		Config: cfg, DB: db, Search: sea, FileStore: stor, Auths: auths,
+	}
 	if cfg.AutoShutdown {
 		expath, err := filepath.Abs(exec)
 		if err != nil {

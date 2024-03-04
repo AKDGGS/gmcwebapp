@@ -6,6 +6,8 @@ import (
 
 type InventoryIndex interface {
 	Add(*model.FlatInventory) error
-	Rollback() error
+	Count() int
 	Commit() error
+	Flush() error
+	Rollback() error
 }

@@ -10,11 +10,13 @@ import (
 	"gmc/config"
 	"gmc/db"
 	"gmc/filestore"
+	"gmc/search"
 )
 
 type Server struct {
 	Config    *config.Config
 	DB        db.DB
+	Search    search.Search
 	FileStore filestore.FileStore
 	Auths     *auth.Auths
 	http      http.Server

@@ -1,20 +1,16 @@
 package model
 
 import (
-	"encoding/json"
+	"fmt"
 )
 
 type FlatInventory struct {
 	ID         int32         `json:"id"`
 	Barcode    *string       `json:"barcode,omitempty"`
+	Remark     *string       `json:"remark,omitempty"`
 	Geometries []interface{} `json:"geometries,omitempty"`
 }
 
-func (f *FlatInventory) MarshalJSON() ([]byte, error) {
-	type Alias FlatInventory
-	return json.Marshal(&struct {
-		*Alias
-	}{
-		Alias: (*Alias)(f),
-	})
+func (f *FlatInventory) StringID() string {
+	return fmt.Sprintf("%d", f.ID)
 }

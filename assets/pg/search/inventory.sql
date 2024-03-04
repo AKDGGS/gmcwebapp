@@ -1,7 +1,9 @@
-SELECT i.inventory_id, i.barcode,
-	jsonb_agg(ST_ASGeoJSON(ig.geog)) FILTER (WHERE ig.geog IS NOT NULL)
-	AS geometries
+SELECT i.inventory_id,
+	i.barcode,
+	i.remark,
+	jsonb_agg(ST_ASGeoJSON(ig.geog)) FILTER (WHERE ig.geog IS NOT NULL) AS geometries
 FROM inventory AS i
 LEFT OUTER JOIN inventory_geog AS ig
 	ON ig.inventory_id = i.inventory_id
+WHERE ST_NPoints(ig.geog::geometry) < 100
 GROUP BY i.inventory_id

@@ -3,24 +3,17 @@ package elastic
 import (
 	"fmt"
 
-	"gmc/search/util"
-
 	elastic "github.com/elastic/go-elasticsearch/v8"
+	"github.com/elastic/go-elasticsearch/v8/typedapi/core/bulk"
 	"github.com/elastic/go-elasticsearch/v8/typedapi/indices/create"
 	"github.com/elastic/go-elasticsearch/v8/typedapi/types"
 )
 
 type Elastic struct {
 	client *elastic.TypedClient
-	index  string
 }
 
 func New(cfg map[string]interface{}) (*Elastic, error) {
-	index, ok := cfg["index"].(string)
-	if !ok {
-		index = "gmc"
-	}
-
 	url, ok := cfg["url"].(string)
 	if !ok {
 		return nil, fmt.Errorf("elastic url must exist and be a string")
@@ -40,15 +33,10 @@ func New(cfg map[string]interface{}) (*Elastic, error) {
 		return nil, err
 	}
 
-	return &Elastic{client: cli, index: index}, nil
+	return &Elastic{client: cli}, nil
 }
 
 func (es *Elastic) Shutdown() {}
-
-func (es *Elastic) NewInventoryIndex() (util.InventoryIndex, error) {
-	ii := ElasticInventoryIndex{}
-	return &ii, nil
-}
 
 func (es *Elastic) createIndex(name string, tmap *types.TypeMapping) error {
 	_, err := es.client.Indices.Create(name).Request(
@@ -59,12 +47,23 @@ func (es *Elastic) createIndex(name string, tmap *types.TypeMapping) error {
 
 func (es *Elastic) deleteIndex(name string) error {
 	_, err := es.client.Indices.Delete(name).Do(nil)
-	return err
+	if err != nil {
+		// Ignore errors from attempts to delete non-existant indexes
+		if e, ok := err.(*types.ElasticsearchError); ok && e.Status == 404 {
+			return nil
+		}
+		return err
+	}
+	return nil
 }
 
 func (es *Elastic) getIndicesFromAlias(name string) ([]string, error) {
 	r, err := es.client.Indices.GetAlias().Name(name).Do(nil)
 	if err != nil {
+		// Ignore errors from attempts to get non-existant indexes
+		if e, ok := err.(*types.ElasticsearchError); ok && e.Status == 404 {
+			return nil, nil
+		}
 		return nil, err
 	}
 
@@ -75,19 +74,37 @@ func (es *Elastic) getIndicesFromAlias(name string) ([]string, error) {
 	return indexes, nil
 }
 
-func (es *Elastic) replaceAlias(name, index string) error {
-	old, err := es.getIndicesFromAlias(name)
-	if err != nil {
-		return err
-	}
-
-	_, err = es.client.Indices.UpdateAliases().Actions(
+func (es *Elastic) replaceAlias(name, index string) ([]string, error) {
+	actions := []types.IndicesAction{
 		types.IndicesAction{Add: &types.AddAction{
 			Alias: &name, Index: &index,
 		}},
-		types.IndicesAction{Remove: &types.RemoveAction{
-			Alias: &name, Indices: old,
-		}},
-	).Do(nil)
+	}
+
+	old, err := es.getIndicesFromAlias(name)
+	if err != nil {
+		return nil, err
+	}
+
+	// Don't add a removal action if the existing alias doesn't exist
+	if old != nil {
+		actions = append(actions, types.IndicesAction{
+			Remove: &types.RemoveAction{Alias: &name, Indices: old},
+		})
+	}
+
+	_, err = es.client.Indices.UpdateAliases().Actions(actions...).Do(nil)
+	if err != nil {
+		return nil, err
+	}
+	return old, nil
+}
+
+func (es *Elastic) bulk(index string) *bulk.Bulk {
+	return es.client.Bulk().Index(index)
+}
+
+func (es *Elastic) refreshIndex(index string) error {
+	_, err := es.client.Indices.Refresh().Index(index).Do(nil)
 	return err
 }
