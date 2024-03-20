@@ -20,7 +20,9 @@ func (pg *Postgres) GetFlatInventory(cb func(*model.FlatInventory) error) error 
 
 	for rows.Next() {
 		f := model.FlatInventory{}
-		err := rows.Scan(&f.ID, &f.Barcode, &f.Remark, &f.Geometries)
+		err := rows.Scan(
+			&f.ID, &f.Collection, &f.Barcode, &f.Remark, &f.Geometries,
+		)
 		if err != nil {
 			return err
 		}

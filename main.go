@@ -33,6 +33,8 @@ func main() {
 		fmt.Printf("      manage quality issues\n")
 		fmt.Printf("  index, idx\n")
 		fmt.Printf("      perform a full search re-indexing\n")
+		fmt.Printf("  search, sea\n")
+		fmt.Printf("      execute a basic search\n")
 		fmt.Printf("  file, f\n")
 		fmt.Printf("      manage files\n")
 		fmt.Printf("See '%s <command> --help' for information ", exec)
@@ -80,6 +82,9 @@ func main() {
 
 	case "index", "idx":
 		os.Exit(cmd.IndexCommand(cfg, exec, cm, flag.Args()[1:]))
+
+	case "search", "sea":
+		os.Exit(cmd.SearchCommand(cfg, exec, cm, flag.Args()[1:]))
 
 	case "file", "f":
 		os.Exit(cmd.FileCommand(cfg, exec, cm, flag.Args()[1:]))
