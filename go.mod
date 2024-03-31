@@ -3,6 +3,7 @@ module gmc
 go 1.22
 
 require (
+	github.com/andybalholm/brotli v1.1.0
 	github.com/boombuler/barcode v1.0.1
 	github.com/elastic/go-elasticsearch/v8 v8.12.0
 	github.com/jackc/pgx/v4 v4.17.0
