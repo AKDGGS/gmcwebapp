@@ -22,6 +22,18 @@ func NewEntry(content *[]byte) *Entry {
 	return &e
 }
 
+func NewEntryFull(content *[]byte, modtime time.Time, expires int) *Entry {
+	e := Entry{ModTime: modtime}
+	if expires > 0 {
+		e.Expires = time.Now().Add(time.Duration(expires) * time.Minute)
+	}
+	e.SetContent(content)
+	if e.pl_content == nil {
+		return nil
+	}
+	return &e
+}
+
 type Entry struct {
 	ModTime time.Time
 	Expires time.Time
