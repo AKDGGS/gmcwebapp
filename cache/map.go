@@ -22,7 +22,8 @@ func (m *Map) Get(name string) *Entry {
 		return nil
 	}
 
-	if time.Now().After(entry.Expires) {
+	// If an entry can expire, check if it has expired
+	if !entry.Expires.IsZero() && time.Now().After(entry.Expires) {
 		m.Remove(name)
 		return nil
 	}
