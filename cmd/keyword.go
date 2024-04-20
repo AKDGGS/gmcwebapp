@@ -39,7 +39,7 @@ func KeywordCommand(cfg *config.Config, exec string, cmd string, args []string) 
 		return 1
 
 	case "list", "ls":
-		db, err := db.New(cfg.DatabaseURL)
+		db, err := db.New(cfg.Database)
 		if err != nil {
 			fmt.Fprintf(os.Stderr, "%s: %s\n", exec, err.Error())
 			return 1
@@ -61,7 +61,7 @@ func KeywordCommand(cfg *config.Config, exec string, cmd string, args []string) 
 			return 1
 		}
 
-		db, err := db.New(cfg.DatabaseURL)
+		db, err := db.New(cfg.Database)
 		if err != nil {
 			fmt.Fprintf(os.Stderr, "%s: %s\n", exec, err.Error())
 			return 1
@@ -78,7 +78,7 @@ func KeywordCommand(cfg *config.Config, exec string, cmd string, args []string) 
 			return 1
 		}
 
-		db, err := db.New(cfg.DatabaseURL)
+		db, err := db.New(cfg.Database)
 		if err != nil {
 			fmt.Fprintf(os.Stderr, "%s: %s\n", exec, err.Error())
 			return 1

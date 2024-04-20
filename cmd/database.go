@@ -30,7 +30,7 @@ func DatabaseCommand(cfg *config.Config, exec string, cmd string, args []string)
 	subcmd := strings.ToLower(args[0])
 	switch subcmd {
 	case "initialize", "init":
-		db, err := db.New(cfg.DatabaseURL)
+		db, err := db.New(cfg.Database)
 		if err != nil {
 			fmt.Fprintf(os.Stderr, "%s: %s\n", os.Args[0], err.Error())
 			return 1
@@ -42,7 +42,7 @@ func DatabaseCommand(cfg *config.Config, exec string, cmd string, args []string)
 		}
 
 	case "verify":
-		db, err := db.New(cfg.DatabaseURL)
+		db, err := db.New(cfg.Database)
 		if err != nil {
 			fmt.Fprintf(os.Stderr, "%s: %s\n", os.Args[0], err.Error())
 			return 1
@@ -56,7 +56,7 @@ func DatabaseCommand(cfg *config.Config, exec string, cmd string, args []string)
 		fmt.Printf("Verification successful.\n")
 
 	case "drop":
-		db, err := db.New(cfg.DatabaseURL)
+		db, err := db.New(cfg.Database)
 		if err != nil {
 			fmt.Fprintf(os.Stderr, "%s: %s\n", os.Args[0], err.Error())
 			return 1

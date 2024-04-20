@@ -12,7 +12,7 @@ import (
 )
 
 func IndexCommand(cfg *config.Config, exec, cmd string, args []string) int {
-	db, err := db.New(cfg.DatabaseURL)
+	db, err := db.New(cfg.Database)
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "%s: %s\n", os.Args[0], err.Error())
 		return 1

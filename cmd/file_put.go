@@ -47,7 +47,7 @@ func FilePut(exec string, cfg *config.Config, cmd string, args []string) int {
 	}
 
 	filenames := flagset.Args()
-	db, err := db.New(cfg.DatabaseURL)
+	db, err := db.New(cfg.Database)
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "%s: %s\n", exec, err.Error())
 		flagset.Usage()

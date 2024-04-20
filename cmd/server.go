@@ -15,7 +15,7 @@ import (
 )
 
 func ServerCommand(cfg *config.Config, exec string) int {
-	db, err := db.New(cfg.DatabaseURL)
+	db, err := db.New(cfg.Database)
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "%s: %s\n", exec, err.Error())
 		return 1

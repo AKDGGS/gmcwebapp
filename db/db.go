@@ -2,9 +2,8 @@ package db
 
 import (
 	"fmt"
-	"net/url"
-	"strings"
 
+	"gmc/config"
 	"gmc/db/model"
 	"gmc/db/pg"
 )
@@ -120,23 +119,20 @@ type DB interface {
 	Shutdown()
 }
 
-func New(su string) (DB, error) {
-	u, err := url.Parse(su)
-	if err != nil {
-		return nil, err
-	}
-
-	if u.Scheme == "" {
-		return nil, fmt.Errorf("URL must include a scheme")
-	}
-
+func New(cfg config.DatabaseConfig) (DB, error) {
 	var db DB
-	switch strings.ToLower(u.Scheme) {
+	var err error
+
+	switch cfg.Type {
 	case "pg", "postgres", "postgresql":
-		db, err = pg.New(u)
+		db, err = pg.New(cfg.Attrs)
 		if err != nil {
 			return nil, err
 		}
+	case "":
+		return nil, fmt.Errorf("database type cannot be empty")
+	default:
+		return nil, fmt.Errorf("unknown database type: %s", cfg.Type)
 	}
 	return db, nil
 }

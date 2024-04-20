@@ -18,8 +18,25 @@ type Postgres struct {
 	pool *pgxpool.Pool
 }
 
-func New(u *url.URL) (*Postgres, error) {
-	config, err := pgxpool.ParseConfig(u.String())
+func New(cfg map[string]interface{}) (*Postgres, error) {
+	u, ok := cfg["url"].(string)
+	if !ok {
+		return nil, fmt.Errorf("database url required")
+	}
+
+	dburl, err := url.Parse(u)
+	if err != nil {
+		return nil, err
+	}
+
+	if dburl.Scheme != "postgres" && dburl.Scheme != "postgresql" {
+		return nil, fmt.Errorf(
+			"postgres database urls must have scheme " +
+				"of \"postgres\" or \"postgresql\"",
+		)
+	}
+
+	config, err := pgxpool.ParseConfig(dburl.String())
 	if err != nil {
 		return nil, err
 	}

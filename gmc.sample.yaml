@@ -1,9 +1,6 @@
 # address service listens on, defaults to '127.0.0.1:8080'
 listen_address: 127.0.0.1:8080
 
-# URL used to access database
-database_url: postgresql://localhost
-
 # base URL path for web requests - useful if behind a proxy, defaults to '/'
 base_path: /
 
@@ -23,6 +20,12 @@ auto_shutdown: false
 #
 # session_max_age: 86400
 
+# Database system
+database:
+  type: postgres
+  url: postgres://localhost
+
+# File storage methods (dir is the default)
 file_store:
   # File store is a directory
   type: dir
