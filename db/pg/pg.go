@@ -37,7 +37,25 @@ func New(cfg map[string]interface{}) (*Postgres, error) {
 	if err != nil {
 		return nil, err
 	}
+
 	config.LazyConnect = true
+	if lazyconnect, ok := cfg["lazyconnect"].(bool); ok {
+		config.LazyConnect = lazyconnect
+	}
+
+	if con_min, ok := cfg["min_connections"].(int); ok {
+		config.MinConns = int32(con_min)
+	}
+
+	if con_max, ok := cfg["max_connections"].(int); ok {
+		if int32(con_max) < config.MinConns {
+			return nil, fmt.Errorf(
+				"max_connections must be greater than or equal "+
+					"to min_connections (%d <= %d)", config.MinConns, con_max,
+			)
+		}
+		config.MaxConns = int32(con_max)
+	}
 
 	pool, err := pgxpool.ConnectConfig(context.Background(), config)
 	if err != nil {
