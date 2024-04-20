@@ -18,7 +18,7 @@ func IndexCommand(cfg *config.Config, exec, cmd string, args []string) int {
 		return 1
 	}
 
-	sea, err := search.New(cfg.SearchProvider)
+	sea, err := search.New(cfg.Search)
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "%s: %s\n", exec, err.Error())
 		return 1

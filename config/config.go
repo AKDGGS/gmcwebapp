@@ -11,15 +11,15 @@ import (
 )
 
 type Config struct {
-	ListenAddress  string               `yaml:"listen_address"`
-	BasePath       string               `yaml:"base_path"`
-	SessionKey     string               `yaml:"session_key"`
-	MaxAge         int                  `yaml:"session_max_age"`
-	AutoShutdown   bool                 `yaml:"auto_shutdown"`
-	Database       DatabaseConfig       `yaml:"database"`
-	FileStore      FileStoreConfig      `yaml:"file_store"`
-	SearchProvider SearchProviderConfig `yaml:"search_provider"`
-	Auths          []AuthConfig         `yaml:"authentication"`
+	ListenAddress string          `yaml:"listen_address"`
+	BasePath      string          `yaml:"base_path"`
+	SessionKey    string          `yaml:"session_key"`
+	MaxAge        int             `yaml:"session_max_age"`
+	AutoShutdown  bool            `yaml:"auto_shutdown"`
+	Database      DatabaseConfig  `yaml:"database"`
+	FileStore     FileStoreConfig `yaml:"file_store"`
+	Search        SearchConfig    `yaml:"search"`
+	Auths         []AuthConfig    `yaml:"authentication"`
 
 	keybytes []byte `yaml:"-"`
 }
@@ -43,7 +43,7 @@ type AuthConfig struct {
 	Attrs map[string]interface{} `yaml:",inline"`
 }
 
-type SearchProviderConfig struct {
+type SearchConfig struct {
 	Type  string                 `yaml:"type"`
 	Attrs map[string]interface{} `yaml:",inline"`
 }

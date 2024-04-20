@@ -14,7 +14,7 @@ type Search interface {
 	Shutdown()
 }
 
-func New(cfg config.SearchProviderConfig) (Search, error) {
+func New(cfg config.SearchConfig) (Search, error) {
 	var sear Search
 	var err error
 	switch cfg.Type {
