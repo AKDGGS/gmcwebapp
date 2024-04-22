@@ -24,9 +24,9 @@ func New(cfg config.SearchConfig) (Search, error) {
 			return nil, err
 		}
 	case "":
-		return nil, fmt.Errorf("search_provider type may not be empty")
+		return nil, fmt.Errorf("search type may not be empty")
 	default:
-		return nil, fmt.Errorf("Unknown search provider type: %s", cfg.Type)
+		return nil, fmt.Errorf("Unknown search type: %s", cfg.Type)
 	}
 	return sear, nil
 }

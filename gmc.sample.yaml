@@ -44,6 +44,13 @@ file_store:
   # S3, bucket name
   bucket: gmc
 
+# Search providers
+search:
+  type: elastic
+  url: http://localhost:9200
+  user: elastic
+  pass: mypassword
+
 # More than one authentication scheme may be configured. In the event of an
 # authentication attempt, schemes are tried one at a time in the order
 # specified until success, or all schemes have been exhausted.
