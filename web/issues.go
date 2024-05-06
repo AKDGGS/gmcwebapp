@@ -6,7 +6,7 @@ import (
 	"net/http"
 )
 
-func (srv *Server) ServeAPIQualityList(w http.ResponseWriter, r *http.Request) {
+func (srv *Server) ServeIssues(w http.ResponseWriter, r *http.Request) {
 	list, err := srv.DB.ListIssues()
 	if err != nil {
 		http.Error(

@@ -54,6 +54,9 @@ func (srv *Server) Start() error {
 	mux.HandleFunc("/api/add_inventory_quality.json", srv.ServeAPIAddInventoryQuality)
 	mux.HandleFunc("/api/recode.json", srv.ServeAPIRecodeInventoryAndContainer)
 
+	// Serves the list of quality issues
+	mux.HandleFunc("/issues.json", srv.ServeIssues)
+
 	// Upload page/endpoint
 	mux.HandleFunc("/upload/{$}", srv.ServeUpload)
 
