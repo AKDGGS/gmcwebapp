@@ -24,16 +24,16 @@ type Well struct {
 	CompletionStatus *string                `json:"completion_status,omitempty"`
 	Unit             *string                `json:"unit,omitempty"`
 	Stash            map[string]interface{} `json:"stash,omitempty"`
+	Notes            []Note                 `json:"notes,omitempty"`
+	URLs             []URL                  `json:"urls,omitempty"`
+	Organizations    []Organization         `json:"organizations,omitempty"`
+	Files            []File                 `json:"files,omitempty"`
 
 	//transient fields that are generated on-the-fly
 	//these fields don't exist in the database
 	GeoJSON        interface{}      `json:"geojson,omitempty"`
 	KeywordSummary []KeywordSummary `json:"keywords,omitempty"`
 	Quadrangles    []Quadrangle     `json:"quadrangles,omitempty"`
-	Notes          []Note           `json:"notes,omitempty"`
-	URLs           []URL            `json:"urls,omitempty"`
-	Organizations  []Organization   `json:"organizations,omitempty"`
-	Files          []File           `json:"files,omitempty"`
 }
 
 func (w *Well) MarshalJSON() ([]byte, error) {

@@ -4,6 +4,7 @@ import (
 	"context"
 
 	"gmc/assets"
+	dbe "gmc/db/errors"
 	"gmc/db/model"
 )
 
@@ -25,7 +26,7 @@ func (pg *Postgres) CheckToken(tok string) (*model.Token, error) {
 		return nil, err
 	}
 	if c == 0 {
-		return nil, nil
+		return nil, dbe.ErrToken
 	}
 	return &tk, nil
 }

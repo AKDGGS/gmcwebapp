@@ -5,11 +5,15 @@ import (
 	"strings"
 
 	"gmc/assets"
+	dbe "gmc/db/errors"
 )
 
 func (pg *Postgres) AddAudit(remark string, container_list []string) error {
 	if remark != "" {
 		remark = strings.TrimSpace(remark)
+	}
+	if remark == "" && len(container_list) == 0 {
+		return dbe.ErrAuditParamsEmpty
 	}
 	tx, err := pg.pool.Begin(context.Background())
 	if err != nil {
@@ -24,6 +28,9 @@ func (pg *Postgres) AddAudit(remark string, container_list []string) error {
 	err = tx.QueryRow(context.Background(), q, remark).Scan(&audit_group_id)
 	if err != nil {
 		return err
+	}
+	if audit_group_id == 0 {
+		return dbe.ErrAuditInsertFailed
 	}
 	for _, c := range container_list {
 		q, err = assets.ReadString("pg/audit/insert.sql")

@@ -3,6 +3,8 @@ package web
 import (
 	"fmt"
 	"net/http"
+
+	dbe "gmc/db/errors"
 )
 
 func (srv *Server) ServeAPIAudit(w http.ResponseWriter, r *http.Request) {
@@ -21,10 +23,17 @@ func (srv *Server) ServeAPIAudit(w http.ResponseWriter, r *http.Request) {
 	q := r.URL.Query()
 	err = srv.DB.AddAudit(q.Get("remark"), q["c"])
 	if err != nil {
-		http.Error(
-			w, fmt.Sprintf("Error: %s", err.Error()),
-			http.StatusInternalServerError,
-		)
+		switch err {
+		case dbe.ErrAuditParamsEmpty:
+			http.Error(w, err.Error(), http.StatusBadRequest)
+		case dbe.ErrAuditInsertFailed:
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+		default:
+			http.Error(
+				w, fmt.Sprintf("Error: %s", err.Error()),
+				http.StatusInternalServerError,
+			)
+		}
 		return
 	}
 }

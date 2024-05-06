@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"net/http"
 
+	dbe "gmc/db/errors"
 	dbf "gmc/db/flag"
 )
 
@@ -29,10 +30,14 @@ func (srv *Server) ServeAPIInventoryDetail(w http.ResponseWriter, r *http.Reques
 	barcode := q.Get("barcode")
 	invs, err := srv.DB.GetInventoryByBarcode(barcode, flags)
 	if err != nil {
-		http.Error(
-			w, fmt.Sprintf("Error: %s", err.Error()),
-			http.StatusInternalServerError,
-		)
+		if err == dbe.ErrBarcodeNotFound {
+			http.Error(w, err.Error(), http.StatusBadRequest)
+		} else {
+			http.Error(
+				w, fmt.Sprintf("Error: %s", err.Error()),
+				http.StatusInternalServerError,
+			)
+		}
 		return
 	}
 	var js []byte
@@ -43,10 +48,19 @@ func (srv *Server) ServeAPIInventoryDetail(w http.ResponseWriter, r *http.Reques
 		js, err = json.Marshal(invs)
 	}
 	if err != nil {
-		http.Error(
-			w, fmt.Sprintf("JSON error: %s", err.Error()),
-			http.StatusInternalServerError,
-		)
+		switch err {
+		case dbe.ErrBarcodeCannotBeEmpty:
+			http.Error(w, err.Error(), http.StatusBadRequest)
+		case dbe.ErrInventoryInsertFailed:
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+		case dbe.ErrInventoryQualityInsertFailed:
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+		default:
+			http.Error(
+				w, fmt.Sprintf("Error: %s", err.Error()),
+				http.StatusInternalServerError,
+			)
+		}
 		return
 	}
 

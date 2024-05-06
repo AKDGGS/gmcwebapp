@@ -6,3 +6,4 @@ SELECT inventory_quality_id AS id,
 FROM inventory_quality
 WHERE inventory_quality_id = ANY($1)
 ORDER BY check_date DESC
+LIMIT 1
