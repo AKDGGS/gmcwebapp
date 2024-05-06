@@ -108,7 +108,6 @@ function FileDrop(drop_zone, file_list_container) {
 	upload_link.addEventListener('click', (e) => {
 		e.preventDefault();
 		if (pb_uploading) {
-			console.log("uploading true");
 			return
 		}
 		let error_div = document.querySelector('.filedrop-error-div');
@@ -152,7 +151,7 @@ function FileDrop(drop_zone, file_list_container) {
 			}
 			let file = files[pb_count];
 			let form_data = new FormData();
-			form_data.append('content', file);
+			form_data.append('file', file);
 
 			let xhr = new XMLHttpRequest();
 
