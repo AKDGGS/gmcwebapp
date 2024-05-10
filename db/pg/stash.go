@@ -1,5 +1,5 @@
 package pg
 
-func (pg *Postgres) GetStash(id int) (map[string]interface{}, error) {
-	return pg.queryRow("pg/inventory/stash.sql", id)
+func (pg *Postgres) GetStash(id int) (interface{}, error) {
+	return pg.queryValue("pg/inventory/stash.sql", id)
 }

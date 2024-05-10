@@ -39,7 +39,7 @@ type DB interface {
 	GetSummaryByBarcode(barcode string, flags int) (*model.Summary, error)
 
 	// Fetches stash for a specific inventory id
-	GetStash(id int) (map[string]interface{}, error)
+	GetStash(id int) (interface{}, error)
 
 	// Fetches wells point list
 	GetWellPoints() ([]map[string]interface{}, error)

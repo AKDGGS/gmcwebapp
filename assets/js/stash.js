@@ -70,8 +70,7 @@ if (stash !== null) {
       var xhr = (window.ActiveXObject ? new ActiveXObject('Microsoft.XMLHTTP') : new XMLHttpRequest());
       xhr.onreadystatechange = function() {
         if (xhr.readyState === 4 && xhr.status === 200) {
-          var json = JSON.parse(xhr.responseText);
-          var el = JSONToElement(json.stash);
+          var el = JSONToElement(JSON.parse(xhr.responseText));
           document.getElementById('stash-dd').appendChild(el);
           anchor.innerHTML = 'Hide Stash';
         }

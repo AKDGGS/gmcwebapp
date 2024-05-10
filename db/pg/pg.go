@@ -68,6 +68,20 @@ func (pg *Postgres) Shutdown() {
 	pg.pool.Close()
 }
 
+func (pg *Postgres) queryValue(name string, args ...interface{}) (interface{}, error) {
+	q, err := assets.ReadString(name)
+	if err != nil {
+		return nil, err
+	}
+
+	var val interface{}
+	row := pg.pool.QueryRow(context.Background(), q, args...)
+	if err := row.Scan(&val); err != nil {
+		return nil, err
+	}
+	return val, nil
+}
+
 func (pg *Postgres) queryRow(name string, args ...interface{}) (map[string]interface{}, error) {
 	q, err := assets.ReadString(name)
 	if err != nil {
