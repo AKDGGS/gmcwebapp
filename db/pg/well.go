@@ -102,13 +102,11 @@ func (pg *Postgres) GetWell(id int, flags int) (*model.Well, error) {
 		}
 	}
 	if (flags & dbf.GEOJSON) != 0 {
-		geojson, err := pg.queryRow("pg/well/geojson.sql", id)
+		geojson, err := pg.queryValue("pg/well/geojson.sql", id)
 		if err != nil {
 			return nil, err
 		}
-		if geojson["geojson"] != nil {
-			well.GeoJSON = geojson["geojson"]
-		}
+		well.GeoJSON = geojson
 	}
 	if (flags & dbf.QUADRANGLES) != 0 {
 		q, err = assets.ReadString("pg/quadrangle/250k_by_well_id.sql")

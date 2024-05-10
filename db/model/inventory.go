@@ -10,8 +10,7 @@ type Inventory struct {
 	Barcode    *string     `json:"barcode,omitempty"`
 	AltBarcode *string     `json:"alt_barcode,omitempty"`
 	Collection *Collection `json:"collection,omitempty"`
-
-	Container *Container `json:"container,omitempty"`
+	Container  *Container  `json:"container,omitempty"`
 
 	SampleID                 *int64   `json:"dggs_sample_id,omitempty"`
 	SampleNumber             *string  `json:"sample_number,omitempty"`
@@ -66,7 +65,7 @@ type Inventory struct {
 
 	//transient fields that are generated on-the-fly
 	//these fields don't exist in the database
-	GeoJSON map[string]interface{} `json:"geojson,omitempty"`
+	GeoJSON interface{} `json:"geojson,omitempty"`
 }
 
 func (i *Inventory) MarshalJSON() ([]byte, error) {

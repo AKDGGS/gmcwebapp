@@ -74,13 +74,11 @@ func (pg *Postgres) GetProspect(id int, flags int) (*model.Prospect, error) {
 	}
 
 	if (flags & dbf.GEOJSON) != 0 {
-		geojson, err := pg.queryRow("pg/prospect/geojson.sql", id)
+		geojson, err := pg.queryValue("pg/prospect/geojson.sql", id)
 		if err != nil {
 			return nil, err
 		}
-		if geojson["geojson"] != nil {
-			prospect.GeoJSON = geojson["geojson"]
-		}
+		prospect.GeoJSON = geojson
 	}
 
 	if (flags & dbf.MINING_DISTRICTS) != 0 {

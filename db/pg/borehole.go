@@ -104,13 +104,11 @@ func (pg *Postgres) GetBorehole(id int, flags int) (*model.Borehole, error) {
 	}
 
 	if (flags & dbf.GEOJSON) != 0 {
-		geojson, err := pg.queryRow("pg/borehole/geojson.sql", id)
+		geojson, err := pg.queryValue("pg/borehole/geojson.sql", id)
 		if err != nil {
 			return nil, err
 		}
-		if geojson["geojson"] != nil {
-			borehole.GeoJSON = geojson["geojson"]
-		}
+		borehole.GeoJSON = geojson
 	}
 
 	if (flags & dbf.MINING_DISTRICTS) != 0 {

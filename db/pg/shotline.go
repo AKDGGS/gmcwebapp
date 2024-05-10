@@ -85,13 +85,11 @@ func (pg *Postgres) GetShotline(id int, flags int) (*model.Shotline, error) {
 		}
 	}
 	if (flags & dbf.GEOJSON) != 0 {
-		geojson, err := pg.queryRow("pg/shotline/geojson.sql", id)
+		geojson, err := pg.queryValue("pg/shotline/geojson.sql", id)
 		if err != nil {
 			return nil, err
 		}
-		if geojson["geojson"] != nil {
-			shotline.GeoJSON = geojson["geojson"]
-		}
+		shotline.GeoJSON = geojson
 	}
 	if (flags & dbf.QUADRANGLES) != 0 {
 		q, err = assets.ReadString("pg/quadrangle/250k_by_shotline_id.sql")

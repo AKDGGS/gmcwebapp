@@ -99,13 +99,11 @@ func (pg *Postgres) GetOutcrop(id int, flags int) (*model.Outcrop, error) {
 		}
 	}
 	if (flags & dbf.GEOJSON) != 0 {
-		geojson, err := pg.queryRow("pg/outcrop/geojson.sql", id)
+		geojson, err := pg.queryValue("pg/outcrop/geojson.sql", id)
 		if err != nil {
 			return nil, err
 		}
-		if geojson["geojson"] != nil {
-			outcrop.GeoJSON = geojson["geojson"]
-		}
+		outcrop.GeoJSON = geojson
 	}
 	if (flags & dbf.QUADRANGLES) != 0 {
 		q, err = assets.ReadString("pg/quadrangle/250k_by_outcrop_id.sql")
