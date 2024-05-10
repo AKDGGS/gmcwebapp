@@ -40,14 +40,21 @@ func (srv *Server) ServeStash(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	js, err := json.Marshal(stash)
+	out, err := compressWriter(r.Header.Get("Accept-Encoding"), w)
 	if err != nil {
 		http.Error(
-			w, fmt.Sprintf("JSON error: %s", err.Error()),
+			w, fmt.Sprintf("Compression error: %s", err.Error()),
 			http.StatusInternalServerError,
 		)
 		return
 	}
+
+	jsenc := json.NewEncoder(out)
 	w.Header().Set("Content-Type", "application/json")
-	w.Write(js)
+	if err := jsenc.Encode(stash); err != nil {
+		fmt.Fprintf(out, "\n\n%s", err.Error())
+	}
+	if f, ok := out.(Flusher); ok {
+		f.Flush()
+	}
 }
