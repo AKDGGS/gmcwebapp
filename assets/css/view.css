@@ -23,7 +23,7 @@ table { max-width: 600px; }
 .tb-columns th {	padding-right: 50px; }
 
 #stash-dd table { border-collapse: collapse; font-size: 12px; font-family: Tahoma, Geneva, sans-serif; }
-#stash-dd table th { text-align: left; }
+#stash-dd table th { text-align: left; vertical-align: top; }
 #stash-dd table th, #stash-dd table td { border: 1px solid #bbb; padding: 4px 8px; }
 #stash-dd table tr:nth-child(odd){ background-color: #eee; }
 .ol-popup { border: 2px solid #999; background-color: #fff; display: none; }
