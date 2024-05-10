@@ -78,7 +78,6 @@ func (srv *Server) ServeInventory(w http.ResponseWriter, r *http.Request) {
 			"../ol/ol.js", "../ol/ol-layerswitcher.min.js",
 			"../js/mustache.js", "../js/map-defaults.js",
 			"../js/filedrop.js", "../js/view.js",
-			"../js/stash.js",
 		},
 		"redirect": fmt.Sprintf("inventory/%d", id),
 		"user":     user,

@@ -7,7 +7,7 @@ import (
 	"strconv"
 )
 
-func (srv *Server) ServeStash(w http.ResponseWriter, r *http.Request) {
+func (srv *Server) ServeInventoryStash(w http.ResponseWriter, r *http.Request) {
 	user, err := srv.Auths.CheckRequest(w, r)
 	if err != nil {
 		http.Error(
@@ -26,7 +26,7 @@ func (srv *Server) ServeStash(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "Invalid Inventory ID", http.StatusBadRequest)
 		return
 	}
-	stash, err := srv.DB.GetStash(id)
+	stash, err := srv.DB.GetInventoryStash(id)
 	if err != nil {
 		http.Error(
 			w, fmt.Sprintf("Query error: %s", err.Error()),

@@ -30,6 +30,9 @@ type DB interface {
 	// Fetches the complete details for an Inventory by barcode
 	GetInventoryByBarcode(barcode string, flags int) ([]*model.Inventory, error)
 
+	// Fetches stash for a specific inventory id
+	GetInventoryStash(id int) (interface{}, error)
+
 	// Get a flattened version of all inventory appropriate
 	// for search indexing, calling function parameter for
 	// each individual item
@@ -37,9 +40,6 @@ type DB interface {
 
 	// Fetches the complete details for a Summary by barcode
 	GetSummaryByBarcode(barcode string, flags int) (*model.Summary, error)
-
-	// Fetches stash for a specific inventory id
-	GetStash(id int) (interface{}, error)
 
 	// Fetches wells point list
 	GetWellPoints() ([]map[string]interface{}, error)

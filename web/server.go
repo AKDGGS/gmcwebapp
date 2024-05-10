@@ -87,10 +87,9 @@ func (srv *Server) Start() error {
 	mux.HandleFunc("/borehole/{id}", srv.ServeBorehole)
 	mux.HandleFunc("/outcrop/{id}", srv.ServeOutcrop)
 	mux.HandleFunc("/shotline/{id}", srv.ServeShotline)
-	mux.HandleFunc("/inventory/{id}", srv.ServeInventory)
 
-	// Used by inventory
-	mux.HandleFunc("/stash.json", srv.ServeStash)
+	mux.HandleFunc("/inventory/{id}", srv.ServeInventory)
+	mux.HandleFunc("/inventory/stash.json", srv.ServeInventoryStash)
 
 	srv.http = http.Server{Handler: mux}
 	err = srv.http.Serve(listen)
