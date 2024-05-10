@@ -22,10 +22,12 @@ table { max-width: 600px; }
 .tb-spacer-sm:not(:first-of-type) th, .tb-spacer-sm:not(:first-of-type) td {padding-top: 25px;}
 .tb-columns th {	padding-right: 50px; }
 
-#stash-dd table { border-collapse: collapse; font-size: 12px; font-family: Tahoma, Geneva, sans-serif; }
-#stash-dd table th { text-align: left; vertical-align: top; }
-#stash-dd table th, #stash-dd table td { border: 1px solid #bbb; padding: 4px 8px; }
-#stash-dd table tr:nth-child(odd){ background-color: #eee; }
+#stash-button { margin-bottom: 8px; }
+#stash-dest { display: none; font-size: 12px; font-family: Tahoma, Geneva, sans-serif; }
+#stash-dest.shown { display: block; }
+#stash-dest table { border-collapse: collapse; }
+#stash-dest table th, #stash-dest table td { text-align: left; vertical-align: top; border: 1px solid #bbb; padding: 4px 8px; }
+#stash-dest table tr:nth-child(odd){ background-color: #eee; }
 .ol-popup { border: 2px solid #999; background-color: #fff; display: none; }
 .ol-popup-top {
 	padding: 2px 4px;

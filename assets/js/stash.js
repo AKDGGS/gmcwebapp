@@ -2,32 +2,27 @@
 // and renders it into a table, returning
 // the table element
 function JSONToElement(obj){
-	var type = Object.prototype.toString.call(obj);
-
+	let type = Object.prototype.toString.call(obj);
 	switch(type){
 		case '[object Boolean]':
 			return document.createTextNode(obj.toString());
-
 		case '[object String]':
 			return document.createTextNode(obj);
-
 		case '[object Number]':
 			return document.createTextNode(obj.toString());
-
 		case '[object Null]':
 			return document.createTextNode('(null)');
+		case '[object Object]': {
+			let tbl = document.createElement('table');
+			let count = 0;
+			for(let i in obj){
+				let tr = document.createElement('tr');
 
-		case '[object Object]':
-			var tbl = document.createElement('table');
-			var count = 0;
-			for(var i in obj){
-				var tr = document.createElement('tr');
-
-				var th = document.createElement('th');
+				let th = document.createElement('th');
 				th.appendChild(document.createTextNode(i));
 				tr.appendChild(th);
 
-				var td = document.createElement('td');
+				let td = document.createElement('td');
 				td.appendChild(JSONToElement(obj[i]));
 				tr.appendChild(td);
 
@@ -36,57 +31,63 @@ function JSONToElement(obj){
 			}
 			if(count > 0) return tbl;
 			else return document.createTextNode('(Empty Object)');
-
-		case '[object Array]':
+		}
+		case '[object Array]': {
 			if(obj.length < 1) return document.createTextNode('(Empty List)');
 
-			var tbl = document.createElement('table');
-			for(var i = obj.length; i--;){
-				var tr = document.createElement('tr');
+			let tbl = document.createElement('table');
+			for(let i = obj.length; i--;){
+				let tr = document.createElement('tr');
 
-				var th = document.createElement('th');
+				let th = document.createElement('th');
 				th.appendChild(document.createTextNode(i));
 				tr.appendChild(th);
 
-				var td = document.createElement('td');
+				let td = document.createElement('td');
 				td.appendChild(JSONToElement(obj[i]));
 				tr.appendChild(td);
 
 				tbl.appendChild(tr);
 			}
 			return tbl;
-
+		}
 		default:
 			return document.createTextNode('Unknown - ' + type);
 	}
 }
 
-
-var stash = document.getElementById('stash-link');
+let stash = document.getElementById('stash-button');
 if (stash !== null) {
-  stash.onclick = function(evt) {
-    var anchor = this;
-    if (this.innerHTML === 'Show Stash') {
-      var xhr = (window.ActiveXObject ? new ActiveXObject('Microsoft.XMLHTTP') : new XMLHttpRequest());
-      xhr.onreadystatechange = function() {
-        if (xhr.readyState === 4 && xhr.status === 200) {
-          var el = JSONToElement(JSON.parse(xhr.responseText));
-          document.getElementById('stash-dd').appendChild(el);
-          anchor.innerHTML = 'Hide Stash';
-        }
-      };
-			var inv_id = window.location.href.substr(window.location.href.lastIndexOf("/")+1);
-      xhr.open('GET', '../stash.json?id=' + inv_id, true);
-      xhr.send();
-    } else {
-      anchor.innerHTML = 'Show Stash';
-      var dd = document.getElementById('stash-dd');
-      if (dd !== null) {
-        while (dd.lastChild) dd.removeChild(dd.lastChild);
-      }
-    }
-    var e = evt === undefined ? window.event : evt;
-    if ('preventDefault' in e) e.preventDefault();
-    return false;
-  };
+	let dest = document.getElementById('stash-dest');
+	stash.addEventListener('click', (e) => {
+		if(stash.disabled) return false;
+
+		if(dest.classList.contains('shown')){
+			stash.innerText = 'Show Stash';
+			dest.classList.remove('shown');
+		} else {
+			if(dest.lastChild){
+				stash.innerText = 'Hide Stash';
+				dest.classList.add('shown');
+				return false;
+			}
+
+			stash.disabled = true;
+			let hr = window.location.href;
+			fetch(
+				`../stash.json?id=${hr.substr(hr.lastIndexOf('/')+1)}`
+			).then(response => {
+				if (!response.ok) throw 'response not ok';
+				return response.json();
+			}).then(result => {
+				dest.appendChild(JSONToElement(result));
+				stash.innerText = 'Hide Stash';
+				dest.classList.add('shown');
+				stash.disabled = false;
+			}).catch(err => {
+				if(window.console) console.log(err);
+			});
+		}
+		return false;
+	});
 }

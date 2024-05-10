@@ -34,11 +34,6 @@ func (srv *Server) ServeStash(w http.ResponseWriter, r *http.Request) {
 		)
 		return
 	}
-	// If no details are returned, throw a 404
-	if stash == nil {
-		http.Error(w, "Stash not found", http.StatusNotFound)
-		return
-	}
 
 	out, err := compressWriter(r.Header.Get("Accept-Encoding"), w)
 	if err != nil {
