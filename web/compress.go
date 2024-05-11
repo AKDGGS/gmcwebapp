@@ -10,8 +10,9 @@ import (
 	"github.com/andybalholm/brotli"
 )
 
-type Flusher interface {
+type CloseFlusher interface {
 	Flush() error
+	Close() error
 }
 
 func compressWriter(accept string, w http.ResponseWriter) (io.Writer, error) {

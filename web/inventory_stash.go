@@ -49,7 +49,8 @@ func (srv *Server) ServeInventoryStash(w http.ResponseWriter, r *http.Request) {
 	if err := jsenc.Encode(stash); err != nil {
 		fmt.Fprintf(out, "\n\n%s", err.Error())
 	}
-	if f, ok := out.(Flusher); ok {
-		f.Flush()
+	if c, ok := out.(CloseFlusher); ok {
+		c.Flush()
+		c.Close()
 	}
 }
