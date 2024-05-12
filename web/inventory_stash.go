@@ -43,14 +43,11 @@ func (srv *Server) ServeInventoryStash(w http.ResponseWriter, r *http.Request) {
 		)
 		return
 	}
+	defer out.Close()
 
 	jsenc := json.NewEncoder(out)
 	w.Header().Set("Content-Type", "application/json")
 	if err := jsenc.Encode(stash); err != nil {
 		fmt.Fprintf(out, "\n\n%s", err.Error())
-	}
-	if c, ok := out.(CloseFlusher); ok {
-		c.Flush()
-		c.Close()
 	}
 }

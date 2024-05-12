@@ -10,12 +10,13 @@ import (
 	"github.com/andybalholm/brotli"
 )
 
-type CloseFlusher interface {
-	Flush() error
-	Close() error
+type ResponseWrapper struct{ http.ResponseWriter }
+
+func (rw ResponseWrapper) Close() error {
+	return nil
 }
 
-func compressWriter(accept string, w http.ResponseWriter) (io.Writer, error) {
+func compressWriter(accept string, w http.ResponseWriter) (io.WriteCloser, error) {
 	encs := strings.Split(accept, ", ")
 	if slices.Contains(encs, "br") {
 		br := brotli.NewWriterLevel(w, brotli.DefaultCompression)
@@ -30,5 +31,6 @@ func compressWriter(accept string, w http.ResponseWriter) (io.Writer, error) {
 		w.Header().Set("Content-Encoding", "gzip")
 		return gz, nil
 	}
-	return w, nil
+
+	return &ResponseWrapper{w}, nil
 }
