@@ -8,6 +8,7 @@ import (
 	"gmc/assets"
 	"gmc/db/model"
 
+	"github.com/jackc/pgx/v4"
 	"github.com/jackc/pgx/v4/pgxpool"
 )
 
@@ -77,6 +78,9 @@ func (pg *Postgres) queryValue(name string, args ...interface{}) (interface{}, e
 	var val interface{}
 	row := pg.pool.QueryRow(context.Background(), q, args...)
 	if err := row.Scan(&val); err != nil {
+		if err == pgx.ErrNoRows {
+			return nil, nil
+		}
 		return nil, err
 	}
 	return val, nil
