@@ -40,6 +40,7 @@ func (srv *Server) ServeInventory(w http.ResponseWriter, r *http.Request) {
 		)
 		return
 	}
+
 	// If no details are returned, throw a 404
 	if inventory == nil {
 		http.Error(w, "Inventory not found", http.StatusNotFound)
@@ -92,7 +93,16 @@ func (srv *Server) ServeInventory(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	w.Header().Set("Content-Length", fmt.Sprintf("%d", tbuf.Len()))
 	w.Header().Set("Content-Type", "text/html; charset=utf-8")
-	w.Write(tbuf.Bytes())
+
+	out, err := compressWriter(r.Header.Get("Accept-Encoding"), w)
+	if err != nil {
+		http.Error(
+			w, fmt.Sprintf("Compression error: %s", err.Error()),
+			http.StatusInternalServerError,
+		)
+		return
+	}
+	defer out.Close()
+	out.Write(tbuf.Bytes())
 }
