@@ -4,7 +4,6 @@ import (
 	"context"
 
 	"gmc/assets"
-	dbe "gmc/db/errors"
 	dbf "gmc/db/flag"
 	"gmc/db/model"
 )
@@ -35,7 +34,7 @@ func (pg *Postgres) GetInventory(id int, flags int) (*model.Inventory, error) {
 
 	//nothing returned by the database
 	if c == 0 {
-		return nil, dbe.ErrBarcodeNotFound
+		return nil, nil
 	}
 
 	if (flags & dbf.FILES) != 0 {

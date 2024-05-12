@@ -43,43 +43,22 @@ func New(cfg map[string]interface{}) (*S3, error) {
 		secure = false
 	}
 
-	var err error
-	s3 := &S3{bucket: bucket}
 	// Setup S3 Connection
-	s3.client, err = minio.New(endpoint, &minio.Options{
+	client, err := minio.New(endpoint, &minio.Options{
 		Creds:  credentials.NewStaticV4(accesskeyid, secretaccesskey, ""),
 		Secure: secure,
 	})
 	if err != nil {
 		return nil, err
 	}
-	return s3, nil
+	return &S3{client: client, bucket: bucket}, nil
 }
 
 func (s3 *S3) GetFile(name string) (*fsutil.File, error) {
-	objectCh := s3.client.ListObjects(context.Background(), s3.bucket,
-		minio.ListObjectsOptions{Prefix: fmt.Sprintf("%s/", name)})
-
-	var objectKey string
-	objectCount := 0
-	for object := range objectCh {
-		if object.Err != nil {
-			return nil, object.Err
-		}
-		objectKey = object.Key
-		objectCount++
-		if objectCount > 1 {
-			return nil, fmt.Errorf("more than one object found")
-		}
-	}
-
 	obj, err := s3.client.GetObject(
-		context.Background(),
-		s3.bucket, objectKey,
-		minio.GetObjectOptions{},
+		context.Background(), s3.bucket, name, minio.GetObjectOptions{},
 	)
 	if err != nil {
-
 		return nil, err
 	}
 
@@ -114,14 +93,18 @@ func (s3 *S3) PutFile(file *fsutil.File) error {
 
 	// Create bucket if it doesn't exist
 	if !exists {
-		err := s3.client.MakeBucket(context.Background(), s3.bucket, minio.MakeBucketOptions{})
+		err := s3.client.MakeBucket(
+			context.Background(), s3.bucket, minio.MakeBucketOptions{},
+		)
 		if err != nil {
 			return err
 		}
 	}
 
-	_, err = s3.client.PutObject(context.Background(), s3.bucket, file.Name,
-		file.Content, file.Size, minio.PutObjectOptions{})
+	_, err = s3.client.PutObject(
+		context.Background(), s3.bucket, file.Name,
+		file.Content, file.Size, minio.PutObjectOptions{},
+	)
 	if err != nil {
 		return err
 	}
@@ -140,7 +123,10 @@ func (s3 *S3) DeleteFile(file *fsutil.File) error {
 	if !exists {
 		return nil
 	}
-	err = s3.client.RemoveObject(context.Background(), s3.bucket, file.Name, minio.RemoveObjectOptions{})
+	err = s3.client.RemoveObject(
+		context.Background(), s3.bucket, file.Name,
+		minio.RemoveObjectOptions{},
+	)
 	if err != nil {
 		return err
 	}

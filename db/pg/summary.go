@@ -4,7 +4,6 @@ import (
 	"context"
 
 	"gmc/assets"
-	dbe "gmc/db/errors"
 	"gmc/db/model"
 )
 
@@ -20,7 +19,7 @@ func (pg *Postgres) GetSummaryByBarcode(barcode string, flags int) (*model.Summa
 	}
 	// return nil, error if the barcode is not a container (barcode_count == 0)
 	if barcode_count == 0 {
-		return nil, dbe.ErrBarcodeNotContainer
+		return nil, nil
 	}
 
 	summary := model.Summary{}
