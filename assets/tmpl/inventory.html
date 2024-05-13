@@ -539,7 +539,6 @@
 				{{- end}}
 			</fieldset>
 			{{- end}}
-			{{- if $.user}}
 			{{- if .Notes}}
 
 			<fieldset>
@@ -567,7 +566,6 @@
 					</tbody>
 				</table>
 			</fieldset>
-			{{- end}}
 			{{- end}}
 			{{- if or .Files $.user}}
 
@@ -641,7 +639,6 @@
 				</table>
 			</fieldset>
 			{{- end}}
-			{{- if $.user}}
 			{{- if .ContainerLog}}
 
 			<fieldset>
@@ -691,6 +688,7 @@
 				</table>
 			</fieldset>
 			{{- end}}
+			{{- if $.user}}
 
 			<fieldset>
 				<legend>Stash</legend>
