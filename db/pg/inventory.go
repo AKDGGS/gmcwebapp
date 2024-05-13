@@ -264,7 +264,7 @@ func (pg *Postgres) GetInventory(id int, flags int) (*model.Inventory, error) {
 			return nil, err
 		}
 
-		row := pg.pool.QueryRow(context.Background(), q, id)
+		row := conn.QueryRow(context.Background(), q, id)
 		if err := row.Scan(&inventory.GeoJSON); err != nil && err != ErrNoRows {
 			return nil, err
 		}
