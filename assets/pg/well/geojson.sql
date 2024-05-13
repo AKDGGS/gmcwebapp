@@ -1,60 +1,66 @@
 SELECT jsonb_build_object(
 	'type', 'FeatureCollection',
-	'features', jsonb_agg( jsonb_build_object(
+	'features', features
+)
+FROM (
+	SELECT jsonb_agg(jsonb_build_object(
 		'type', 'Feature',
-		'geometry', ST_AsGeoJSON(w1.geog, 5, 0):: jsonb,
+		'geometry', ST_AsGeoJSON(x.geog,5,0)::jsonb,
 		'properties', jsonb_strip_nulls(jsonb_build_object(
-			'well_id', w1.well_id,
-			'name', w1.name,
+			'well_id', x.well_id,
+			'name', x.name,
 			'nearby_wells', (
 				SELECT jsonb_agg(jsonb_build_object(
 					'well_id', nearby_wells.well_id,
-					'name', nearby_wells.name, 'distance',
-					nearby_wells.distance
-				))
+					'name', nearby_wells.name,
+					'distance', nearby_wells.distance
+				)) AS nearby_wells
 				FROM (
-					SELECT
-					w2.well_id, w2.name,
-					ROUND((ST_Distance(w1.geog, w2.geog)/ 1609.344):: numeric, 2) AS distance
+					SELECT s.well_id, s.name,
+					ROUND(
+						(ST_Distance(x.geog, s.geog)/1609.344)::numeric, 2
+					) AS distance
 					FROM (
-						SELECT w1.well_id, w1.name, p1.geog
-						FROM well AS w1
-						JOIN well_point AS wp1 ON wp1.well_id = w1.well_id
-						JOIN point AS p1 ON p1.point_id = wp1.point_id
+						SELECT w.well_id, w.name, p.geog
+						FROM well AS w
+						JOIN well_point AS wp ON wp.well_id = w.well_id
+						JOIN point AS p ON p.point_id = wp.point_id
 
 						UNION ALL
 
-						SELECT w1.well_id, w1.name, place.geog
-						FROM well AS w1
-						JOIN well_place AS wplace ON wplace.well_id = w1.well_id
-						JOIN place ON place.place_id = wplace.place_id
-					) AS w2
-					WHERE w1.well_id != w2.well_id AND ST_DWithin(w1.geog, w2.geog, 2414.016)
+						SELECT w.well_id, w.name, p.geog
+						FROM well AS w
+						JOIN well_place AS wp ON wp.well_id = w.well_id
+						JOIN place AS p ON p.place_id = wp.place_id
+					) AS s
+					WHERE x.well_id != s.well_id
+						AND ST_DWithin(x.geog, s.geog, 2414.016)
 					ORDER BY distance
-					LIMIT 10)
-					AS nearby_wells
-				))
-			))
-		)
-	) AS geojson
-FROM (
-	SELECT w1.well_id, w1.name, p1.geog
-	FROM well AS w1
-	JOIN well_point AS wp1 ON wp1.well_id = w1.well_id
-	JOIN point AS p1 ON p1.point_id = wp1.point_id
+					LIMIT 10
+				) AS nearby_wells
+			)
+		))
+	)) AS features
+	FROM (
+		SELECT w.well_id, w.name, p.geog
+		FROM well AS w
+		JOIN well_point AS wp ON wp.well_id = w.well_id
+		JOIN point AS p ON p.point_id = wp.point_id
 
-	UNION ALL
+		UNION ALL
 
-	SELECT w1.well_id, w1.name, place.geog
-	FROM well AS w1
-	JOIN well_place AS wplace ON wplace.well_id = w1.well_id
-	JOIN place ON place.place_id = wplace.place_id
+		SELECT w.well_id, w.name, p.geog
+		FROM well AS w
+		JOIN well_place AS wp ON wp.well_id = w.well_id
+		JOIN place AS p ON p.place_id = wp.place_id
 
-	UNION ALL
+		UNION ALL
 
-	SELECT w1.well_id, w1.name, region.geog
-	FROM well AS w1
-	JOIN well_region AS wregion ON wregion.well_id = w1.well_id
-	JOIN region ON region.region_id = wregion.region_id
-) AS w1
-WHERE w1.well_id = $1 AND w1.geog IS NOT NULL;
+		SELECT w.well_id, w.name, r.geog
+		FROM well AS w
+		JOIN well_region AS wr ON wr.well_id = w.well_id
+		JOIN region AS r ON r.region_id = wr.region_id
+	) AS x
+	WHERE x.geog IS NOT NULL AND x.well_id = $1
+) AS y
+WHERE features IS NOT NULL
