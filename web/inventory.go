@@ -15,7 +15,7 @@ func (srv *Server) ServeInventory(w http.ResponseWriter, r *http.Request) {
 	user, err := srv.Auths.CheckRequest(w, r)
 	if err != nil {
 		http.Error(
-			w, fmt.Sprintf("Authentication error: %s", err.Error()),
+			w, fmt.Sprintf("authentication error: %s", err.Error()),
 			http.StatusBadRequest,
 		)
 		return
@@ -35,7 +35,7 @@ func (srv *Server) ServeInventory(w http.ResponseWriter, r *http.Request) {
 	inventory, err := srv.DB.GetInventory(id, flags)
 	if err != nil {
 		http.Error(
-			w, fmt.Sprintf("Query error: %s", err.Error()),
+			w, fmt.Sprintf("query error: %s", err.Error()),
 			http.StatusInternalServerError,
 		)
 		return
@@ -43,13 +43,13 @@ func (srv *Server) ServeInventory(w http.ResponseWriter, r *http.Request) {
 
 	// If no details are returned, throw a 404
 	if inventory == nil {
-		http.Error(w, "Inventory not found", http.StatusNotFound)
+		http.Error(w, "inventory not found", http.StatusNotFound)
 		return
 	}
 
 	// If can_publish is false, throw a 403
 	if user == nil && inventory.CanPublish == false {
-		http.Error(w, "Access denied", http.StatusForbidden)
+		http.Error(w, "access denied", http.StatusForbidden)
 		return
 	}
 
@@ -61,7 +61,7 @@ func (srv *Server) ServeInventory(w http.ResponseWriter, r *http.Request) {
 	buf := bytes.Buffer{}
 	if err := assets.ExecuteTemplate("tmpl/inventory.html", &buf, inventory_params); err != nil {
 		http.Error(
-			w, fmt.Sprintf("Parse error: %s", err.Error()),
+			w, fmt.Sprintf("parse error: %s", err.Error()),
 			http.StatusInternalServerError,
 		)
 		return
@@ -87,18 +87,17 @@ func (srv *Server) ServeInventory(w http.ResponseWriter, r *http.Request) {
 	tbuf := bytes.Buffer{}
 	if err := assets.ExecuteTemplate("tmpl/template.html", &tbuf, params); err != nil {
 		http.Error(
-			w, fmt.Sprintf("Parse error: %s", err.Error()),
+			w, fmt.Sprintf("parse error: %s", err.Error()),
 			http.StatusInternalServerError,
 		)
 		return
 	}
 
 	w.Header().Set("Content-Type", "text/html; charset=utf-8")
-
 	out, err := compressWriter(r.Header.Get("Accept-Encoding"), w)
 	if err != nil {
 		http.Error(
-			w, fmt.Sprintf("Compression error: %s", err.Error()),
+			w, fmt.Sprintf("compression error: %s", err.Error()),
 			http.StatusInternalServerError,
 		)
 		return
