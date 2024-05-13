@@ -146,3 +146,21 @@ func (pg *Postgres) queryTable(name string, args ...interface{}) (*model.Table, 
 	}
 	return rs, nil
 }
+
+// Using the provided connection, runs the query found at the given asset
+// location and returns the results into dest via rowsToStruct()
+func ConnQuery(conn *pgxpool.Conn, qry string, dest interface{}, args ...interface{}) (int, error) {
+	sql, err := assets.ReadString(qry)
+	if err != nil {
+		return 0, err
+	}
+
+	r, err := conn.Query(context.Background(), sql, args...)
+	if err != nil {
+		return 0, err
+	}
+
+	c, err := rowsToStruct(r, dest)
+	r.Close()
+	return c, err
+}
