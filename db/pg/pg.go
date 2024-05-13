@@ -12,6 +12,8 @@ import (
 	"github.com/jackc/pgx/v4/pgxpool"
 )
 
+var ErrNoRows error = pgx.ErrNoRows
+
 type Postgres struct {
 	pool *pgxpool.Pool
 }
@@ -78,7 +80,7 @@ func (pg *Postgres) queryValue(name string, args ...interface{}) (interface{}, e
 	var val interface{}
 	row := pg.pool.QueryRow(context.Background(), q, args...)
 	if err := row.Scan(&val); err != nil {
-		if err == pgx.ErrNoRows {
+		if err == ErrNoRows {
 			return nil, nil
 		}
 		return nil, err
