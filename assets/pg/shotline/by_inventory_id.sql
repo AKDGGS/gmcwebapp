@@ -1,4 +1,5 @@
-SELECT sl.shotline_id AS id,
+SELECT
+	sl.shotline_id AS id,
 	sl.name,
 	sl.alt_names,
 	sl.year,
@@ -7,7 +8,6 @@ SELECT sl.shotline_id AS id,
 		sp.shotpoint_number::TEXT, 'Unknown'
 	) ORDER BY shotpoint_number), ', ') AS numbers
 FROM shotpoint AS sp
-
 LEFT OUTER JOIN shotline AS sl
 	ON sl.shotline_id = sp.shotline_id
 WHERE sp.shotline_id IN (

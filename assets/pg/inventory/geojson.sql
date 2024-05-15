@@ -1,7 +1,8 @@
 SELECT jsonb_build_object(
 	'type', 'FeatureCollection',
 	'features', x.features
-) FROM (
+) AS geojson
+FROM (
 	SELECT jsonb_agg(q.features) AS features
 	FROM ((
 		-- Borehole Point

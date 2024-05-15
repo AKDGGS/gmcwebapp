@@ -6,45 +6,45 @@ import (
 )
 
 type Borehole struct {
-	ID                int32                  `json:"id"`
-	Name              *string                `json:"name"`
-	AltNames          *string                `json:"alt_name,omitempty"`
-	Onshore           bool                   `json:"is_onshore"`
-	CompletionDate    time.Time              `json:"completion_date,omitempty"`
-	MeasuredDepth     *float64               `json:"measured_depth,omitempty"`
-	MeasuredDepthUnit *string                `json:"measured_depth_unit,omitempty"`
-	Elevation         *float64               `json:"elevation,omitempty"`
-	ElevationUnit     *string                `json:"elevation_unit,omitempty"`
-	EnteredDate       time.Time              `json:"entered_date,omitempty"`
-	ModifiedDate      time.Time              `json:"modified_date,omitempty"`
-	ModifiedUser      *string                `json:"modified_user,omitempty"`
-	Stash             map[string]interface{} `json:"stash,omitempty"`
-	Notes             []Note                 `json:"notes,omitempty"`
-	URLs              []URL                  `json:"urls,omitempty"`
-	Organizations     []Organization         `json:"organizations,omitempty"`
-	Files             []File                 `json:"files,omitempty"`
-	Prospect          *Prospect              `json:"prospects,omitempty"`
+	ID                int32          `json:"id"`
+	Name              *string        `json:"name"`
+	AltNames          *string        `db:"alt_names" json:"alt_names,omitempty"`
+	Onshore           bool           `db:"is_onshore" json:"is_onshore"`
+	CompletionDate    *time.Time     `db:"completion_date" json:"completion_date,omitempty"`
+	MeasuredDepth     *float64       `db:"measured_depth" json:"measured_depth,omitempty"`
+	MeasuredDepthUnit *string        `db:"measured_depth_unit" json:"measured_depth_unit,omitempty"`
+	Elevation         *float64       `json:"elevation,omitempty"`
+	ElevationUnit     *string        `db:"elevation_unit" json:"elevation_unit,omitempty"`
+	EnteredDate       *time.Time     `db:"entered_date" json:"entered_date,omitempty"`
+	ModifiedDate      *time.Time     `db:"modified_date" json:"modified_date,omitempty"`
+	ModifiedUser      *string        `db:"modified_user" json:"modified_user,omitempty"`
+	Stash             interface{}    `json:"stash,omitempty"`
+	Notes             []Note         `json:"notes,omitempty"`
+	URLs              []URL          `json:"urls,omitempty"`
+	Organizations     []Organization `json:"organizations,omitempty"`
+	Files             []File         `json:"files,omitempty"`
+	Prospect          *Prospect      `json:"prospect,omitempty"`
 
 	//transient fields that are generated on-the-fly
 	//these fields don't exist in the database
 	GeoJSON         interface{}      `json:"geojson,omitempty"`
-	KeywordSummary  []KeywordSummary `json:"keywords,omitempty"`
-	MiningDistricts []MiningDistrict `json:"mining_districts,omitempty"`
+	KeywordSummary  []KeywordSummary `db:"keywords" json:"keywords,omitempty"`
+	MiningDistricts []MiningDistrict `db:"mining_districts" json:"mining_districts,omitempty"`
 	Quadrangles     []Quadrangle     `json:"quadrangles,omitempty"`
 }
 
 func (b *Borehole) MarshalJSON() ([]byte, error) {
 	type Alias Borehole
 	var completionDate string
-	if !b.CompletionDate.IsZero() {
+	if b.CompletionDate != nil {
 		completionDate = b.CompletionDate.Format("01-02-2006")
 	}
 	var enteredDate string
-	if !b.EnteredDate.IsZero() {
+	if b.EnteredDate != nil {
 		enteredDate = b.EnteredDate.Format("01-02-2006")
 	}
 	var modifiedDate string
-	if !b.ModifiedDate.IsZero() {
+	if b.ModifiedDate != nil {
 		modifiedDate = b.ModifiedDate.Format("01-02-2006")
 	}
 	return json.Marshal(&struct {

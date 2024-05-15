@@ -1,16 +1,20 @@
 SELECT iv.inventory_id AS id,
-	cl.collection_id AS "collection.id",
-	cl.name AS "collection.name",
-	cl.description AS "collection.description",
-	cl.organization_id AS "collection.organization.id",
-
-	co.container_id AS "container.id",
-	co.name AS "container.name",
-	co.remark AS "container.remark",
-	co.barcode AS "container.barcode",
-	co.alt_barcode AS "container.alt_barcode",
-	co.path_cache AS "container.path_cache",
-
+	jsonb_build_object(
+		'id', cl.collection_id,
+		'name', cl.name,
+		'description', cl.description
+	) AS collection,
+	jsonb_build_object(
+		'id', co.container_id,
+		'name', co.name,
+		'path_cache', co.path_cache
+	) AS container,
+	jsonb_build_object(
+		'id', cd.core_diameter_id,
+		'name', cd.name,
+		'core_diameter', cd.core_diameter,
+		'unit', COALESCE(cd.unit::text, 'ft')
+	) AS core_diameter,
 	iv.dggs_sample_id AS sample_id,
 	iv.sample_number,
 	iv.sample_number_prefix,
@@ -36,12 +40,6 @@ SELECT iv.inventory_id AS id,
 	iv.keywords::text[],
 	COALESCE(iv.interval_unit::text, 'ft') AS interval_unit,
 	iv.core_number,
-
-	cd.core_diameter_id AS "core_diameter.id",
-	cd.name AS "core_diameter.name",
-	cd.core_diameter AS "core_diameter.core_diameter",
-	COALESCE(cd.unit::text, 'ft') AS "core_diameter.unit",
-
 	iv.weight,
 	iv.weight_unit::text,
 	iv.sample_frequency,

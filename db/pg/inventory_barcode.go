@@ -211,7 +211,7 @@ func (pg *Postgres) GetInventoryByBarcode(barcode string, flags int) ([]*model.I
 			return nil, err
 		}
 		defer rows.Close()
-		issues := make([]model.Qualities, 0)
+		issues := make([]model.Quality, 0)
 		rowsToStruct(rows, &issues)
 		for _, iss := range issues {
 			for _, inv := range q_inv[iss.ID] {

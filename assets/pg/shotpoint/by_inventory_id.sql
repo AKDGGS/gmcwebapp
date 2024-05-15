@@ -1,10 +1,13 @@
-SELECT 	sp.shotpoint_id AS id,
-	sp.shotpoint_number AS number,
-	sl.shotline_id AS "shotline.id",
-	sl.name AS "shotline.name",
-	sl.alt_names AS "shotline.alt_names",
-	sl.year AS "shotline.year",
-	sl.remark AS "shotline.remark"
+SELECT
+	sp.shotpoint_id AS id,
+	sp.shotpoint_number AS "number",
+	jsonb_build_object(
+		'id', sl.shotline_id,
+		'name', sl.name,
+		'alt_names', sl.alt_names,
+		'year', sl.year,
+		'remark', sl.remark
+	) AS shotline
 FROM inventory_shotpoint AS isp
 JOIN shotpoint AS sp
 	ON sp.shotpoint_id = isp.shotpoint_id

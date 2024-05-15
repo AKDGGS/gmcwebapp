@@ -189,13 +189,13 @@
 						</tr>
 						{{- end}}
 						{{- if $.user}}
-						{{- if ne .ReceivedDate.IsZero true}}
+						{{- if .ReceivedDate}}
 						<tr>
 							<th>Received Date</th>
 							<td>{{.ReceivedDate.Format "1/2/2006"}}</td>
 						</tr>
 						{{- end}}
-						{{- if ne .EnteredDate.IsZero true}}
+						{{- if .EnteredDate}}
 						<tr>
 							<th>Entered Date</th>
 							<td>{{.EnteredDate.Format "1/2/2006"}}</td>
@@ -207,7 +207,7 @@
 							<td>{{.ModifiedUser}}</td>
 						</tr>
 						{{- end}}
-						{{- if ne .ModifiedDate.IsZero true}}
+						{{- if .ModifiedDate}}
 						<tr>
 							<th>Modified Date</th>
 							<td>{{.ModifiedDate.Format "1/2/2006"}}</td>
@@ -386,6 +386,16 @@
 							<td>{{.AltNames}}</td>
 						</tr>
 						{{- end}}
+						{{- range .Organizations}}
+						<tr>
+							<th>Organization</th>
+							<td>{{.Name}}</td>
+						</tr>
+						<tr>
+							<th>Organization Type</th>
+							<td>{{.Type.Name}}</td>
+						</tr>
+						{{- end}}
 						{{- end}}
 					</tbody>
 				</table>
@@ -414,6 +424,16 @@
 						<tr>
 							<th>Outcrop Year</th>
 							<td>{{.Year}}</td>
+						</tr>
+						{{- end}}
+						{{- range .Organizations}}
+						<tr>
+							<th>Organization</th>
+							<td>{{.Name}}</td>
+						</tr>
+						<tr>
+							<th>Organization Type</th>
+							<td>{{.Type.Name}}</td>
 						</tr>
 						{{- end}}
 						{{- end}}
@@ -498,12 +518,10 @@
 							<th>{{if .Current}}Current{{else}}Previous{{- end}} Operator</th>
 							<td>{{.Name}}</td>
 						</tr>
-						{{- if .Type}}
 						<tr>
 							<th>Operator Type</th>
 							<td>{{.Type.Name}}</td>
 						</tr>
-						{{- end}}
 						{{- end}}
 						{{- end}}
 					</tbody>

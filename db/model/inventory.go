@@ -44,9 +44,9 @@ type Inventory struct {
 	Recovery        *string                `json:"recovery,omitempty"`
 	CanPublish      bool                   `json:"can_publish"`
 	RadiationMSVH   *float64               `json:"radiation_msvh,omitempty"`
-	ReceivedDate    time.Time              `json:"received_date,omitempty"`
-	EnteredDate     time.Time              `json:"entered_date,omitempty"`
-	ModifiedDate    time.Time              `json:"modified_date,omitempty"`
+	ReceivedDate    *time.Time             `json:"received_date,omitempty"`
+	EnteredDate     *time.Time             `json:"entered_date,omitempty"`
+	ModifiedDate    *time.Time             `json:"modified_date,omitempty"`
 	ModifiedUser    *string                `json:"modified_user,omitempty"`
 	Active          bool                   `json:"active"`
 	Stash           map[string]interface{} `json:"stash,omitempty"`
@@ -61,7 +61,7 @@ type Inventory struct {
 	Files         []File         `json:"files,omitempty"`
 	Publications  []Publication  `json:"publications,omitempty"`
 	ContainerLog  []ContainerLog `json:"container_logs,omitempty"`
-	Qualities     []Qualities    `json:"qualities,omitempty"`
+	Qualities     []Quality      `json:"qualities,omitempty"`
 
 	//transient fields that are generated on-the-fly
 	//these fields don't exist in the database

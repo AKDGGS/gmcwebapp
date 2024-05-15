@@ -8,8 +8,8 @@ import (
 	"gmc/assets"
 	"gmc/db/model"
 
-	"github.com/jackc/pgx/v4"
-	"github.com/jackc/pgx/v4/pgxpool"
+	"github.com/jackc/pgx/v5"
+	"github.com/jackc/pgx/v5/pgxpool"
 )
 
 var ErrNoRows error = pgx.ErrNoRows
@@ -36,31 +36,26 @@ func New(cfg map[string]interface{}) (*Postgres, error) {
 		)
 	}
 
-	config, err := pgxpool.ParseConfig(dburl.String())
+	pgcfg, err := pgxpool.ParseConfig(dburl.String())
 	if err != nil {
 		return nil, err
 	}
 
-	config.LazyConnect = true
-	if lazyconnect, ok := cfg["lazyconnect"].(bool); ok {
-		config.LazyConnect = lazyconnect
-	}
-
 	if con_min, ok := cfg["min_connections"].(int); ok {
-		config.MinConns = int32(con_min)
+		pgcfg.MinConns = int32(con_min)
 	}
 
 	if con_max, ok := cfg["max_connections"].(int); ok {
-		if int32(con_max) < config.MinConns {
+		if int32(con_max) < pgcfg.MinConns {
 			return nil, fmt.Errorf(
 				"max_connections must be greater than or equal "+
-					"to min_connections (%d <= %d)", config.MinConns, con_max,
+					"to min_connections (%d <= %d)", pgcfg.MinConns, con_max,
 			)
 		}
-		config.MaxConns = int32(con_max)
+		pgcfg.MaxConns = int32(con_max)
 	}
 
-	pool, err := pgxpool.ConnectConfig(context.Background(), config)
+	pool, err := pgxpool.NewWithConfig(context.Background(), pgcfg)
 	if err != nil {
 		return nil, err
 	}
@@ -145,6 +140,59 @@ func (pg *Postgres) queryTable(name string, args ...interface{}) (*model.Table, 
 		rs.Rows = append(rs.Rows, vals)
 	}
 	return rs, nil
+}
+
+// Using the provided connection, runs the query found at the given
+// asset location, and returns the results via pgx.CollectRows() as []T
+func cQryStructs[T any](conn *pgxpool.Conn, qry string, args ...interface{}) ([]T, error) {
+	sql, err := assets.ReadString(qry)
+	if err != nil {
+		return nil, err
+	}
+	r, err := conn.Query(context.Background(), sql, args...)
+	if err != nil {
+		return nil, err
+	}
+	v, err := pgx.CollectRows(r, pgx.RowToStructByNameLax[T])
+	if err != nil {
+		return nil, err
+	}
+	return v, nil
+}
+
+func cQryValue(conn *pgxpool.Conn, qry string, args ...interface{}) (interface{}, error) {
+	sql, err := assets.ReadString("pg/inventory/geojson.sql")
+	if err != nil {
+		return nil, err
+	}
+
+	var x interface{}
+	row := conn.QueryRow(context.Background(), sql, args...)
+	if err := row.Scan(&x); err != nil && err != ErrNoRows {
+		return nil, err
+	}
+	return x, nil
+}
+
+// Using the provided connection, runs the query found at the given
+// asset location, and returns the results via pgx.CollectOneRow() as []T
+func cQryStruct[T any](conn *pgxpool.Conn, qry string, args ...interface{}) (*T, error) {
+	sql, err := assets.ReadString(qry)
+	if err != nil {
+		return nil, err
+	}
+	r, err := conn.Query(context.Background(), sql, args...)
+	if err != nil {
+		return nil, err
+	}
+	v, err := pgx.CollectOneRow(r, pgx.RowToAddrOfStructByNameLax[T])
+	if err != nil {
+		if err == pgx.ErrNoRows {
+			return nil, nil
+		}
+		return nil, err
+	}
+	return v, nil
 }
 
 // Using the provided connection, runs the query found at the given asset

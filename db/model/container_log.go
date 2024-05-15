@@ -6,9 +6,9 @@ import (
 )
 
 type ContainerLog struct {
-	ID          int32     `json:"container_log_id,omitempty"`
+	ID          int32     `json:"id,omitempty"`
+	Date        time.Time `db:"date" json:"date,omitempty"`
 	Destination string    `json:"destination,omitempty"`
-	Date        time.Time `json:"log_date,omitempty"`
 }
 
 func (cl *ContainerLog) MarshalJSON() ([]byte, error) {
@@ -18,7 +18,7 @@ func (cl *ContainerLog) MarshalJSON() ([]byte, error) {
 		date = cl.Date.Format("01-02-2006")
 	}
 	return json.Marshal(&struct {
-		Date string `json:"date,omitempty"`
+		Date string `db:"date" json:"date,omitempty"`
 		*Alias
 	}{
 		Date:  date,

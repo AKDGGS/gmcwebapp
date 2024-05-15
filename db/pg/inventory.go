@@ -3,7 +3,6 @@ package pg
 import (
 	"context"
 
-	"gmc/assets"
 	dbf "gmc/db/flag"
 	"gmc/db/model"
 )
@@ -15,34 +14,21 @@ func (pg *Postgres) GetInventory(id int, flags int) (*model.Inventory, error) {
 	}
 	defer conn.Release()
 
-	inventory := model.Inventory{}
-	c, err := ConnQuery(
-		conn, "pg/inventory/by_inventory_id.sql",
-		&inventory, id,
+	inventory, err := cQryStruct[model.Inventory](
+		conn, "pg/inventory/by_inventory_id.sql", id,
 	)
 	if err != nil {
 		return nil, err
 	}
 
 	// If no inventory is found, stop right here
-	if c == 0 {
+	if inventory == nil {
 		return nil, nil
 	}
 
-	if (flags & dbf.FILES) != 0 {
-		_, err := ConnQuery(
-			conn, "pg/file/by_inventory_id.sql",
-			&inventory.Files, id,
-		)
-		if err != nil {
-			return nil, err
-		}
-	}
-
-	if (flags & dbf.URLS) != 0 {
-		_, err = ConnQuery(
-			conn, "pg/url/by_inventory_id.sql",
-			&inventory.URLs, id,
+	if (flags & dbf.WELL) != 0 {
+		inventory.Wells, err = cQryStructs[model.Well](
+			conn, "pg/well/by_inventory_id.sql", id,
 		)
 		if err != nil {
 			return nil, err
@@ -50,9 +36,35 @@ func (pg *Postgres) GetInventory(id int, flags int) (*model.Inventory, error) {
 	}
 
 	if (flags & dbf.NOTE) != 0 {
-		_, err = ConnQuery(
-			conn, "pg/note/by_inventory_id.sql",
-			&inventory.Notes, id,
+		inventory.Notes, err = cQryStructs[model.Note](
+			conn, "pg/note/by_inventory_id.sql", id,
+		)
+		if err != nil {
+			return nil, err
+		}
+	}
+
+	if (flags & dbf.URLS) != 0 {
+		inventory.URLs, err = cQryStructs[model.URL](
+			conn, "pg/url/by_inventory_id.sql", id,
+		)
+		if err != nil {
+			return nil, err
+		}
+	}
+
+	if (flags & dbf.QUALITY) != 0 {
+		inventory.Qualities, err = cQryStructs[model.Quality](
+			conn, "pg/quality/by_inventory_id.sql", id,
+		)
+		if err != nil {
+			return nil, err
+		}
+	}
+
+	if (flags & dbf.FILES) != 0 {
+		inventory.Files, err = cQryStructs[model.File](
+			conn, "pg/file/by_inventory_id.sql", id,
 		)
 		if err != nil {
 			return nil, err
@@ -60,9 +72,8 @@ func (pg *Postgres) GetInventory(id int, flags int) (*model.Inventory, error) {
 	}
 
 	if (flags & dbf.PUBLICATION) != 0 {
-		_, err = ConnQuery(
-			conn, "pg/publication/by_inventory_id.sql",
-			&inventory.Publications, id,
+		inventory.Publications, err = cQryStructs[model.Publication](
+			conn, "pg/publication/by_inventory_id.sql", id,
 		)
 		if err != nil {
 			return nil, err
@@ -70,9 +81,8 @@ func (pg *Postgres) GetInventory(id int, flags int) (*model.Inventory, error) {
 	}
 
 	if (flags & dbf.BOREHOLE) != 0 {
-		_, err = ConnQuery(
-			conn, "pg/borehole/by_inventory_id.sql",
-			&inventory.Boreholes, id,
+		inventory.Boreholes, err = cQryStructs[model.Borehole](
+			conn, "pg/borehole/by_inventory_id.sql", id,
 		)
 		if err != nil {
 			return nil, err
@@ -80,74 +90,8 @@ func (pg *Postgres) GetInventory(id int, flags int) (*model.Inventory, error) {
 	}
 
 	if (flags & dbf.OUTCROP) != 0 {
-		_, err = ConnQuery(
-			conn, "pg/outcrop/by_inventory_id.sql",
-			&inventory.Outcrops, id,
-		)
-		if err != nil {
-			return nil, err
-		}
-	}
-
-	if (flags & dbf.SHOTPOINT) != 0 {
-		_, err = ConnQuery(
-			conn, "pg/shotpoint/by_inventory_id.sql",
-			&inventory.Shotpoints, id,
-		)
-		if err != nil {
-			return nil, err
-		}
-	}
-
-	if (flags & dbf.WELL) != 0 {
-		_, err = ConnQuery(
-			conn, "pg/well/by_inventory_id.sql",
-			&inventory.Wells, id,
-		)
-		if err != nil {
-			return nil, err
-		}
-	}
-
-	if (flags & dbf.ORGANIZATION) != 0 {
-		for i := 0; i < len(inventory.Boreholes); i++ {
-			q, err := assets.ReadString("pg/organization/by_borehole_id.sql")
-			if err != nil {
-				return nil, err
-			}
-			rows, err := conn.Query(context.Background(), q, inventory.Boreholes[i].ID)
-			if err != nil {
-				return nil, err
-			}
-			defer rows.Close()
-			_, err = rowsToStruct(rows, &inventory.Boreholes[i].Organizations)
-			if err != nil {
-				return nil, err
-			}
-			rows.Close()
-		}
-		for i := 0; i < len(inventory.Outcrops); i++ {
-			q, err := assets.ReadString("pg/organization/by_outcrop_id.sql")
-			if err != nil {
-				return nil, err
-			}
-			rows, err := conn.Query(context.Background(), q, inventory.Outcrops[i].ID)
-			if err != nil {
-				return nil, err
-			}
-			defer rows.Close()
-			_, err = rowsToStruct(rows, &inventory.Outcrops[i].Organizations)
-			if err != nil {
-				return nil, err
-			}
-			rows.Close()
-		}
-	}
-
-	if (flags & dbf.QUALITY) != 0 {
-		_, err = ConnQuery(
-			conn, "pg/quality/by_inventory_id.sql",
-			&inventory.Qualities, id,
+		inventory.Outcrops, err = cQryStructs[model.Outcrop](
+			conn, "pg/outcrop/by_inventory_id.sql", id,
 		)
 		if err != nil {
 			return nil, err
@@ -155,9 +99,17 @@ func (pg *Postgres) GetInventory(id int, flags int) (*model.Inventory, error) {
 	}
 
 	if (flags & dbf.TRACKING) != 0 {
-		_, err = ConnQuery(
-			conn, "pg/container_log/by_inventory_id.sql",
-			&inventory.ContainerLog, id,
+		inventory.ContainerLog, err = cQryStructs[model.ContainerLog](
+			conn, "pg/container_log/by_inventory_id.sql", id,
+		)
+		if err != nil {
+			return nil, err
+		}
+	}
+
+	if (flags & dbf.SHOTPOINT) != 0 {
+		inventory.Shotpoints, err = cQryStructs[model.Shotpoint](
+			conn, "pg/shotpoint/by_inventory_id.sql", id,
 		)
 		if err != nil {
 			return nil, err
@@ -165,15 +117,12 @@ func (pg *Postgres) GetInventory(id int, flags int) (*model.Inventory, error) {
 	}
 
 	if (flags & dbf.GEOJSON) != 0 {
-		q, err := assets.ReadString("pg/inventory/geojson.sql")
+		inventory.GeoJSON, err = cQryValue(
+			conn, "pg/ivnentory/geojson.sql", id,
+		)
 		if err != nil {
 			return nil, err
 		}
-
-		row := conn.QueryRow(context.Background(), q, id)
-		if err := row.Scan(&inventory.GeoJSON); err != nil && err != ErrNoRows {
-			return nil, err
-		}
 	}
-	return &inventory, nil
+	return inventory, nil
 }

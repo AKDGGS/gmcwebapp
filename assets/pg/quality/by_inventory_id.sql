@@ -1,4 +1,5 @@
-SELECT inventory_quality_id AS id,
+SELECT
+	inventory_quality_id AS id,
 	check_date AS "date",
 	remark,
 	username,
