@@ -142,22 +142,6 @@ func (pg *Postgres) GetInventory(id int, flags int) (*model.Inventory, error) {
 			}
 			rows.Close()
 		}
-		for i := 0; i < len(inventory.Wells); i++ {
-			q, err := assets.ReadString("pg/organization/by_well_id.sql")
-			if err != nil {
-				return nil, err
-			}
-			rows, err := conn.Query(context.Background(), q, inventory.Wells[i].ID)
-			if err != nil {
-				return nil, err
-			}
-			defer rows.Close()
-			_, err = rowsToStruct(rows, &inventory.Wells[i].Organizations)
-			if err != nil {
-				return nil, err
-			}
-			rows.Close()
-		}
 	}
 
 	if (flags & dbf.QUALITY) != 0 {

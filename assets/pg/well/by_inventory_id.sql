@@ -14,9 +14,30 @@ SELECT w.well_id AS id,
 	w.permit_status,
 	w.completion_status,
 	w.permit_number,
-	w.unit::text
-	FROM well AS w
-	LEFT OUTER JOIN inventory_well AS iw
-		ON iw.well_id = w.well_id
-	WHERE iw.inventory_id = $1
-	GROUP BY w.well_id;
+	w.unit::text,
+	(
+		SELECT jsonb_agg(operators)
+		FROM (
+			SELECT jsonb_build_object(
+				'organization_id', o.organization_id,
+				'name', o.name,
+				'type', jsonb_build_object(
+					'name', ot.name
+				),
+				'remark', o.remark,
+				'is_current', wo.is_current
+			) AS operators
+			FROM organization AS o
+			JOIN organization_type AS ot
+				ON o.organization_type_id = ot.organization_type_id
+			JOIN well_operator AS wo
+				ON o.organization_id = wo.organization_id
+			WHERE wo.well_id = w.well_id
+			ORDER BY wo.is_current DESC, o.name
+		) AS s
+	) AS organizations
+FROM well AS w
+LEFT OUTER JOIN inventory_well AS iw
+	ON iw.well_id = w.well_id
+WHERE iw.inventory_id = $1
+GROUP BY w.well_id

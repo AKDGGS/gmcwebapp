@@ -470,13 +470,11 @@
 				<legend>Well(s)</legend>
 				<table class="tb-fields">
 					<tbody>
-						{{- range $i, $w :=.Wells}}
-						{{- if .Name}}
+						{{- range .Wells}}
 						<tr class="tb-spacer-sm">
 							<th>Well Name</th>
 							<td><a href="../well/{{.ID}}">{{.Name}}</a></td>
 						</tr>
-						{{- end}}
 						{{- if .AltNames}}
 						<tr>
 							<th>Well Alt. Name</th>
@@ -495,34 +493,16 @@
 							<td>{{.APINumber}}</td>
 						</tr>
 						{{- end}}
-						{{- range $i, $o :=.Organizations}}
-						{{- if .Current}}
-						{{- if .Name}}
+						{{- range .Organizations}}
 						<tr>
-							<th>Current Operator</th>
+							<th>{{if .Current}}Current{{else}}Previous{{- end}} Operator</th>
 							<td>{{.Name}}</td>
 						</tr>
-						{{- end}}
 						{{- if .Type}}
 						<tr>
 							<th>Operator Type</th>
 							<td>{{.Type.Name}}</td>
 						</tr>
-						{{- end}}
-						{{- end}}
-						{{- if not .Current}}
-						{{- if .Name}}
-						<tr>
-							<th>Previous Operator</th>
-							<td>{{.Name}}</td>
-						</tr>
-						{{- end}}
-						{{- if .Type}}
-						<tr>
-							<th>Operator Type</th>
-							<td>{{.Type.Name}}</td>
-						</tr>
-						{{- end}}
 						{{- end}}
 						{{- end}}
 						{{- end}}
