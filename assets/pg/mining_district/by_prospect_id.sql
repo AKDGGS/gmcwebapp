@@ -1,4 +1,5 @@
-SELECT DISTINCT md.mining_district_id AS id,
+SELECT DISTINCT
+	md.mining_district_id AS id,
 	md.name
 FROM borehole AS b
 JOIN borehole_point AS bp

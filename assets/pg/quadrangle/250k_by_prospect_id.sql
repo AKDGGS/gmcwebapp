@@ -1,4 +1,5 @@
-SELECT DISTINCT q.quadrangle_id AS id,
+SELECT DISTINCT
+	q.quadrangle_id AS id,
 	q.name
 FROM borehole AS b
 JOIN borehole_point AS bp
@@ -7,4 +8,5 @@ JOIN point AS p
 	ON p.point_id = bp.point_id
 JOIN quadrangle AS q
 	ON ST_Intersects(q.geog, p.geog)
-WHERE b.prospect_id = $1 AND q.scale = 250000
+WHERE q.scale = 250000
+	AND b.prospect_id = $1

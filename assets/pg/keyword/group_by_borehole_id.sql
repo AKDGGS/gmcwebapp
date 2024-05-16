@@ -1,10 +1,14 @@
-SELECT keywords AS keywords,
-	COUNT(q2.inventory_id) AS count
+SELECT
+	keywords,
+	COUNT(q2.inventory_id)
 FROM (
-	SELECT q1.inventory_id,
+	SELECT
+		q1.inventory_id,
 		ARRAY_AGG(q1.keyword ORDER BY q1.keyword)::text[] AS keywords
 	FROM (
-		SELECT i.inventory_id, UNNEST(i.keywords) AS keyword
+		SELECT
+			i.inventory_id,
+			UNNEST(i.keywords) AS keyword
 		FROM inventory_borehole AS ib
 		JOIN borehole AS b
 			ON b.borehole_id = ib.borehole_id

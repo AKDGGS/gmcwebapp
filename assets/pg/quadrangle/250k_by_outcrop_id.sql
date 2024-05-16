@@ -1,4 +1,5 @@
-SELECT DISTINCT q.quadrangle_id AS id,
+SELECT DISTINCT
+	q.quadrangle_id AS id,
 	q.name
 FROM outcrop AS o
 JOIN outcrop_point AS op
@@ -7,4 +8,5 @@ JOIN point AS p
 	ON p.point_id = op.point_id
 JOIN quadrangle AS q
 	ON ST_Intersects(q.geog, p.geog)
-WHERE o.outcrop_id = $1 AND q.scale = 250000
+WHERE q.scale = 250000
+	AND o.outcrop_id = $1

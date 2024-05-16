@@ -1,4 +1,5 @@
-SELECT DISTINCT q.quadrangle_id AS id,
+SELECT DISTINCT
+	q.quadrangle_id AS id,
 	q.name
 FROM well AS w
 JOIN well_point AS wp
@@ -7,4 +8,5 @@ JOIN point AS p
 	ON p.point_id = wp.point_id
 JOIN quadrangle AS q
 	ON ST_Intersects(q.geog, p.geog)
-WHERE w.well_id = $1 AND q.scale = 250000
+WHERE q.scale = 250000
+	AND w.well_id = $1

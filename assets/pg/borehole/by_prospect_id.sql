@@ -1,4 +1,5 @@
-SELECT borehole_id AS id,
+SELECT
+	borehole_id AS id,
 	name,
 	alt_names,
 	completion_date
