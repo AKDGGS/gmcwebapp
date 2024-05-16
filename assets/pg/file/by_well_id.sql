@@ -1,7 +1,8 @@
-SELECT f.file_id AS ID,
-	f.filename AS Name,
-	f.mimetype AS type,
-	f.size::numeric AS size
+SELECT
+	f.file_id AS id,
+	f.filename AS name,
+	f.mimetype,
+	f.size::numeric
 FROM well_file AS wf
 JOIN file AS f
 	ON f.file_id = wf.file_id

@@ -4,7 +4,7 @@ type Prospect struct {
 	ID         int32      `json:"id,omitempty"`
 	Name       string     `json:"name,omitempty"`
 	AltNames   *string    `db:"alt_names" json:"alt_names,omitempty"`
-	ARDFNumber *string    `db:"ardf_number" json:"ardf_number,omitempty"`
+	ARDFNumber *string    `db:"ardf" json:"ardf,omitempty"`
 	Boreholes  []Borehole `json:"boreholes,omitempty"`
 	Files      []File     `json:"files,omitempty"`
 

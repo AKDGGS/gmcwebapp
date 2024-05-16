@@ -1,4 +1,5 @@
-SELECT u.url_id AS id,
+SELECT
+	u.url_id AS id,
 	u.url,
 	u.description,
 	u.url_type::text AS type
