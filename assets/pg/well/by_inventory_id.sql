@@ -1,7 +1,7 @@
 SELECT w.well_id AS id,
 	w.name AS name,
 	w.alt_names,
-	w.well_number AS number,
+	w.well_number AS "number",
 	w.api_number,
 	w.is_onshore AS onshore,
 	w.is_federal AS federal,

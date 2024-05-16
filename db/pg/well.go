@@ -3,7 +3,6 @@ package pg
 import (
 	"context"
 
-	"gmc/assets"
 	dbf "gmc/db/flag"
 	"gmc/db/model"
 )
@@ -15,136 +14,72 @@ func (pg *Postgres) GetWell(id int, flags int) (*model.Well, error) {
 	}
 	defer conn.Release()
 
-	q, err := assets.ReadString("pg/well/by_well_id.sql")
+	well, err := cQryStruct[model.Well](
+		conn, "pg/well/by_well_id.sql", id,
+	)
 	if err != nil {
 		return nil, err
 	}
-	r, err := conn.Query(context.Background(), q, id)
-	if err != nil {
-		return nil, err
-	}
-	defer r.Close()
 
-	well := model.Well{}
-	c, err := rowsToStruct(r, &well)
-	if err != nil {
-		return nil, err
-	}
-	r.Close()
-
-	if c == 0 {
+	// If no well is found, stop right here
+	if well == nil {
 		return nil, nil
 	}
 
 	if (flags & dbf.FILES) != 0 {
-		q, err = assets.ReadString("pg/file/by_well_id.sql")
+		well.Files, err = cQryStructs[model.File](
+			conn, "pg/file/by_well_id.sql", id,
+		)
 		if err != nil {
 			return nil, err
 		}
-		r, err := conn.Query(context.Background(), q, id)
-		if err != nil {
-			return nil, err
-		}
-		defer r.Close()
-		_, err = rowsToStruct(r, &well.Files)
-		if err != nil {
-			return nil, err
-		}
-		r.Close()
 	}
 
 	if (flags & dbf.INVENTORY_SUMMARY) != 0 {
-		q, err = assets.ReadString("pg/keyword/group_by_well_id.sql")
+		well.KeywordSummary, err = cQryStructs[model.KeywordSummary](
+			conn, "pg/keyword/group_by_well_id.sql", id,
+			((flags & dbf.PRIVATE) == 0),
+		)
 		if err != nil {
 			return nil, err
 		}
-		r, err := conn.Query(context.Background(), q, id, ((flags & dbf.PRIVATE) == 0))
-		if err != nil {
-			return nil, err
-		}
-		defer r.Close()
-		_, err = rowsToStruct(r, &well.KeywordSummary)
-		if err != nil {
-			return nil, err
-		}
-		r.Close()
-	}
-
-	if (flags & dbf.ORGANIZATION) != 0 {
-		q, err = assets.ReadString("pg/organization/by_well_id.sql")
-		if err != nil {
-			return nil, err
-		}
-		r, err := conn.Query(context.Background(), q, id)
-		if err != nil {
-			return nil, err
-		}
-		defer r.Close()
-		_, err = rowsToStruct(r, &well.Organizations)
-		if err != nil {
-			return nil, err
-		}
-		r.Close()
 	}
 
 	if (flags & dbf.URLS) != 0 {
-		q, err = assets.ReadString("pg/url/by_well_id.sql")
+		well.URLs, err = cQryStructs[model.URL](
+			conn, "pg/url/by_well_id.sql", id,
+		)
 		if err != nil {
 			return nil, err
 		}
-		r, err := conn.Query(context.Background(), q, id)
-		if err != nil {
-			return nil, err
-		}
-		defer r.Close()
-		_, err = rowsToStruct(r, &well.URLs)
-		if err != nil {
-			return nil, err
-		}
-		r.Close()
 	}
 
 	if (flags & dbf.NOTE) != 0 {
-		q, err = assets.ReadString("pg/note/by_well_id.sql")
+		well.Notes, err = cQryStructs[model.Note](
+			conn, "pg/note/by_well_id.sql", id,
+		)
 		if err != nil {
 			return nil, err
 		}
-		r, err := conn.Query(context.Background(), q, id)
-		if err != nil {
-			return nil, err
-		}
-		defer r.Close()
-		_, err = rowsToStruct(r, &well.Notes)
-		if err != nil {
-			return nil, err
-		}
-		r.Close()
 	}
 
 	if (flags & dbf.QUADRANGLES) != 0 {
-		q, err = assets.ReadString("pg/quadrangle/250k_by_well_id.sql")
+		well.Quadrangles, err = cQryStructs[model.Quadrangle](
+			conn, "pg/quadrangle/250k_by_well_id.sql", id,
+		)
 		if err != nil {
 			return nil, err
 		}
-		r, err := conn.Query(context.Background(), q, id)
-		if err != nil {
-			return nil, err
-		}
-		defer r.Close()
-		_, err = rowsToStruct(r, &well.Quadrangles)
-		if err != nil {
-			return nil, err
-		}
-		r.Close()
 	}
 
 	if (flags & dbf.GEOJSON) != 0 {
-		geojson, err := pg.queryValue("pg/well/geojson.sql", id)
+		well.GeoJSON, err = cQryValue(
+			conn, "pg/well/geojson.sql", id,
+		)
 		if err != nil {
 			return nil, err
 		}
-		well.GeoJSON = geojson
 	}
 
-	return &well, nil
+	return well, nil
 }

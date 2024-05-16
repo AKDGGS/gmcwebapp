@@ -118,7 +118,7 @@ func (pg *Postgres) GetInventory(id int, flags int) (*model.Inventory, error) {
 
 	if (flags & dbf.GEOJSON) != 0 {
 		inventory.GeoJSON, err = cQryValue(
-			conn, "pg/ivnentory/geojson.sql", id,
+			conn, "pg/inventory/geojson.sql", id,
 		)
 		if err != nil {
 			return nil, err

@@ -161,7 +161,7 @@ func cQryStructs[T any](conn *pgxpool.Conn, qry string, args ...interface{}) ([]
 }
 
 func cQryValue(conn *pgxpool.Conn, qry string, args ...interface{}) (interface{}, error) {
-	sql, err := assets.ReadString("pg/inventory/geojson.sql")
+	sql, err := assets.ReadString(qry)
 	if err != nil {
 		return nil, err
 	}
@@ -193,22 +193,4 @@ func cQryStruct[T any](conn *pgxpool.Conn, qry string, args ...interface{}) (*T,
 		return nil, err
 	}
 	return v, nil
-}
-
-// Using the provided connection, runs the query found at the given asset
-// location and returns the results into dest via rowsToStruct()
-func ConnQuery(conn *pgxpool.Conn, qry string, dest interface{}, args ...interface{}) (int, error) {
-	sql, err := assets.ReadString(qry)
-	if err != nil {
-		return 0, err
-	}
-
-	r, err := conn.Query(context.Background(), sql, args...)
-	if err != nil {
-		return 0, err
-	}
-
-	c, err := rowsToStruct(r, dest)
-	r.Close()
-	return c, err
 }
