@@ -1,8 +1,9 @@
-SELECT f.file_id AS id,
+SELECT
+	f.file_id AS id,
 	f.filename AS name,
-	f.mimetype AS type,
-	f.size::numeric AS size
-FROM outcrop_file AS of
+	f.mimetype,
+	f.size::numeric AS "size"
+FROM outcrop_file AS ocf
 JOIN file AS f
-	ON f.file_id = of.file_id
-WHERE of.outcrop_id = $1
+	ON f.file_id = ocf.file_id
+WHERE ocf.outcrop_id = $1

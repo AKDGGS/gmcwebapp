@@ -9,7 +9,7 @@ type Outcrop struct {
 	ID            int32          `json:"id,omitempty"`
 	Name          string         `json:"name,omitempty"`
 	Number        *string        `db:"number" json:"number,omitempty"`
-	Onshore       bool           `db:"is_onshore" json:"is_onshore"`
+	Onshore       bool           `db:"onshore" json:"onshore"`
 	EnteredDate   *time.Time     `db:"entered_date" json:"entered_date,omitempty"`
 	ModifiedDate  *time.Time     `db:"modified_date" json:"modified_date,omitempty"`
 	ModifiedUser  *string        `db:"modified_user" json:"modified_user,omitempty"`

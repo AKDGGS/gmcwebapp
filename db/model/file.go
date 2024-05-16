@@ -3,12 +3,13 @@ package model
 import "fmt"
 
 type File struct {
-	ID           int32    `json:"id,omitempty"`
+	ID           int32    `db:"id" json:"id,omitempty"`
 	Name         string   `json:"name,omitempty"`
 	Description  *string  `json:"description,omitempty"`
 	Type         string   `db:"mimetype" json:"mimetype"`
 	Size         int64    `json:"size"`
-	MD5          string   `json:"content_md5,omitempty"`
+	MD5          string   `db:"content_md5" json:"content_md5,omitempty"`
+
 	BoreholeIDs  []int    `json:"borehole_ids,omitempty"`
 	InventoryIDs []int    `json:"inventory_ids,omitempty"`
 	OutcropIDs   []int    `json:"outcrop_ids,omitempty"`

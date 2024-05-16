@@ -3,121 +3,83 @@ package pg
 import (
 	"context"
 
-	"gmc/assets"
 	dbf "gmc/db/flag"
 	"gmc/db/model"
 )
 
 func (pg *Postgres) GetOutcrop(id int, flags int) (*model.Outcrop, error) {
-	q, err := assets.ReadString("pg/outcrop/by_outcrop_id.sql")
+	conn, err := pg.pool.Acquire(context.Background())
 	if err != nil {
 		return nil, err
 	}
-	rows, err := pg.pool.Query(context.Background(), q, id)
-	if err != nil {
-		return nil, err
-	}
-	defer rows.Close()
-	outcrop := model.Outcrop{}
+	defer conn.Release()
 
-	c, err := rowsToStruct(rows, &outcrop)
+	outcrop, err := cQryStruct[model.Outcrop](
+		conn, "pg/outcrop/by_outcrop_id.sql", id,
+	)
 	if err != nil {
 		return nil, err
 	}
-	if c == 0 {
+
+	// If no outcrop is found, stop right here
+	if outcrop == nil {
 		return nil, nil
 	}
+
 	if (flags & dbf.FILES) != 0 {
-		q, err = assets.ReadString("pg/file/by_outcrop_id.sql")
-		if err != nil {
-			return nil, err
-		}
-		r, err := pg.pool.Query(context.Background(), q, id)
-		if err != nil {
-			return nil, err
-		}
-		_, err = rowsToStruct(r, &outcrop.Files)
+		outcrop.Files, err = cQryStructs[model.File](
+			conn, "pg/file/by_outcrop_id.sql", id,
+		)
 		if err != nil {
 			return nil, err
 		}
 	}
+
 	if (flags & dbf.INVENTORY_SUMMARY) != 0 {
-		q, err = assets.ReadString("pg/keyword/group_by_outcrop_id.sql")
-		if err != nil {
-			return nil, err
-		}
-		r, err := pg.pool.Query(context.Background(), q, id, ((flags & dbf.PRIVATE) == 0))
-		if err != nil {
-			return nil, err
-		}
-		_, err = rowsToStruct(r, &outcrop.KeywordSummary)
+		outcrop.KeywordSummary, err = cQryStructs[model.KeywordSummary](
+			conn, "pg/keyword/group_by_outcrop_id.sql", id,
+			((flags & dbf.PRIVATE) == 0),
+		)
 		if err != nil {
 			return nil, err
 		}
 	}
-	if (flags & dbf.ORGANIZATION) != 0 {
-		q, err = assets.ReadString("pg/organization/by_outcrop_id.sql")
-		if err != nil {
-			return nil, err
-		}
-		r, err := pg.pool.Query(context.Background(), q, id)
-		if err != nil {
-			return nil, err
-		}
-		_, err = rowsToStruct(r, &outcrop.Organizations)
-		if err != nil {
-			return nil, err
-		}
-	}
+
 	if (flags & dbf.URLS) != 0 {
-		q, err = assets.ReadString("pg/url/by_outcrop_id.sql")
-		if err != nil {
-			return nil, err
-		}
-		r, err := pg.pool.Query(context.Background(), q, id)
-		if err != nil {
-			return nil, err
-		}
-		_, err = rowsToStruct(r, &outcrop.URLs)
+		outcrop.URLs, err = cQryStructs[model.URL](
+			conn, "pg/url/by_outcrop_id.sql", id,
+		)
 		if err != nil {
 			return nil, err
 		}
 	}
 
 	if (flags & dbf.NOTE) != 0 {
-		q, err = assets.ReadString("pg/note/by_outcrop_id.sql")
-		if err != nil {
-			return nil, err
-		}
-		r, err := pg.pool.Query(context.Background(), q, id)
-		if err != nil {
-			return nil, err
-		}
-		_, err = rowsToStruct(r, &outcrop.Notes)
+		outcrop.Notes, err = cQryStructs[model.Note](
+			conn, "pg/note/by_outcrop_id.sql", id,
+		)
 		if err != nil {
 			return nil, err
 		}
 	}
-	if (flags & dbf.GEOJSON) != 0 {
-		geojson, err := pg.queryValue("pg/outcrop/geojson.sql", id)
-		if err != nil {
-			return nil, err
-		}
-		outcrop.GeoJSON = geojson
-	}
+
 	if (flags & dbf.QUADRANGLES) != 0 {
-		q, err = assets.ReadString("pg/quadrangle/250k_by_outcrop_id.sql")
-		if err != nil {
-			return nil, err
-		}
-		r, err := pg.pool.Query(context.Background(), q, id)
-		if err != nil {
-			return nil, err
-		}
-		_, err = rowsToStruct(r, &outcrop.Quadrangles)
+		outcrop.Quadrangles, err = cQryStructs[model.Quadrangle](
+			conn, "pg/quadrangle/250k_by_outcrop_id.sql", id,
+		)
 		if err != nil {
 			return nil, err
 		}
 	}
-	return &outcrop, nil
+
+	if (flags & dbf.GEOJSON) != 0 {
+		outcrop.GeoJSON, err = cQryValue(
+			conn, "pg/outcrop/geojson.sql", id,
+		)
+		if err != nil {
+			return nil, err
+		}
+	}
+
+	return outcrop, nil
 }
