@@ -88,5 +88,14 @@ func (srv *Server) ServeShotline(w http.ResponseWriter, r *http.Request) {
 
 	w.Header().Set("Content-Length", fmt.Sprintf("%d", tbuf.Len()))
 	w.Header().Set("Content-Type", "text/html; charset=utf-8")
-	w.Write(tbuf.Bytes())
+	out, err := compressWriter(r.Header.Get("Accept-Encoding"), w)
+	if err != nil {
+		http.Error(
+			w, fmt.Sprintf("compression error: %s", err.Error()),
+			http.StatusInternalServerError,
+		)
+		return
+	}
+	defer out.Close()
+	out.Write(tbuf.Bytes())
 }
