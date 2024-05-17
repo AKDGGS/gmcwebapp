@@ -5,6 +5,8 @@ import (
 
 	"gmc/assets"
 	"gmc/db/model"
+
+	"github.com/jackc/pgx/v5"
 )
 
 func (pg *Postgres) GetFile(id int) (*model.File, error) {
@@ -12,18 +14,18 @@ func (pg *Postgres) GetFile(id int) (*model.File, error) {
 	if err != nil {
 		return nil, err
 	}
-	rows, err := pg.pool.Query(context.Background(), q, id)
+	r, err := pg.pool.Query(context.Background(), q, id)
 	if err != nil {
 		return nil, err
 	}
-	defer rows.Close()
-	file := model.File{}
-	c, err := rowsToStruct(rows, &file)
+	f, err := pgx.CollectOneRow(
+		r, pgx.RowToAddrOfStructByNameLax[model.File],
+	)
 	if err != nil {
+		if err == pgx.ErrNoRows {
+			return nil, nil
+		}
 		return nil, err
 	}
-	if c == 0 {
-		return nil, nil
-	}
-	return &file, nil
+	return f, nil
 }
