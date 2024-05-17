@@ -1,4 +1,5 @@
-SELECT token_id AS id,
+SELECT
+	token_id AS id,
 	description
 FROM token
 WHERE token = $1

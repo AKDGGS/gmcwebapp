@@ -143,20 +143,6 @@ func cQryStructs[T any](conn *pgxpool.Conn, qry string, args ...interface{}) ([]
 	return v, nil
 }
 
-func cQryValue(conn *pgxpool.Conn, qry string, args ...interface{}) (interface{}, error) {
-	sql, err := assets.ReadString(qry)
-	if err != nil {
-		return nil, err
-	}
-
-	var x interface{}
-	row := conn.QueryRow(context.Background(), sql, args...)
-	if err := row.Scan(&x); err != nil && err != ErrNoRows {
-		return nil, err
-	}
-	return x, nil
-}
-
 // Using the provided connection, runs the query found at the given
 // asset location, and returns the results via pgx.CollectOneRow() as []T
 func cQryStruct[T any](conn *pgxpool.Conn, qry string, args ...interface{}) (*T, error) {
@@ -176,4 +162,20 @@ func cQryStruct[T any](conn *pgxpool.Conn, qry string, args ...interface{}) (*T,
 		return nil, err
 	}
 	return v, nil
+}
+
+// Using the provided connection, runs the query found at the given
+// asset location, and then returns the singular result
+func cQryValue(conn *pgxpool.Conn, qry string, args ...interface{}) (interface{}, error) {
+	sql, err := assets.ReadString(qry)
+	if err != nil {
+		return nil, err
+	}
+
+	var x interface{}
+	row := conn.QueryRow(context.Background(), sql, args...)
+	if err := row.Scan(&x); err != nil && err != ErrNoRows {
+		return nil, err
+	}
+	return x, nil
 }

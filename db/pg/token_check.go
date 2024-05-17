@@ -4,8 +4,9 @@ import (
 	"context"
 
 	"gmc/assets"
-	dbe "gmc/db/errors"
 	"gmc/db/model"
+
+	"github.com/jackc/pgx/v5"
 )
 
 func (pg *Postgres) CheckToken(tok string) (*model.Token, error) {
@@ -14,19 +15,19 @@ func (pg *Postgres) CheckToken(tok string) (*model.Token, error) {
 		return nil, err
 	}
 
-	rows, err := pg.pool.Query(context.Background(), q, tok)
+	r, err := pg.pool.Query(context.Background(), q, tok)
 	if err != nil {
 		return nil, err
 	}
-	defer rows.Close()
-	tk := model.Token{}
 
-	c, err := rowsToStruct(rows, &tk)
+	tk, err := pgx.CollectOneRow(
+		r, pgx.RowToAddrOfStructByNameLax[model.Token],
+	)
 	if err != nil {
+		if err == pgx.ErrNoRows {
+			return nil, nil
+		}
 		return nil, err
 	}
-	if c == 0 {
-		return nil, dbe.ErrToken
-	}
-	return &tk, nil
+	return tk, nil
 }
