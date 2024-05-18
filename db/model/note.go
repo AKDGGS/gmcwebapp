@@ -20,15 +20,11 @@ type Note struct {
 
 func (n *Note) MarshalJSON() ([]byte, error) {
 	type Alias Note
-	var date string
-	if !n.Date.IsZero() {
-		date = n.Date.Format("01-02-2006")
-	}
 	return json.Marshal(&struct {
 		Date string `json:"date,omitempty"`
 		*Alias
 	}{
-		Date:  date,
+		Date:  n.Date.Format("01-02-2006"),
 		Alias: (*Alias)(n),
 	})
 }

@@ -1,4 +1,5 @@
-SELECT iv.inventory_id AS id,
+SELECT
+	iv.inventory_id AS id,
 	jsonb_build_object(
 		'id', cl.collection_id,
 		'name', cl.name,

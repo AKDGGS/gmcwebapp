@@ -36,15 +36,15 @@ type Borehole struct {
 func (b *Borehole) MarshalJSON() ([]byte, error) {
 	type Alias Borehole
 	var completionDate string
-	if b.CompletionDate != nil {
+	if b.CompletionDate != nil && !b.CompletionDate.IsZero() {
 		completionDate = b.CompletionDate.Format("01-02-2006")
 	}
 	var enteredDate string
-	if b.EnteredDate != nil {
+	if b.EnteredDate != nil && !b.EnteredDate.IsZero() {
 		enteredDate = b.EnteredDate.Format("01-02-2006")
 	}
 	var modifiedDate string
-	if b.ModifiedDate != nil {
+	if b.ModifiedDate != nil && !b.ModifiedDate.IsZero() {
 		modifiedDate = b.ModifiedDate.Format("01-02-2006")
 	}
 	return json.Marshal(&struct {

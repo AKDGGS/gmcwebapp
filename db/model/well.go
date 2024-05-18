@@ -39,11 +39,11 @@ type Well struct {
 func (w *Well) MarshalJSON() ([]byte, error) {
 	type Alias Well
 	var spudDate string
-	if w.SpudDate != nil {
+	if w.SpudDate != nil && !w.SpudDate.IsZero() {
 		spudDate = w.SpudDate.Format("01-02-2006")
 	}
 	var completionDate string
-	if w.CompletionDate != nil {
+	if w.CompletionDate != nil && w.CompletionDate.IsZero() {
 		completionDate = w.CompletionDate.Format("01-02-2006")
 	}
 	return json.Marshal(&struct {

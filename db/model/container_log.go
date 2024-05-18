@@ -13,15 +13,11 @@ type ContainerLog struct {
 
 func (cl *ContainerLog) MarshalJSON() ([]byte, error) {
 	type Alias ContainerLog
-	var date string
-	if !cl.Date.IsZero() {
-		date = cl.Date.Format("01-02-2006")
-	}
 	return json.Marshal(&struct {
 		Date string `db:"date" json:"date,omitempty"`
 		*Alias
 	}{
-		Date:  date,
+		Date:  cl.Date.Format("01-02-2006"),
 		Alias: (*Alias)(cl),
 	})
 }

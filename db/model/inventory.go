@@ -71,15 +71,15 @@ type Inventory struct {
 func (i *Inventory) MarshalJSON() ([]byte, error) {
 	type Alias Inventory
 	var receivedDate string
-	if !i.ReceivedDate.IsZero() {
+	if i.ReceivedDate != nil && !i.ReceivedDate.IsZero() {
 		receivedDate = i.ReceivedDate.Format("01-02-2006")
 	}
 	var enteredDate string
-	if !i.EnteredDate.IsZero() {
+	if i.EnteredDate != nil && !i.EnteredDate.IsZero() {
 		enteredDate = i.EnteredDate.Format("01-02-2006")
 	}
 	var modifiedDate string
-	if !i.ModifiedDate.IsZero() {
+	if i.ModifiedDate != nil && !i.ModifiedDate.IsZero() {
 		modifiedDate = i.ModifiedDate.Format("01-02-2006")
 	}
 	return json.Marshal(&struct {

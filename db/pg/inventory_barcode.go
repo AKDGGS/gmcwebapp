@@ -9,11 +9,17 @@ import (
 )
 
 func (pg *Postgres) GetInventoryByBarcode(barcode string, flags int) ([]*model.Inventory, error) {
+	conn, err := pg.pool.Acquire(context.Background())
+	if err != nil {
+		return nil, err
+	}
+	defer conn.Release()
+
 	q, err := assets.ReadString("pg/inventory/by_barcode.sql")
 	if err != nil {
 		return nil, err
 	}
-	rows, err := pg.pool.Query(context.Background(), q, barcode)
+	rows, err := conn.Query(context.Background(), q, barcode)
 	if err != nil {
 		return nil, err
 	}
@@ -86,13 +92,14 @@ func (pg *Postgres) GetInventoryByBarcode(barcode string, flags int) ([]*model.I
 			}
 		}
 	}
+	rows.Close()
 
 	if len(borehole_ids) > 0 {
 		q, err := assets.ReadString("pg/borehole/by_borehole_ids.sql")
 		if err != nil {
 			return nil, err
 		}
-		rows, err := pg.pool.Query(context.Background(), q, borehole_ids)
+		rows, err := conn.Query(context.Background(), q, borehole_ids)
 		if err != nil {
 			return nil, err
 		}
@@ -104,6 +111,7 @@ func (pg *Postgres) GetInventoryByBarcode(barcode string, flags int) ([]*model.I
 				inv.Boreholes = append(inv.Boreholes, borehole)
 			}
 		}
+		rows.Close()
 	}
 
 	if len(outcrop_ids) > 0 {
@@ -111,7 +119,7 @@ func (pg *Postgres) GetInventoryByBarcode(barcode string, flags int) ([]*model.I
 		if err != nil {
 			return nil, err
 		}
-		rows, err := pg.pool.Query(context.Background(), q, outcrop_ids)
+		rows, err := conn.Query(context.Background(), q, outcrop_ids)
 		if err != nil {
 			return nil, err
 		}
@@ -123,6 +131,7 @@ func (pg *Postgres) GetInventoryByBarcode(barcode string, flags int) ([]*model.I
 				inv.Outcrops = append(inv.Outcrops, outcrop)
 			}
 		}
+		rows.Close()
 	}
 
 	if len(shotpoint_ids) > 0 {
@@ -130,7 +139,7 @@ func (pg *Postgres) GetInventoryByBarcode(barcode string, flags int) ([]*model.I
 		if err != nil {
 			return nil, err
 		}
-		rows, err := pg.pool.Query(context.Background(), q, shotpoint_ids)
+		rows, err := conn.Query(context.Background(), q, shotpoint_ids)
 		if err != nil {
 			return nil, err
 		}
@@ -142,6 +151,7 @@ func (pg *Postgres) GetInventoryByBarcode(barcode string, flags int) ([]*model.I
 				inv.Shotpoints = append(inv.Shotpoints, sp)
 			}
 		}
+		rows.Close()
 	}
 
 	if len(well_ids) > 0 {
@@ -149,7 +159,7 @@ func (pg *Postgres) GetInventoryByBarcode(barcode string, flags int) ([]*model.I
 		if err != nil {
 			return nil, err
 		}
-		rows, err := pg.pool.Query(context.Background(), q, well_ids)
+		rows, err := conn.Query(context.Background(), q, well_ids)
 		if err != nil {
 			return nil, err
 		}
@@ -177,12 +187,13 @@ func (pg *Postgres) GetInventoryByBarcode(barcode string, flags int) ([]*model.I
 				}
 			}
 		}
+		rows.Close()
 
 		q, err = assets.ReadString("pg/organization/by_well_ids.sql")
 		if err != nil {
 			return nil, err
 		}
-		rows, err = pg.pool.Query(context.Background(), q, well_ids)
+		rows, err = conn.Query(context.Background(), q, well_ids)
 		if err != nil {
 			return nil, err
 		}
@@ -199,6 +210,7 @@ func (pg *Postgres) GetInventoryByBarcode(barcode string, flags int) ([]*model.I
 				inv.Wells = append(inv.Wells, *w)
 			}
 		}
+		rows.Close()
 	}
 
 	if len(quality_ids) > 0 {
@@ -206,7 +218,7 @@ func (pg *Postgres) GetInventoryByBarcode(barcode string, flags int) ([]*model.I
 		if err != nil {
 			return nil, err
 		}
-		rows, err := pg.pool.Query(context.Background(), q, quality_ids)
+		rows, err := conn.Query(context.Background(), q, quality_ids)
 		if err != nil {
 			return nil, err
 		}
@@ -218,6 +230,7 @@ func (pg *Postgres) GetInventoryByBarcode(barcode string, flags int) ([]*model.I
 				inv.Qualities = append(inv.Qualities, iss)
 			}
 		}
+		rows.Close()
 	}
 
 	return inventory, nil

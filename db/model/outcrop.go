@@ -30,11 +30,11 @@ type Outcrop struct {
 func (o *Outcrop) MarshalJSON() ([]byte, error) {
 	type Alias Outcrop
 	var enteredDate string
-	if o.EnteredDate != nil {
+	if o.EnteredDate != nil && !o.EnteredDate.IsZero() {
 		enteredDate = o.EnteredDate.Format("01-02-2006")
 	}
 	var modifiedDate string
-	if o.ModifiedDate != nil {
+	if o.ModifiedDate != nil && !o.ModifiedDate.IsZero() {
 		modifiedDate = o.ModifiedDate.Format("01-02-2006")
 	}
 	return json.Marshal(&struct {
