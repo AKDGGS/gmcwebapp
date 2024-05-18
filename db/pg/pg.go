@@ -134,11 +134,11 @@ func cQryStructs[T any](conn *pgxpool.Conn, qry string, args ...interface{}) ([]
 	}
 	r, err := conn.Query(context.Background(), sql, args...)
 	if err != nil {
-		return nil, err
+		return nil, fmt.Errorf("%s: %s", qry, err)
 	}
 	v, err := pgx.CollectRows(r, pgx.RowToStructByNameLax[T])
 	if err != nil {
-		return nil, err
+		return nil, fmt.Errorf("%s: %s", qry, err)
 	}
 	return v, nil
 }
@@ -152,14 +152,14 @@ func cQryStruct[T any](conn *pgxpool.Conn, qry string, args ...interface{}) (*T,
 	}
 	r, err := conn.Query(context.Background(), sql, args...)
 	if err != nil {
-		return nil, err
+		return nil, fmt.Errorf("%s: %s", qry, err)
 	}
 	v, err := pgx.CollectOneRow(r, pgx.RowToAddrOfStructByNameLax[T])
 	if err != nil {
 		if err == pgx.ErrNoRows {
 			return nil, nil
 		}
-		return nil, err
+		return nil, fmt.Errorf("%s: %s", qry, err)
 	}
 	return v, nil
 }
@@ -175,7 +175,7 @@ func cQryValue(conn *pgxpool.Conn, qry string, args ...interface{}) (interface{}
 	var x interface{}
 	row := conn.QueryRow(context.Background(), sql, args...)
 	if err := row.Scan(&x); err != nil && err != ErrNoRows {
-		return nil, err
+		return nil, fmt.Errorf("%s: %s", qry, err)
 	}
 	return x, nil
 }

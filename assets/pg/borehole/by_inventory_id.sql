@@ -2,7 +2,7 @@ SELECT
 	bh.borehole_id AS id,
 	bh.name,
 	bh.alt_names,
-	bh.is_onshore,
+	bh.is_onshore AS onshore,
 	bh.completion_date,
 	bh.measured_depth,
 	COALESCE(bh.measured_depth_unit::text, 'ft') AS measured_depth_unit,
