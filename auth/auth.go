@@ -3,6 +3,7 @@ package auth
 import (
 	"fmt"
 
+	"gmc/auth/always"
 	"gmc/auth/file"
 	"gmc/auth/token"
 	authu "gmc/auth/util"
@@ -33,6 +34,8 @@ func NewAuth(cfg config.AuthConfig, db db.DB) (Auth, error) {
 		if err != nil {
 			return nil, err
 		}
+	case "always":
+		auth, err = always.New(cfg.Attrs)
 	case "":
 		return nil, fmt.Errorf("authentication type cannot be empty")
 	default:
