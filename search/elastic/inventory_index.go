@@ -24,7 +24,7 @@ func (es *Elastic) NewInventoryIndex() (util.InventoryIndex, error) {
 				"collection":  &types.TextProperty{Store: &yes, Index: &yes},
 				"barcode":     &types.TextProperty{Store: &yes, Index: &yes},
 				"remark":      &types.TextProperty{Store: &no, Index: &yes},
-				"can_publish": &types.BooleanProperty{Store: &yes, Index: &yes},
+				"can_publish": &types.BooleanProperty{Store: &no, Index: &yes},
 			},
 		},
 	)

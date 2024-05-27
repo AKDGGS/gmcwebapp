@@ -10,6 +10,15 @@ import (
 )
 
 func (srv *Server) ServeInventorySearch(w http.ResponseWriter, r *http.Request) {
+	user, err := srv.Auths.CheckRequest(w, r)
+	if err != nil {
+		http.Error(
+			w, fmt.Sprintf("authentication error: %s", err.Error()),
+			http.StatusBadRequest,
+		)
+		return
+	}
+
 	q := r.URL.Query()
 
 	size, err := strconv.Atoi(q.Get("size"))
@@ -22,9 +31,10 @@ func (srv *Server) ServeInventorySearch(w http.ResponseWriter, r *http.Request) 
 	}
 
 	params := &sutil.InventoryParams{
-		Query: q.Get("q"),
-		Size:  size,
-		From:  from,
+		Query:   q.Get("q"),
+		Size:    size,
+		From:    from,
+		Private: (user != nil),
 	}
 
 	result, err := srv.Search.SearchInventory(params)

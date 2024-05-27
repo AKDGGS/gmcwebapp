@@ -23,10 +23,18 @@ func (es *Elastic) SearchInventory(params *util.InventoryParams) (*util.Inventor
 	qry := &types.BoolQuery{}
 
 	if params.Query != "" {
-		qry.Must = append(qry.Filter, types.Query{
+		qry.Must = append(qry.Must, types.Query{
 			QueryString: &types.QueryStringQuery{
 				DefaultOperator: &operator.And,
 				Query:           params.Query,
+			},
+		})
+	}
+
+	if !params.Private {
+		qry.Filter = append(qry.Filter, types.Query{
+			Match: map[string]types.MatchQuery{
+				"can_publish": {Query: "true"},
 			},
 		})
 	}
@@ -55,10 +63,6 @@ func (es *Elastic) SearchInventory(params *util.InventoryParams) (*util.Inventor
 		if err := hfType[string](hit, "barcode", &ih.Barcode); err != nil {
 			return nil, err
 		}
-		if err := hfType[bool](hit, "can_publish", &ih.CanPublish); err != nil {
-			return nil, err
-		}
-
 		res.Hits = append(res.Hits, ih)
 	}
 
