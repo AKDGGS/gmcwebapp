@@ -44,4 +44,6 @@ func (ir *InventoryResults) MarshalJSON() ([]byte, error) {
 type InventoryHit struct {
 	ID         int    `json:"id"`
 	Collection string `json:"collection,omitempty"`
+	Barcode    string `json:"barcode,omitempty"`
+	CanPublish bool   `json:"can_publish"`
 }

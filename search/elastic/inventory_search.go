@@ -2,7 +2,6 @@ package elastic
 
 import (
 	"encoding/json"
-	"fmt"
 	"strconv"
 	"time"
 
@@ -50,23 +49,30 @@ func (es *Elastic) SearchInventory(params *util.InventoryParams) (*util.Inventor
 		}
 
 		ih := util.InventoryHit{ID: id}
-		if err := hfStr(hit, "collection", &ih.Collection); err != nil {
+		if err := hfType[string](hit, "collection", &ih.Collection); err != nil {
 			return nil, err
 		}
+		if err := hfType[string](hit, "barcode", &ih.Barcode); err != nil {
+			return nil, err
+		}
+		if err := hfType[bool](hit, "can_publish", &ih.CanPublish); err != nil {
+			return nil, err
+		}
+
 		res.Hits = append(res.Hits, ih)
 	}
 
 	return res, nil
 }
 
-// Returns a hit's field n as string in ptr
-func hfStr(hit types.Hit, n string, ptr *string) error {
+// Returns a hit's field n as type T in ptr
+func hfType[T any](hit types.Hit, n string, ptr *T) error {
 	f, ok := hit.Fields[n]
 	if !ok {
-		return fmt.Errorf("unknown field: %s", n)
+		return nil
 	}
 
-	var arr []string
+	var arr []T
 	if err := json.Unmarshal(f, &arr); err != nil {
 		return err
 	}

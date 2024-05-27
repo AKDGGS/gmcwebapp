@@ -21,9 +21,10 @@ func (es *Elastic) NewInventoryIndex() (util.InventoryIndex, error) {
 	err := es.createIndex(iname,
 		&types.TypeMapping{
 			Properties: map[string]types.Property{
-				"collection": &types.TextProperty{Store: &yes, Index: &yes},
-				"barcode":    &types.TextProperty{Store: &yes, Index: &yes},
-				"remark":     &types.TextProperty{Store: &no, Index: &yes},
+				"collection":  &types.TextProperty{Store: &yes, Index: &yes},
+				"barcode":     &types.TextProperty{Store: &yes, Index: &yes},
+				"remark":      &types.TextProperty{Store: &no, Index: &yes},
+				"can_publish": &types.BooleanProperty{Store: &yes, Index: &yes},
 			},
 		},
 	)
