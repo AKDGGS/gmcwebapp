@@ -9,7 +9,7 @@ import (
 	sutil "gmc/search/util"
 )
 
-func (srv *Server) ServeInventorySearch(w http.ResponseWriter, r *http.Request) {
+func (srv *Server) ServeSearchInventoryJSON(w http.ResponseWriter, r *http.Request) {
 	user, err := srv.Auths.CheckRequest(w, r)
 	if err != nil {
 		http.Error(

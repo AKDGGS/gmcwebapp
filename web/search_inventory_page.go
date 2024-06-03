@@ -9,7 +9,7 @@ import (
 	"gmc/assets"
 )
 
-func (srv *Server) ServeInventorySearchPage(w http.ResponseWriter, r *http.Request) {
+func (srv *Server) ServeSearchInventoryPage(w http.ResponseWriter, r *http.Request) {
 	user, err := srv.Auths.CheckRequest(w, r)
 	if err != nil {
 		http.Error(
