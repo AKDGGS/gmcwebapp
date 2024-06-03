@@ -15,10 +15,13 @@ Both S3 and Directory-based file stores are supported. Support for additional
 file stores can be added by implementing `gmc/filestore/FileStore`.
 
 #### Authentication
-Only one authentication scheme is supported, file. The file authentication
-scheme uses a fixed file to authenticate users. The file is cached on
-execution, so changes to the file require a restart. Support for
-additional file stores can be added by implementing `gmc/auth/Auth`.
+Three authentication schemata are supported: file, LDAP, and token.  The file
+authentication schema uses a fixed file to authenticate users. The file is
+cached on execution, so changes to the file require a restart.  The LDAP
+authentication schema connects to a LDAP serve and can be configured in
+`/etc/gmc.yaml`.  The token authentication schema uses a database table to
+authenticate users.  The database URL is specified in `/etc/gmc.yaml`. Support
+for additional file stores can be added by implementing `gmc/auth/Auth`.
 
 ## Development
 Development requires a minimum of Go 1.22. For developers it
