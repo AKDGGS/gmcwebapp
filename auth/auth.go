@@ -5,6 +5,7 @@ import (
 
 	"gmc/auth/always"
 	"gmc/auth/file"
+	"gmc/auth/ldap"
 	"gmc/auth/token"
 	authu "gmc/auth/util"
 	"gmc/config"
@@ -26,6 +27,11 @@ func NewAuth(cfg config.AuthConfig, db db.DB) (Auth, error) {
 	switch cfg.Type {
 	case "file":
 		auth, err = file.New(cfg.Attrs)
+		if err != nil {
+			return nil, err
+		}
+	case "ldap":
+		auth, err = ldap.New(cfg.Attrs)
 		if err != nil {
 			return nil, err
 		}
@@ -71,7 +77,8 @@ func (auths *Auths) Check(u string, p string) (*authu.User, error) {
 	for _, auth := range auths.auths {
 		user, err := auth.Check(u, p)
 		if err != nil {
-			return nil, err
+			fmt.Println(err)
+			continue
 		}
 		if user != nil {
 			return user, nil
