@@ -68,6 +68,16 @@ authentication:
   #
   - type: file
     path: /etc/gmc.passwd
+  - type: ldap
+    ldap_url: ldap_url
+    bind_dn: bind_dn
+    bind_password: mypassword
+    bind_as_user: true
+    skip_verify: false
+    base_dn: base_dn
+    user_search: search_filter
+  - type: token
+    database_url: postgresql://localhost
 
   # Always authentication scheme always returns success with a specific user
   - type: always
