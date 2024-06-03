@@ -15,7 +15,7 @@ SELECT
 	jsonb_build_object(
 		'id', ph.prospect_id,
 		'name', ph.name,
-		'ardf_number', ph.ardf_number
+		'ardf', ph.ardf_number
 	) AS prospect,
 	(
 		SELECT jsonb_agg(orgs)
