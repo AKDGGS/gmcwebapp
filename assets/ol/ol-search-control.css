@@ -1,0 +1,61 @@
+.ol-search, .ol-search:hover { background-color: transparent; }
+.ol-search {
+	top: 0; right: 0;
+	width: 330px;
+	margin: 0.5em 0.5em 0 auto;
+	padding: 0;
+}
+.ol-search-container {
+	display: flex;
+	flex-wrap: wrap;
+	flex-direction: row;
+	align-items: center;
+	margin: 0 0 0 3em;
+	border: 1px solid #428bca;
+	background-color: #fff;
+	border-radius: 5px;
+	box-shadow: 0px 2px 6px rgba(0, 0, 0, 0.3),
+		0px 4px 15px -5px transparent;
+}
+.ol-search-box {
+	flex-grow: 1;
+	border: none;
+	border-radius: 5px 0 0 5px;
+	height: 28px;
+}
+.ol-search-box:focus { outline-width: 0; outline: none; }
+.ol-search-menu {
+	height: 24px; width: 24px;
+	border-radius: 5px 0 0 5px;
+	background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADAAAAAwAQMAAABtzGvEAAAABlBMVEVHcExmZmZEBjuPAAAAAXRSTlMAQObYZgAAABdJREFUGNNjYKA9qP///x8uajDpowYAAGKXKcU4V2lCAAAAAElFTkSuQmCC);
+	background-repeat: no-repeat;
+	background-size: cover;
+	cursor: pointer;
+}
+.ol-search-submit {
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 13px;
+	color: #fff;
+	padding: 0 8px;
+	background-color: #428bca;
+	border: none;
+	height: 30px;
+}
+.ol-search-submit:hover,
+.ol-search-submit:active,
+.ol-search-submit:focus {
+	background-color: #3f85c1;
+}
+.ol-search-tools {
+	border-top: 1px solid #ddd;
+	border-radius: 0 0 5px 5px;
+	padding: 8px 4px;
+	flex-grow: 1;
+	background-color: #f4f4f4;
+	display: none;
+	overflow-y: scroll;
+}
+
+@media only screen and (min-width: 600px) {
+	.ol-search { width: 550px; }
+}

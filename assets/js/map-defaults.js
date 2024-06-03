@@ -3,11 +3,6 @@ const MAP_DEFAULTS = {
 		title: 'Base Maps',
 		layers: [
 			new ol.layer.Tile({
-				title: 'Stamen Watercolor',
-				type: 'base',
-				source: new ol.source.Stamen({ layer: 'watercolor' })
-			}),
-			new ol.layer.Tile({
 				title: 'ESRI National Geographic',
 				type: 'base',
 				source: new ol.source.XYZ({
@@ -59,19 +54,6 @@ const MAP_DEFAULTS = {
 	OverlayLayers: new ol.layer.Group({
 		title: 'Overlays',
 		layers: [
-			new ol.layer.Image({
-				title: 'PLSS (BLM)',
-				visible: false,
-				source: new ol.source.ImageWMS({
-					url: 'https://maps.dggs.alaska.gov/arcgis/services/apps/plss/MapServer/WMSServer',
-					params: {
-						"LAYERS": '1,2,3',
-						"TRANSPARENT": true,
-						"FORMAT": 'image/png'
-					},
-					serverType: 'mapserver',
-				})
-			}),
 			new ol.layer.Image({
 				title: 'Quadrangles',
 				visible: false,

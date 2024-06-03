@@ -1,0 +1,65 @@
+.cancel-draw-button, .drawbox-button {
+ 	font: 11px "Helvetica Neue", Arial, Helvetica, sans-serif !important;
+ 	color: white !important;
+ 	font-weight: normal;
+	height: 22px !important;
+}
+
+.ol-drawbox-control {
+ 	display: flex;
+ 	flex-direction: row;
+ 	top: 60px;
+ 	left: 8px;
+ 	cursor: pointer;
+}
+
+.ol-drawbox-control .drawbox-button {
+	width: 22px;
+ 	background-image: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAABzUlEQVQ4T6WTzUsCURDAR0o924dIakaIRXXpD6hDnaMgOkSXIEgI6mBfUJBaJEQdKqxDQlGGRAV94L1O/gFBgZhBbFIYHTpkUbmvmfd2V7egi4v6nqvzm9/MmzVAiZeB4pkJAt8M+soNcGT4hMB/zN//5YAvI1zng3NNr5EDiK5fgswYMLyfzxMdX7KM9/C7DOCd6gCLtx/K/PM3xi9o1gyydo8/29kDV4OTGMDjcGU8EHkapHV/BWwXZ1DzlAqSLQfQtXSeYQ6LSQQQgCxwz20UkEwrvu8eP2B5qJ7HaoDQCQIqTDwdGotAdY9BxZDbx3dYHXbrAYvHErNXmkVWJJAF2dBerAVgKpOD8IhHDwgeSsyJBpSZDER2dY8QAnIIQOohB5tjDXqAP3bPHFVmJUipX6lZ2IiGEiQl5WDL16gHzO7dM2e1UatfzVawEEZkkJTeYHuiSQ+Y3rljtdVowLsuMokTUUop6kMSDXanxQhopzAeSTOXFZuo6vJV1F58nPQ7GURnWgoAGs+M1e2X2rsg0evTdVxtJh8m/Gg7XYO6RBxcL+nCIKmj/LwRg4XJuNJxPMo86qOmjCOtjnco3A220YG/o1zSw1TKE/0D3MN7IAXEzZwAAAAASUVORK5CYII=");
+ 	background-size: 16px, 16px;
+ 	background-repeat: no-repeat;
+ 	background-position: center;
+}
+
+.ol-drawbox-control-active .drawbox-button {
+ 	border-top-right-radius: 0px;
+ 	border-bottom-right-radius: 0px;
+}
+
+.ol-drawbox-control .cancel-draw-button {
+ 	display: none;
+}
+
+.ol-drawbox-control-active .cancel-draw-button {
+ 	display: block;
+ 	width: 50px;
+ 	background-color: #919187;
+ 	border-top-left-radius: 0px;
+ 	border-bottom-left-radius: 0px;
+ 	margin-left: -1px;
+}
+
+.ol-drawbox-control-active .cancel-draw-button:hover {
+ 	outline: none;
+ 	background-color: #A0A098 !important;
+}
+
+.ol-drawbox-tooltip {
+ 	background-color: rgb(0,0,0,0.5);
+	color: #fff;
+ 	padding: 2px 4px;
+ 	border-radius: 3px;
+ 	cursor: pointer;
+}
+
+.ol-drawbox-tooltip:before {
+ 	content: '';
+ 	position: absolute;
+ 	top: 50%;
+ 	left: 0;
+ 	width: 0;
+ 	height: 0;
+	border: 10px solid transparent;
+ 	border-right-color: rgb(0,0,0,0.5);
+	margin: -10px 0 0 -20px;
+}
