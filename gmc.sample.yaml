@@ -81,4 +81,4 @@ authentication:
 
   # Always authentication scheme always returns success with a specific user
   - type: always
-    user: admin
+    allow: true
