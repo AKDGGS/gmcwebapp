@@ -6,13 +6,10 @@ require (
 	github.com/andybalholm/brotli v1.1.0
 	github.com/boombuler/barcode v1.0.1
 	github.com/elastic/go-elasticsearch/v8 v8.12.0
+	github.com/go-ldap/ldap/v3 v3.4.8
 	github.com/jackc/pgx/v5 v5.5.5
 	github.com/minio/minio-go/v7 v7.0.19
-<<<<<<< HEAD
-	golang.org/x/crypto v0.17.0
-=======
 	golang.org/x/crypto v0.21.0
->>>>>>> c3dbaeb (Add ldap support for authentication)
 	gopkg.in/yaml.v2 v2.4.0
 )
 
@@ -21,17 +18,9 @@ require (
 	github.com/dustin/go-humanize v1.0.0 // indirect
 	github.com/elastic/elastic-transport-go/v8 v8.4.0 // indirect
 	github.com/go-asn1-ber/asn1-ber v1.5.5 // indirect
-	github.com/go-ldap/ldap/v3 v3.4.8 // indirect
 	github.com/go-logr/logr v1.3.0 // indirect
 	github.com/go-logr/stdr v1.2.2 // indirect
-<<<<<<< HEAD
-	github.com/google/uuid v1.3.0 // indirect
-=======
 	github.com/google/uuid v1.6.0 // indirect
-	github.com/jackc/chunkreader/v2 v2.0.1 // indirect
-	github.com/jackc/pgconn v1.13.0 // indirect
-	github.com/jackc/pgio v1.0.0 // indirect
->>>>>>> c3dbaeb (Add ldap support for authentication)
 	github.com/jackc/pgpassfile v1.0.0 // indirect
 	github.com/jackc/pgservicefile v0.0.0-20221227161230-091c0ba34f0a // indirect
 	github.com/jackc/puddle/v2 v2.2.1 // indirect
@@ -50,14 +39,9 @@ require (
 	go.opentelemetry.io/otel v1.21.0 // indirect
 	go.opentelemetry.io/otel/metric v1.21.0 // indirect
 	go.opentelemetry.io/otel/trace v1.21.0 // indirect
-<<<<<<< HEAD
-	golang.org/x/net v0.10.0 // indirect
-	golang.org/x/sync v0.1.0 // indirect
-	golang.org/x/sys v0.15.0 // indirect
-=======
 	golang.org/x/net v0.22.0 // indirect
+	golang.org/x/sync v0.1.0 // indirect
 	golang.org/x/sys v0.18.0 // indirect
->>>>>>> c3dbaeb (Add ldap support for authentication)
 	golang.org/x/text v0.14.0 // indirect
 	gopkg.in/ini.v1 v1.66.2 // indirect
 )

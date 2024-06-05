@@ -11,7 +11,7 @@ import (
 	"github.com/go-ldap/ldap/v3"
 )
 
-type LdapAuth struct {
+type LDAPAuth struct {
 	name          string
 	ldap_url      string
 	base_dn       string
@@ -22,14 +22,14 @@ type LdapAuth struct {
 	skip_verify   bool
 }
 
-func New(cfg map[string]interface{}) (*LdapAuth, error) {
+func New(cfg map[string]interface{}) (*LDAPAuth, error) {
 	name, ok := cfg["name"].(string)
 	if !ok {
 		name = "ldap"
 	}
 	ldap_url, ok := cfg["ldap_url"].(string)
 	if !ok {
-		return nil, fmt.Errorf("ldap_url must exist and be a string")
+		return nil, fmt.Errorf("ldap_url is required and must be a string")
 	}
 	bind_as_user, ok := cfg["bind_as_user"].(bool)
 	if !ok {
@@ -37,26 +37,23 @@ func New(cfg map[string]interface{}) (*LdapAuth, error) {
 	}
 	base_dn, ok := cfg["base_dn"].(string)
 	if !ok && !bind_as_user {
-		return nil, fmt.Errorf("base_dn must exist and be a strings")
+		return nil, fmt.Errorf("base_dn is required and must be a string")
 	}
 	bind_dn, ok := cfg["bind_dn"].(string)
 	if !ok && !bind_as_user {
-		return nil, fmt.Errorf("bind_dn must exist and be a string")
+		return nil, fmt.Errorf("bind_dn must be a string")
 	}
 	bind_password, ok := cfg["bind_password"].(string)
 	if !ok && !bind_as_user {
-		return nil, fmt.Errorf("bind_password must exist and be a string")
+		return nil, fmt.Errorf("bind_password must be a string")
 	}
 	user_search, ok := cfg["user_search"].(string)
 	if !ok && !bind_as_user {
-		return nil, fmt.Errorf("user_search must exist and be a string")
+		return nil, fmt.Errorf("user_search must be a string")
 	}
-	skip_verify, ok := cfg["skip_verify"].(bool)
-	if !ok {
-		skip_verify = false
-	}
+	skip_verify, _ := cfg["skip_verify"].(bool)
 
-	a := &LdapAuth{
+	a := &LDAPAuth{
 		name:          name,
 		ldap_url:      ldap_url,
 		base_dn:       base_dn,
@@ -69,12 +66,13 @@ func New(cfg map[string]interface{}) (*LdapAuth, error) {
 	return a, nil
 }
 
-func (a *LdapAuth) Name() string {
+func (a *LDAPAuth) Name() string {
 	return a.name
 }
 
-func (a *LdapAuth) Check(u string, p string) (*authu.User, error) {
-	conn, err := ldap.DialURL(a.ldap_url, ldap.DialWithTLSConfig(&tls.Config{InsecureSkipVerify: a.skip_verify}))
+func (a *LDAPAuth) Check(u string, p string) (*authu.User, error) {
+	conn, err := ldap.DialURL(a.ldap_url,
+		ldap.DialWithTLSConfig(&tls.Config{InsecureSkipVerify: a.skip_verify}))
 	if err != nil {
 		return nil, err
 	}
