@@ -12,14 +12,14 @@ import (
 )
 
 type LDAPAuth struct {
-	name          string
-	ldap_url      string
-	base_dn       string
-	bind_dn       string
-	bind_password string
-	user_search   string
-	bind_as_user  bool
-	skip_verify   bool
+	name                       string
+	ldap_url                   string
+	base_dn                    string
+	bind_dn                    string
+	bind_password              string
+	user_search                string
+	bind_as_user               bool
+	disable_certificate_verify bool
 }
 
 func New(cfg map[string]interface{}) (*LDAPAuth, error) {
@@ -48,17 +48,17 @@ func New(cfg map[string]interface{}) (*LDAPAuth, error) {
 	if !ok && !bind_as_user {
 		return nil, fmt.Errorf("when bind_as_user is false, user_search is required and must be a string")
 	}
-	skip_verify, _ := cfg["skip_verify"].(bool)
+	disable_certificate_verify, _ := cfg["disable_certificate_verify"].(bool)
 
 	a := &LDAPAuth{
-		name:          name,
-		ldap_url:      ldap_url,
-		base_dn:       base_dn,
-		bind_dn:       bind_dn,
-		bind_password: bind_password,
-		user_search:   user_search,
-		bind_as_user:  bind_as_user,
-		skip_verify:   skip_verify,
+		name:                       name,
+		ldap_url:                   ldap_url,
+		base_dn:                    base_dn,
+		bind_dn:                    bind_dn,
+		bind_password:              bind_password,
+		user_search:                user_search,
+		bind_as_user:               bind_as_user,
+		disable_certificate_verify: disable_certificate_verify,
 	}
 	return a, nil
 }
@@ -69,7 +69,7 @@ func (a *LDAPAuth) Name() string {
 
 func (a *LDAPAuth) Check(u string, p string) (*authu.User, error) {
 	conn, err := ldap.DialURL(a.ldap_url,
-		ldap.DialWithTLSConfig(&tls.Config{InsecureSkipVerify: a.skip_verify}))
+		ldap.DialWithTLSConfig(&tls.Config{InsecureSkipVerify: a.disable_certificate_verify}))
 	if err != nil {
 		return nil, err
 	}
@@ -90,12 +90,12 @@ func (a *LDAPAuth) Check(u string, p string) (*authu.User, error) {
 		if err := conn.Bind(a.bind_dn, a.bind_password); err != nil {
 			return nil, nil
 		}
-		t_filter, err := template.New("user_search_tmpl").Parse(a.user_search)
+		t, err := template.New("user_search_tmpl").Parse(a.user_search)
 		if err != nil {
 			return nil, err
 		}
 		var filter_buf bytes.Buffer
-		if err := t_filter.Execute(&filter_buf, ldap.EscapeFilter(u)); err != nil {
+		if err := t.Execute(&filter_buf, ldap.EscapeFilter(u)); err != nil {
 			return nil, err
 		}
 		search_request := ldap.NewSearchRequest(
