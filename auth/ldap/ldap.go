@@ -74,34 +74,33 @@ func (a *LDAPAuth) Check(u string, p string) (*authu.User, error) {
 		return nil, err
 	}
 	defer conn.Close()
+	var buf bytes.Buffer
 	if a.bind_as_user {
-		var bind_dn_buf bytes.Buffer
 		t, err := template.New("bind_dn_tmpl").Parse(a.bind_dn)
 		if err != nil {
 			return nil, err
 		}
-		if err := t.Execute(&bind_dn_buf, ldap.EscapeDN(u)); err != nil {
+		if err := t.Execute(&buf, ldap.EscapeDN(u)); err != nil {
 			return nil, err
 		}
-		if err := conn.Bind(bind_dn_buf.String(), p); err != nil {
+		if err := conn.Bind(buf.String(), p); err != nil {
 			return nil, nil
 		}
 	} else {
-		if err := conn.Bind(a.bind_dn, a.bind_password); err != nil {
-			return nil, nil
-		}
 		t, err := template.New("user_search_tmpl").Parse(a.user_search)
 		if err != nil {
 			return nil, err
 		}
-		var filter_buf bytes.Buffer
-		if err := t.Execute(&filter_buf, ldap.EscapeFilter(u)); err != nil {
+		if err := t.Execute(&buf, ldap.EscapeFilter(u)); err != nil {
 			return nil, err
+		}
+		if err := conn.Bind(a.bind_dn, a.bind_password); err != nil {
+			return nil, nil
 		}
 		search_request := ldap.NewSearchRequest(
 			a.base_dn,
 			ldap.ScopeWholeSubtree, ldap.NeverDerefAliases, 0, 0, false,
-			filter_buf.String(),
+			buf.String(),
 			[]string{},
 			nil,
 		)
