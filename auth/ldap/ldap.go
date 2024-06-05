@@ -31,25 +31,22 @@ func New(cfg map[string]interface{}) (*LDAPAuth, error) {
 	if !ok {
 		return nil, fmt.Errorf("ldap_url is required and must be a string")
 	}
-	bind_as_user, ok := cfg["bind_as_user"].(bool)
-	if !ok {
-		bind_as_user = false
-	}
+	bind_as_user, _ := cfg["bind_as_user"].(bool)
 	base_dn, ok := cfg["base_dn"].(string)
 	if !ok && !bind_as_user {
 		return nil, fmt.Errorf("base_dn is required and must be a string")
 	}
 	bind_dn, ok := cfg["bind_dn"].(string)
 	if !ok && !bind_as_user {
-		return nil, fmt.Errorf("bind_dn must be a string")
+		return nil, fmt.Errorf("bind_dn is required and must be a string")
 	}
 	bind_password, ok := cfg["bind_password"].(string)
 	if !ok && !bind_as_user {
-		return nil, fmt.Errorf("bind_password must be a string")
+		return nil, fmt.Errorf("when bind_as_user is false, bind_password is required and must be a string")
 	}
 	user_search, ok := cfg["user_search"].(string)
 	if !ok && !bind_as_user {
-		return nil, fmt.Errorf("user_search must be a string")
+		return nil, fmt.Errorf("when bind_as_user is false, user_search is required and must be a string")
 	}
 	skip_verify, _ := cfg["skip_verify"].(bool)
 
@@ -77,12 +74,12 @@ func (a *LDAPAuth) Check(u string, p string) (*authu.User, error) {
 		return nil, err
 	}
 	defer conn.Close()
-	t, err := template.New("bind_dn_tmpl").Parse(a.bind_dn)
-	if err != nil {
-		return nil, err
-	}
 	if a.bind_as_user {
 		var bind_dn_buf bytes.Buffer
+		t, err := template.New("bind_dn_tmpl").Parse(a.bind_dn)
+		if err != nil {
+			return nil, err
+		}
 		if err := t.Execute(&bind_dn_buf, ldap.EscapeDN(u)); err != nil {
 			return nil, err
 		}
