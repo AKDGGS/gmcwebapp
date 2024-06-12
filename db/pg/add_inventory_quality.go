@@ -2,7 +2,6 @@ package pg
 
 import (
 	"context"
-	"errors"
 	"strings"
 
 	"gmc/assets"
@@ -11,7 +10,7 @@ import (
 
 func (pg *Postgres) AddInventoryQuality(barcode string, remark string, issues []string, username string) error {
 	if barcode == "" || len(strings.TrimSpace(barcode)) < 1 {
-		return errors.New("Barcode cannot be empty")
+		return dbe.ErrSourceBarcodeEmpty
 	}
 	q, err := assets.ReadString("pg/inventory/get_ids_by_barcode.sql")
 	if err != nil {

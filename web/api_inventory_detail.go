@@ -13,13 +13,13 @@ func (srv *Server) ServeAPIInventoryDetail(w http.ResponseWriter, r *http.Reques
 	user, err := srv.Auths.CheckRequest(w, r)
 	if err != nil {
 		http.Error(
-			w, fmt.Sprintf("Authentication error: %s", err.Error()),
+			w, fmt.Sprintf("authentication error: %s", err.Error()),
 			http.StatusBadRequest,
 		)
 		return
 	}
 	if user == nil {
-		http.Error(w, "Access denied", http.StatusForbidden)
+		http.Error(w, "access denied", http.StatusForbidden)
 		return
 	}
 	flags := dbf.ALL
@@ -34,7 +34,7 @@ func (srv *Server) ServeAPIInventoryDetail(w http.ResponseWriter, r *http.Reques
 			http.Error(w, err.Error(), http.StatusBadRequest)
 		} else {
 			http.Error(
-				w, fmt.Sprintf("Error: %s", err.Error()),
+				w, fmt.Sprintf("error: %s", err.Error()),
 				http.StatusInternalServerError,
 			)
 		}
@@ -57,7 +57,7 @@ func (srv *Server) ServeAPIInventoryDetail(w http.ResponseWriter, r *http.Reques
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 		default:
 			http.Error(
-				w, fmt.Sprintf("Error: %s", err.Error()),
+				w, fmt.Sprintf("error: %s", err.Error()),
 				http.StatusInternalServerError,
 			)
 		}

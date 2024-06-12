@@ -13,7 +13,7 @@ func (pg *Postgres) RunQAReport(id int) (*model.Table, error) {
 	}
 
 	if id < 0 || id >= len(rpts) {
-		return nil, fmt.Errorf("Invalid Report ID")
+		return nil, fmt.Errorf("invalid Report ID")
 	}
 
 	return pg.queryTable("pg/qa/" + rpts[id]["file"])

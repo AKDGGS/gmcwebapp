@@ -13,7 +13,7 @@ func (srv *Server) ServeWells(w http.ResponseWriter, r *http.Request) {
 	buf := bytes.Buffer{}
 	if err := assets.ExecuteTemplate("tmpl/wells.html", &buf, nil); err != nil {
 		http.Error(
-			w, fmt.Sprintf("Parse error: %s", err.Error()),
+			w, fmt.Sprintf("parse error: %s", err.Error()),
 			http.StatusInternalServerError,
 		)
 		return
@@ -37,7 +37,7 @@ func (srv *Server) ServeWells(w http.ResponseWriter, r *http.Request) {
 	tbuf := bytes.Buffer{}
 	if err := assets.ExecuteTemplate("tmpl/template.html", &tbuf, params); err != nil {
 		http.Error(
-			w, fmt.Sprintf("Parse error: %s", err.Error()),
+			w, fmt.Sprintf("parse error: %s", err.Error()),
 			http.StatusInternalServerError,
 		)
 		return

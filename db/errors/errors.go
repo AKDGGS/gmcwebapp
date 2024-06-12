@@ -3,42 +3,42 @@ package errors
 import "errors"
 
 // Authentication
-var ErrToken = errors.New("Token is incorrect")
+var ErrToken = errors.New("token is incorrect")
 
 // Empty field
-var ErrBarcodeCannotBeEmpty = errors.New("Barcode cannot be empty")
-var ErrOldBarcodeCannotBeEmpty = errors.New("Old barcode cannot be empty")
-var ErrNewBarcodeCannotBeEmpty = errors.New("New barcode cannot be empty")
-var ErrDestinationBarcodeEmpty = errors.New("Destination barcode cannot be empty")
-var ErrSourceBarcodeEmpty = errors.New("Source barcode cannot be empty")
-var ErrListOfBarcodesEmpty = errors.New("List of barcodes is empty")
+var ErrBarcodeCannotBeEmpty = errors.New("barcode cannot be empty")
+var ErrOldBarcodeCannotBeEmpty = errors.New("old barcode cannot be empty")
+var ErrNewBarcodeCannotBeEmpty = errors.New("new barcode cannot be empty")
+var ErrDestinationBarcodeEmpty = errors.New("destination barcode cannot be empty")
+var ErrSourceBarcodeEmpty = errors.New("source barcode cannot be empty")
+var ErrListOfBarcodesEmpty = errors.New("list of barcodes is empty")
 
 // Existance
-var ErrBarcodeExists = errors.New("Barcode already exists")
+var ErrBarcodeExists = errors.New("barcode already exists")
 
 // Failure
-var ErrInventoryInsertFailed = errors.New("Inventory insert failed")
-var ErrInventoryQualityInsertFailed = errors.New("Inventory quality insert failed")
-var ErrAuditInsertFailed = errors.New("Audit group insert failed")
-var ErrAuditParamsEmpty = errors.New("Both the remark and the items list are empty. Audit insert failed.")
-var ErrNothingMoved = errors.New("Move failed")
-var ErrNothingRecoded = errors.New("Record failed")
+var ErrInventoryInsertFailed = errors.New("inventory insert failed")
+var ErrInventoryQualityInsertFailed = errors.New("inventory quality insert failed")
+var ErrAuditInsertFailed = errors.New("audit group insert failed")
+var ErrAuditParamsEmpty = errors.New("both the remark and the items list are empty. Audit insert failed.")
+var ErrNothingMoved = errors.New("move failed")
+var ErrNothingRecoded = errors.New("record failed")
 
 // Upload
-var ErrUploadToFileStoreFailed = errors.New("Upload to filestore failed")
+var ErrUploadToFileStoreFailed = errors.New("upload to filestore failed")
 
 // Not found
-var ErrBarcodeNotFound = errors.New("Barcode not found")
-var ErrDestinationNotFound = errors.New("The destination barcode not found")
-var ErrNotFoundInInventory = errors.New("Barcode not found in Inventory")
-var ErrAtLeastOneBarcodeNotFound = errors.New("At least one barcode not found")
-var ErrSourceNotFound = errors.New("The source barcode not found")
+var ErrBarcodeNotFound = errors.New("barcode not found")
+var ErrDestinationNotFound = errors.New("the destination barcode not found")
+var ErrNotFoundInInventory = errors.New("barcode not found in Inventory")
+var ErrAtLeastOneBarcodeNotFound = errors.New("at least one barcode not found")
+var ErrSourceNotFound = errors.New("the source barcode not found")
 
 // Type Conflict
-var ErrBarcodeNotContainer = errors.New("Barcode is not a container")
-var ErrMultipleIDs = errors.New("Multiple IDs returned")
-var ErrDestinationMultipleContainers = errors.New("The destination barcode refers to multiple containers")
-var ErrSourceNotValid = errors.New("The source barcode not valid")
+var ErrBarcodeNotContainer = errors.New("barcode is not a container")
+var ErrMultipleIDs = errors.New("multiple IDs returned")
+var ErrDestinationMultipleContainers = errors.New("the destination barcode refers to multiple containers")
+var ErrSourceNotValid = errors.New("the source barcode not valid")
 
 // Miscellaneous
-var ErrSrcNoInv = errors.New("The source has no inventory")
+var ErrSrcNoInv = errors.New("the source has no inventory")

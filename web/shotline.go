@@ -15,7 +15,7 @@ func (srv *Server) ServeShotline(w http.ResponseWriter, r *http.Request) {
 	user, err := srv.Auths.CheckRequest(w, r)
 	if err != nil {
 		http.Error(
-			w, fmt.Sprintf("Authentication error: %s", err.Error()),
+			w, fmt.Sprintf("authentication error: %s", err.Error()),
 			http.StatusBadRequest,
 		)
 		return
@@ -35,14 +35,14 @@ func (srv *Server) ServeShotline(w http.ResponseWriter, r *http.Request) {
 	shotline, err := srv.DB.GetShotline(id, flags)
 	if err != nil {
 		http.Error(
-			w, fmt.Sprintf("Query error: %s", err.Error()),
+			w, fmt.Sprintf("query error: %s", err.Error()),
 			http.StatusInternalServerError,
 		)
 		return
 	}
 	// If no details are returned, throw a 404
 	if shotline == nil {
-		http.Error(w, "Shotline not found", http.StatusNotFound)
+		http.Error(w, "shotline not found", http.StatusNotFound)
 		return
 	}
 
@@ -54,7 +54,7 @@ func (srv *Server) ServeShotline(w http.ResponseWriter, r *http.Request) {
 	buf := bytes.Buffer{}
 	if err := assets.ExecuteTemplate("tmpl/shotline.html", &buf, shotlineParams); err != nil {
 		http.Error(
-			w, fmt.Sprintf("Parse error: %s", err.Error()),
+			w, fmt.Sprintf("parse error: %s", err.Error()),
 			http.StatusInternalServerError,
 		)
 		return
@@ -80,7 +80,7 @@ func (srv *Server) ServeShotline(w http.ResponseWriter, r *http.Request) {
 	tbuf := bytes.Buffer{}
 	if err := assets.ExecuteTemplate("tmpl/template.html", &tbuf, params); err != nil {
 		http.Error(
-			w, fmt.Sprintf("Parse error: %s", err.Error()),
+			w, fmt.Sprintf("parse error: %s", err.Error()),
 			http.StatusInternalServerError,
 		)
 		return

@@ -19,7 +19,7 @@ func rowsToStruct(rows pgx.Rows, a interface{}) (int, error) {
 		rv = rv.Elem()
 	}
 	if !rv.CanSet() {
-		return 0, fmt.Errorf("Cannot set value")
+		return 0, fmt.Errorf("cannot set value")
 	}
 	switch rv.Kind() {
 	case reflect.Slice:
@@ -59,7 +59,7 @@ func rowToStruct(rows pgx.Rows, a interface{}) (int, error) {
 		rv = rv.Elem()
 	}
 	if !rv.CanSet() {
-		return 0, fmt.Errorf("Cannot set value")
+		return 0, fmt.Errorf("cannot set value")
 	}
 	switch rv.Kind() {
 	case reflect.Slice:

@@ -11,13 +11,13 @@ func (srv *Server) ServeAPIAddInventory(w http.ResponseWriter, r *http.Request) 
 	user, err := srv.Auths.CheckRequest(w, r)
 	if err != nil {
 		http.Error(
-			w, fmt.Sprintf("Authentication error: %s", err.Error()),
+			w, fmt.Sprintf("authentication error: %s", err.Error()),
 			http.StatusBadRequest,
 		)
 		return
 	}
 	if user == nil {
-		http.Error(w, "Access denied", http.StatusForbidden)
+		http.Error(w, "access denied", http.StatusForbidden)
 		return
 	}
 	q := r.URL.Query()
@@ -31,7 +31,7 @@ func (srv *Server) ServeAPIAddInventory(w http.ResponseWriter, r *http.Request) 
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 		} else {
 			http.Error(
-				w, fmt.Sprintf("Error: %s", err.Error()),
+				w, fmt.Sprintf("error: %s", err.Error()),
 				http.StatusInternalServerError,
 			)
 		}

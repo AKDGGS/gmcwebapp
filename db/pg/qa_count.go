@@ -14,7 +14,7 @@ func (pg *Postgres) CountQAReport(id int) (int, error) {
 	}
 
 	if id < 0 || id >= len(rpts) {
-		return 0, fmt.Errorf("Invalid Report ID")
+		return 0, fmt.Errorf("invalid Report ID")
 	}
 
 	q, err := assets.ReadString("pg/qa/" + rpts[id]["file"])

@@ -28,7 +28,7 @@ func FileGet(exec string, cfg *config.Config, cmd string, args []string) int {
 
 	if len(args) < 1 {
 		fmt.Fprintf(os.Stderr,
-			"A filename is required and a save destination is optional\n")
+			"a filename is required and a save destination is optional\n")
 		flagset.Usage()
 		return 1
 	}

@@ -102,7 +102,7 @@ func FilePut(exec string, cfg *config.Config, cmd string, args []string) int {
 				Content:      file_obj,
 			})
 			if err != nil {
-				return fmt.Errorf("Error putting file in filestore: %w", err)
+				return fmt.Errorf("error putting file in filestore: %w", err)
 			}
 			return nil
 		})

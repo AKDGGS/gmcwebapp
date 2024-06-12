@@ -14,7 +14,7 @@ func (srv *Server) ServeWellsPointsJSON(w http.ResponseWriter, r *http.Request) 
 		pts, err := srv.DB.GetWellPoints()
 		if err != nil {
 			http.Error(
-				w, fmt.Sprintf("Error: %s", err.Error()),
+				w, fmt.Sprintf("error: %s", err.Error()),
 				http.StatusInternalServerError,
 			)
 			return

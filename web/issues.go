@@ -10,7 +10,7 @@ func (srv *Server) ServeIssues(w http.ResponseWriter, r *http.Request) {
 	list, err := srv.DB.ListIssues()
 	if err != nil {
 		http.Error(
-			w, fmt.Sprintf("Error: %s", err.Error()),
+			w, fmt.Sprintf("error: %s", err.Error()),
 			http.StatusInternalServerError,
 		)
 		return

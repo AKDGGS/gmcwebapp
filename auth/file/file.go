@@ -116,14 +116,14 @@ func (pw *PasswordFile) readSource() error {
 
 		ba := bytes.Split(line, []byte(":"))
 		if len(ba) < 1 || len(ba) > 2 {
-			return fmt.Errorf("Syntax error in %s on line %d", pw.path, lc)
+			return fmt.Errorf("syntax error in %s on line %d", pw.path, lc)
 		}
 
 		user := string(ba[0])
 
 		if _, exists := pw.users[user]; exists {
 			return fmt.Errorf(
-				"Duplicate user %s in %s on line %d", user, pw.path, lc,
+				"duplicate user %s in %s on line %d", user, pw.path, lc,
 			)
 		}
 

@@ -26,7 +26,7 @@ func New(cfg config.SearchConfig) (Search, error) {
 	case "":
 		return nil, fmt.Errorf("search type may not be empty")
 	default:
-		return nil, fmt.Errorf("Unknown search type: %s", cfg.Type)
+		return nil, fmt.Errorf("unknown search type: %s", cfg.Type)
 	}
 	return sear, nil
 }

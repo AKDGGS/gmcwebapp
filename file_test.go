@@ -101,7 +101,7 @@ func TestFile(t *testing.T) {
 			//Add the file to the filestore
 			err = fs.PutFile(&fs_file)
 			if err != nil {
-				return fmt.Errorf("Error putting file in filestore: %w", err)
+				return fmt.Errorf("error putting file in filestore: %w", err)
 			}
 			return nil
 		})
@@ -119,7 +119,7 @@ func TestFile(t *testing.T) {
 			if err != nil {
 				t.Fatal(err)
 			} else {
-				t.Log("File deleted from filestore:", fs_file.Name)
+				t.Log("file deleted from filestore:", fs_file.Name)
 			}
 		}
 	}
@@ -209,23 +209,23 @@ func TestFsPutGetFile(t *testing.T) {
 		}
 		err = fs.PutFile(&fs_file)
 		if err != nil {
-			t.Fatal("Failure: file not added to the filestore", file.ID)
+			t.Fatal("failure: file not added to the filestore", file.ID)
 		} else {
-			t.Log("Success: file added to the filestore", file.ID)
+			t.Log("success: file added to the filestore", file.ID)
 		}
 
 		retrieved_file, err := fs.GetFile(strconv.Itoa(int(file.ID)))
 		if err != nil {
-			t.Fatal("Failure: unable to get file from the filestore", file.ID, err)
+			t.Fatal("failure: unable to get file from the filestore", file.ID, err)
 		} else {
-			t.Log("Success: file retrieved from the filestore", retrieved_file.Name)
+			t.Log("success: file retrieved from the filestore", retrieved_file.Name)
 		}
 
 		err = fs.DeleteFile(&fs_file)
 		if err != nil {
 			t.Fatal(err)
 		} else {
-			t.Log("File deleted from filestore:", fs_file.Name)
+			t.Log("file deleted from filestore:", fs_file.Name)
 		}
 	}
 }
@@ -314,7 +314,7 @@ func TestDBPutGetFile(t *testing.T) {
 		if err != nil {
 			t.Fatal(err)
 		} else {
-			t.Log("File's metadata deleted from db:", file.Name)
+			t.Log("file's metadata deleted from db:", file.Name)
 		}
 	}
 }

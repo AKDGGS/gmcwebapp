@@ -212,7 +212,7 @@ func (auths *Auths) CheckForm(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 
-		params["error"] = "Invalid username or password"
+		params["error"] = "invalid username or password"
 	}
 
 	// If there's no secure cookie, and no POSTed credentials,

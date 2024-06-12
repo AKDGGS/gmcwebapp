@@ -13,7 +13,7 @@ func (srv *Server) ServeWellsDetail(w http.ResponseWriter, r *http.Request) {
 	user, err := srv.Auths.CheckRequest(w, r)
 	if err != nil {
 		http.Error(
-			w, fmt.Sprintf("Authentication error: %s", err.Error()),
+			w, fmt.Sprintf("authentication error: %s", err.Error()),
 			http.StatusBadRequest,
 		)
 		return
@@ -25,20 +25,20 @@ func (srv *Server) ServeWellsDetail(w http.ResponseWriter, r *http.Request) {
 	q := r.URL.Query()
 	id, err := strconv.Atoi(q.Get("id"))
 	if err != nil {
-		http.Error(w, "Invalid Well ID", http.StatusBadRequest)
+		http.Error(w, "invalid Well ID", http.StatusBadRequest)
 		return
 	}
 	well, err := srv.DB.GetWell(id, flags)
 	if err != nil {
 		http.Error(
-			w, fmt.Sprintf("Error: %s", err.Error()),
+			w, fmt.Sprintf("error: %s", err.Error()),
 			http.StatusInternalServerError,
 		)
 		return
 	}
 	// If no details are returned, throw a 404
 	if well == nil {
-		http.Error(w, "Well ID not found", http.StatusNotFound)
+		http.Error(w, "well ID not found", http.StatusNotFound)
 		return
 	}
 	js, err := json.Marshal(well)
