@@ -15,14 +15,14 @@ Both S3 and Directory-based file stores are supported. Support for additional
 file stores can be added by implementing `gmc/filestore/FileStore`.
 
 #### Authentication
-Four authentication schemata are supported: file, LDAP, and token.  The file
+Four authentication schemata are supported: file, LDAP, token, and always.  The file
 authentication schema uses a fixed file to authenticate users. The file is
 cached on execution, so changes to the file require a restart.  The LDAP
 authentication schema connects to a LDAP serve and can be configured in
 `/etc/gmc.yaml`.  The token authentication schema uses a database table to
 authenticate users.  The database URL is specified in `/etc/gmc.yaml`. The
 always authentication schema using a configured boolean variable to grant log-in
-privileges to all users-passwords combinations.Support for additional file
+privileges to all users-passwords combinations. Support for additional file
 stores can be added by implementing `gmc/auth/Auth`.
 
 ## Development
