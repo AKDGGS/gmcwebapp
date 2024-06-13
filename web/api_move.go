@@ -3,15 +3,13 @@ package web
 import (
 	"fmt"
 	"net/http"
-
-	dbe "gmc/db/errors"
 )
 
 func (srv *Server) ServeAPIMoveInventoryAndContainers(w http.ResponseWriter, r *http.Request) {
 	user, err := srv.Auths.CheckRequest(w, r)
 	if err != nil {
 		http.Error(
-			w, fmt.Sprintf("authentication error: %s", err.Error()),
+			w, fmt.Sprintf("authentication error: %s", err),
 			http.StatusBadRequest,
 		)
 		return
@@ -25,23 +23,10 @@ func (srv *Server) ServeAPIMoveInventoryAndContainers(w http.ResponseWriter, r *
 	barcodes_to_move := q["c"]
 	err = srv.DB.MoveInventoryAndContainers(dest, barcodes_to_move, user.Username)
 	if err != nil {
-		switch err {
-		case dbe.ErrDestinationBarcodeEmpty:
-			http.Error(w, err.Error(), http.StatusBadRequest)
-		case dbe.ErrListOfBarcodesEmpty:
-			http.Error(w, err.Error(), http.StatusBadRequest)
-		case dbe.ErrAtLeastOneBarcodeNotFound:
-			http.Error(w, err.Error(), http.StatusNotFound)
-		case dbe.ErrDestinationNotFound:
-			http.Error(w, err.Error(), http.StatusNotFound)
-		case dbe.ErrDestinationMultipleContainers:
-			http.Error(w, err.Error(), http.StatusInternalServerError)
-		default:
-			http.Error(
-				w, fmt.Sprintf("error: %s", err.Error()),
-				http.StatusInternalServerError,
-			)
-		}
+		http.Error(
+			w, fmt.Sprintf("move inventory and containers error: %s", err),
+			http.StatusInternalServerError,
+		)
 		return
 	}
 	js := []byte(`{"success":true}`)

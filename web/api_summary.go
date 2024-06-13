@@ -5,7 +5,6 @@ import (
 	"fmt"
 	"net/http"
 
-	dbe "gmc/db/errors"
 	dbf "gmc/db/flag"
 )
 
@@ -13,7 +12,7 @@ func (srv *Server) ServeAPISummary(w http.ResponseWriter, r *http.Request) {
 	user, err := srv.Auths.CheckRequest(w, r)
 	if err != nil {
 		http.Error(
-			w, fmt.Sprintf("authentication error: %s", err.Error()),
+			w, fmt.Sprintf("authentication error: %s", err),
 			http.StatusBadRequest,
 		)
 		return
@@ -30,14 +29,10 @@ func (srv *Server) ServeAPISummary(w http.ResponseWriter, r *http.Request) {
 	barcode := q.Get("barcode")
 	sum, err := srv.DB.GetSummaryByBarcode(barcode, flags)
 	if err != nil {
-		if err == dbe.ErrBarcodeNotContainer {
-			http.Error(w, err.Error(), http.StatusBadRequest)
-		} else {
-			http.Error(
-				w, fmt.Sprintf("error: %s", err.Error()),
-				http.StatusInternalServerError,
-			)
-		}
+		http.Error(
+			w, fmt.Sprintf("get summary by barcode error: %s", err),
+			http.StatusInternalServerError,
+		)
 		return
 	}
 	var js []byte
@@ -49,7 +44,7 @@ func (srv *Server) ServeAPISummary(w http.ResponseWriter, r *http.Request) {
 	}
 	if err != nil {
 		http.Error(
-			w, fmt.Sprintf("JSON error: %s", err.Error()),
+			w, fmt.Sprintf("marshalling error: %s", err),
 			http.StatusInternalServerError,
 		)
 		return

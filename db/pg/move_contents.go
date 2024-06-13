@@ -2,18 +2,18 @@ package pg
 
 import (
 	"context"
+	"fmt"
 	"strings"
 
 	"gmc/assets"
-	dbe "gmc/db/errors"
 )
 
 func (pg *Postgres) MoveInventoryAndContainersContents(src string, dest string) error {
 	if src == "" || len(strings.TrimSpace(src)) < 1 {
-		return dbe.ErrSourceBarcodeEmpty
+		return fmt.Errorf("source barcode cannot be empty")
 	}
 	if dest == "" || len(strings.TrimSpace(dest)) < 1 {
-		return dbe.ErrDestinationBarcodeEmpty
+		return fmt.Errorf("destination barcode cannot be empty")
 	}
 	q, err := assets.ReadString("pg/container/get_dest_container_id_and_validate_src_and_dest.sql")
 	if err != nil {
@@ -32,13 +32,13 @@ func (pg *Postgres) MoveInventoryAndContainersContents(src string, dest string) 
 		}
 	}
 	if dest_cid == nil {
-		return dbe.ErrDestinationNotFound
+		return fmt.Errorf("destination barcode not found")
 	}
 	if !src_valid {
-		return dbe.ErrSourceNotValid
+		return fmt.Errorf("source barcode not valid")
 	}
 	if cid_count > 1 {
-		return dbe.ErrDestinationMultipleContainers
+		return fmt.Errorf("destination barcode refers to multiple containers")
 	}
 	tx, err := pg.pool.Begin(context.Background())
 	if err != nil {
@@ -49,7 +49,7 @@ func (pg *Postgres) MoveInventoryAndContainersContents(src string, dest string) 
 	if err != nil {
 		return err
 	}
-	rc, err := tx.Exec(context.Background(), q, src, *dest_cid)
+	_, err = tx.Exec(context.Background(), q, src, *dest_cid)
 	if err != nil {
 		return err
 	}
@@ -62,10 +62,7 @@ func (pg *Postgres) MoveInventoryAndContainersContents(src string, dest string) 
 		return err
 	}
 	if ic.RowsAffected() == 0 {
-		return dbe.ErrSrcNoInv
-	}
-	if (ic.RowsAffected() + rc.RowsAffected()) == 0 {
-		return dbe.ErrNothingMoved
+		return fmt.Errorf("source has no inventory")
 	}
 	// If the move is successful, commit the changes
 	if err := tx.Commit(context.Background()); err != nil {

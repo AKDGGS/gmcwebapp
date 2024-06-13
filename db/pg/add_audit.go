@@ -2,10 +2,10 @@ package pg
 
 import (
 	"context"
+	"fmt"
 	"strings"
 
 	"gmc/assets"
-	dbe "gmc/db/errors"
 )
 
 func (pg *Postgres) AddAudit(remark string, container_list []string) error {
@@ -13,7 +13,7 @@ func (pg *Postgres) AddAudit(remark string, container_list []string) error {
 		remark = strings.TrimSpace(remark)
 	}
 	if remark == "" && len(container_list) == 0 {
-		return dbe.ErrAuditParamsEmpty
+		return fmt.Errorf("remark and the items list cannot be empty")
 	}
 	tx, err := pg.pool.Begin(context.Background())
 	if err != nil {
@@ -30,7 +30,7 @@ func (pg *Postgres) AddAudit(remark string, container_list []string) error {
 		return err
 	}
 	if audit_group_id == 0 {
-		return dbe.ErrAuditInsertFailed
+		return fmt.Errorf("audit insert returned zero for audit_group_id")
 	}
 	for _, c := range container_list {
 		q, err = assets.ReadString("pg/audit/insert.sql")

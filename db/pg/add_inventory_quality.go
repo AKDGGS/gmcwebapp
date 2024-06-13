@@ -2,15 +2,15 @@ package pg
 
 import (
 	"context"
+	"fmt"
 	"strings"
 
 	"gmc/assets"
-	dbe "gmc/db/errors"
 )
 
 func (pg *Postgres) AddInventoryQuality(barcode string, remark string, issues []string, username string) error {
 	if barcode == "" || len(strings.TrimSpace(barcode)) < 1 {
-		return dbe.ErrSourceBarcodeEmpty
+		return fmt.Errorf("source barcode cannot be empty")
 	}
 	q, err := assets.ReadString("pg/inventory/get_ids_by_barcode.sql")
 	if err != nil {
@@ -31,10 +31,10 @@ func (pg *Postgres) AddInventoryQuality(barcode string, remark string, issues []
 		inventory_ids = append(inventory_ids, id)
 	}
 	if inventory_ids == nil {
-		return dbe.ErrNotFoundInInventory
+		return fmt.Errorf("barcode not found")
 	}
 	if len(inventory_ids) > 1 {
-		return dbe.ErrMultipleIDs
+		return fmt.Errorf("multiple IDs returned")
 	}
 	tx, err := pg.pool.Begin(context.Background())
 	if err != nil {
@@ -51,7 +51,7 @@ func (pg *Postgres) AddInventoryQuality(barcode string, remark string, issues []
 		return err
 	}
 	if iq_id == 0 {
-		return dbe.ErrInventoryQualityInsertFailed
+		return fmt.Errorf("inventory quality insert returned zero for iq_id")
 	}
 	// If the insert is successful, commit the changes
 	if err := tx.Commit(context.Background()); err != nil {

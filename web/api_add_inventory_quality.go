@@ -3,15 +3,13 @@ package web
 import (
 	"fmt"
 	"net/http"
-
-	dbe "gmc/db/errors"
 )
 
 func (srv *Server) ServeAPIAddInventoryQuality(w http.ResponseWriter, r *http.Request) {
 	user, err := srv.Auths.CheckRequest(w, r)
 	if err != nil {
 		http.Error(
-			w, fmt.Sprintf("authentication error: %s", err.Error()),
+			w, fmt.Sprintf("authentication error: %s", err),
 			http.StatusBadRequest,
 		)
 		return
@@ -23,19 +21,10 @@ func (srv *Server) ServeAPIAddInventoryQuality(w http.ResponseWriter, r *http.Re
 	q := r.URL.Query()
 	err = srv.DB.AddInventoryQuality(q.Get("barcode"), q.Get("remark"), q["i"], user.Username)
 	if err != nil {
-		switch err {
-		case dbe.ErrNotFoundInInventory:
-			http.Error(w, err.Error(), http.StatusNotFound)
-		case dbe.ErrMultipleIDs:
-			http.Error(w, err.Error(), http.StatusInternalServerError)
-		case dbe.ErrInventoryQualityInsertFailed:
-			http.Error(w, err.Error(), http.StatusInternalServerError)
-		default:
-			http.Error(
-				w, fmt.Sprintf("error: %s", err.Error()),
-				http.StatusInternalServerError,
-			)
-		}
+		http.Error(
+			w, fmt.Sprintf("add inventory quality error: %s", err),
+			http.StatusInternalServerError,
+		)
 		return
 	}
 }

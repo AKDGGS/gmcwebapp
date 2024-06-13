@@ -2,18 +2,18 @@ package pg
 
 import (
 	"context"
+	"fmt"
 	"strings"
 
 	"gmc/assets"
-	dbe "gmc/db/errors"
 )
 
 func (pg *Postgres) MoveInventoryAndContainers(dest string, barcodes_to_move []string, username string) error {
 	if dest == "" || len(strings.TrimSpace(dest)) < 1 {
-		return dbe.ErrDestinationBarcodeEmpty
+		return fmt.Errorf("destination barcode cannot be empty")
 	}
 	if barcodes_to_move == nil || len(barcodes_to_move) < 1 {
-		return dbe.ErrListOfBarcodesEmpty
+		return fmt.Errorf("list of barcodes cannot be empty")
 	}
 	q, err := assets.ReadString("pg/container/get_id_by_barcode.sql")
 	if err != nil {
@@ -32,10 +32,10 @@ func (pg *Postgres) MoveInventoryAndContainers(dest string, barcodes_to_move []s
 		}
 	}
 	if cid_count == 0 {
-		return dbe.ErrDestinationNotFound
+		return fmt.Errorf("destination barcode not found")
 	}
 	if cid_count > 1 {
-		return dbe.ErrDestinationMultipleContainers
+		return fmt.Errorf("destination barcode refers to multiple containers")
 	}
 	q, err = assets.ReadString("pg/move/validate_barcodes_to_move.sql")
 	if err != nil {
@@ -48,7 +48,7 @@ func (pg *Postgres) MoveInventoryAndContainers(dest string, barcodes_to_move []s
 	}
 	defer rows.Close()
 	if !barcodes_valid {
-		return dbe.ErrAtLeastOneBarcodeNotFound
+		return fmt.Errorf("at least one barcode in items to move not found")
 	}
 	tx, err := pg.pool.Begin(context.Background())
 	if err != nil {

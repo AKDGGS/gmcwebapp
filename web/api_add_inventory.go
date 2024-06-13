@@ -3,15 +3,13 @@ package web
 import (
 	"fmt"
 	"net/http"
-
-	dbe "gmc/db/errors"
 )
 
 func (srv *Server) ServeAPIAddInventory(w http.ResponseWriter, r *http.Request) {
 	user, err := srv.Auths.CheckRequest(w, r)
 	if err != nil {
 		http.Error(
-			w, fmt.Sprintf("authentication error: %s", err.Error()),
+			w, fmt.Sprintf("authentication error: %s", err),
 			http.StatusBadRequest,
 		)
 		return
@@ -25,16 +23,10 @@ func (srv *Server) ServeAPIAddInventory(w http.ResponseWriter, r *http.Request) 
 	issues := q["i"]
 	err = srv.DB.AddInventory(q.Get("barcode"), q.Get("remark"), container_id, issues, user.Username)
 	if err != nil {
-		if err == dbe.ErrInventoryInsertFailed {
-			http.Error(w, err.Error(), http.StatusInternalServerError)
-		} else if err == dbe.ErrInventoryQualityInsertFailed {
-			http.Error(w, err.Error(), http.StatusInternalServerError)
-		} else {
-			http.Error(
-				w, fmt.Sprintf("error: %s", err.Error()),
-				http.StatusInternalServerError,
-			)
-		}
+		http.Error(
+			w, fmt.Sprintf("add inventory error: %s", err),
+			http.StatusInternalServerError,
+		)
 		return
 	}
 	js := []byte(`{"success":true}`)

@@ -3,15 +3,13 @@ package web
 import (
 	"fmt"
 	"net/http"
-
-	dbe "gmc/db/errors"
 )
 
 func (srv *Server) ServeAPIAddContainer(w http.ResponseWriter, r *http.Request) {
 	user, err := srv.Auths.CheckRequest(w, r)
 	if err != nil {
 		http.Error(
-			w, fmt.Sprintf("authentication error: %s", err.Error()),
+			w, fmt.Sprintf("authentication error: %s", err),
 			http.StatusBadRequest,
 		)
 		return
@@ -23,17 +21,10 @@ func (srv *Server) ServeAPIAddContainer(w http.ResponseWriter, r *http.Request) 
 	q := r.URL.Query()
 	err = srv.DB.AddContainer(q.Get("barcode"), q.Get("name"), q.Get("remark"))
 	if err != nil {
-		switch err {
-		case dbe.ErrBarcodeCannotBeEmpty:
-			http.Error(w, err.Error(), http.StatusBadRequest)
-		case dbe.ErrBarcodeExists:
-			http.Error(w, err.Error(), http.StatusInternalServerError)
-		default:
-			http.Error(
-				w, fmt.Sprintf("error: %s", err.Error()),
-				http.StatusInternalServerError,
-			)
-		}
+		http.Error(
+			w, fmt.Sprintf("add container error: %s", err),
+			http.StatusInternalServerError,
+		)
 		return
 	}
 	js := []byte(`{"success":true}`)

@@ -2,18 +2,18 @@ package pg
 
 import (
 	"context"
+	"fmt"
 	"strings"
 
 	"gmc/assets"
-	dbe "gmc/db/errors"
 )
 
 func (pg *Postgres) RecodeInventoryAndContainer(old_barcode string, new_barcode string) error {
 	if old_barcode == "" || len(strings.TrimSpace(old_barcode)) < 1 {
-		return dbe.ErrOldBarcodeCannotBeEmpty
+		return fmt.Errorf("old barcode cannot be empty")
 	}
 	if new_barcode == "" || len(strings.TrimSpace(new_barcode)) < 1 {
-		return dbe.ErrNewBarcodeCannotBeEmpty
+		return fmt.Errorf("new barcode cannot be empty")
 	}
 	tx, err := pg.pool.Begin(context.Background())
 	if err != nil {
@@ -80,7 +80,7 @@ func (pg *Postgres) RecodeInventoryAndContainer(old_barcode string, new_barcode 
 	}
 	rowsAffected += ir.RowsAffected() + cr.RowsAffected()
 	if (rowsAffected) == 0 {
-		return dbe.ErrNothingRecoded
+		return fmt.Errorf("recode failed")
 	}
 	// If the move is successful, commit the changes
 	if err := tx.Commit(context.Background()); err != nil {
