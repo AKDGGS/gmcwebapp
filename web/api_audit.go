@@ -27,4 +27,8 @@ func (srv *Server) ServeAPIAudit(w http.ResponseWriter, r *http.Request) {
 		)
 		return
 	}
+	js := []byte(`{"success":true}`)
+	w.Header().Set("Content-Type", "application/json")
+	w.Header().Set("Content-Length", fmt.Sprintf("%d", len(js)))
+	w.Write(js)
 }
