@@ -49,20 +49,15 @@ func (pg *Postgres) MoveInventoryAndContainersContents(src string, dest string) 
 	if err != nil {
 		return err
 	}
-	_, err = tx.Exec(context.Background(), q, src, *dest_cid)
-	if err != nil {
+	if _, err = tx.Exec(context.Background(), q, src, *dest_cid); err != nil {
 		return err
 	}
 	q, err = assets.ReadString("pg/inventory/move_by_container_barcode.sql")
 	if err != nil {
 		return err
 	}
-	ic, err := tx.Exec(context.Background(), q, src, dest_cid)
-	if err != nil {
+	if _, err := tx.Exec(context.Background(), q, src, dest_cid); err != nil {
 		return err
-	}
-	if ic.RowsAffected() == 0 {
-		return fmt.Errorf("source has no inventory")
 	}
 	// If the move is successful, commit the changes
 	if err := tx.Commit(context.Background()); err != nil {
