@@ -14,6 +14,13 @@ import (
 )
 
 func (srv *Server) ServeUpload(w http.ResponseWriter, r *http.Request) {
+	if srv.FileStore == nil {
+		http.Error(
+			w, "file store not configured", http.StatusInternalServerError,
+		)
+		return
+	}
+
 	user, err := srv.Auths.CheckRequest(w, r)
 	if err != nil {
 		http.Error(

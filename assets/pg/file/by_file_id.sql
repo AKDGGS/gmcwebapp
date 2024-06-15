@@ -4,6 +4,6 @@ SELECT
 	f.description,
 	f.mimetype,
 	f.size::numeric,
-	f.content_md5 AS MD5
+	f.content_md5
 FROM file AS f
 WHERE f.file_id = $1

@@ -33,10 +33,13 @@ func ServerCommand(cfg *config.Config, exec string) int {
 		return 1
 	}
 
-	stor, err := filestore.New(cfg.FileStore)
-	if err != nil {
-		fmt.Fprintf(os.Stderr, "%s: %s\n", exec, err.Error())
-		return 1
+	var stor filestore.FileStore
+	if cfg.FileStore != nil {
+		stor, err = filestore.New(*cfg.FileStore)
+		if err != nil {
+			fmt.Fprintf(os.Stderr, "%s: %s\n", exec, err.Error())
+			return 1
+		}
 	}
 
 	srv := web.Server{

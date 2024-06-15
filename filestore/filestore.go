@@ -30,8 +30,6 @@ func New(cfg config.FileStoreConfig) (FileStore, error) {
 		if err != nil {
 			return nil, err
 		}
-	case "":
-		return nil, fmt.Errorf("file_store type cannot be empty")
 	default:
 		return nil, fmt.Errorf("unknown file store type: %s", cfg.Type)
 	}

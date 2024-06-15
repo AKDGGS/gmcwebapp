@@ -33,7 +33,12 @@ func FileGet(exec string, cfg *config.Config, cmd string, args []string) int {
 		return 1
 	}
 
-	fs, err := filestore.New(cfg.FileStore)
+	if cfg.FileStore == nil {
+		fmt.Fprintf(os.Stderr, "no file store configured\n")
+		return 1
+	}
+
+	fs, err := filestore.New(*cfg.FileStore)
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "%s: %s\n", exec, err.Error())
 		return 1

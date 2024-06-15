@@ -8,6 +8,13 @@ import (
 )
 
 func (srv *Server) ServeFile(w http.ResponseWriter, r *http.Request) {
+	if srv.FileStore == nil {
+		http.Error(
+			w, "file store not configured", http.StatusInternalServerError,
+		)
+		return
+	}
+
 	id, err := strconv.Atoi(r.PathValue("id"))
 	if err != nil {
 		http.Error(w, "invalid file id", http.StatusBadRequest)

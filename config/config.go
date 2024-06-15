@@ -11,15 +11,14 @@ import (
 )
 
 type Config struct {
-	ListenAddress string          `yaml:"listen_address"`
-	BasePath      string          `yaml:"base_path"`
-	SessionKey    string          `yaml:"session_key"`
-	MaxAge        int             `yaml:"session_max_age"`
-	AutoShutdown  bool            `yaml:"auto_shutdown"`
-	Database      DatabaseConfig  `yaml:"database"`
-	FileStore     FileStoreConfig `yaml:"file_store"`
-	Search        SearchConfig    `yaml:"search"`
-	Auths         []AuthConfig    `yaml:"authentication"`
+	ListenAddress string           `yaml:"listen_address"`
+	SessionKey    string           `yaml:"session_key"`
+	MaxAge        int              `yaml:"session_max_age"`
+	AutoShutdown  bool             `yaml:"auto_shutdown"`
+	Database      DatabaseConfig   `yaml:"database"`
+	FileStore     *FileStoreConfig `yaml:"file_store"`
+	Search        SearchConfig     `yaml:"search"`
+	Auths         []AuthConfig     `yaml:"authentication"`
 
 	keybytes []byte `yaml:"-"`
 }
@@ -51,7 +50,6 @@ type SearchConfig struct {
 func New() (*Config, error) {
 	cfg := &Config{
 		ListenAddress: "127.0.0.1:8080",
-		BasePath:      "/",
 		MaxAge:        86400, // Default of 24 hours
 		Database: DatabaseConfig{
 			Type: "postgres",
@@ -75,14 +73,6 @@ func New() (*Config, error) {
 	_, err := rand.Read(cfg.keybytes)
 	if err != nil {
 		return nil, err
-	}
-
-	// Set default file store (dir, current working directory)
-	if cwd, err := os.Getwd(); err == nil {
-		cfg.FileStore.Type = "dir"
-		cfg.FileStore.Attrs = map[string]interface{}{
-			"path": cwd,
-		}
 	}
 
 	return cfg, nil
