@@ -21,10 +21,19 @@ func (es *Elastic) NewInventoryIndex() (util.InventoryIndex, error) {
 	err := es.createIndex(iname,
 		&types.TypeMapping{
 			Properties: map[string]types.Property{
-				"collection":  &types.TextProperty{Store: &yes, Index: &yes},
-				"barcode":     &types.TextProperty{Store: &yes, Index: &yes},
-				"remark":      &types.TextProperty{Store: &no, Index: &yes},
-				"can_publish": &types.BooleanProperty{Store: &no, Index: &yes},
+				"collection":      &types.TextProperty{Store: &yes, Index: &yes},
+				"sample":   &types.TextProperty{Store: &yes, Index: &yes},
+				"slide":    &types.TextProperty{Store: &yes, Index: &yes},
+				"box":      &types.TextProperty{Store: &yes, Index: &yes},
+				"set":      &types.TextProperty{Store: &yes, Index: &yes},
+				"core":     &types.TextProperty{Store: &yes, Index: &yes},
+				"diameter":   &types.FloatNumberProperty{Store: &yes, Index: &yes},
+				"top":             &types.FloatNumberProperty{Store: &yes, Index: &yes},
+				"bottom": &types.FloatNumberProperty{Store: &yes, Index: &yes},
+				"keywords":        &types.TextProperty{Store: &yes, Index: &yes},
+				"barcode":         &types.TextProperty{Store: &yes, Index: &yes},
+				"remark":          &types.TextProperty{Store: &no, Index: &yes},
+				"can_publish":     &types.BooleanProperty{Store: &no, Index: &yes},
 			},
 		},
 	)

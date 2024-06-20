@@ -60,6 +60,33 @@ func (es *Elastic) SearchInventory(params *util.InventoryParams) (*util.Inventor
 		if err := hfType[string](hit, "collection", &ih.Collection); err != nil {
 			return nil, err
 		}
+		if err := hfType[string](hit, "sample", &ih.SampleNumber); err != nil {
+			return nil, err
+		}
+		if err := hfType[string](hit, "slide", &ih.SlideNumber); err != nil {
+			return nil, err
+		}
+		if err := hfType[string](hit, "box", &ih.BoxNumber); err != nil {
+			return nil, err
+		}
+		if err := hfType[string](hit, "set", &ih.SetNumber); err != nil {
+			return nil, err
+		}
+		if err := hfType[string](hit, "core", &ih.CoreNumber); err != nil {
+			return nil, err
+		}
+		if err := hfType[float64](hit, "diameter", &ih.CoreDiameter); err != nil {
+			return nil, err
+		}
+		if err := hfType[float64](hit, "top", &ih.IntervalTop); err != nil {
+			return nil, err
+		}
+		if err := hfType[float64](hit, "bottom", &ih.IntervalBottom); err != nil {
+			return nil, err
+		}
+		if err := hfType[string](hit, "keywords", &ih.Keywords); err != nil {
+			return nil, err
+		}
 		if err := hfType[string](hit, "barcode", &ih.Barcode); err != nil {
 			return nil, err
 		}
