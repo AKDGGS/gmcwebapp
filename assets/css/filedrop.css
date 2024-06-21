@@ -89,6 +89,6 @@
 .filedrop-file-list-container {
 	display: inline-block;
 	max-width: auto;
-text-overflow: ellipsis;
-word-break: break-all;
+	text-overflow: ellipsis;
+	word-break: break-all;
 }
