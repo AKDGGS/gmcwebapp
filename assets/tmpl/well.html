@@ -35,13 +35,13 @@
 							<th>Federal</th>
 							<td>{{- if .Federal}}Yes{{- else}}No{{- end}}</td>
 						</tr>
-						{{- if ne .SpudDate.IsZero true}}
+						{{- if .SpudDate}}
 						<tr>
 							<th>Spud Date</th>
 							<td>{{.SpudDate.Format "1/2/2006"}}</td>
 						</tr>
 						{{- end}}
-						{{- if ne .CompletionDate.IsZero true}}
+						{{- if .CompletionDate}}
 						<tr>
 							<th>Completion Date</th>
 							<td>{{.CompletionDate.Format "1/2/2006"}}</td>
