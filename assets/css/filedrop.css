@@ -1,98 +1,94 @@
 #filedrop {
 	height: 100%;
 	width: 100%;
- 	background-color: white;
+	margin: 0 auto 0 auto;
+	background-color: white;
 }
 
 .filedrop-header {
- 	position: relative;
- 	display: flex;
- 	justify-content: center;
+	position: relative;
+	display: flex;
+	justify-content: center;
 }
 
 .filedrop-container {
- 	width: 400px;
-
- 	margin: 20px auto 0 auto;
+	/* without setting the max-width the filedrop block's width
+	will expand to the size of very long filenames */
+	max-width: 600px;
+	margin: 20px auto 0 auto;
 }
 
 .filedrop-file-input {
- 	display: none;
+	display: none;
 }
 
 .filedrop-pb {
- 	flex-direction: column;
-}
-
-.filedrop-pb {
- 	color: black;
- 	width: 100%;
- 	height: 45px;
- 	max-width: 400px;
- 	background-color: #cfe4fa;
- 	text-align: center;
- 	line-height: 18px;
+	flex-direction: column;
+	color: black;
+	max-width: 100%;
+	background-color: #cfe4fa;
+	line-height: 25px;
 }
 
 .filedrop-pb-file {
- 	margin-top: 5px;
- 	display: none;
+	margin-top: 5px;
+	display: none;
 }
 
 .filedrop-pb-total {
- 	margin: 3px 0 5px 0;
- 	display: none;
+	margin: 3px 0 5px 0;
+	display: none;
 }
 
 .filedrop-pb-text {
- 	width: 390px;
- 	padding: 1px;
- 	display: -webkit-box;
- 	-webkit-line-clamp: 1;
- 	-webkit-box-orient: vertical;
- 	overflow: hidden;
- 	text-overflow: ellipsis;
+	padding: 1px;
+	display: -webkit-box;
+	-webkit-line-clamp: 1;
+	-webkit-box-orient: vertical;
+	word-wrap: break-word;
  	word-break: break-all;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	text-align: center;
 }
 
 .filedrop-center-text {
- 	top: 0;
+	top: 0;
 }
 
 .filedrop-center-text.uploading {
- 	visibility: hidden;
+	visibility: hidden;
 }
 
 .filedrop-center-text.filedrop-uploading::before {
- 	content: "Uploading...";
- 	visibility: visible;
- 	display: inline-block;
- 	min-width: 400px;
+	content: "Uploading...";
+	visibility: visible;
+	display: inline-block;
+	min-width: 100%;
 }
 
 .filedrop-error-div {
- 	display: none;
- 	flex-direction: column;
- 	width: 100%;
- 	min-height: auto;
- 	background-color: #f4cecd;
- 	text-align: left;
- 	margin-bottom: 10px;
- 	z-index: 99;
+	display: none;
+	flex-direction: column;
+	width: 100%;
+	min-height: auto;
+	background-color: #f4cecd;
+	text-align: left;
+	margin-bottom: 10px;
+	z-index: 99;
 }
 
 .filedrop-error-div li {
- 	display: -webkit-box;
- 	-webkit-line-clamp: 1;
- 	-webkit-box-orient: vertical;
- 	overflow: hidden;
- 	text-overflow: ellipsis;
- 	word-break: break-all;
+	display: -webkit-box;
+	-webkit-line-clamp: 1;
+	-webkit-box-orient: vertical;
+	overflow: hidden;
+	text-overflow: ellipsis;
 }
 
 .filedrop-file-list-container {
- 	display: inline-block;
- 	max-width: auto;
- 	word-break: break-all;
- 	word-wrap: break-word;
+	display: inline-block;
+	max-width: auto;
+text-overflow: ellipsis;
+word-break: break-all;
 }

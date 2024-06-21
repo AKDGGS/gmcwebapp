@@ -219,8 +219,7 @@ function FileDrop(drop_zone, file_list_container) {
 
 		filename_container.appendChild(file_link);
 
-		f_size = pb_size_formatter(file.size);
-		const file_size = document.createTextNode(` (${f_size})`);
+		const file_size = document.createTextNode(` (${pb_size_formatter(file.size)})`);
 		filename_container.appendChild(file_size);
 
 		file_div.appendChild(filename_container);
