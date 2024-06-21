@@ -56,14 +56,22 @@ let wellPointLabelLayer = new ol.layer.Vector({
 	declutter: true
 });
 
-//Fetch the makers
+//Fetch the markers
 fetch('points.json')
 	.then(response => {
 		if (!response.ok) throw new Error(response.status + " " +
 			response.statusText);
+		if (!response) {
+			console.error('No response received')
+			return null;
+		}
 		return response.json();
 	})
 	.then(d => {
+		if (!d) {
+			console.log("No points returned");
+			return;
+		}
 		let markers = [];
 		d.forEach(({
 			geog,

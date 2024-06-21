@@ -42,7 +42,7 @@ type DB interface {
 	GetSummaryByBarcode(barcode string, flags int) (*model.Summary, error)
 
 	// Fetches wells point list
-	GetWellPoints() ([]map[string]interface{}, error)
+	GetWellPoints() ([]model.WellPoint, error)
 
 	// Fetches file details
 	GetFile(id int) (*model.File, error)

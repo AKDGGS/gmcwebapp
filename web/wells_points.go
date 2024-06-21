@@ -20,11 +20,6 @@ func (srv *Server) ServeWellsPointsJSON(w http.ResponseWriter, r *http.Request) 
 			return
 		}
 
-		// If no details are returned, return an empty json
-		if pts == nil {
-			pts = make([]map[string]interface{}, 0)
-		}
-
 		js, err := json.Marshal(pts)
 		if err != nil {
 			http.Error(
