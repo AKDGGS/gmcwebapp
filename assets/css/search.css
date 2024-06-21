@@ -2,6 +2,7 @@
 .ol-search-tools label { display: block; font-size: 0.9em; font-weight: bold; }
 .ol-search-tools div:not(:first-child) { margin-top: 1.2em; }
 .noresults { margin: 1em; font-size: 1.2em; font-weight: bold; }
+.csp span:not(:last-of-type)::after { content: ", "; }
 #map { flex: 0 0 100%; height: 50vh; max-height: 400px; min-height: 250px; margin: 0; } 
 #result-control { display: none; margin: 4px 12px 2px auto; }
 #result { flex: 0 0 100%; }

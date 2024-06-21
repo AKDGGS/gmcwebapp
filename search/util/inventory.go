@@ -43,17 +43,25 @@ func (ir *InventoryResults) MarshalJSON() ([]byte, error) {
 }
 
 type InventoryHit struct {
-	ID             int      `json:"id"`
-	Collection     string   `json:"collection,omitempty"`
-	SampleNumber   string   `json:"sample,omitempty"`
-	SlideNumber    string   `json:"slide,omitempty"`
-	BoxNumber      string   `json:"box,omitempty"`
-	SetNumber      string   `json:"set,omitempty"`
-	CoreNumber     string   `json:"core,omitempty"`
-	CoreDiameter   float64  `json:"diameter,omitempty"`
-	IntervalTop    float64  `json:"top,omitempty"`
-	IntervalBottom float64  `json:"bottom,omitempty"`
-	Keywords       string   `json:"keywords,omitempty"`
-	Barcode        string   `json:"barcode,omitempty"`
-	CanPublish     bool     `json:"can_publish"`
+	ID             int             `json:"id"`
+	Collection     string          `json:"collection,omitempty"`
+	SampleNumber   string          `json:"sample,omitempty"`
+	SlideNumber    string          `json:"slide,omitempty"`
+	BoxNumber      string          `json:"box,omitempty"`
+	SetNumber      string          `json:"set,omitempty"`
+	CoreNumber     string          `json:"core,omitempty"`
+	CoreDiameter   *float64        `json:"diameter,omitempty"`
+	IntervalTop    *float64        `json:"top,omitempty"`
+	IntervalBottom *float64        `json:"bottom,omitempty"`
+	Keywords       []string        `json:"keywords,omitempty"`
+	Barcode        string          `json:"barcode,omitempty"`
+	CanPublish     bool            `json:"can_publish"`
+	Geometries     json.RawMessage `json:"geometries,omitempty"`
+	Wells          []struct {
+		ID       int     `json:"id"`
+		Name     string  `json:"name"`
+		AltNames *string `json:"altnames,omitempty"`
+		Number   *string `json:"number,omitempty"`
+		API      *string `json:"api,omitempty"`
+	} `json:"wells,omitempty"`
 }

@@ -2,7 +2,6 @@ package elastic
 
 import (
 	"encoding/json"
-	"strconv"
 	"time"
 
 	"gmc/search/util"
@@ -17,8 +16,9 @@ func (es *Elastic) SearchInventory(params *util.InventoryParams) (*util.Inventor
 		From(params.From).
 		Size(params.Size).
 		TrackTotalHits(true).
-		StoredFields([]string{"*"}...).
-		Source_(nil)
+		Source_(&types.SourceFilter{
+			Includes: []string{"*"},
+		})
 
 	qry := &types.BoolQuery{}
 
@@ -51,67 +51,12 @@ func (es *Elastic) SearchInventory(params *util.InventoryParams) (*util.Inventor
 	}
 
 	for _, hit := range r.Hits.Hits {
-		id, err := strconv.Atoi(hit.Id_)
-		if err != nil {
-			return nil, err
-		}
-
-		ih := util.InventoryHit{ID: id}
-		if err := hfType[string](hit, "collection", &ih.Collection); err != nil {
-			return nil, err
-		}
-		if err := hfType[string](hit, "sample", &ih.SampleNumber); err != nil {
-			return nil, err
-		}
-		if err := hfType[string](hit, "slide", &ih.SlideNumber); err != nil {
-			return nil, err
-		}
-		if err := hfType[string](hit, "box", &ih.BoxNumber); err != nil {
-			return nil, err
-		}
-		if err := hfType[string](hit, "set", &ih.SetNumber); err != nil {
-			return nil, err
-		}
-		if err := hfType[string](hit, "core", &ih.CoreNumber); err != nil {
-			return nil, err
-		}
-		if err := hfType[float64](hit, "diameter", &ih.CoreDiameter); err != nil {
-			return nil, err
-		}
-		if err := hfType[float64](hit, "top", &ih.IntervalTop); err != nil {
-			return nil, err
-		}
-		if err := hfType[float64](hit, "bottom", &ih.IntervalBottom); err != nil {
-			return nil, err
-		}
-		if err := hfType[string](hit, "keywords", &ih.Keywords); err != nil {
-			return nil, err
-		}
-		if err := hfType[string](hit, "barcode", &ih.Barcode); err != nil {
+		ih := util.InventoryHit{}
+		if err := json.Unmarshal(hit.Source_, &ih); err != nil {
 			return nil, err
 		}
 		res.Hits = append(res.Hits, ih)
 	}
 
 	return res, nil
-}
-
-// Returns a hit's field n as type T in ptr
-func hfType[T any](hit types.Hit, n string, ptr *T) error {
-	f, ok := hit.Fields[n]
-	if !ok {
-		return nil
-	}
-
-	var arr []T
-	if err := json.Unmarshal(f, &arr); err != nil {
-		return err
-	}
-
-	if len(arr) < 1 {
-		return nil
-	}
-
-	*ptr = arr[0]
-	return nil
 }

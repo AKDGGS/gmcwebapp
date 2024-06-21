@@ -99,7 +99,7 @@ function doSearch(dir){
 	}
 
 	let url = '';
-	if(query) url += `${url?'&':''}query=${query}`;
+	if(query) url += `${url?'&':''}q=${query}`;
 	if(size !== 25) url += `${url?'&':''}size=${size}`;
 	if(nfrom > 0) url += `${url?'&':''}from=${nfrom}`;
 
