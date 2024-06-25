@@ -28,6 +28,28 @@ type FlatInventory struct {
 		Number   *string `json:"number,omitempty"`
 		API      *string `json:"api,omitempty"`
 	} `json:"wells,omitempty"`
+	Outcrop		   []struct {
+		ID       int32   `json:"id"`
+		Name     string  `json:"name"`
+		Number   *string `json:"number,omitempty"`
+		Year     *int32 `json:"year,omitempty"`
+	} `json:"outcrop,omitempty"`
+	Boreholes		[]struct {
+		ID       int32   `json:"id"`
+		Name     string  `json:"name"`
+		Prospect struct {
+			ID       int32   `json:"id"`
+			Name     string  `json:"name"`
+			ARDF	 string  `json:"ardf"`
+		} `json:"prospect,omitempty"`
+	} `json:"boreholes,omitempty"`
+	Shotlines		[]struct {
+		ID       int32    `json:"id"`
+		Name     string   `json:"name"`
+		Year     *int32   `json:"year,omitempty"`
+		Min      *float64 `json:"min,omitempty"`
+		Max      *float64 `json:"max,omitempty"`
+	} `json:"shotlines,omitempty"`
 }
 
 func (f *FlatInventory) StringID() string {

@@ -47,6 +47,44 @@ func (es *Elastic) NewInventoryIndex() (util.InventoryIndex, error) {
 						"api":      &types.TextProperty{Index: &yes},
 					},
 				},
+				"outcrop": &types.ObjectProperty{
+					Dynamic: &dynamicmapping.False,
+					Enabled: &yes,
+					Properties: map[string]types.Property{
+						"id":       &types.IntegerNumberProperty{Index: &yes},
+						"name":     &types.TextProperty{Index: &yes},
+						"number":   &types.TextProperty{Index: &yes},
+						"year":     &types.IntegerNumberProperty{Index: &yes},
+					},
+				},
+				"boreholes": &types.ObjectProperty{
+					Dynamic: &dynamicmapping.False,
+					Enabled: &yes,
+					Properties: map[string]types.Property{
+						"id":       &types.IntegerNumberProperty{Index: &yes},
+						"name":     &types.TextProperty{Index: &yes},
+						"prospect": &types.ObjectProperty{
+							Dynamic: &dynamicmapping.False,
+							Enabled: &yes,
+							Properties: map[string]types.Property{
+								"id":       &types.IntegerNumberProperty{Index: &yes},
+								"name":     &types.TextProperty{Index: &yes},
+								"ardf":     &types.TextProperty{Index: &yes},
+							},
+						},
+					},
+				},
+				"shotlines": &types.ObjectProperty{
+					Dynamic: &dynamicmapping.False,
+					Enabled: &yes,
+					Properties: map[string]types.Property{
+						"id":       &types.IntegerNumberProperty{Index: &yes},
+						"name":     &types.TextProperty{Index: &yes},
+						"year":     &types.IntegerNumberProperty{Index: &yes},
+						"min":      &types.FloatNumberProperty{Index: &yes},
+						"max":      &types.FloatNumberProperty{Index: &yes},
+					},
+				},
 			},
 		},
 	)
