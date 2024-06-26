@@ -16,7 +16,7 @@ SELECT
 	w.well,
 	o.outcrop,
 	b.borehole,
-	sl.shotlines,
+	sl.shotline,
 	g.geometries
 FROM inventory AS i
 LEFT OUTER JOIN (
@@ -72,7 +72,7 @@ LEFT OUTER JOIN (
 		'year', sl.year,
 		'min', sp.shotline_min,
 		'max', sp.shotline_max
-	))) AS shotlines
+	))) AS shotline
 FROM(
 	SELECT 
 	isp.inventory_id, 

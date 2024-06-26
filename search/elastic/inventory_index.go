@@ -74,7 +74,7 @@ func (es *Elastic) NewInventoryIndex() (util.InventoryIndex, error) {
 						},
 					},
 				},
-				"shotlines": &types.ObjectProperty{
+				"shotline": &types.ObjectProperty{
 					Dynamic: &dynamicmapping.False,
 					Enabled: &yes,
 					Properties: map[string]types.Property{

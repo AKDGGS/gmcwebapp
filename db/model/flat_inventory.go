@@ -43,13 +43,13 @@ type FlatInventory struct {
 			ARDF string `json:"ardf"`
 		} `json:"prospect,omitempty"`
 	} `json:"borehole,omitempty"`
-	Shotlines []struct {
+	Shotline []struct {
 		ID   int32    `json:"id"`
 		Name string   `json:"name"`
 		Year *int32   `json:"year,omitempty"`
 		Min  *float64 `json:"min,omitempty"`
 		Max  *float64 `json:"max,omitempty"`
-	} `json:"shotlines,omitempty"`
+	} `json:"shotline,omitempty"`
 }
 
 func (f *FlatInventory) StringID() string {
