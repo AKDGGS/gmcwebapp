@@ -13,9 +13,9 @@ SELECT
 	i.barcode,
 	i.remark,
 	i.can_publish,
-	w.wells,
+	w.well,
 	o.outcrop,
-	b.boreholes,
+	b.borehole,
 	sl.shotlines,
 	g.geometries
 FROM inventory AS i
@@ -28,7 +28,7 @@ LEFT OUTER JOIN (
 			'altnames', w.alt_names,
 			'number', w.well_number,
 			'api', w.api_number
-		))) AS wells
+		))) AS well
 	FROM inventory_well AS iw
 	JOIN well AS w ON w.well_id = iw.well_id
 	GROUP BY iw.inventory_id
@@ -57,7 +57,7 @@ LEFT OUTER JOIN (
 			'name', p.name,
 			'ardf', p.ardf_number
 			)
-	))) AS boreholes
+	))) AS borehole
 	FROM inventory_borehole AS ib
 	JOIN borehole as b ON b.borehole_id = ib.borehole_id
 	LEFT OUTER JOIN prospect AS p ON p.prospect_id = b.prospect_id

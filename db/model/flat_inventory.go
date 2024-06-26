@@ -21,20 +21,20 @@ type FlatInventory struct {
 	Remark         *string         `json:"remark,omitempty"`
 	Geometries     json.RawMessage `json:"geometries,omitempty"`
 	CanPublish     bool            `db:"can_publish" json:"can_publish"`
-	Wells          []struct {
+	Well          []struct {
 		ID       int32   `json:"id"`
 		Name     string  `json:"name"`
 		AltNames *string `json:"altnames,omitempty"`
 		Number   *string `json:"number,omitempty"`
 		API      *string `json:"api,omitempty"`
-	} `json:"wells,omitempty"`
+	} `json:"well,omitempty"`
 	Outcrop		   []struct {
 		ID       int32   `json:"id"`
 		Name     string  `json:"name"`
 		Number   *string `json:"number,omitempty"`
 		Year     *int32 `json:"year,omitempty"`
 	} `json:"outcrop,omitempty"`
-	Boreholes		[]struct {
+	Borehole		[]struct {
 		ID       int32   `json:"id"`
 		Name     string  `json:"name"`
 		Prospect struct {
@@ -42,7 +42,7 @@ type FlatInventory struct {
 			Name     string  `json:"name"`
 			ARDF	 string  `json:"ardf"`
 		} `json:"prospect,omitempty"`
-	} `json:"boreholes,omitempty"`
+	} `json:"borehole,omitempty"`
 	Shotlines		[]struct {
 		ID       int32    `json:"id"`
 		Name     string   `json:"name"`

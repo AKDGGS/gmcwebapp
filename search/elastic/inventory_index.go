@@ -36,7 +36,7 @@ func (es *Elastic) NewInventoryIndex() (util.InventoryIndex, error) {
 				"barcode":     &types.TextProperty{Index: &yes},
 				"remark":      &types.TextProperty{Index: &yes},
 				"can_publish": &types.BooleanProperty{Index: &yes},
-				"wells": &types.ObjectProperty{
+				"well": &types.ObjectProperty{
 					Dynamic: &dynamicmapping.False,
 					Enabled: &yes,
 					Properties: map[string]types.Property{
@@ -57,7 +57,7 @@ func (es *Elastic) NewInventoryIndex() (util.InventoryIndex, error) {
 						"year":     &types.IntegerNumberProperty{Index: &yes},
 					},
 				},
-				"boreholes": &types.ObjectProperty{
+				"borehole": &types.ObjectProperty{
 					Dynamic: &dynamicmapping.False,
 					Enabled: &yes,
 					Properties: map[string]types.Property{
