@@ -29,6 +29,9 @@ func (srv *Server) Start() error {
 	}
 
 	mux := http.NewServeMux()
+	// Main page redirect
+	mux.Handle("/{$}", http.RedirectHandler("inventory/search", 301))
+
 	// Interactive login/logout machinery
 	mux.HandleFunc("/login", srv.Auths.CheckForm)
 	mux.HandleFunc("/logout", srv.Auths.Logout)
