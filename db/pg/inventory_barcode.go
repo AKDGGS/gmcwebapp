@@ -94,6 +94,11 @@ func (pg *Postgres) GetInventoryByBarcode(barcode string, flags int) ([]*model.I
 	}
 	rows.Close()
 
+	// If no inventory is found, stop right here
+	if len(inventory) == 0 {
+		return nil, nil
+	}
+
 	if len(borehole_ids) > 0 {
 		q, err := assets.ReadString("pg/borehole/by_borehole_ids.sql")
 		if err != nil {
