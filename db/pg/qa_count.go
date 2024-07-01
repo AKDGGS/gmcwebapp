@@ -26,6 +26,9 @@ func (pg *Postgres) CountQAReport(id int) (int, error) {
 	var count int
 	err = pg.pool.QueryRow(context.Background(), q).Scan(&count)
 	if err != nil {
+		if err == ErrNoRows {
+			return 0, nil
+		}
 		return 0, err
 	}
 	return count, nil

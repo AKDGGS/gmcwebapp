@@ -24,7 +24,7 @@ func (pg *Postgres) CheckToken(tok string) (*model.Token, error) {
 		r, pgx.RowToAddrOfStructByNameLax[model.Token],
 	)
 	if err != nil {
-		if err == pgx.ErrNoRows {
+		if err == ErrNoRows {
 			return nil, nil
 		}
 		return nil, err

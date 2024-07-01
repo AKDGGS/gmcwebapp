@@ -19,6 +19,9 @@ func (pg *Postgres) AddContainer(barcode string, name string, remark string) err
 	var count int
 	err = pg.pool.QueryRow(context.Background(), q, barcode).Scan(&count)
 	if err != nil {
+		if err == ErrNoRows {
+			return nil
+		}
 		return err
 	}
 

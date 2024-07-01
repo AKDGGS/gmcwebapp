@@ -44,6 +44,9 @@ func (pg *Postgres) MoveInventoryAndContainers(dest string, barcodes_to_move []s
 	var barcodes_valid bool
 	err = pg.pool.QueryRow(context.Background(), q, barcodes_to_move).Scan(&barcodes_valid)
 	if err != nil {
+		if err == ErrNoRows {
+			return nil
+		}
 		return err
 	}
 	defer rows.Close()

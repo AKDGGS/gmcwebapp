@@ -22,7 +22,7 @@ func (pg *Postgres) GetFile(id int) (*model.File, error) {
 		r, pgx.RowToAddrOfStructByNameLax[model.File],
 	)
 	if err != nil {
-		if err == pgx.ErrNoRows {
+		if err == ErrNoRows {
 			return nil, nil
 		}
 		return nil, err

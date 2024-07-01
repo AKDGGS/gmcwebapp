@@ -156,7 +156,7 @@ func cQryStruct[T any](conn *pgxpool.Conn, qry string, args ...interface{}) (*T,
 	}
 	v, err := pgx.CollectOneRow(r, pgx.RowToAddrOfStructByNameLax[T])
 	if err != nil {
-		if err == pgx.ErrNoRows {
+		if err == ErrNoRows {
 			return nil, nil
 		}
 		return nil, fmt.Errorf("%s: %s", qry, err)

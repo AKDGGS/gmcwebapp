@@ -27,6 +27,9 @@ func (pg *Postgres) AddAudit(remark string, container_list []string) error {
 	var audit_group_id int32
 	err = tx.QueryRow(context.Background(), q, remark).Scan(&audit_group_id)
 	if err != nil {
+		if err == ErrNoRows {
+			return nil
+		}
 		return err
 	}
 	if audit_group_id == 0 {

@@ -23,6 +23,9 @@ func (pg *Postgres) CreateToken(tk *model.Token) error {
 		context.Background(), q, tk.Description, tk.Token,
 	).Scan(&tk.ID)
 	if err != nil {
+		if err == ErrNoRows {
+			return nil
+		}
 		return err
 	}
 

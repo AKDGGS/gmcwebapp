@@ -24,6 +24,9 @@ func (pg *Postgres) AddInventory(barcode string, remark string, container_id *in
 	var inventory_id int32
 	err = tx.QueryRow(context.Background(), q, barcode, remark, nil).Scan(&inventory_id)
 	if err != nil {
+		if err == ErrNoRows {
+			return nil
+		}
 		return err
 	}
 	if inventory_id == 0 {
@@ -36,6 +39,9 @@ func (pg *Postgres) AddInventory(barcode string, remark string, container_id *in
 	var iq_id int32
 	err = tx.QueryRow(context.Background(), q, inventory_id, nil, username, issues).Scan(&iq_id)
 	if err != nil {
+		if err == ErrNoRows {
+			return nil
+		}
 		return err
 	}
 	if iq_id == 0 {

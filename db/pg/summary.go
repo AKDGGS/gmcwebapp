@@ -16,6 +16,9 @@ func (pg *Postgres) GetSummaryByBarcode(barcode string, flags int) (*model.Summa
 	var barcode_count int32
 	err = pg.pool.QueryRow(context.Background(), q, barcode).Scan(&barcode_count)
 	if err != nil {
+		if err == ErrNoRows {
+			return nil, nil
+		}
 		return nil, err
 	}
 	// return nil, error if the barcode is not a container (barcode_count == 0)

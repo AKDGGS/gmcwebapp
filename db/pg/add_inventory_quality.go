@@ -48,6 +48,9 @@ func (pg *Postgres) AddInventoryQuality(barcode string, remark string, issues []
 	var iq_id int32
 	err = tx.QueryRow(context.Background(), q, inventory_ids[0], nil, username, issues).Scan(&iq_id)
 	if err != nil {
+		if err == ErrNoRows {
+			return nil
+		}
 		return err
 	}
 	if iq_id == 0 {
