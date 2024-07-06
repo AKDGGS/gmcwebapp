@@ -45,8 +45,8 @@ LEFT OUTER JOIN (
 		iw.inventory_id,
 		jsonb_agg(jsonb_strip_nulls(jsonb_build_object(
 			'id', w.well_id,
-			'name', w.name,
-			'altnames', w.alt_names,
+			'name', array_remove(array[w.name, w.alt_names], null),
+			'display_name', w.name,
 			'number', w.well_number,
 			'api', w.api_number
 		))) AS well

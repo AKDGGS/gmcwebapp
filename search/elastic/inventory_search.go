@@ -26,7 +26,7 @@ func (es *Elastic) SearchInventory(params *util.InventoryParams) (*util.Inventor
 			"outcrop.year",
 			"shotline.year",
 			"prospect.ardf",
-			"well.altnames",
+			"well.name",
 			"publication.number",
 			"publication.description",
 			"publication.series",

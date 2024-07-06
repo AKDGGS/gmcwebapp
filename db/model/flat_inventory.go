@@ -34,11 +34,11 @@ type FlatInventory struct {
 	Note           []string        `json:"note,omitempty"`
 	Issue          []string        `json:"issue,omitempty"`
 	Well           []struct {
-		ID       int32   `json:"id"`
-		Name     string  `json:"name"`
-		AltNames *string `json:"altnames,omitempty"`
-		Number   *string `json:"number,omitempty"`
-		API      *string `json:"api,omitempty"`
+		ID          int32    `json:"id"`
+		DisplayName string   `json:"display_name"`
+		Name        []string `json:"name,omitempty"`
+		Number      *string  `json:"number,omitempty"`
+		API         *string  `json:"api,omitempty"`
 	} `json:"well,omitempty"`
 	Outcrop []struct {
 		ID     int32   `json:"id"`
