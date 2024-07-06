@@ -132,7 +132,7 @@ function doSearch(dir){
 			document.createTextNode(response.from + 1)
 		);
 		elementEmpty('result-to').appendChild(
-			document.createTextNode(response.from + response.hits.length + 1)
+			document.createTextNode(response.from + response.hits.length)
 		);
 		elementEmpty('result-total').appendChild(
 			document.createTextNode(response.total)
@@ -152,7 +152,7 @@ function doSearch(dir){
 
 		result.innerHTML = mustache.render(
 			document.getElementById('tmpl-search').innerHTML,
-			response.hits, {}, ['[[', ']]']
+			response, {}, ['[[', ']]']
 		);
 
 		elementDisplay('result-control', 'block');

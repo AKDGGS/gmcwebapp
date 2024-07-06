@@ -23,7 +23,7 @@ func (srv *Server) ServeSearchInventoryJSON(w http.ResponseWriter, r *http.Reque
 
 	size, err := strconv.Atoi(q.Get("size"))
 	if err != nil || size > 1000 {
-		size = 100
+		size = 25
 	}
 	from, err := strconv.Atoi(q.Get("from"))
 	if err != nil || from < 0 {

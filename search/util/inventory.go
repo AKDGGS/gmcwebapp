@@ -23,10 +23,11 @@ type InventoryParams struct {
 }
 
 type InventoryResults struct {
-	Hits  []model.FlatInventory `json:"hits,omitempty"`
-	From  int                   `json:"from"`
-	Total int64                 `json:"total"`
-	Time  time.Duration         `json:"time"`
+	Hits    []model.FlatInventory `json:"hits,omitempty"`
+	From    int                   `json:"from"`
+	Total   int64                 `json:"total"`
+	Time    time.Duration         `json:"time"`
+	Private bool                  `json:"private,omitempty"`
 }
 
 func (ir *InventoryResults) MarshalJSON() ([]byte, error) {

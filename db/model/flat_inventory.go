@@ -17,10 +17,10 @@ type FlatInventory struct {
 	CoreDiameter   *float64        `json:"diameter,omitempty"`
 	CoreName       *string         `json:"core_name,omitempty"`
 	CoreUnit       *string         `json:"core_unit,omitempty"`
-	IntervalTop    *float64        `json:"top,omitempty"`
-	IntervalBottom *float64        `json:"bottom,omitempty"`
-	IntervalUnit   *string         `json:"interval_unit,omitempty"`
-	Keywords       []string        `json:"keywords,omitempty"`
+	IntervalTop    *float64        `db:"interval_top" json:"top,omitempty"`
+	IntervalBottom *float64        `db:"interval_bottom" json:"bottom,omitempty"`
+	IntervalUnit   *string         `db:"interval_unit" json:"unit,omitempty"`
+	Keyword        []string        `json:"keyword,omitempty"`
 	Barcode        []string        `json:"barcode,omitempty"`
 	DisplayBarcode *string         `json:"display_barcode,omitempty"`
 	ContainerID    *int32          `json:"container_id,omitempty"`
@@ -29,9 +29,10 @@ type FlatInventory struct {
 	Geometries     json.RawMessage `json:"geometries,omitempty"`
 	ProjectID      *int32          `json:"project_id,omitempty"`
 	Project        *string         `json:"project,omitempty"`
-	CanPublish     bool            `db:"can_publish" json:"can_publish"`
+	CanPublish     *bool           `db:"can_publish" json:"can_publish,omitempty"`
 	Description    *string         `json:"description,omitempty"`
 	Note           []string        `json:"note,omitempty"`
+	Issue          []string        `json:"issue,omitempty"`
 	Well           []struct {
 		ID       int32   `json:"id"`
 		Name     string  `json:"name"`
@@ -64,6 +65,7 @@ type FlatInventory struct {
 	Publication []struct {
 		ID          int32  `json:"id"`
 		Title       string `json:"title"`
+		Year        *int32 `json:"year,omitempty"`
 		Description string `json:"description,omitempty"`
 		Number      string `json:"number,omitempty"`
 		Series      string `json:"series,omitempty"`

@@ -10,11 +10,15 @@
 							<th>Top/<br>Bottom</th>
 							<th>Keywords</th>
 							<th>Collection</th>
+							[[#private]]
+							<th>Barcode</th>
+							<th>Location /<br>Quality</th>
+							[[/private]]
 						</tr>
 					</thead>
 					<tbody>
-						[[#.]]
-						<tr>
+						[[#hits]]
+						<tr class="[[#borehole.0]]borehole [[/borehole.0]][[#well.0]]well [[/well.0]][[#outcrop.0]]outcrop [[/outcrop.0]][[#shotline.0]]shotline [[/shotline.0]]">
 							<td><a href="[[id]]">[[id]]</a></td>
 							<td>
 								[[#well]]
@@ -33,10 +37,13 @@
 								</div>
 								[[/outcrop]]
 								[[#borehole]]
+								[[#prospect]]
 								<div>
-									Borehole: <a href="../borehole/[[id]]">
-										[[name]]
-									</a>
+									Prospect: <a href="../prospect/[[id]]">[[name]]</a>
+								</div>
+								[[/prospect]]
+								<div>
+									Borehole: <a href="../borehole/[[id]]">[[name]]</a>
 								</div>
 								[[/borehole]]
 								[[#shotline]]
@@ -47,9 +54,13 @@
 								[[/shotline]]
 								[[#publication]]
 								<div>
-									Publication: [[title]]
+									Publication: [[title]] [[#year]]([[year]])[[/year]]
+									[[#description]]
+										<br> Description: [[description]]
+									[[/description]]
 								</div>
 								[[/publication]]
+								[[#project]]<div>Project: [[.]][[/project]]
 							</td>
 							<td>
 								[[sample]]
@@ -57,22 +68,31 @@
 							</td>
 							<td>
 								[[box]]
-								[[#set]]<br>[[set]][[/set]]
+								[[#set]]<br>[[.]][[/set]]
 							</td>
 							<td>
 								[[core]]
-								[[#diameter]]<br>[[diameter]][[/diameter]]
+								[[#diameter]]<br>[[.]][[/diameter]]
 							</td>
 							<td>
-								[[#top]][[top]] ft[[/top]]
-								[[#bottom]]<br>[[bottom]] ft[[/bottom]]
+								[[#top]][[.]] [[unit]][[/top]]
+								[[#bottom]]<br>[[.]] [[unit]][[/bottom]]
 							</td>
 							<td class="csp">
-								[[#keywords]]<span>[[.]]</span>[[/keywords]]
+								[[#keyword]]<span>[[.]]</span>[[/keyword]]
 							</td>
 							<td>[[collection]]</td>
+							[[#private]]
+							<td>[[display_barcode]]</td>
+							<td>
+								[[path_cache]]
+								[[#issue.0]]
+								<div class="quality">[[#issue]]<span>[[.]]</span>[[/issue]]</div>
+								[[/issue.0]]
+							</td>
+							[[/private]]
 						</tr>
-						[[/.]]
+						[[/hits]]
 					</tbody>
 				</table>
 			</script>

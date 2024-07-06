@@ -13,9 +13,9 @@ SELECT
 	i.interval_top,
 	i.interval_bottom,
 	i.interval_unit,
-	i.keywords,
+	i.keywords AS keyword,
 	array_remove(array[i.barcode, i.alt_barcode, ct.barcode, ct.alt_barcode], null) as barcode,
-	coalesce(i.barcode, i.alt_barcode, ct.barcode, ct.alt_barcode) as display_barcode,
+	COALESCE(i.barcode, i.alt_barcode, ct.barcode, ct.alt_barcode) as display_barcode,
 	ct.container_id,
 	ct.path_cache AS container_path,
 	i.remark,
@@ -28,11 +28,18 @@ SELECT
 	p.publication,
 	n.note,
 	g.geometries,
-	pj.project_id, 
-	pj.name AS project
+	pj.project_id,
+	pj.name AS project,
+	iq.issues AS issue
 FROM inventory AS i
-LEFT OUTER JOIN container AS ct ON ct.container_id = i.container_id AND ct.active
-LEFT OUTER JOIN project AS pj ON pj.project_id = i.project_id
+LEFT OUTER JOIN container AS ct
+	ON ct.container_id = i.container_id AND ct.active
+LEFT OUTER JOIN project AS pj
+	ON pj.project_id = i.project_id
+LEFT OUTER JOIN collection AS co
+	ON co.collection_id = i.collection_id
+LEFT OUTER JOIN core_diameter as cd
+	on cd.core_diameter_id = i.core_diameter_id
 LEFT OUTER JOIN (
 	SELECT
 		iw.inventory_id,
@@ -78,8 +85,8 @@ LEFT OUTER JOIN (
 	GROUP BY ib.inventory_id, b.borehole_id, p.prospect_id
 ) AS b on b.inventory_id = i.inventory_id
 LEFT OUTER JOIN (
-	SELECT 
-		sp.inventory_id, 
+	SELECT
+		sp.inventory_id,
 		jsonb_agg(jsonb_strip_nulls(jsonb_build_object(
 			'id', sl.shotline_id,
 			'name', sl.name,
@@ -88,8 +95,8 @@ LEFT OUTER JOIN (
 			'max', sp.shotline_max
 	))) AS shotline
 FROM(
-	SELECT 
-		isp.inventory_id, 
+	SELECT
+		isp.inventory_id,
 		sp.shotline_id,
 		MIN(sp.shotpoint_number) AS shotline_min,
 		MAX(sp.shotpoint_number) AS shotline_max
@@ -106,6 +113,7 @@ LEFT OUTER JOIN (
 		jsonb_agg(jsonb_strip_nulls(jsonb_build_object(
 			'id', p.publication_id,
 			'title', p.title,
+			'year', p.year,
 			'description', p.description,
 			'number', p.publication_number,
 			'series', p.publication_series
@@ -131,8 +139,10 @@ LEFT OUTER JOIN (
 	WHERE ST_NPoints(geog::geometry) < 100
 	GROUP BY inventory_id
 ) AS g ON g.inventory_id = i.inventory_id
-LEFT OUTER JOIN collection AS co
-	ON co.collection_id = i.collection_id
-LEFT OUTER JOIN core_diameter as cd
-	on cd.core_diameter_id = i.core_diameter_id
+LEFT OUTER JOIN (
+	SELECT DISTINCT ON (inventory_id)
+		inventory_id, issues
+	FROM inventory_quality
+	ORDER BY inventory_id, check_date DESC
+) AS iq ON iq.inventory_id = i.inventory_id
 WHERE i.active

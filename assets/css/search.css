@@ -3,12 +3,31 @@
 .ol-search-tools div:not(:first-child) { margin-top: 1.2em; }
 .noresults { margin: 1em; font-size: 1.2em; font-weight: bold; }
 .csp span:not(:last-of-type)::after { content: ", "; }
+.quality span {
+	font-size: 12px;
+	display: inline-block;
+	padding: 0 5px;
+	margin: 2px 4px 0px 0px;
+	background-color: red;
+	color: #fff;
+	border-radius: 4px;
+	text-transform: uppercase;
+}
 #map { flex: 0 0 100%; height: 50vh; max-height: 400px; min-height: 250px; margin: 0; } 
 #result-control { display: none; margin: 4px 12px 2px auto; }
 #result { flex: 0 0 100%; }
 #result table { width: 100%; border-collapse: collapse; }
 #result table tbody tr:nth-child(odd) { background-color: #ddd; }
-#result table tbody tr:hover { background-color: #ff9; }
+#result table tbody tr.shotline { background-color: #ffeeee; }
+#result table tbody tr.shotline:nth-child(odd) { background-color: #ffdcdc; }
+#result table tbody tr.outcrop { background-color: #ffffe6; }
+#result table tbody tr.outcrop:nth-child(odd) { background-color: #ffffcc; }
+#result table tbody tr.borehole { background-color: #f0ffeb; }
+#result table tbody tr.borehole:nth-child(odd) { background-color: #e0ffd6; }
+#result table tbody tr.well { background-color: #ebf5ff; }
+#result table tbody tr.well:nth-child(odd) { background-color: #d6ebff; }
 #result td, #result th { vertical-align: top; text-align: left; padding: 4px 8px; }
 #result th { vertical-align: bottom; border-bottom: 1px solid #000; }
 #result td.keyword { white-space: nowrap; }
+#result a { color: #428bca; text-decoration: none; }
+#result a:hover { text-decoration: underline; }
