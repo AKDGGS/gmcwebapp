@@ -143,10 +143,12 @@ function doSearch(dir){
 		);
 
 		response.hits.forEach(hit => {
-			if ('geojson' in hit){
-				result_source.addFeature(
-					fmt.readFeature(hit.geojson)
-				);
+			if ('geometries' in hit){
+				hit['geometries'].forEach(g => {
+					result_source.addFeature(
+						fmt.readFeature(g)
+					);
+				});
 			}
 		});
 
