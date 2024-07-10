@@ -52,30 +52,147 @@ SELECT
 	iv.modified_date,
 	iv.modified_user,
 	iv.active,
-	ARRAY_AGG(DISTINCT ib.borehole_id) FILTER (WHERE ib.borehole_id IS NOT NULL) AS borehole_ids,
-	ARRAY_AGG(DISTINCT io.outcrop_id) FILTER (WHERE io.outcrop_id IS NOT NULL) AS outcrop_ids,
-	ARRAY_AGG(DISTINCT isp.shotpoint_id) FILTER (WHERE isp.shotpoint_id IS NOT NULL) AS shotpoint_ids,
-	ARRAY_AGG(DISTINCT iw.well_id) FILTER (WHERE iw.well_id IS NOT NULL) AS well_ids,
-	ARRAY_AGG(DISTINCT iq.inventory_quality_id) FILTER (WHERE iq.inventory_quality_id IS NOT NULL) AS quality_ids
+	(
+		SELECT
+		jsonb_agg(
+			jsonb_strip_nulls(
+				jsonb_build_object(
+					'id', b.borehole_id,
+					'name', b.name,
+					'prospect',
+						jsonb_build_object(
+						'id', b.prospect_id,
+						'name', p.name,
+						'ardf', p.ardf_number
+					)
+				)
+			)
+		)
+		FROM inventory_borehole AS ib
+		JOIN borehole AS b ON b.borehole_id = ib.borehole_id
+		LEFT JOIN prospect AS p ON p.prospect_id = b.prospect_id
+		WHERE ib.inventory_id = iv.inventory_id
+		) AS boreholes,
+	(
+		SELECT jsonb_agg(
+			jsonb_strip_nulls(
+				jsonb_build_object(
+					'id', o.outcrop_id,
+					'name', o.name,
+					'number', o.outcrop_number,
+					'year', o.year
+				)
+			)
+		)
+		FROM inventory_outcrop AS io
+		JOIN outcrop AS o ON o.outcrop_id = io.outcrop_id
+		WHERE io.inventory_id = iv.inventory_id
+	) AS outcrops,
+	(
+		SELECT jsonb_agg(
+			jsonb_strip_nulls(
+				jsonb_build_object(
+					'id', sq.shotpoint_id,
+					'number', sq.shotpoint_number,
+					'shotline',
+					jsonb_strip_nulls(
+						jsonb_build_object(
+							'id', sq.shotline_id,
+							'name', sq.name,
+							'alt_names', sq.alt_names,
+							'year', sq.year,
+							'remark', sq.remark
+						)
+					)
+				)
+			) ORDER BY sq.shotline_id, sq.shotpoint_number
+		) AS shotpoints
+		FROM (
+			SELECT isp.inventory_id, sp.shotpoint_id, sp.shotpoint_number, sl.shotline_id, sl.name, sl.alt_names, sl.year, sl.remark
+			FROM inventory_shotpoint AS isp
+			LEFT OUTER JOIN shotpoint AS sp ON sp.shotpoint_id = isp.shotpoint_id
+			LEFT OUTER JOIN shotline AS sl ON sl.shotline_id = sp.shotline_id
+			WHERE isp.inventory_id = iv.inventory_id
+			ORDER BY sl.shotline_id, sp.shotpoint_number
+		) AS sq
+	) AS shotpoints,
+	(
+		SELECT jsonb_agg(
+			jsonb_strip_nulls(
+				jsonb_build_object(
+					'id', wq.well_id,
+					'name', wq.name,
+					'alt_names', wq.alt_names,
+					'number', wq.well_number,
+					'api_number', wq.api_number,
+					'onshore', wq.is_onshore,
+					'federal', wq.is_federal,
+					'spud_date', to_char(wq.spud_date, 'YYYY-MM-DD"T"HH24:MI:SS"Z"'),
+					'completion date', to_char(wq.completion_date, 'YYYY-MM-DD"T"HH24:MI:SS"Z"'),
+					'measured_depth', wq.measured_depth,
+					'vertical_depth', wq.vertical_depth,
+					'elevation', wq.elevation,
+					'elevation_kb', wq.elevation_kb,
+					'permit_status', wq.permit_status,
+					'completion_status', wq.completion_status,
+					'permit_number', wq.permit_number,
+					'unit', COALESCE(wq.unit::text, 'ft'),
+					'organizations', (
+						SELECT json_agg(
+							jsonb_build_object(
+								'id', org.organization_id,
+								'name', org.name,
+								'type', json_build_object('name', org.ot_name),
+								'remark', org.remark,
+								'is_current', org.is_current
+							)
+						)
+						FROM (
+							SELECT o.organization_id, o.name, ot.name AS ot_name, o.remark, wo.is_current, wo.well_id
+							FROM organization AS o
+							JOIN organization_type AS ot ON o.organization_type_id = ot.organization_type_id
+							JOIN well_operator AS wo ON o.organization_id = wo.organization_id
+							WHERE wo.well_id = wq.well_id
+							ORDER BY wo.is_current DESC, o.name
+						) AS org
+					)
+				)
+			)
+		) AS wells
+	FROM (
+		SELECT iw.inventory_id, w.well_id, w.name, w.alt_names, w.well_number, w.api_number,
+		w.is_onshore, w.is_federal, w.spud_date, w.completion_date, w.measured_depth,
+		w.vertical_depth, w.elevation, w.elevation_kb, w.permit_status, w.completion_status,
+		w.permit_number, w.unit
+	FROM inventory_well AS iw
+		JOIN well AS w ON w.well_id = iw.well_id
+		WHERE iw.inventory_id = iv.inventory_id
+	) AS wq
+	) AS wells,
+	(
+		SELECT jsonb_agg(
+			jsonb_strip_nulls(
+				jsonb_build_object(
+					'id', iq.inventory_quality_id,
+					'date', to_char(iq.check_date, 'YYYY-MM-DD"T"HH24:MI:SS"Z"'),
+					'remark', iq.remark,
+					'username', iq.username,
+					'issues', iq.issues::text[]
+				)
+			)
+		)
+		FROM inventory_quality AS iq
+		WHERE inventory_id = iv.inventory_id
+		GROUP BY iq.inventory_quality_id, iq.check_date
+		ORDER BY iq.check_date DESC
+		LIMIT 1
+	) AS qualities
 FROM inventory AS iv
-LEFT OUTER JOIN inventory_borehole AS ib
-	ON ib.inventory_id = iv.inventory_id
-LEFT OUTER JOIN inventory_outcrop AS io
-	ON io.inventory_id = iv.inventory_id
-LEFT OUTER JOIN inventory_shotpoint AS isp
-	ON isp.inventory_id = iv.inventory_id
-LEFT OUTER JOIN inventory_well AS iw
-	ON iw.inventory_id = iv.inventory_id
-LEFT OUTER JOIN inventory_quality AS iq
-	ON iq.inventory_id = iv.inventory_id
-LEFT OUTER JOIN collection AS cl
-	ON cl.collection_id = iv.collection_id
-LEFT OUTER JOIN container AS co
-	ON co.container_id = iv.container_id
-LEFT OUTER JOIN core_diameter AS cd
-	ON cd.core_diameter_id = iv.core_diameter_id
+LEFT OUTER JOIN collection AS cl ON cl.collection_id = iv.collection_id
+LEFT OUTER JOIN container AS co ON co.container_id = iv.container_id
+LEFT OUTER JOIN core_diameter AS cd ON cd.core_diameter_id = iv.core_diameter_id
 WHERE iv.active AND (iv.barcode = $1
-	OR iv.barcode = ('GMC-' || $1)
+	OR iv.barcode = ('GMC-' || $1 )
 	OR iv.alt_barcode = $1
 	OR iv.container_id IN (
 		WITH RECURSIVE r AS (
@@ -87,8 +204,8 @@ WHERE iv.active AND (iv.barcode = $1
 			SELECT co.container_id
 			FROM r
 			JOIN container AS co
-				ON r.container_id = co.parent_container_id
+			ON r.container_id = co.parent_container_id
 		) SELECT container_id FROM r
-	))
-	GROUP BY iv.inventory_id, cl.collection_id, co.container_id, cd.core_diameter_id
-LIMIT 100
+	)
+)
+GROUP BY iv.inventory_id, cl.collection_id, co.container_id, cd.core_diameter_id
