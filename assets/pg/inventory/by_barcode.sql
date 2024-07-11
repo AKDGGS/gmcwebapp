@@ -75,13 +75,11 @@ SELECT
 		) AS boreholes,
 	(
 		SELECT jsonb_agg(
-			jsonb_strip_nulls(
-				jsonb_build_object(
-					'id', o.outcrop_id,
-					'name', o.name,
-					'number', o.outcrop_number,
-					'year', o.year
-				)
+			jsonb_build_object(
+				'id', o.outcrop_id,
+				'name', o.name,
+				'number', o.outcrop_number,
+				'year', o.year
 			)
 		)
 		FROM inventory_outcrop AS io
@@ -92,23 +90,22 @@ SELECT
 		SELECT jsonb_agg(
 			jsonb_strip_nulls(
 				jsonb_build_object(
-					'id', sq.shotpoint_id,
-					'number', sq.shotpoint_number,
-					'shotline',
-					jsonb_strip_nulls(
-						jsonb_build_object(
-							'id', sq.shotline_id,
-							'name', sq.name,
-							'alt_names', sq.alt_names,
-							'year', sq.year,
-							'remark', sq.remark
-						)
+				'id', sq.shotpoint_id,
+				'number', sq.shotpoint_number,
+				'shotline',
+					jsonb_build_object(
+					'id', sq.shotline_id,
+					'name', sq.name,
+					'alt_names', sq.alt_names,
+					'year', sq.year,
+					'remark', sq.remark
 					)
 				)
 			) ORDER BY sq.shotline_id, sq.shotpoint_number
 		) AS shotpoints
 		FROM (
-			SELECT isp.inventory_id, sp.shotpoint_id, sp.shotpoint_number, sl.shotline_id, sl.name, sl.alt_names, sl.year, sl.remark
+			SELECT isp.inventory_id, sp.shotpoint_id, sp.shotpoint_number,
+				sl.shotline_id, sl.name, sl.alt_names, sl.year, sl.remark
 			FROM inventory_shotpoint AS isp
 			LEFT OUTER JOIN shotpoint AS sp ON sp.shotpoint_id = isp.shotpoint_id
 			LEFT OUTER JOIN shotline AS sl ON sl.shotline_id = sp.shotline_id
@@ -148,7 +145,8 @@ SELECT
 							)
 						)
 						FROM (
-							SELECT o.organization_id, o.name, ot.name AS ot_name, o.remark, wo.is_current, wo.well_id
+							SELECT o.organization_id, o.name, ot.name AS ot_name, o.remark,
+							 	wo.is_current, wo.well_id
 							FROM organization AS o
 							JOIN organization_type AS ot ON o.organization_type_id = ot.organization_type_id
 							JOIN well_operator AS wo ON o.organization_id = wo.organization_id
@@ -159,15 +157,15 @@ SELECT
 				)
 			)
 		) AS wells
-	FROM (
-		SELECT iw.inventory_id, w.well_id, w.name, w.alt_names, w.well_number, w.api_number,
-		w.is_onshore, w.is_federal, w.spud_date, w.completion_date, w.measured_depth,
-		w.vertical_depth, w.elevation, w.elevation_kb, w.permit_status, w.completion_status,
-		w.permit_number, w.unit
-	FROM inventory_well AS iw
-		JOIN well AS w ON w.well_id = iw.well_id
-		WHERE iw.inventory_id = iv.inventory_id
-	) AS wq
+		FROM (
+			SELECT iw.inventory_id, w.well_id, w.name, w.alt_names, w.well_number,
+				w.api_number, w.is_onshore, w.is_federal, w.spud_date, w.completion_date,
+				w.measured_depth, w.vertical_depth, w.elevation, w.elevation_kb,
+				w.permit_status, w.completion_status, w.permit_number, w.unit
+			FROM inventory_well AS iw
+			JOIN well AS w ON w.well_id = iw.well_id
+			WHERE iw.inventory_id = iv.inventory_id
+		) AS wq
 	) AS wells,
 	(
 		SELECT jsonb_agg(
@@ -187,25 +185,31 @@ SELECT
 		ORDER BY iq.check_date DESC
 		LIMIT 1
 	) AS qualities
-FROM inventory AS iv
-LEFT OUTER JOIN collection AS cl ON cl.collection_id = iv.collection_id
-LEFT OUTER JOIN container AS co ON co.container_id = iv.container_id
-LEFT OUTER JOIN core_diameter AS cd ON cd.core_diameter_id = iv.core_diameter_id
-WHERE iv.active AND (iv.barcode = $1
-	OR iv.barcode = ('GMC-' || $1 )
-	OR iv.alt_barcode = $1
-	OR iv.container_id IN (
-		WITH RECURSIVE r AS (
-			SELECT container_id
-			FROM container WHERE barcode = $1
+	FROM inventory AS iv
+	LEFT OUTER JOIN collection AS cl
+		ON cl.collection_id = iv.collection_id
+	LEFT OUTER JOIN container AS co
+		ON co.container_id = iv.container_id
+	LEFT OUTER JOIN core_diameter AS cd
+		ON cd.core_diameter_id = iv.core_diameter_id
+	WHERE iv.active AND
+	(
+		iv.barcode = $1
+		OR iv.barcode = ('GMC-' || $1 )
+		OR iv.alt_barcode = $1
+		OR iv.container_id IN (
+			WITH RECURSIVE r AS (
+				SELECT container_id
+				FROM container WHERE barcode = $1
 
-			UNION ALL
+				UNION ALL
 
-			SELECT co.container_id
-			FROM r
-			JOIN container AS co
-			ON r.container_id = co.parent_container_id
-		) SELECT container_id FROM r
+				SELECT co.container_id
+				FROM r
+				JOIN container AS co
+				ON r.container_id = co.parent_container_id
+			) SELECT container_id FROM r
+		)
 	)
-)
-GROUP BY iv.inventory_id, cl.collection_id, co.container_id, cd.core_diameter_id
+	GROUP BY iv.inventory_id, cl.collection_id, co.container_id, cd.core_diameter_id
+	LIMIT 100
