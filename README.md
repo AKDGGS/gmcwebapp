@@ -26,7 +26,32 @@ The file authentication schema uses a fixed file to authenticate users. The
 file is cached on execution, so changes to the file require a restart.
 
 #### LDAP Authentication
-The LDAP authentication schema connects to an LDAP server.
+The LDAP authentication schema connects to an LDAP server.   To configure the LDAP authentication server add the following values to the configuration yaml file:
+  - type: ldap
+    ldap_url: ldap_url
+    bind_dn: bind_dn
+    bind_password: mypassword
+    bind_as_user: true
+    disable_certificate_verify: false
+    base_dn: base_dn
+    user_search: search_filter
+
+Two common configurations using placeholder values are
+
+	Example 1: bind_as_user = true
+	   - type: ldap
+	    ldap_url: ldaps://ldap4.example.com
+	    base_dn: ou=User,o=co.wv.uk.eu
+	    user_search: (uid={{.}})
+	    bind_dn: uid=<BIND_USERNAME>,ou=User,o=co.wv.uk.eu
+	    bind_password: <BIND_PASSWORD>
+
+	Example 2: bind_as_user = false
+	   - type: ldap
+	    ldap_url: ldaps://ldap5.example.com
+	    bind_as_user: false
+	    base_dn: ou=User,ou=akk,ou=tru,ou=akd,dc=poc,dc=wv,dc=com
+	    user_search: (CN={{.}})
 
 #### Token Authentication
 The token authentication schema uses the existing database connection to
