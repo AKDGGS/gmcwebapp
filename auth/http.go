@@ -10,6 +10,7 @@ import (
 	"gmc/assets"
 	"gmc/auth/securecookie"
 	authu "gmc/auth/util"
+	webu "gmc/web/util"
 )
 
 var redirect_rx *regexp.Regexp = regexp.MustCompile(`^(?:\.|borehole|inventory|outcrop|prospect|shotline|well|wells|qa)\/?(\d*|search)$`)
@@ -44,7 +45,7 @@ func (auths *Auths) Logout(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	http.Redirect(w, r, redirect, http.StatusFound)
+	webu.Redirect(w, redirect, http.StatusFound)
 }
 
 func (auths *Auths) CheckRequest(w http.ResponseWriter, r *http.Request) (*authu.User, error) {
@@ -139,7 +140,7 @@ func (auths *Auths) CheckForm(w http.ResponseWriter, r *http.Request) {
 			// and ignore any failures.
 			cookie.SetValue(w, uj)
 
-			http.Redirect(w, r, ".", http.StatusFound)
+			webu.Redirect(w, ".", http.StatusFound)
 			return
 		}
 	}
@@ -208,7 +209,7 @@ func (auths *Auths) CheckForm(w http.ResponseWriter, r *http.Request) {
 			if redirect == "" {
 				redirect = "."
 			}
-			http.Redirect(w, r, redirect, http.StatusFound)
+			webu.Redirect(w, redirect, http.StatusFound)
 			return
 		}
 

@@ -11,6 +11,7 @@ import (
 	"gmc/db"
 	"gmc/filestore"
 	"gmc/search"
+	webu "gmc/web/util"
 )
 
 type Server struct {
@@ -29,8 +30,11 @@ func (srv *Server) Start() error {
 	}
 
 	mux := http.NewServeMux()
+
 	// Main page redirect
-	mux.Handle("/{$}", http.RedirectHandler("inventory/search", 301))
+	mux.HandleFunc("/{$}", func(w http.ResponseWriter, r *http.Request) {
+		webu.Redirect(w, "inventory/search", http.StatusFound)
+	})
 
 	// Interactive login/logout machinery
 	mux.HandleFunc("/login", srv.Auths.CheckForm)
