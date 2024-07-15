@@ -39,19 +39,18 @@ The LDAP authentication schema connects to an LDAP server.   To configure the LD
 Two common configurations using placeholder values are
 
 	Example 1: bind_as_user = true
-	   - type: ldap
-	    ldap_url: ldaps://ldap4.example.com
-	    base_dn: ou=User,o=co.wv.uk.eu
-	    user_search: (uid={{.}})
-	    bind_dn: uid=<BIND_USERNAME>,ou=User,o=co.wv.uk.eu
-	    bind_password: <BIND_PASSWORD>
+	  - type: ldap
+			ldap_url: ldaps://ldap4.example.com
+			bind_dn: uid=<BIND_USERNAME>,ou=User,o=co.wv.uk.eu
 
 	Example 2: bind_as_user = false
-	   - type: ldap
-	    ldap_url: ldaps://ldap5.example.com
-	    bind_as_user: false
-	    base_dn: ou=User,ou=akk,ou=tru,ou=akd,dc=poc,dc=wv,dc=com
-	    user_search: (CN={{.}})
+		- type: ldap
+			ldap_url: ldaps://ldap5.example.com
+			bind_dn: uid=<BIND_USERNAME>,ou=User,o=co.wv.uk.eu
+			bind_password: <BIND_PASSWORD>
+			bind_as_user: false
+			base_dn: ou=User,ou=akk,ou=tru,ou=akd,dc=poc,dc=wv,dc=com
+			user_search: (CN={{.}})
 
 #### Token Authentication
 The token authentication schema uses the existing database connection to
