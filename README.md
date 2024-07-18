@@ -26,32 +26,43 @@ The file authentication schema uses a fixed file to authenticate users. The
 file is cached on execution, so changes to the file require a restart.
 
 #### LDAP Authentication
-The LDAP authentication schema establishes a connection to an LDAP server to authenticate users.  To configure the connection to the LDAP authentication server, add the following values to the configuration yaml file based on the LDAP server's configuration requirements:
+The LDAP authentication schema establishes a connection to an LDAP server
+to authenticate users.  To configure the connection to the LDAP authentication
+server, add the following values to the configuration yaml file based on the
+LDAP server's configuration requirements:
 
-* name: The authentication method name. Defaults to 'ldap'.
-* ldap_url: The LDAP server's URL.
-* bind_as_user: A boolean flag that controls whether admin or user credentials are used to bind to the LDAP server.  Defaults to false.
-* disable_certificate_verify: A boolean flag to skip certificate verification when connecting to the LDAP server.  Defaults to false.
-* bind_dn: The distinguished name (DN) used to bind to the LDAP server when bind_as_user is false.
-* bind_password: The password used to bind to the LDAP server when bind_as_user is false.
-* base_dn: The starting point for searches of the LDAP directory.
-* user_search: The filter used to narrow searches of the LDAP directory.
+* `name`: The authentication method name. Defaults to 'ldap'.
+* `ldap_url`: The LDAP server's URL.
+* `bind_as_user`: A boolean flag that controls whether admin or user credentials
+  are used to bind to the LDAP server.  Defaults to false.
+* `disable_certificate_verify`: A boolean flag to skip certificate verification
+  when connecting to the LDAP server.  Defaults to false.
+* `bind_dn`: The distinguished name (DN) used to bind to the LDAP server when
+  `bind_as_user` is false.
+* `bind_password`: The password used to bind to the LDAP server when `bind_as_user`
+  is false.
+* `base_dn`: The starting point for searches of the LDAP directory.
+* `user_search`: The filter used to narrow searches of the LDAP directory.
 
 Two common configurations using placeholder values are:
 
-	Example 1: bind_as_user = true
-		- type: ldap
-			ldap_url: ldaps://ldap4.example.com
-			bind_as_user = true
-			bind_dn: uid=<BIND_USERNAME>,ou=User,o=co.wv.uk.eu
+Example 1: `bind_as_user` = true
+```
+- type: ldap
+  ldap_url: ldaps://ldap4.example.com
+  bind_as_user = true
+  bind_dn: uid=<BIND_USERNAME>,ou=User,o=co.wv.uk.eu
+```
 
-	Example 2: bind_as_user = false
-		- type: ldap
-			ldap_url: ldaps://ldap4.example.com
-			bind_dn: uid=<BIND_USERNAME>,ou=User,o=co.wv.uk.eu
-			bind_password: <BIND_PASSWORD>
-			base_dn: ou=User,ou=akk,ou=tru,ou=akd,dc=poc,dc=wv,dc=com
-			user_search: (CN={{.}})
+Example 2: `bind_as_user` = false
+```
+- type: ldap
+  ldap_url: ldaps://ldap4.example.com
+  bind_dn: uid=<BIND_USERNAME>,ou=User,o=co.wv.uk.eu
+  bind_password: <BIND_PASSWORD>
+  base_dn: ou=User,ou=akk,ou=tru,ou=akd,dc=poc,dc=wv,dc=com
+  user_search: (CN={{.}})
+```
 
 #### Token Authentication
 The token authentication schema uses the existing database connection to
