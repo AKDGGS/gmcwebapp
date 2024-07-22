@@ -43,8 +43,11 @@ LDAP server's configuration requirements:
   is false.
 * `base_dn`: The starting point for searches of the LDAP directory.
 * `user_search`: The filter used to narrow searches of the LDAP directory.
+* `ca`: The path to a user-provided certificate,  If empty, the device's default
+  certificates are used.  `ca` is only read when disable_certificate_verify is
+  false.
 
-Two common configurations using placeholder values are:
+Three common configurations using placeholder values are:
 
 Example 1: `bind_as_user` = true
 ```
@@ -62,6 +65,16 @@ Example 2: `bind_as_user` = false
   bind_password: <BIND_PASSWORD>
   base_dn: ou=User,ou=akk,ou=tru,ou=akd,dc=poc,dc=wv,dc=com
   user_search: (CN={{.}})
+```
+
+Example 3: `ca` = "/home/user/my_cert.pem"
+```
+- type: ldap
+  ldap_url: ldaps://ldap4.example.com
+  ldap_url: ldaps://SOAADCDC06.soa.alaska.gov
+  bind_as_user: true
+  base_dn: ou=User,ou=akk,ou=tru,ou=akd,dc=poc,dc=wv,dc=com
+  ca = "/home/user/my_cert.pem"
 ```
 
 #### Token Authentication

@@ -3,7 +3,9 @@ package ldap
 import (
 	"bytes"
 	"crypto/tls"
+	"crypto/x509"
 	"fmt"
+	"io/ioutil"
 	"text/template"
 
 	authu "gmc/auth/util"
@@ -20,6 +22,7 @@ type LDAPAuth struct {
 	user_search                string
 	bind_as_user               bool
 	disable_certificate_verify bool
+	tls_config                 *tls.Config
 }
 
 func New(cfg map[string]interface{}) (*LDAPAuth, error) {
@@ -59,6 +62,19 @@ func New(cfg map[string]interface{}) (*LDAPAuth, error) {
 		user_search:                user_search,
 		bind_as_user:               bind_as_user,
 		disable_certificate_verify: disable_certificate_verify,
+		tls_config:                 &tls.Config{},
+	}
+
+	ca, _ := cfg["ca"].(string)
+	a.tls_config.InsecureSkipVerify = disable_certificate_verify
+	if !disable_certificate_verify && ca != "" {
+		ca_cert, err := ioutil.ReadFile(ca)
+		if err != nil {
+			return nil, err
+		}
+		ca_cert_pool := x509.NewCertPool()
+		ca_cert_pool.AppendCertsFromPEM(ca_cert)
+		a.tls_config.RootCAs = ca_cert_pool
 	}
 	return a, nil
 }
@@ -68,8 +84,7 @@ func (a *LDAPAuth) Name() string {
 }
 
 func (a *LDAPAuth) Check(u string, p string) (*authu.User, error) {
-	conn, err := ldap.DialURL(a.ldap_url,
-		ldap.DialWithTLSConfig(&tls.Config{InsecureSkipVerify: a.disable_certificate_verify}))
+	conn, err := ldap.DialURL(a.ldap_url, ldap.DialWithTLSConfig(a.tls_config))
 	if err != nil {
 		return nil, err
 	}
