@@ -1,6 +1,9 @@
 package model
 
 type Summary struct {
+	PathCache *string  `json:"path_cache,omitempty"`
+	Keywords  []string `json:"keywords,omitempty"`
+
 	//transient fields that are generated on-the-fly
 	//these fields don't exist in the database
 	Containers struct {
@@ -12,10 +15,6 @@ type Summary struct {
 		Collection      string `json:"collection,omitempty"`
 		CollectionTotal *int32 `json:"collection_total,omitempty"`
 	} `json:"collections,omitempty"`
-
-	Keywords struct {
-		Keywords []string `json:"keywords,omitempty"`
-	} `json:"keywords,omitempty"`
 
 	Barcodes struct {
 		Barcodes     []string `json:"barcodes,omitempty"`
