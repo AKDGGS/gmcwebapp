@@ -30,39 +30,36 @@ WITH ivs AS (
 	) AS kw
 ), bcs AS (
 	SELECT
-		ARRAY_AGG(DISTINCT COALESCE(i.barcode, i.alt_barcode)
-			ORDER BY COALESCE(i.barcode, i.alt_barcode)) AS barcodes,
-		COUNT(DISTINCT COALESCE(i.barcode, i.alt_barcode)) AS barcode_total
+	ARRAY_AGG(DISTINCT COALESCE(i.barcode, i.alt_barcode)
+		ORDER BY COALESCE(i.barcode, i.alt_barcode)) AS barcodes,
+	COUNT(DISTINCT COALESCE(i.barcode, i.alt_barcode)) AS barcode_total
 	FROM ivs
 	JOIN inventory AS i ON i.inventory_id = ANY(ivs.ids)
 	WHERE COALESCE(barcode, alt_barcode) IS NOT NULL
 ), cts AS (
-	SELECT
-		jsonb_agg(cb) AS containers
-	FROM (
-		SELECT jsonb_build_object(
-			'path_cache', c.path_cache,
-			'total', COUNT(i.inventory_id)
-		) AS cb
+		SELECT
+			c.path_cache AS container,
+			COUNT(i.inventory_id) AS container_total
 		FROM ivs
 		JOIN inventory AS i ON i.inventory_id = ANY(ivs.ids)
 		JOIN container AS c ON c.container_id = i.container_id
 		GROUP BY c.path_cache
-	) AS q
+	-- ) AS q
 ), cls AS (
 	SELECT
 		jsonb_agg(cb) AS collections
 	FROM (
 		SELECT jsonb_build_object(
-			'name', COALESCE(c.name, 'None'),
-			'total', COUNT(i.inventory_id)
+			'collection', COALESCE(c.name, 'None'),
+			'collection_total', COUNT(i.inventory_id)
 		) AS cb
 		FROM ivs
 		JOIN inventory AS i ON i.inventory_id = ANY(ivs.ids)
 		LEFT JOIN collection AS c ON c.collection_id = i.collection_id
 		GROUP BY c.name
 	) AS q
-),bhs AS (
+)
+, bhs AS (
 	SELECT
 		jsonb_agg(bh) AS boreholes
 	FROM (
@@ -97,7 +94,8 @@ WITH ivs AS (
 			o.name, o.outcrop_number
 			LIMIT 100
 	) AS q
-),sls AS (
+)
+,sls AS (
 	SELECT
 		jsonb_agg(sl) AS shotlines
 	FROM (
@@ -132,9 +130,7 @@ WITH ivs AS (
 			LIMIT 100
 	) AS q
 )
-SELECT array_length(ivs.ids, 1) AS total, kws.keywords, bcs.barcodes,
-	bcs.barcode_total, cts.containers,
-	cls.collections, bhs.boreholes, ocs.outcrops,
-	sls.shotlines, ws.wells
-FROM ivs, kws, bcs, cts, cls, bhs, ocs, sls, ws
+SELECT barcodes, barcode_total, kws.keywords, cts.container, cls.collections,
+	bhs.boreholes, ocs.outcrops, sls.shotlines, ws.wells
+FROM ivs, bcs, kws, cts, cls, bhs, ocs, sls, ws
 LIMIT 100
