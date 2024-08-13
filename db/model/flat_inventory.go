@@ -47,12 +47,14 @@ type FlatInventory struct {
 		Year   *int32  `json:"year,omitempty"`
 	} `json:"outcrop,omitempty"`
 	Borehole []struct {
-		ID       int32  `json:"id"`
-		Name     string `json:"name"`
-		Prospect struct {
-			ID   int32  `json:"id"`
-			Name string `json:"name"`
-			ARDF string `json:"ardf"`
+		ID          int32    `json:"id"`
+		DisplayName string   `json:"display_name"`
+		Name        []string `json:"name,omitempty"`
+		Prospect    struct {
+			ID          int32    `json:"id"`
+			DisplayName string   `json:"display_name"`
+			Name        []string `json:"name,omitempty"`
+			ARDF        string   `json:"ardf,omitempty"`
 		} `json:"prospect,omitempty"`
 	} `json:"borehole,omitempty"`
 	Shotline []struct {

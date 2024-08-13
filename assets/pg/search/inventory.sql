@@ -72,12 +72,14 @@ LEFT OUTER JOIN (
 		ib.inventory_id,
 		jsonb_agg(jsonb_strip_nulls(jsonb_build_object(
 			'id', b.borehole_id,
-			'name', b.name,
+			'name', array_remove(array[b.name, b.alt_names], null),
+			'display_name', b.name,
 			'prospect', jsonb_build_object(
 				'id', p.prospect_id,
-				'name', p.name,
+				'name', array_remove(array[p.name, p.alt_names], null),
+				'display_name', p.name,
 				'ardf', p.ardf_number
-				)
+			)
 	))) AS borehole
 	FROM inventory_borehole AS ib
 	JOIN borehole as b ON b.borehole_id = ib.borehole_id
