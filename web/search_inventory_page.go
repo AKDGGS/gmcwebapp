@@ -19,19 +19,22 @@ func (srv *Server) ServeSearchInventoryPage(w http.ResponseWriter, r *http.Reque
 		return
 	}
 
-	sea, err := assets.ReadString("tmpl/search.html")
-	if err != nil {
+	sparams := map[string]interface{}{
+		"user": user,
+	}
+
+	sbuf := bytes.Buffer{}
+	if err := assets.ExecuteTemplate("tmpl/search.html", &sbuf, sparams); err != nil {
 		http.Error(
-			w, fmt.Sprintf("asset error: %s", err.Error()),
+			w, fmt.Sprintf("parse error: %s", err.Error()),
 			http.StatusInternalServerError,
 		)
 		return
 	}
 
-	mtmp, err := assets.ReadString("tmpl/inventory_search.html")
-	if err != nil {
+	if err := assets.ExecuteTemplate("tmpl/inventory_search.html", &sbuf, sparams); err != nil {
 		http.Error(
-			w, fmt.Sprintf("asset error: %s", err.Error()),
+			w, fmt.Sprintf("parse error: %s", err.Error()),
 			http.StatusInternalServerError,
 		)
 		return
@@ -39,7 +42,7 @@ func (srv *Server) ServeSearchInventoryPage(w http.ResponseWriter, r *http.Reque
 
 	params := map[string]interface{}{
 		"title":   "Inventory Search",
-		"content": template.HTML(fmt.Sprintf("%s%s", sea, mtmp)),
+		"content": template.HTML(sbuf.String()),
 		"stylesheets": []string{
 			"../ol/ol.css",
 			"../ol/ol-layerswitcher.min.css",

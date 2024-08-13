@@ -11,6 +11,11 @@
 						<option>250</option>
 						<option>500</option>
 						<option>1000</option>
+						{{- if .user}}
+						<option>2500</option>
+						<option>5000</option>
+						<option>10000</option>
+						{{- end}}
 					</select>
 					|
 					<button id="result-prev">Previous</button>
