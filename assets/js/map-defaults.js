@@ -73,5 +73,41 @@ const MAP_DEFAULTS = {
 		center: ol.proj.fromLonLat([ -147.77, 64.83 ]),
 		zoom: 3,
 		maxZoom: 19
-	})
+	}),
+	Style: function(feature) {
+		let c = ((f) => {
+			if(f.get('borehole_id') || f.get('borehole')){
+				return '99, 186, 0';
+			}
+			if(f.get('outcrop_id') || f.get('outcrop')){
+				return '230, 177, 1';
+			}
+			if(f.get('shotline_id') || f.get('shotline')){
+				return '255, 138, 134';
+			}
+			if(f.get('well_id') || f.get('well')){
+				return '46, 145, 230';
+			}
+			return '44, 126, 167';
+		})(feature);
+		return new ol.style.Style({
+			fill: new ol.style.Fill({
+				color: `rgba(${c}, 0.25)`
+			}),
+			stroke: new ol.style.Stroke({
+				color: `rgba(${c}, 1)`,
+				width: 2
+			}),
+			image: new ol.style.Circle({
+				fill: new ol.style.Fill({
+					color: `rgba(${c}, 0.25)`
+				}),
+				stroke: new ol.style.Stroke({
+					color: `rgba(${c}, 1)`,
+					width: 2
+				}),
+				radius: 5
+			})
+		});
+	}
 };

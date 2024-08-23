@@ -51,28 +51,15 @@ let map = new ol.Map({
 		MAP_DEFAULTS.BaseLayers,
 		MAP_DEFAULTS.OverlayLayers,
 		new ol.layer.Vector({
-			style: new ol.style.Style({
-				fill: new ol.style.Fill({
-					color: 'rgba(44, 126, 167, 0.25)'
-				}),
-				stroke: new ol.style.Stroke({
-					color: 'rgba(44, 126, 167, 255)',
-					width: 5
-				}),
-				image: new ol.style.Circle({
-					radius: 5,
-					fill: new ol.style.Fill({
-						color: 'rgba(44, 126, 167, 0.25)'
-					}),
-					stroke: new ol.style.Stroke({
-						color: 'rgba(44, 126, 167, 255)',
-						width: 2
-					})
-				})
-			}),
+			style: MAP_DEFAULTS.Style,
 			source: result_source
 		})
 	]
+});
+map.on('pointermove', function(e){
+	e.map.getTargetElement().style.cursor = (
+		e.map.hasFeatureAtPixel(e.pixel) ? 'pointer' : ''
+	);
 });
 
 let search_active = false;
@@ -145,9 +132,9 @@ function doSearch(dir){
 		response.hits.forEach(hit => {
 			if ('geometries' in hit){
 				hit['geometries'].forEach(g => {
-					result_source.addFeature(
-						fmt.readFeature(g)
-					);
+					let feat = fmt.readFeature(g)
+					feat.setProperties(hit, true)
+					result_source.addFeature(feat);
 				});
 			}
 		});
