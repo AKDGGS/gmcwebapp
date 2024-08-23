@@ -42,6 +42,14 @@ func (es *Elastic) SearchInventory(params *util.InventoryParams) (*util.Inventor
 		TrackTotalHits(true).
 		Source_(src_filter)
 
+	if len(params.Sort) > 0 {
+		var sort []types.SortCombinations
+		for _, v := range params.Sort {
+			sort = append(sort, v)
+		}
+		sea = sea.Sort(sort...)
+	}
+
 	qry := &types.BoolQuery{}
 
 	if params.Query != "" {

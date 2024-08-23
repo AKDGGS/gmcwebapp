@@ -20,6 +20,7 @@ type InventoryParams struct {
 	From    int
 	Size    int
 	Private bool
+	Sort    []map[string]string
 }
 
 type InventoryResults struct {

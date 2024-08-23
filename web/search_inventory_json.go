@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"net/http"
 	"strconv"
+	"strings"
 
 	sutil "gmc/search/util"
 )
@@ -40,6 +41,20 @@ func (srv *Server) ServeSearchInventoryJSON(w http.ResponseWriter, r *http.Reque
 		Size:    size,
 		From:    from,
 		Private: (user != nil),
+	}
+
+	if sorts, ok := q["sort"]; ok {
+		dirs, _ := q["dir"]
+		for i, v := range sorts {
+			dir := "asc"
+			if i < len(dirs) && strings.ToLower(dirs[i]) == "desc" {
+				dir = "desc"
+			}
+			params.Sort = append(
+				params.Sort,
+				map[string]string{v: dir},
+			)
+		}
 	}
 
 	result, err := srv.Search.SearchInventory(params)

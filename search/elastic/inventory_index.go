@@ -18,6 +18,10 @@ var (
 	no  = false
 )
 
+func strPtr(s string) *string {
+	return &s
+}
+
 func (es *Elastic) NewInventoryIndex() (util.InventoryIndex, error) {
 	iname := fmt.Sprintf("inventory-%x", time.Now().UnixMicro())
 	err := es.createIndex(iname,
@@ -81,6 +85,21 @@ func (es *Elastic) NewInventoryIndex() (util.InventoryIndex, error) {
 								"name": &types.TextProperty{Index: &yes},
 								"ardf": &types.TextProperty{Index: &yes},
 							},
+						},
+					},
+				},
+				"prospect": &types.ObjectProperty{
+					Dynamic: &dynamicmapping.False,
+					Enabled: &yes,
+					Properties: map[string]types.Property{
+						"id": &types.FieldAliasProperty{
+							Path: strPtr("borehole.prospect.id"),
+						},
+						"name": &types.FieldAliasProperty{
+							Path: strPtr("borehole.prospect.name"),
+						},
+						"ardf": &types.FieldAliasProperty{
+							Path: strPtr("borehole.prospect.ardf"),
 						},
 					},
 				},
