@@ -87,6 +87,7 @@ fetch('points.json')
 	.catch(error => {
 		handleError(error);
 	});
+
 let map = new ol.Map({
 	target: 'map',
 	layers: [
@@ -121,10 +122,10 @@ let map = new ol.Map({
 	])
 });
 
-map.on('pointermove', function (e) {
-	map.getTargetElement().style.cursor = map.hasFeatureAtPixel(e.pixel)
-		? 'pointer'
-		: '';
+map.on('pointermove', function(e){
+	e.map.getTargetElement().style.cursor = (
+		e.map.hasFeatureAtPixel(e.pixel) ? 'pointer' : ''
+	);
 });
 
 //Allows the overlay to be visible.

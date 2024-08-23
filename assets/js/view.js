@@ -7,7 +7,8 @@ if(typeof geojson !== 'undefined'){
 		let content = document.getElementById('popup-content');
 		let popup = document.getElementById('popup');
 		let overlay = new ol.Overlay({
-			element: popup, autoPan: {animation:{duration:100}}
+			element: popup,
+			autoPan: { animation: { duration: 100 } }
 		});
 		let template = document.getElementById('tmpl-popup');
 
@@ -72,10 +73,10 @@ if(typeof geojson !== 'undefined'){
 			])
 		});
 
-		map.on('pointermove', function (e) {
-			map.getTargetElement().style.cursor = map.hasFeatureAtPixel(e.pixel)
-				? 'pointer'
-				: '';
+		map.on('pointermove', function(e){
+			e.map.getTargetElement().style.cursor = (
+				e.map.hasFeatureAtPixel(e.pixel) ? 'pointer' : ''
+			);
 		});
 
 		let closer = document.getElementById('popup-closer');
@@ -109,7 +110,9 @@ if(typeof geojson !== 'undefined'){
 						ft.getProperties(), {}, ['[[', ']]']
 					);
 				}
-				overlay.setPosition(e.coordinate);
+				overlay.setPosition(ol.extent.getCenter(
+					fts[0].getGeometry().getExtent()
+				));
 			});
 		}
 	}
