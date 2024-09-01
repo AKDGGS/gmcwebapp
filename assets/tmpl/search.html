@@ -2,27 +2,50 @@
 			<div class="search-container">	
 				<div id="map"></div>
 				<div id="result-control">
-					Showing
-					<select autocomplete="off" name="result-size" id="result-size">
-						<option>10</option>
-						<option selected>25</option>
-						<option>50</option>
-						<option>100</option>
-						<option>250</option>
-						<option>500</option>
-						<option>1000</option>
-						{{- if .user}}
-						<option>2500</option>
-						<option>5000</option>
-						<option>10000</option>
+					<div>
+						Showing
+						<select autocomplete="off" name="result-size" id="result-size">
+							<option>10</option>
+							<option selected>25</option>
+							<option>50</option>
+							<option>100</option>
+							<option>250</option>
+							<option>500</option>
+							<option>1000</option>
+							{{- if .user}}
+							<option>2500</option>
+							<option>5000</option>
+							<option>10000</option>
+							{{- end}}
+						</select>
+						|
+						<button id="result-prev">Previous</button>
+						Displaying <span id="result-from"></span>
+						- <span id="result-to"></span> of
+						<span id="result-total"></span>
+						<button id="result-next">Next</button>
+					</div>
+					<div>
+						Sort by
+						<select autocomplete="off" name="sort">
+						{{- range .sortby}}
+							<option value="{{index . 0}}">{{index . 1}}</option>
 						{{- end}}
-					</select>
-					|
-					<button id="result-prev">Previous</button>
-					Displaying <span id="result-from"></span>
-					- <span id="result-to"></span> of
-					<span id="result-total"></span>
-					<button id="result-next">Next</button>
+						</select>
+						<select autocomplete="off" name="dir">
+							<option value="asc" selected="selected">Asc</option>
+							<option value="desc">Desc</option>
+						</select>
+						<select autocomplete="off" name="sort">
+						{{- range .sortby}}
+							<option value="{{index . 0}}">{{index . 1}}</option>
+						{{- end}}
+						</select>
+						<select autocomplete="off" name="dir">
+							<option value="asc" selected="selected">Asc</option>
+							<option value="desc">Desc</option>
+						</select>
+					</div>
 				</div>
 				<div id="result"></div>
 			</div>

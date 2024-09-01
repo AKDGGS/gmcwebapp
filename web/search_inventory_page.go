@@ -20,7 +20,8 @@ func (srv *Server) ServeSearchInventoryPage(w http.ResponseWriter, r *http.Reque
 	}
 
 	sparams := map[string]interface{}{
-		"user": user,
+		"user":   user,
+		"sortby": srv.Search.InventorySortByFields(),
 	}
 
 	sbuf := bytes.Buffer{}

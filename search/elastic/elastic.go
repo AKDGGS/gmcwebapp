@@ -44,6 +44,14 @@ func (es *Elastic) createIndex(name string, tmap *types.TypeMapping) error {
 		&create.Request{
 			Mappings: tmap,
 			Settings: &types.IndexSettings{
+				Analysis: &types.IndexSettingsAnalysis{
+					Normalizer: map[string]types.Normalizer{
+						"clean": map[string]interface{}{
+							"type":   "custom",
+							"filter": []string{"lowercase", "trim"},
+						},
+					},
+				},
 				MaxResultWindow: &window,
 			},
 		},

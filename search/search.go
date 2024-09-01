@@ -10,6 +10,7 @@ import (
 
 type Search interface {
 	NewInventoryIndex() (util.InventoryIndex, error)
+	InventorySortByFields() [][2]string
 	SearchInventory(*util.InventoryParams) (*util.InventoryResults, error)
 	Shutdown()
 }

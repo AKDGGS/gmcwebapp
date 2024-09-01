@@ -50,10 +50,7 @@ func (srv *Server) ServeSearchInventoryJSON(w http.ResponseWriter, r *http.Reque
 			if i < len(dirs) && strings.ToLower(dirs[i]) == "desc" {
 				dir = "desc"
 			}
-			params.Sort = append(
-				params.Sort,
-				map[string]string{v: dir},
-			)
+			params.Sort = append(params.Sort, [2]string{v, dir})
 		}
 	}
 

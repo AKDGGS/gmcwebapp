@@ -45,7 +45,18 @@ func (es *Elastic) SearchInventory(params *util.InventoryParams) (*util.Inventor
 	if len(params.Sort) > 0 {
 		var sort []types.SortCombinations
 		for _, v := range params.Sort {
-			sort = append(sort, v)
+			if v[0] == "_score" {
+				sort = append(sort, map[string]string{
+					v[0]: v[1],
+				})
+			} else {
+				sort = append(sort, map[string]map[string]string{
+					v[0]: map[string]string{
+						"order":   v[1],
+						"missing": "_last",
+					},
+				})
+			}
 		}
 		sea = sea.Sort(sort...)
 	}

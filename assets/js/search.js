@@ -90,6 +90,14 @@ function doSearch(dir){
 	if(size !== 25) url += `${url?'&':''}size=${size}`;
 	if(nfrom > 0) url += `${url?'&':''}from=${nfrom}`;
 
+	url += Array.from(document.querySelectorAll('select[name="sort"]'))
+		.reduce((a, e) => {
+			return (a +
+				`${url?'&':''}sort=${e.querySelector('option:checked').value}` +
+				`&dir=${e.nextElementSibling.querySelector('option:checked').value}`
+			);
+		},'');
+
 	let feat = drawbox_control.getFeature();
 	if(feat !== null){
 		let geojson = fmt.writeGeometry(feat.getGeometry());
@@ -176,5 +184,11 @@ document.getElementById('result-prev').addEventListener(
 document.getElementById('result-next').addEventListener(
 	'click', e => doSearch(1)
 );
+document.querySelectorAll('select[name="sort"]').forEach(e => {
+	e.addEventListener('change', x => { from = 0; doSearch() });
+});
+document.querySelectorAll('select[name="dir"]').forEach(e => {
+	e.addEventListener('change', x => { from = 0; doSearch() });
+});
 
 search_control.getSearchBox().focus();

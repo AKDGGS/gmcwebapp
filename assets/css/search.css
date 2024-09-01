@@ -14,7 +14,8 @@
 	text-transform: uppercase;
 }
 #map { flex: 0 0 100%; height: 50vh; max-height: 400px; min-height: 250px; margin: 0; } 
-#result-control { display: none; margin: 4px 12px 2px auto; }
+#result-control { display: none; margin: 4px 8px 2px auto; padding: 4px 16px; background-color: #d9edf7; color: #3a87ad; border-radius: 4px; border: 1px solid #bce8f1; }
+#result-control div:not(:first-child) { margin-top: 4px; }
 #result { flex: 0 0 100%; }
 #result table { width: 100%; border-collapse: collapse; }
 #result table tbody tr:nth-child(odd) { background-color: #ddd; }
