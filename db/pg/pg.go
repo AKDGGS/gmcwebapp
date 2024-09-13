@@ -166,16 +166,23 @@ func cQryStruct[T any](conn *pgxpool.Conn, qry string, args ...interface{}) (*T,
 
 // Using the provided connection, runs the query found at the given
 // asset location, and then returns the singular result
-func cQryValue(conn *pgxpool.Conn, qry string, args ...interface{}) (interface{}, error) {
+func cQryValue[T any](conn *pgxpool.Conn, qry string, args ...interface{}) (T, error) {
 	sql, err := assets.ReadString(qry)
 	if err != nil {
-		return nil, err
+		return *new(T), err
 	}
 
-	var x interface{}
-	row := conn.QueryRow(context.Background(), sql, args...)
-	if err := row.Scan(&x); err != nil && err != ErrNoRows {
-		return nil, fmt.Errorf("%s: %s", qry, err)
+	r, err := conn.Query(context.Background(), sql, args...)
+	if err != nil {
+		return *new(T), fmt.Errorf("%s: %s", qry, err)
+	}
+
+	x, err := pgx.CollectOneRow(r, pgx.RowTo[T])
+	if err != nil {
+		if err == ErrNoRows {
+			return *new(T), nil
+		}
+		return *new(T), fmt.Errorf("%s: %s", qry, err)
 	}
 	return x, nil
 }

@@ -73,7 +73,7 @@ func (pg *Postgres) GetOutcrop(id int, flags int) (*model.Outcrop, error) {
 	}
 
 	if (flags & dbf.GEOJSON) != 0 {
-		outcrop.GeoJSON, err = cQryValue(
+		outcrop.GeoJSON, err = cQryValue[interface{}](
 			conn, "pg/outcrop/geojson.sql", id,
 		)
 		if err != nil {

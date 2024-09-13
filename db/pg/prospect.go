@@ -73,7 +73,7 @@ func (pg *Postgres) GetProspect(id int, flags int) (*model.Prospect, error) {
 	}
 
 	if (flags & dbf.GEOJSON) != 0 {
-		prospect.GeoJSON, err = cQryValue(
+		prospect.GeoJSON, err = cQryValue[interface{}](
 			conn, "pg/prospect/geojson.sql", id,
 		)
 		if err != nil {

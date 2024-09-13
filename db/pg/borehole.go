@@ -82,7 +82,7 @@ func (pg *Postgres) GetBorehole(id int, flags int) (*model.Borehole, error) {
 	}
 
 	if (flags & dbf.GEOJSON) != 0 {
-		borehole.GeoJSON, err = cQryValue(
+		borehole.GeoJSON, err = cQryValue[interface{}](
 			conn, "pg/borehole/geojson.sql", id,
 		)
 		if err != nil {

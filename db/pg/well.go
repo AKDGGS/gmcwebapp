@@ -73,7 +73,7 @@ func (pg *Postgres) GetWell(id int, flags int) (*model.Well, error) {
 	}
 
 	if (flags & dbf.GEOJSON) != 0 {
-		well.GeoJSON, err = cQryValue(
+		well.GeoJSON, err = cQryValue[interface{}](
 			conn, "pg/well/geojson.sql", id,
 		)
 		if err != nil {

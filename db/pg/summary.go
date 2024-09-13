@@ -2,7 +2,6 @@ package pg
 
 import (
 	"context"
-	"fmt"
 
 	"gmc/assets"
 	"gmc/db/model"
@@ -17,26 +16,30 @@ func (pg *Postgres) GetSummaryByBarcode(barcode string, flags int) (*model.Summa
 	}
 	defer conn.Release()
 
-	count, err := cQryValue(
+	count, err := cQryValue[int64](
 		conn, "pg/container/get_count_by_barcode.sql", barcode,
 	)
 	if err != nil {
 		return nil, err
 	}
-	if count == int64(0) {
-		return nil, fmt.Errorf("barcode is not a container")
+	if count == 0 {
+		return nil, nil
 	}
 
 	q, err := assets.ReadString("pg/summary/by_barcode.sql")
 	if err != nil {
 		return nil, err
 	}
+
 	rows, err := conn.Query(context.Background(), q, barcode)
 	if err != nil {
 		return nil, err
 	}
 	defer rows.Close()
-	summary, err := pgx.CollectOneRow(rows, pgx.RowToStructByNameLax[model.Summary])
+
+	summary, err := pgx.CollectOneRow(
+		rows, pgx.RowToStructByNameLax[model.Summary],
+	)
 	if err != nil {
 		return nil, err
 	}

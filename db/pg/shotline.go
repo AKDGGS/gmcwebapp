@@ -73,7 +73,7 @@ func (pg *Postgres) GetShotline(id int, flags int) (*model.Shotline, error) {
 	}
 
 	if (flags & dbf.GEOJSON) != 0 {
-		shotline.GeoJSON, err = cQryValue(
+		shotline.GeoJSON, err = cQryValue[interface{}](
 			conn, "pg/shotline/geojson.sql", id,
 		)
 		if err != nil {
