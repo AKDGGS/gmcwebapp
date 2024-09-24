@@ -14,25 +14,35 @@ func (srv *Server) ServeQARun(w http.ResponseWriter, r *http.Request) {
 	user, err := srv.Auths.CheckRequest(w, r)
 	if err != nil {
 		http.Error(
-			w, fmt.Sprintf("authentication error: %s", err.Error()),
+			w,
+			fmt.Sprintf("authentication error: %s", err),
 			http.StatusBadRequest,
 		)
 		return
 	}
 	if user == nil {
-		http.Error(w, "access denied", http.StatusForbidden)
+		http.Error(
+			w,
+			"access denied",
+			http.StatusForbidden,
+		)
 		return
 	}
 	q := r.URL.Query()
 	id, err := strconv.Atoi(q.Get("id"))
 	if err != nil {
-		http.Error(w, "invalid Report ID", http.StatusBadRequest)
+		http.Error(
+			w,
+			"invalid report id",
+			http.StatusBadRequest,
+		)
 		return
 	}
 	re, err := srv.DB.RunQAReport(id)
 	if err != nil {
 		http.Error(
-			w, fmt.Sprintf("query error: %s", err.Error()),
+			w,
+			fmt.Sprintf("run qa report error: %s", err),
 			http.StatusInternalServerError,
 		)
 		return
@@ -41,7 +51,8 @@ func (srv *Server) ServeQARun(w http.ResponseWriter, r *http.Request) {
 	js, err := json.Marshal(re)
 	if err != nil {
 		http.Error(
-			w, fmt.Sprintf("JSON error: %s", err.Error()),
+			w,
+			fmt.Sprintf("json marshal error: %s", err),
 			http.StatusInternalServerError,
 		)
 		return
@@ -55,7 +66,8 @@ func (srv *Server) ServeQARun(w http.ResponseWriter, r *http.Request) {
 		gz, err := gzip.NewWriterLevel(&buf, gzip.BestCompression)
 		if err != nil {
 			http.Error(
-				w, fmt.Sprintf("gzip error: %s", err.Error()),
+				w,
+				fmt.Sprintf("gzip error: %s", err),
 				http.StatusInternalServerError,
 			)
 			return
@@ -64,7 +76,8 @@ func (srv *Server) ServeQARun(w http.ResponseWriter, r *http.Request) {
 
 		if _, err := gz.Write(js); err != nil {
 			http.Error(
-				w, fmt.Sprintf("gz write error: %s", err.Error()),
+				w,
+				fmt.Sprintf("gz write error: %s", err),
 				http.StatusInternalServerError,
 			)
 			return
@@ -72,7 +85,8 @@ func (srv *Server) ServeQARun(w http.ResponseWriter, r *http.Request) {
 
 		if err := gz.Flush(); err != nil {
 			http.Error(
-				w, fmt.Sprintf("gz write error: %s", err.Error()),
+				w,
+				fmt.Sprintf("gz flush error: %s", err),
 				http.StatusInternalServerError,
 			)
 			return

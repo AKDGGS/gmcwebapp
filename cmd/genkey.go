@@ -11,7 +11,7 @@ func GenKeyCommand() int {
 	keyb := make([]byte, 32)
 	_, err := rand.Read(keyb)
 	if err != nil {
-		fmt.Fprintf(os.Stderr, "%s: %s\n", os.Args[0], err.Error())
+		fmt.Fprintf(os.Stderr, "%s: %s\n", os.Args[0], err)
 		return 1
 	}
 

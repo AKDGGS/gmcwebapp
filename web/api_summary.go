@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/http"
+	"strings"
 
 	dbf "gmc/db/flag"
 )
@@ -12,13 +13,18 @@ func (srv *Server) ServeAPISummary(w http.ResponseWriter, r *http.Request) {
 	user, err := srv.Auths.CheckRequest(w, r)
 	if err != nil {
 		http.Error(
-			w, fmt.Sprintf("authentication error: %s", err),
+			w,
+			fmt.Sprintf("authentication error: %s", err),
 			http.StatusBadRequest,
 		)
 		return
 	}
 	if user == nil {
-		http.Error(w, "access denied", http.StatusForbidden)
+		http.Error(
+			w,
+			"access denied",
+			http.StatusForbidden,
+		)
 		return
 	}
 	flags := dbf.ALL
@@ -26,11 +32,20 @@ func (srv *Server) ServeAPISummary(w http.ResponseWriter, r *http.Request) {
 		flags = dbf.ALL_NOPRIVATE
 	}
 	q := r.URL.Query()
-	barcode := q.Get("barcode")
+	barcode := strings.TrimSpace(q.Get("barcode"))
+	if barcode == "" {
+		http.Error(
+			w,
+			"barcode cannot be empty",
+			http.StatusBadRequest,
+		)
+		return
+	}
 	sum, err := srv.DB.GetSummaryByBarcode(barcode, flags)
 	if err != nil {
 		http.Error(
-			w, fmt.Sprintf("get summary by barcode error: %s", err),
+			w,
+			fmt.Sprintf("get summary by barcode error: %s", err),
 			http.StatusInternalServerError,
 		)
 		return
@@ -44,7 +59,8 @@ func (srv *Server) ServeAPISummary(w http.ResponseWriter, r *http.Request) {
 	}
 	if err != nil {
 		http.Error(
-			w, fmt.Sprintf("marshalling error: %s", err),
+			w,
+			fmt.Sprintf("json marshal error: %s", err),
 			http.StatusInternalServerError,
 		)
 		return

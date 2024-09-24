@@ -49,7 +49,7 @@ func FilePut(exec string, cfg *config.Config, cmd string, args []string) int {
 	filenames := flagset.Args()
 	db, err := db.New(cfg.Database)
 	if err != nil {
-		fmt.Fprintf(os.Stderr, "%s: %s\n", exec, err.Error())
+		fmt.Fprintf(os.Stderr, "%s: %s\n", exec, err)
 		flagset.Usage()
 		return 1
 	}
@@ -60,7 +60,7 @@ func FilePut(exec string, cfg *config.Config, cmd string, args []string) int {
 	}
 	fs, err := filestore.New(*cfg.FileStore)
 	if err != nil {
-		fmt.Fprintf(os.Stderr, "%s: %s\n", exec, err.Error())
+		fmt.Fprintf(os.Stderr, "%s: %s\n", exec, err)
 		return 1
 	}
 
@@ -111,7 +111,7 @@ func FilePut(exec string, cfg *config.Config, cmd string, args []string) int {
 			return nil
 		})
 		if err != nil {
-			fmt.Fprintf(os.Stderr, "%s\n", err.Error())
+			fmt.Fprintf(os.Stderr, "%s\n", err)
 			return 1
 		}
 	}

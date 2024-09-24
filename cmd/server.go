@@ -17,19 +17,19 @@ import (
 func ServerCommand(cfg *config.Config, exec string) int {
 	db, err := db.New(cfg.Database)
 	if err != nil {
-		fmt.Fprintf(os.Stderr, "%s: %s\n", exec, err.Error())
+		fmt.Fprintf(os.Stderr, "%s: %s\n", exec, err)
 		return 1
 	}
 
 	sea, err := search.New(cfg.Search)
 	if err != nil {
-		fmt.Fprintf(os.Stderr, "%s: %s\n", exec, err.Error())
+		fmt.Fprintf(os.Stderr, "%s: %s\n", exec, err)
 		return 1
 	}
 
 	auths, err := auth.NewAuths(cfg.SessionKeyBytes(), cfg.MaxAge, cfg.Auths, db)
 	if err != nil {
-		fmt.Fprintf(os.Stderr, "%s: %s\n", exec, err.Error())
+		fmt.Fprintf(os.Stderr, "%s: %s\n", exec, err)
 		return 1
 	}
 
@@ -37,7 +37,7 @@ func ServerCommand(cfg *config.Config, exec string) int {
 	if cfg.FileStore != nil {
 		stor, err = filestore.New(*cfg.FileStore)
 		if err != nil {
-			fmt.Fprintf(os.Stderr, "%s: %s\n", exec, err.Error())
+			fmt.Fprintf(os.Stderr, "%s: %s\n", exec, err)
 			return 1
 		}
 	}
@@ -48,7 +48,7 @@ func ServerCommand(cfg *config.Config, exec string) int {
 	if cfg.AutoShutdown {
 		expath, err := filepath.Abs(exec)
 		if err != nil {
-			fmt.Fprintf(os.Stderr, "absolute path error: %s\n", err.Error())
+			fmt.Fprintf(os.Stderr, "absolute path error: %s\n", err)
 			return 1
 		}
 
@@ -60,7 +60,7 @@ func ServerCommand(cfg *config.Config, exec string) int {
 
 				fi, err := os.Stat(expath)
 				if err != nil {
-					fmt.Fprintf(os.Stderr, "stat error: %s\n", err.Error())
+					fmt.Fprintf(os.Stderr, "stat error: %s\n", err)
 					continue
 				}
 
@@ -74,7 +74,7 @@ func ServerCommand(cfg *config.Config, exec string) int {
 	}
 
 	if err = srv.Start(); err != nil {
-		fmt.Fprintf(os.Stderr, "%s: %s\n", exec, err.Error())
+		fmt.Fprintf(os.Stderr, "%s: %s\n", exec, err)
 		return 1
 	}
 

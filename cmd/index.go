@@ -14,19 +14,19 @@ import (
 func IndexCommand(cfg *config.Config, exec, cmd string, args []string) int {
 	db, err := db.New(cfg.Database)
 	if err != nil {
-		fmt.Fprintf(os.Stderr, "%s: %s\n", os.Args[0], err.Error())
+		fmt.Fprintf(os.Stderr, "%s: %s\n", os.Args[0], err)
 		return 1
 	}
 
 	sea, err := search.New(cfg.Search)
 	if err != nil {
-		fmt.Fprintf(os.Stderr, "%s: %s\n", exec, err.Error())
+		fmt.Fprintf(os.Stderr, "%s: %s\n", exec, err)
 		return 1
 	}
 
 	ii, err := sea.NewInventoryIndex()
 	if err != nil {
-		fmt.Fprintf(os.Stderr, "%s: %s\n", exec, err.Error())
+		fmt.Fprintf(os.Stderr, "%s: %s\n", exec, err)
 		return 1
 	}
 
@@ -43,14 +43,13 @@ func IndexCommand(cfg *config.Config, exec, cmd string, args []string) int {
 	})
 	if err != nil {
 		ii.Rollback()
-		fmt.Fprintf(os.Stderr, "\n%s: %s\n",
-			os.Args[0], err.Error())
+		fmt.Fprintf(os.Stderr, "\n%s: %s\n", os.Args[0], err)
 		return 1
 	}
 
 	if err := ii.Commit(); err != nil {
 		ii.Rollback()
-		fmt.Fprintf(os.Stderr, "\n%s: %s\n", os.Args[0], err.Error())
+		fmt.Fprintf(os.Stderr, "\n%s: %s\n", os.Args[0], err)
 		return 1
 	}
 	fmt.Printf(" complete in %s\n", time.Since(start).String())

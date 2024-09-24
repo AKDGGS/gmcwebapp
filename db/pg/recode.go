@@ -3,18 +3,11 @@ package pg
 import (
 	"context"
 	"fmt"
-	"strings"
 
 	"gmc/assets"
 )
 
 func (pg *Postgres) RecodeInventoryAndContainer(old_barcode string, new_barcode string) error {
-	if old_barcode == "" || len(strings.TrimSpace(old_barcode)) < 1 {
-		return fmt.Errorf("old barcode cannot be empty")
-	}
-	if new_barcode == "" || len(strings.TrimSpace(new_barcode)) < 1 {
-		return fmt.Errorf("new barcode cannot be empty")
-	}
 	tx, err := pg.pool.Begin(context.Background())
 	if err != nil {
 		return err

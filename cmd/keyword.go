@@ -41,13 +41,13 @@ func KeywordCommand(cfg *config.Config, exec string, cmd string, args []string) 
 	case "list", "ls":
 		db, err := db.New(cfg.Database)
 		if err != nil {
-			fmt.Fprintf(os.Stderr, "%s: %s\n", exec, err.Error())
+			fmt.Fprintf(os.Stderr, "%s: %s\n", exec, err)
 			return 1
 		}
 
 		kws, err := db.ListKeywords()
 		if err != nil {
-			fmt.Fprintf(os.Stderr, "%s: %s\n", exec, err.Error())
+			fmt.Fprintf(os.Stderr, "%s: %s\n", exec, err)
 			return 1
 		}
 
@@ -63,12 +63,12 @@ func KeywordCommand(cfg *config.Config, exec string, cmd string, args []string) 
 
 		db, err := db.New(cfg.Database)
 		if err != nil {
-			fmt.Fprintf(os.Stderr, "%s: %s\n", exec, err.Error())
+			fmt.Fprintf(os.Stderr, "%s: %s\n", exec, err)
 			return 1
 		}
 
 		if err := db.AddKeywords(args[1:]...); err != nil {
-			fmt.Fprintf(os.Stderr, "%s: %s\n", exec, err.Error())
+			fmt.Fprintf(os.Stderr, "%s: %s\n", exec, err)
 			return 1
 		}
 
@@ -80,12 +80,12 @@ func KeywordCommand(cfg *config.Config, exec string, cmd string, args []string) 
 
 		db, err := db.New(cfg.Database)
 		if err != nil {
-			fmt.Fprintf(os.Stderr, "%s: %s\n", exec, err.Error())
+			fmt.Fprintf(os.Stderr, "%s: %s\n", exec, err)
 			return 1
 		}
 
 		if err := db.DeleteKeywords(args[1:]...); err != nil {
-			fmt.Fprintf(os.Stderr, "%s: %s\n", exec, err.Error())
+			fmt.Fprintf(os.Stderr, "%s: %s\n", exec, err)
 			return 1
 		}
 	}

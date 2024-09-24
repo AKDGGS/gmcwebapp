@@ -13,34 +13,33 @@ func (srv *Server) ServeSearchInventoryPage(w http.ResponseWriter, r *http.Reque
 	user, err := srv.Auths.CheckRequest(w, r)
 	if err != nil {
 		http.Error(
-			w, fmt.Sprintf("authentication error: %s", err.Error()),
+			w,
+			fmt.Sprintf("authentication error: %s", err),
 			http.StatusBadRequest,
 		)
 		return
 	}
-
 	sparams := map[string]interface{}{
 		"user":   user,
 		"sortby": srv.Search.InventorySortByFields(),
 	}
-
 	sbuf := bytes.Buffer{}
 	if err := assets.ExecuteTemplate("tmpl/search.html", &sbuf, sparams); err != nil {
 		http.Error(
-			w, fmt.Sprintf("parse error: %s", err.Error()),
+			w,
+			fmt.Sprintf("parse error: %s", err),
 			http.StatusInternalServerError,
 		)
 		return
 	}
-
 	if err := assets.ExecuteTemplate("tmpl/inventory_search.html", &sbuf, sparams); err != nil {
 		http.Error(
-			w, fmt.Sprintf("parse error: %s", err.Error()),
+			w,
+			fmt.Sprintf("parse error: %s", err),
 			http.StatusInternalServerError,
 		)
 		return
 	}
-
 	params := map[string]interface{}{
 		"title":   "Inventory Search",
 		"content": template.HTML(sbuf.String()),
@@ -64,21 +63,21 @@ func (srv *Server) ServeSearchInventoryPage(w http.ResponseWriter, r *http.Reque
 		"redirect": "inventory/search",
 		"user":     user,
 	}
-
 	tbuf := bytes.Buffer{}
 	if err := assets.ExecuteTemplate("tmpl/template.html", &tbuf, params); err != nil {
 		http.Error(
-			w, fmt.Sprintf("parse error: %s", err.Error()),
+			w,
+			fmt.Sprintf("parse error: %s", err),
 			http.StatusInternalServerError,
 		)
 		return
 	}
-
 	w.Header().Set("Content-Type", "text/html; charset=utf-8")
 	out, err := compressWriter(r.Header.Get("Accept-Encoding"), w)
 	if err != nil {
 		http.Error(
-			w, fmt.Sprintf("compression error: %s", err.Error()),
+			w,
+			fmt.Sprintf("compression error: %s", err),
 			http.StatusInternalServerError,
 		)
 		return

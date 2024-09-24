@@ -3,15 +3,11 @@ package pg
 import (
 	"context"
 	"fmt"
-	"strings"
 
 	"gmc/assets"
 )
 
 func (pg *Postgres) AddInventoryQuality(barcode string, remark string, issues []string, username string) error {
-	if barcode == "" || len(strings.TrimSpace(barcode)) < 1 {
-		return fmt.Errorf("source barcode cannot be empty")
-	}
 	q, err := assets.ReadString("pg/inventory/get_ids_by_barcode.sql")
 	if err != nil {
 		return err
@@ -21,7 +17,6 @@ func (pg *Postgres) AddInventoryQuality(barcode string, remark string, issues []
 		return err
 	}
 	defer rows.Close()
-
 	var inventory_ids []int32
 	for rows.Next() {
 		var id int32

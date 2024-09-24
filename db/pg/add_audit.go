@@ -3,18 +3,11 @@ package pg
 import (
 	"context"
 	"fmt"
-	"strings"
 
 	"gmc/assets"
 )
 
 func (pg *Postgres) AddAudit(remark string, container_list []string) error {
-	if remark != "" {
-		remark = strings.TrimSpace(remark)
-	}
-	if remark == "" && len(container_list) == 0 {
-		return fmt.Errorf("remark and the items list cannot be empty")
-	}
 	tx, err := pg.pool.Begin(context.Background())
 	if err != nil {
 		return err

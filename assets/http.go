@@ -19,10 +19,15 @@ func ServeStaticPath(name string, w http.ResponseWriter, h http.Header) {
 	s, err := Stat(name)
 	if err != nil {
 		if errors.Is(err, fs.ErrNotExist) {
-			http.Error(w, "file not found", http.StatusNotFound)
+			http.Error(
+				w,
+				"file not found",
+				http.StatusNotFound,
+			)
 		} else {
 			http.Error(
-				w, fmt.Sprintf("stat error: %s", err.Error()),
+				w,
+				fmt.Sprintf("stat error: %s", err),
 				http.StatusInternalServerError,
 			)
 		}
@@ -34,7 +39,8 @@ func ServeStaticPath(name string, w http.ResponseWriter, h http.Header) {
 		b, err := ReadBytes(name)
 		if err != nil {
 			http.Error(
-				w, fmt.Sprintf("read error: %s", err.Error()),
+				w,
+				fmt.Sprintf("read error: %s", err),
 				http.StatusInternalServerError,
 			)
 			return

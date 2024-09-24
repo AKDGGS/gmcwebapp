@@ -41,13 +41,13 @@ func IssueCommand(cfg *config.Config, exec string, cmd string, args []string) in
 	case "list", "ls":
 		db, err := db.New(cfg.Database)
 		if err != nil {
-			fmt.Fprintf(os.Stderr, "%s: %s\n", exec, err.Error())
+			fmt.Fprintf(os.Stderr, "%s: %s\n", exec, err)
 			return 1
 		}
 
 		iss, err := db.ListIssues()
 		if err != nil {
-			fmt.Fprintf(os.Stderr, "%s: %s\n", exec, err.Error())
+			fmt.Fprintf(os.Stderr, "%s: %s\n", exec, err)
 			return 1
 		}
 
@@ -63,12 +63,12 @@ func IssueCommand(cfg *config.Config, exec string, cmd string, args []string) in
 
 		db, err := db.New(cfg.Database)
 		if err != nil {
-			fmt.Fprintf(os.Stderr, "%s: %s\n", exec, err.Error())
+			fmt.Fprintf(os.Stderr, "%s: %s\n", exec, err)
 			return 1
 		}
 
 		if err := db.AddIssues(args[1:]...); err != nil {
-			fmt.Fprintf(os.Stderr, "%s: %s\n", exec, err.Error())
+			fmt.Fprintf(os.Stderr, "%s: %s\n", exec, err)
 			return 1
 		}
 	case "del", "rm", "delete", "remove":
@@ -79,12 +79,12 @@ func IssueCommand(cfg *config.Config, exec string, cmd string, args []string) in
 
 		db, err := db.New(cfg.Database)
 		if err != nil {
-			fmt.Fprintf(os.Stderr, "%s: %s\n", exec, err.Error())
+			fmt.Fprintf(os.Stderr, "%s: %s\n", exec, err)
 			return 1
 		}
 
 		if err := db.DeleteIssues(args[1:]...); err != nil {
-			fmt.Fprintf(os.Stderr, "%s: %s\n", exec, err.Error())
+			fmt.Fprintf(os.Stderr, "%s: %s\n", exec, err)
 			return 1
 		}
 	}

@@ -18,7 +18,7 @@ func SearchCommand(cfg *config.Config, exec, cmd string, args []string) int {
 
 	sea, err := search.New(cfg.Search)
 	if err != nil {
-		fmt.Fprintf(os.Stderr, "%s: %s\n", exec, err.Error())
+		fmt.Fprintf(os.Stderr, "%s: %s\n", exec, err)
 		return 1
 	}
 
@@ -29,13 +29,13 @@ func SearchCommand(cfg *config.Config, exec, cmd string, args []string) int {
 
 	r, err := sea.SearchInventory(params)
 	if err != nil {
-		fmt.Fprintf(os.Stderr, "%s: %s\n", exec, err.Error())
+		fmt.Fprintf(os.Stderr, "%s: %s\n", exec, err)
 		return 1
 	}
 
 	jsn, err := json.Marshal(r)
 	if err != nil {
-		fmt.Fprintf(os.Stderr, "%s: %s\n", exec, err.Error())
+		fmt.Fprintf(os.Stderr, "%s: %s\n", exec, err)
 		return 1
 	}
 

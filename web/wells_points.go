@@ -14,32 +14,30 @@ func (srv *Server) ServeWellsPointsJSON(w http.ResponseWriter, r *http.Request) 
 		pts, err := srv.DB.GetWellPoints()
 		if err != nil {
 			http.Error(
-				w, fmt.Sprintf("error: %s", err.Error()),
+				w,
+				fmt.Sprintf("get well points error: %s", err),
 				http.StatusInternalServerError,
 			)
 			return
 		}
-
 		js, err := json.Marshal(pts)
 		if err != nil {
 			http.Error(
-				w, fmt.Sprintf("JSON error: %s", err.Error()),
+				w,
+				fmt.Sprintf("json marshal error: %s", err),
 				http.StatusInternalServerError,
 			)
 			return
 		}
-
 		e = cache.NewEntry(&js)
 		cache.Put("wells/points.json", e)
 	}
-
 	enc, etag, content := e.Content(r.Header.Get("Accept-Encoding"))
 	// Ignore requests for the same content
 	if r.Header.Get("If-None-Match") == etag {
 		w.WriteHeader(http.StatusNotModified)
 		return
 	}
-
 	if enc != "" {
 		w.Header().Set("Content-Encoding", enc)
 	}

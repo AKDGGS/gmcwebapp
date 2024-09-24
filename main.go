@@ -52,7 +52,7 @@ func main() {
 
 	cfg, err := config.Load(*cpath)
 	if err != nil {
-		fmt.Fprintf(os.Stderr, "%s: %s\n", exec, err.Error())
+		fmt.Fprintf(os.Stderr, "%s: %s\n", exec, err)
 		os.Exit(1)
 	}
 

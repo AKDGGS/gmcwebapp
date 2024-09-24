@@ -13,12 +13,12 @@ func (srv *Server) ServeWells(w http.ResponseWriter, r *http.Request) {
 	buf := bytes.Buffer{}
 	if err := assets.ExecuteTemplate("tmpl/wells.html", &buf, nil); err != nil {
 		http.Error(
-			w, fmt.Sprintf("parse error: %s", err.Error()),
+			w,
+			fmt.Sprintf("parse error: %s", err),
 			http.StatusInternalServerError,
 		)
 		return
 	}
-
 	params := map[string]interface{}{
 		"title":   "Wells Page",
 		"content": template.HTML(buf.String()),
@@ -37,12 +37,12 @@ func (srv *Server) ServeWells(w http.ResponseWriter, r *http.Request) {
 	tbuf := bytes.Buffer{}
 	if err := assets.ExecuteTemplate("tmpl/template.html", &tbuf, params); err != nil {
 		http.Error(
-			w, fmt.Sprintf("parse error: %s", err.Error()),
+			w,
+			fmt.Sprintf("parse error: %s", err),
 			http.StatusInternalServerError,
 		)
 		return
 	}
-
 	w.Header().Set("Content-Length", fmt.Sprintf("%d", tbuf.Len()))
 	w.Header().Set("Content-Type", "text/html; charset=utf-8")
 	w.Write(tbuf.Bytes())

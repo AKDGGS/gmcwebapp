@@ -48,13 +48,13 @@ func TokenCommand(cfg *config.Config, exec string, cmd string, args []string) in
 	case "list", "ls":
 		db, err := db.New(cfg.Database)
 		if err != nil {
-			fmt.Fprintf(os.Stderr, "%s: %s\n", exec, err.Error())
+			fmt.Fprintf(os.Stderr, "%s: %s\n", exec, err)
 			return 1
 		}
 
 		tokens, err := db.ListTokens()
 		if err != nil {
-			fmt.Fprintf(os.Stderr, "%s: %s\n", exec, err.Error())
+			fmt.Fprintf(os.Stderr, "%s: %s\n", exec, err)
 			return 1
 		}
 
@@ -70,7 +70,7 @@ func TokenCommand(cfg *config.Config, exec string, cmd string, args []string) in
 
 		db, err := db.New(cfg.Database)
 		if err != nil {
-			fmt.Fprintf(os.Stderr, "%s: %s\n", exec, err.Error())
+			fmt.Fprintf(os.Stderr, "%s: %s\n", exec, err)
 			return 1
 		}
 
@@ -82,7 +82,7 @@ func TokenCommand(cfg *config.Config, exec string, cmd string, args []string) in
 
 		err = db.DeleteToken(id)
 		if err != nil {
-			fmt.Fprintf(os.Stderr, "%s: %s\n", exec, err.Error())
+			fmt.Fprintf(os.Stderr, "%s: %s\n", exec, err)
 			return 1
 		}
 
@@ -116,7 +116,7 @@ func TokenCommand(cfg *config.Config, exec string, cmd string, args []string) in
 
 		db, err := db.New(cfg.Database)
 		if err != nil {
-			fmt.Fprintf(os.Stderr, "%s: %s\n", os.Args[0], err.Error())
+			fmt.Fprintf(os.Stderr, "%s: %s\n", os.Args[0], err)
 			return 1
 		}
 
@@ -125,7 +125,7 @@ func TokenCommand(cfg *config.Config, exec string, cmd string, args []string) in
 
 		err = db.CreateToken(tk)
 		if err != nil {
-			fmt.Fprintf(os.Stderr, "%s: %s\n", exec, err.Error())
+			fmt.Fprintf(os.Stderr, "%s: %s\n", exec, err)
 			return 1
 		}
 
@@ -136,23 +136,23 @@ func TokenCommand(cfg *config.Config, exec string, cmd string, args []string) in
 
 		qrcode, err := qr.Encode(tk.Token, qr.H, qr.AlphaNumeric)
 		if err != nil {
-			fmt.Fprintf(os.Stderr, "%s: %s\n", exec, err.Error())
+			fmt.Fprintf(os.Stderr, "%s: %s\n", exec, err)
 			return 1
 		}
 		qrcode, err = barcode.Scale(qrcode, *width, *height)
 		if err != nil {
-			fmt.Fprintf(os.Stderr, "%s: %s\n", exec, err.Error())
+			fmt.Fprintf(os.Stderr, "%s: %s\n", exec, err)
 			return 1
 		}
 		fout, err := os.Create(*img)
 		if err != nil {
-			fmt.Fprintf(os.Stderr, "%s: %s\n", exec, err.Error())
+			fmt.Fprintf(os.Stderr, "%s: %s\n", exec, err)
 			return 1
 		}
 		defer fout.Close()
 		err = png.Encode(fout, qrcode)
 		if err != nil {
-			fmt.Fprintf(os.Stderr, "%s: %s\n", exec, err.Error())
+			fmt.Fprintf(os.Stderr, "%s: %s\n", exec, err)
 			return 1
 		}
 	}

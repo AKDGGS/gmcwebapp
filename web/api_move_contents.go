@@ -3,28 +3,51 @@ package web
 import (
 	"fmt"
 	"net/http"
+	"strings"
 )
 
 func (srv *Server) ServeAPIMoveInventoryAndContainersContents(w http.ResponseWriter, r *http.Request) {
 	user, err := srv.Auths.CheckRequest(w, r)
 	if err != nil {
 		http.Error(
-			w, fmt.Sprintf("authentication error: %s", err),
+			w,
+			fmt.Sprintf("authentication error: %s", err),
 			http.StatusBadRequest,
 		)
 		return
 	}
 	if user == nil {
-		http.Error(w, "access denied", http.StatusForbidden)
+		http.Error(
+			w,
+			"access denied",
+			http.StatusForbidden,
+		)
 		return
 	}
 	q := r.URL.Query()
-	src := q.Get("src")
-	dest := q.Get("dest")
+	src := strings.TrimSpace(q.Get("src"))
+	if src == "" {
+		http.Error(
+			w,
+			"source barcode cannot be empty",
+			http.StatusBadRequest,
+		)
+		return
+	}
+	dest := strings.TrimSpace(q.Get("dest"))
+	if dest == "" {
+		http.Error(
+			w,
+			"destination barcode cannot be empty",
+			http.StatusBadRequest,
+		)
+		return
+	}
 	err = srv.DB.MoveInventoryAndContainersContents(src, dest)
 	if err != nil {
 		http.Error(
-			w, fmt.Sprintf("move inventory and container contents error: %s", err),
+			w,
+			fmt.Sprintf("move inventory and container contents error: %s", err),
 			http.StatusInternalServerError,
 		)
 		return

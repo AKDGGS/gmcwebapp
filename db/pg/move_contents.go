@@ -3,18 +3,11 @@ package pg
 import (
 	"context"
 	"fmt"
-	"strings"
 
 	"gmc/assets"
 )
 
 func (pg *Postgres) MoveInventoryAndContainersContents(src string, dest string) error {
-	if src == "" || len(strings.TrimSpace(src)) < 1 {
-		return fmt.Errorf("source barcode cannot be empty")
-	}
-	if dest == "" || len(strings.TrimSpace(dest)) < 1 {
-		return fmt.Errorf("destination barcode cannot be empty")
-	}
 	q, err := assets.ReadString("pg/container/get_dest_container_id_and_validate_src_and_dest.sql")
 	if err != nil {
 		return err

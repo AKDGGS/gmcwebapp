@@ -40,7 +40,7 @@ func FileGet(exec string, cfg *config.Config, cmd string, args []string) int {
 
 	fs, err := filestore.New(*cfg.FileStore)
 	if err != nil {
-		fmt.Fprintf(os.Stderr, "%s: %s\n", exec, err.Error())
+		fmt.Fprintf(os.Stderr, "%s: %s\n", exec, err)
 		return 1
 	}
 
@@ -50,12 +50,12 @@ func FileGet(exec string, cfg *config.Config, cmd string, args []string) int {
 	if outpath == "" {
 		cwd, err := os.Getwd()
 		if err != nil {
-			fmt.Fprintf(os.Stderr, "%s: %s\n", exec, err.Error())
+			fmt.Fprintf(os.Stderr, "%s: %s\n", exec, err)
 			return 1
 		}
 		file, err = fs.GetFile(args[0])
 		if err != nil {
-			fmt.Fprintf(os.Stderr, "%s: %s\n", exec, err.Error())
+			fmt.Fprintf(os.Stderr, "%s: %s\n", exec, err)
 			return 1
 		}
 		if file == nil {
@@ -64,13 +64,13 @@ func FileGet(exec string, cfg *config.Config, cmd string, args []string) int {
 		}
 		outpath = filepath.Join(cwd, (file).Name)
 		if err != nil {
-			fmt.Fprintf(os.Stderr, "%s: %s\n", exec, err.Error())
+			fmt.Fprintf(os.Stderr, "%s: %s\n", exec, err)
 			return 1
 		}
 	} else {
 		file, err = fs.GetFile(args[2])
 		if err != nil {
-			fmt.Fprintf(os.Stderr, "%s: %s\n", exec, err.Error())
+			fmt.Fprintf(os.Stderr, "%s: %s\n", exec, err)
 			return 1
 		}
 		outpath = filepath.Join(*out, (file).Name)
@@ -78,13 +78,13 @@ func FileGet(exec string, cfg *config.Config, cmd string, args []string) int {
 
 	f, err := os.Create(outpath)
 	if err != nil {
-		fmt.Fprintf(os.Stderr, "%s: %s\n", exec, err.Error())
+		fmt.Fprintf(os.Stderr, "%s: %s\n", exec, err)
 		return 1
 	}
 	defer f.Close()
 	_, err = io.Copy(f, file.Content)
 	if err != nil {
-		fmt.Fprintf(os.Stderr, "%s: %s\n", exec, err.Error())
+		fmt.Fprintf(os.Stderr, "%s: %s\n", exec, err)
 		return 1
 	}
 

@@ -32,24 +32,24 @@ func DatabaseCommand(cfg *config.Config, exec string, cmd string, args []string)
 	case "initialize", "init":
 		db, err := db.New(cfg.Database)
 		if err != nil {
-			fmt.Fprintf(os.Stderr, "%s: %s\n", os.Args[0], err.Error())
+			fmt.Fprintf(os.Stderr, "%s: %s\n", os.Args[0], err)
 			return 1
 		}
 
 		if err := db.SchemaInit(); err != nil {
-			fmt.Fprintf(os.Stderr, "%s: %s\n", os.Args[0], err.Error())
+			fmt.Fprintf(os.Stderr, "%s: %s\n", os.Args[0], err)
 			return 1
 		}
 
 	case "verify":
 		db, err := db.New(cfg.Database)
 		if err != nil {
-			fmt.Fprintf(os.Stderr, "%s: %s\n", os.Args[0], err.Error())
+			fmt.Fprintf(os.Stderr, "%s: %s\n", os.Args[0], err)
 			return 1
 		}
 
 		if err := db.Verify(); err != nil {
-			fmt.Fprintf(os.Stderr, "%s: %s\n", os.Args[0], err.Error())
+			fmt.Fprintf(os.Stderr, "%s: %s\n", os.Args[0], err)
 			return 1
 		}
 
@@ -58,7 +58,7 @@ func DatabaseCommand(cfg *config.Config, exec string, cmd string, args []string)
 	case "drop":
 		db, err := db.New(cfg.Database)
 		if err != nil {
-			fmt.Fprintf(os.Stderr, "%s: %s\n", os.Args[0], err.Error())
+			fmt.Fprintf(os.Stderr, "%s: %s\n", os.Args[0], err)
 			return 1
 		}
 
@@ -70,7 +70,7 @@ func DatabaseCommand(cfg *config.Config, exec string, cmd string, args []string)
 
 		if confirm == "yes" {
 			if err := db.SchemaDrop(); err != nil {
-				fmt.Fprintf(os.Stderr, "%s: %s\n", os.Args[0], err.Error())
+				fmt.Fprintf(os.Stderr, "%s: %s\n", os.Args[0], err)
 				return 1
 			}
 		} else {

@@ -14,7 +14,8 @@ func (srv *Server) ServeQA(w http.ResponseWriter, r *http.Request) {
 	user, err := srv.Auths.CheckRequest(w, r)
 	if err != nil {
 		http.Error(
-			w, fmt.Sprintf("authentication error: %s", err.Error()),
+			w,
+			fmt.Sprintf("authentication error: %s", err),
 			http.StatusBadRequest,
 		)
 		return
@@ -27,7 +28,8 @@ func (srv *Server) ServeQA(w http.ResponseWriter, r *http.Request) {
 	qar, err := srv.DB.ListQAReports()
 	if err != nil {
 		http.Error(
-			w, fmt.Sprintf("QA report error: %s", err.Error()),
+			w,
+			fmt.Sprintf("qa report error: %s", err),
 			http.StatusInternalServerError,
 		)
 		return
@@ -36,7 +38,8 @@ func (srv *Server) ServeQA(w http.ResponseWriter, r *http.Request) {
 	buf := bytes.Buffer{}
 	if err := assets.ExecuteTemplate("tmpl/qa.html", &buf, qar); err != nil {
 		http.Error(
-			w, fmt.Sprintf("parse error: %s", err.Error()),
+			w,
+			fmt.Sprintf("parse error: %s", err),
 			http.StatusInternalServerError,
 		)
 		return
@@ -53,7 +56,7 @@ func (srv *Server) ServeQA(w http.ResponseWriter, r *http.Request) {
 	tbuf := bytes.Buffer{}
 	if err := assets.ExecuteTemplate("tmpl/template.html", &tbuf, params); err != nil {
 		http.Error(
-			w, fmt.Sprintf("parse error: %s", err.Error()),
+			w, fmt.Sprintf("parse error: %s", err),
 			http.StatusInternalServerError,
 		)
 		return

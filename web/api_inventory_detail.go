@@ -12,13 +12,18 @@ func (srv *Server) ServeAPIInventoryDetail(w http.ResponseWriter, r *http.Reques
 	user, err := srv.Auths.CheckRequest(w, r)
 	if err != nil {
 		http.Error(
-			w, fmt.Sprintf("authentication error: %s", err),
+			w,
+			fmt.Sprintf("authentication error: %s", err),
 			http.StatusBadRequest,
 		)
 		return
 	}
 	if user == nil {
-		http.Error(w, "access denied", http.StatusForbidden)
+		http.Error(
+			w,
+			"access denied",
+			http.StatusForbidden,
+		)
 		return
 	}
 	flags := dbf.ALL
@@ -30,7 +35,8 @@ func (srv *Server) ServeAPIInventoryDetail(w http.ResponseWriter, r *http.Reques
 	invs, err := srv.DB.GetInventoryByBarcode(barcode, flags)
 	if err != nil {
 		http.Error(
-			w, fmt.Sprintf("get inventory by barcode error: %s", err),
+			w,
+			fmt.Sprintf("get inventory by barcode error: %s", err),
 			http.StatusInternalServerError,
 		)
 		return
@@ -44,7 +50,8 @@ func (srv *Server) ServeAPIInventoryDetail(w http.ResponseWriter, r *http.Reques
 	}
 	if err != nil {
 		http.Error(
-			w, fmt.Sprintf("marshalling error: %s", err),
+			w,
+			fmt.Sprintf("json marshal error: %s", err),
 			http.StatusInternalServerError,
 		)
 		return

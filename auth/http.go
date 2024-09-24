@@ -25,7 +25,8 @@ func (auths *Auths) Logout(w http.ResponseWriter, r *http.Request) {
 	)
 	if err != nil {
 		http.Error(
-			w, fmt.Sprintf("error: %s", err.Error()),
+			w,
+			fmt.Sprintf("secure cookie error: %s", err),
 			http.StatusInternalServerError,
 		)
 		return
@@ -39,7 +40,8 @@ func (auths *Auths) Logout(w http.ResponseWriter, r *http.Request) {
 	}
 	if !redirect_rx.MatchString(redirect) {
 		http.Error(
-			w, fmt.Sprintf("error: invalid redirect"),
+			w,
+			fmt.Sprintf("invalid redirect"),
 			http.StatusInternalServerError,
 		)
 		return
@@ -118,7 +120,8 @@ func (auths *Auths) CheckForm(w http.ResponseWriter, r *http.Request) {
 	)
 	if err != nil {
 		http.Error(
-			w, fmt.Sprintf("error: %s", err.Error()),
+			w,
+			fmt.Sprintf("secure cookie error: %s", err),
 			http.StatusInternalServerError,
 		)
 		return
@@ -129,7 +132,8 @@ func (auths *Auths) CheckForm(w http.ResponseWriter, r *http.Request) {
 		user, err := authu.UnmarshalUser(uj)
 		if err != nil {
 			http.Error(
-				w, fmt.Sprintf("error: %s", err.Error()),
+				w,
+				fmt.Sprintf("json unmarshal error: %s", err),
 				http.StatusInternalServerError,
 			)
 			return
@@ -150,7 +154,8 @@ func (auths *Auths) CheckForm(w http.ResponseWriter, r *http.Request) {
 	err = r.ParseForm()
 	if err != nil {
 		http.Error(
-			w, fmt.Sprintf("error: %s", err.Error()),
+			w,
+			fmt.Sprintf("parse error: %s", err),
 			http.StatusInternalServerError,
 		)
 		return
@@ -165,7 +170,8 @@ func (auths *Auths) CheckForm(w http.ResponseWriter, r *http.Request) {
 	}
 	if !redirect_rx.MatchString(redirect) {
 		http.Error(
-			w, fmt.Sprintf("error: invalid redirect"),
+			w,
+			fmt.Sprintf("invalid redirect"),
 			http.StatusInternalServerError,
 		)
 		return
@@ -181,8 +187,9 @@ func (auths *Auths) CheckForm(w http.ResponseWriter, r *http.Request) {
 		user, err := auths.Check(username, password)
 		if err != nil {
 			http.Error(
-				w, fmt.Sprintf("error: %s", err.Error()),
-				http.StatusInternalServerError,
+				w,
+				fmt.Sprintf("authentication error: %s", err),
+				http.StatusBadRequest,
 			)
 			return
 		}
@@ -191,7 +198,8 @@ func (auths *Auths) CheckForm(w http.ResponseWriter, r *http.Request) {
 			uj, err := authu.MarshalUser(user)
 			if err != nil {
 				http.Error(
-					w, fmt.Sprintf("error: %s", err.Error()),
+					w,
+					fmt.Sprintf("json marshal error: %s", err),
 					http.StatusInternalServerError,
 				)
 				return
@@ -200,7 +208,8 @@ func (auths *Auths) CheckForm(w http.ResponseWriter, r *http.Request) {
 			err = cookie.SetValue(w, uj)
 			if err != nil {
 				http.Error(
-					w, fmt.Sprintf("error: %s", err.Error()),
+					w,
+					fmt.Sprintf("cookie error: %s", err),
 					http.StatusInternalServerError,
 				)
 				return
@@ -221,7 +230,8 @@ func (auths *Auths) CheckForm(w http.ResponseWriter, r *http.Request) {
 	buf := bytes.Buffer{}
 	if err := assets.ExecuteTemplate("tmpl/login.html", &buf, params); err != nil {
 		http.Error(
-			w, fmt.Sprintf("parse error: %s", err.Error()),
+			w,
+			fmt.Sprintf("parse error: %s", err),
 			http.StatusInternalServerError,
 		)
 		return
