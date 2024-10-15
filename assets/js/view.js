@@ -20,7 +20,7 @@ if(typeof geojson !== 'undefined'){
 				MAP_DEFAULTS.BaseLayers,
 				MAP_DEFAULTS.OverlayLayers,
 				new ol.layer.Vector({
-					style: MAP_DEFAULTS.Style,
+					style: MAP_DEFAULTS.DynamicStyle,
 					source: new ol.source.Vector({
 						features: fmt.readFeatures(geojson)
 					})

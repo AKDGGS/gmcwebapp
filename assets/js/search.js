@@ -51,7 +51,7 @@ let map = new ol.Map({
 		MAP_DEFAULTS.BaseLayers,
 		MAP_DEFAULTS.OverlayLayers,
 		new ol.layer.Vector({
-			style: MAP_DEFAULTS.Style,
+			style: MAP_DEFAULTS.DynamicStyle,
 			source: result_source
 		})
 	]

@@ -1,4 +1,25 @@
 const MAP_DEFAULTS = {
+	NewStyle: function(c){
+		return new ol.style.Style({
+			fill: new ol.style.Fill({
+				color: `rgba(${c}, 0.25)`
+			}),
+			stroke: new ol.style.Stroke({
+				color: `rgba(${c}, 1)`,
+				width: 2
+			}),
+			image: new ol.style.Circle({
+				fill: new ol.style.Fill({
+					color: `rgba(${c}, 0.25)`
+				}),
+				stroke: new ol.style.Stroke({
+					color: `rgba(${c}, 1)`,
+					width: 2
+				}),
+				radius: 5
+			})
+		});
+	},
 	BaseLayers: new ol.layer.Group({
 		title: 'Base Maps',
 		layers: [
@@ -74,40 +95,24 @@ const MAP_DEFAULTS = {
 		zoom: 3,
 		maxZoom: 19
 	}),
-	Style: function(feature) {
-		let c = ((f) => {
-			if(f.get('borehole_id') || f.get('borehole')){
-				return '99, 186, 0';
-			}
-			if(f.get('outcrop_id') || f.get('outcrop')){
-				return '230, 177, 1';
-			}
-			if(f.get('shotline_id') || f.get('shotline')){
-				return '255, 138, 134';
-			}
-			if(f.get('well_id') || f.get('well')){
-				return '46, 145, 230';
-			}
-			return '44, 126, 167';
-		})(feature);
-		return new ol.style.Style({
-			fill: new ol.style.Fill({
-				color: `rgba(${c}, 0.25)`
-			}),
-			stroke: new ol.style.Stroke({
-				color: `rgba(${c}, 1)`,
-				width: 2
-			}),
-			image: new ol.style.Circle({
-				fill: new ol.style.Fill({
-					color: `rgba(${c}, 0.25)`
-				}),
-				stroke: new ol.style.Stroke({
-					color: `rgba(${c}, 1)`,
-					width: 2
-				}),
-				radius: 5
-			})
-		});
+	DynamicStyle: function(f) {
+		if(f.get('borehole_id') || f.get('borehole')){
+			return MAP_DEFAULTS.BoreholeStyle;
+		}
+		if(f.get('outcrop_id') || f.get('outcrop')){
+			return MAP_DEFAULTS.OutcropStyle;
+		}
+		if(f.get('shotline_id') || f.get('shotline')){
+			return MAP_DEFAULTS.ShotlineStyle;
+		}
+		if(f.get('well_id') || f.get('well')){
+			return MAP_DEFAULTS.WellStyle;
+		}
+		return MAP_DEFAULTS.DefaultStyle;
 	}
 };
+MAP_DEFAULTS.BoreholeStyle = MAP_DEFAULTS.NewStyle('99, 186, 0');
+MAP_DEFAULTS.OutcropStyle = MAP_DEFAULTS.NewStyle('230, 177, 1');
+MAP_DEFAULTS.ShotlineStyle = MAP_DEFAULTS.NewStyle('255, 138, 134');
+MAP_DEFAULTS.WellStyle = MAP_DEFAULTS.NewStyle('46, 145, 230');
+MAP_DEFAULTS.DefaultStyle = MAP_DEFAULTS.NewStyle('44, 126, 167');
