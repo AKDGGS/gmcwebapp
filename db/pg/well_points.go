@@ -4,36 +4,18 @@ import (
 	"context"
 
 	"gmc/assets"
-	"gmc/db/model"
 )
 
-func (pg *Postgres) GetWellPoints() ([]model.WellPoint, error) {
-	conn, err := pg.pool.Acquire(context.Background())
+func (pg *Postgres) GetWellPoints() (interface{}, error) {
+	sql, err := assets.ReadString("pg/well/points.sql")
 	if err != nil {
 		return nil, err
 	}
-	defer conn.Release()
 
-	q, err := assets.ReadString("pg/well/points.sql")
-	if err != nil {
+	var x interface{}
+	row := pg.pool.QueryRow(context.Background(), sql)
+	if err := row.Scan(&x); err != nil && err != ErrNoRows {
 		return nil, err
 	}
-	rows, err := conn.Query(context.Background(), q)
-	if err != nil {
-		if err == ErrNoRows {
-			return nil, nil
-		}
-		return nil, err
-	}
-	defer rows.Close()
-	var well_points []model.WellPoint
-	for rows.Next() {
-		var wp model.WellPoint
-		err := rows.Scan(&wp.Name, &wp.WellID, &wp.Geog)
-		if err != nil {
-			return nil, err
-		}
-		well_points = append(well_points, wp)
-	}
-	return well_points, nil
+	return x, nil
 }

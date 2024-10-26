@@ -10,52 +10,31 @@ const overlay = new ol.Overlay({
 });
 let fts = [];
 
+let source = new ol.source.Vector({
+	url: 'points.json',
+	format: new ol.format.GeoJSON({
+		dataProjection: 'EPSG:4326',
+		featureProjection: 'EPSG:3857'
+	})
+});
+
 let point_layer = new ol.layer.Vector({
-	source: new ol.source.Vector(),
+	source: source,
 	style: MAP_DEFAULTS.WellStyle
 });
 
 let label_layer = new ol.layer.Vector({
-	source: new ol.source.Vector(),
+	source: source,
 	renderBuffer: 1e3,
 	style: function(f) {
-		MAP_DEFAULTS.LabelStyle.getText().setText(f.label);
+		MAP_DEFAULTS.LabelStyle.getText().setText(
+			f.get('name') + (f.get('number') == undefined ? '' : ' - ') +
+			f.get('number')
+		);
 		return MAP_DEFAULTS.LabelStyle;
 	},
 	declutter: true
 });
-
-//Fetch the markers
-fetch('points.json')
-	.then(response => {
-		if (!response.ok) throw new Error(response.status + " " +
-			response.statusText);
-		return response.json();
-	})
-	.then(d => {
-		if (!d) {
-			console.log("No points returned");
-			return;
-		}
-		let markers = [];
-		d.forEach(({
-			geog,
-			name,
-			well_id
-		}) => {
-			let f = new ol.Feature(new ol.format.WKT().readGeometry(geog));
-			f.getGeometry().transform("EPSG:4326", "EPSG:3857");
-			f.label = name + ' - ' + well_id;
-			f.well_id = well_id;
-			f.setId(well_id);
-			label_layer.getSource().addFeature(f);
-			markers.push(f);
-		});
-		point_layer.getSource().addFeatures(markers);
-	})
-	.catch(err => {
-		alert(err);
-	});
 
 let map = new ol.Map({
 	target: 'map',
@@ -118,7 +97,7 @@ function displayOverlayContents(e) {
 			currentPage = 0;
 		}
 		if (typeof fts[currentPage] !== "undefined") {
-			let well_id = fts[currentPage].well_id;
+			let well_id = fts[currentPage].get('well_id');
 			fetch('detail.json?id=' + well_id)
 				.then(response => {
 					if (!response.ok) throw new Error(response.status + " " +
