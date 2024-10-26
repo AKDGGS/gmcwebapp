@@ -27,27 +27,8 @@ if(typeof geojson !== 'undefined'){
 				})
 			],
 			view: MAP_DEFAULTS.View,
-			controls: ol.control.defaults.defaults({
-				attribution: false
-			}).extend([
-				new ol.control.ScaleLine({ units: "us" }),
-				new ol.control.LayerSwitcher({
-					tipLabel: 'Legend',
-					groupSelectStyle: 'none'
-				}),
-				new ol.control.MousePosition({
-					projection: 'EPSG:4326',
-					placeholder: '',
-					coordinateFormat: ol.coordinate.createStringXY(3)
-				})
-			]),
-			interactions: ol.interaction.defaults.defaults({
-				mouseWheelZoom: false
-			}).extend([
-				new ol.interaction.MouseWheelZoom({
-					condition: ol.events.condition.platformModifierKeyOnly
-				})
-			])
+			controls: MAP_DEFAULTS.Controls,
+			interactions: MAP_DEFAULTS.Interactions
 		});
 
 		map.on('pointermove', function(e){

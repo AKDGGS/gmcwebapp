@@ -3,55 +3,24 @@ const content = document.getElementById('popup-content');
 const closer = document.getElementById('popup-closure');
 const prevBtn = document.getElementById('prev-btn');
 const nextBtn = document.getElementById('next-btn');
-let template = document.getElementById('tmpl-popup');
 
 const overlay = new ol.Overlay({
-		element: popup, autoPan: {animation:{duration:100}}
+	element: popup,
+	autoPan: { animation: { duration: 100 } }
 });
 let fts = [];
-let width = 2.5;
 
-function handleError(err) {
-	alert(err);
-}
-
-let markerStyle = new ol.style.Style({
-	image: new ol.style.Circle({
-		radius: width * 2,
-		fill: new ol.style.Fill({
-			color: '#2C7EA740'
-		}),
-		stroke: new ol.style.Stroke({
-			color: '#2C7EA7FF',
-			width: width / 1.5
-		})
-	}),
-	zIndex: Infinity
-});
-
-let labelStyle = new ol.style.Style({
-	text: new ol.style.Text({
-		offsetY: -9,
-		fill: new ol.style.Fill({
-			color: '#000000FF'
-		}),
-		backgroundFill: new ol.style.Fill({
-			color: '#FFFFFF1A'
-		})
-	})
-});
-
-let wellPointLayer = new ol.layer.Vector({
+let point_layer = new ol.layer.Vector({
 	source: new ol.source.Vector(),
-	style: markerStyle
+	style: MAP_DEFAULTS.WellStyle
 });
 
-let wellPointLabelLayer = new ol.layer.Vector({
+let label_layer = new ol.layer.Vector({
 	source: new ol.source.Vector(),
 	renderBuffer: 1e3,
-	style: function(feature) {
-		labelStyle.getText().setText(feature.label);
-		return labelStyle;
+	style: function(f) {
+		MAP_DEFAULTS.LabelStyle.getText().setText(f.label);
+		return MAP_DEFAULTS.LabelStyle;
 	},
 	declutter: true
 });
@@ -79,13 +48,13 @@ fetch('points.json')
 			f.label = name + ' - ' + well_id;
 			f.well_id = well_id;
 			f.setId(well_id);
-			wellPointLabelLayer.getSource().addFeature(f);
+			label_layer.getSource().addFeature(f);
 			markers.push(f);
 		});
-		wellPointLayer.getSource().addFeatures(markers);
+		point_layer.getSource().addFeatures(markers);
 	})
-	.catch(error => {
-		handleError(error);
+	.catch(err => {
+		alert(err);
 	});
 
 let map = new ol.Map({
@@ -96,30 +65,15 @@ let map = new ol.Map({
 		new ol.layer.Group({
 			visible: true,
 			layers: [
-				wellPointLayer,
-				wellPointLabelLayer
+				point_layer,
+				label_layer
 			]
 		}),
 	],
 	overlays: [ overlay ],
 	view: MAP_DEFAULTS.View,
-	controls: ol.control.defaults.defaults({ attribution: false }).extend([
-		new ol.control.ScaleLine({ units: "us" }),
-		new ol.control.LayerSwitcher({
-			tipLabel: 'Legend',
-			groupSelectStyle: 'none'
-		}),
-		new ol.control.MousePosition({
-			projection: 'EPSG:4326',
-			placeholder: '',
-			coordinateFormat: ol.coordinate.createStringXY(3)
-		})
-	]),
-	interactions: ol.interaction.defaults.defaults({ mouseWheelZoom: false }).extend([
-		new ol.interaction.MouseWheelZoom({
-			condition: ol.events.condition.platformModifierKeyOnly
-		})
-	])
+	controls: MAP_DEFAULTS.Controls,
+	interactions: MAP_DEFAULTS.Interactions
 });
 
 map.on('pointermove', function(e){
@@ -208,8 +162,8 @@ function displayOverlayContents(e) {
 					nextBtn.style.color = "#fff";
 					running = false;
 				})
-				.catch(error => {
-					handleError(error);
+				.catch(err => {
+					alert(err);
 					running = false;
 				});
 		}

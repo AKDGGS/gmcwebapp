@@ -109,7 +109,39 @@ const MAP_DEFAULTS = {
 			return MAP_DEFAULTS.WellStyle;
 		}
 		return MAP_DEFAULTS.DefaultStyle;
-	}
+	},
+	LabelStyle: new ol.style.Style({
+		text: new ol.style.Text({
+			offsetY: -12,
+			fill: new ol.style.Fill({
+				color: 'rgba(0,0,0,1)'
+			}),
+			backgroundFill: new ol.style.Fill({
+				color: 'rgba(255,255,255,0.1)'
+			})
+		})
+	}),
+	Controls: ol.control.defaults.defaults({
+		attribution: false
+	}).extend([
+		new ol.control.ScaleLine({ units: "us" }),
+		new ol.control.LayerSwitcher({
+			tipLabel: 'Legend',
+			groupSelectStyle: 'none'
+		}),
+		new ol.control.MousePosition({
+			projection: 'EPSG:4326',
+			placeholder: '',
+			coordinateFormat: ol.coordinate.createStringXY(3)
+		})
+	]),
+	Interactions: ol.interaction.defaults.defaults({
+		mouseWheelZoom: false
+	}).extend([
+		new ol.interaction.MouseWheelZoom({
+			condition: ol.events.condition.platformModifierKeyOnly
+		})
+	])
 };
 MAP_DEFAULTS.BoreholeStyle = MAP_DEFAULTS.NewStyle('99, 186, 0');
 MAP_DEFAULTS.OutcropStyle = MAP_DEFAULTS.NewStyle('230, 177, 1');
