@@ -136,7 +136,7 @@ LEFT OUTER JOIN (
 LEFT OUTER JOIN (
 	SELECT
 		inventory_id,
-		jsonb_agg(ST_ASGeoJSON(geog)::jsonb) AS geometries
+		jsonb_agg(ST_ASGeoJSON(geog, 5)::jsonb) AS geometries
 	FROM inventory_geog
 	WHERE ST_NPoints(geog::geometry) < 100
 	GROUP BY inventory_id
