@@ -5,7 +5,26 @@ let fmt = new ol.format.GeoJSON({
 	dataProjection: 'EPSG:4326',
 	featureProjection: 'EPSG:3857'
 });
-let from = 0;
+
+URLSearchParams.prototype.seapp = function(k,v){
+	if(typeof v === 'string' && v.trim() === '') return;
+	switch(k){
+		case 'size':
+			if(Number(v) !== 25) this.append(k,v);
+			return;
+		case 'from':
+			if(Number(v) > 0) this.append(k,v);
+			return
+		case 'sort':
+			if(v !== '_score') this.append(k,v);
+			return
+		case 'dir':
+			if(v !== 'asc') this.append(k,v);
+			return
+		default:
+			this.append(k,v.trim());
+	}
+};
 
 // Convenience function: empties element of all child nodes
 function elementEmpty(el){
@@ -74,43 +93,43 @@ function doSearch(dir){
 		return el;
 	};
 
-	let query = encodeURIComponent(search_control.getSearchBox().value);
-	let nfrom = from;
-	let size = Number(document.getElementById('result-size').value);
-	if(query !== search_control.getSearchBox().dataset?.last){
-		nfrom = 0;
-	} else if(dir === 1){
-		nfrom += size;
-	} else if(dir === -1){
-		nfrom = Math.max(nfrom - size, 0);
-	}
+	let oldparams = new URL(window.location.toString()).searchParams;
+	let nfrom = Number(oldparams.get('from'));
+	oldparams.delete('from');
+	oldparams.sort();
 
-	let url = '';
-	if(query) url += `${url?'&':''}q=${query}`;
-	if(size !== 25) url += `${url?'&':''}size=${size}`;
-	if(nfrom > 0) url += `${url?'&':''}from=${nfrom}`;
-
-	url += Array.from(document.querySelectorAll('select[name="sort"]'))
-		.reduce((a, e) => {
-			return (a +
-				`${url?'&':''}sort=${e.querySelector('option:checked').value}` +
-				`&dir=${e.nextElementSibling.querySelector('option:checked').value}`
-			);
-		},'');
-
+	let params = new URLSearchParams();
+	document.querySelectorAll('#result-control select').forEach(e => {
+		e.querySelectorAll('option:checked').forEach(o => {
+			params.seapp(e.getAttribute('name'), o.value);
+		});
+	});
+	params.seapp('q', search_control.getSearchBox().value);
+	/*
 	let feat = drawbox_control.getFeature();
 	if(feat !== null){
 		let geojson = fmt.writeGeometry(feat.getGeometry());
 		url += `${url?'&':''}geojson=${encodeURIComponent(geojson)}`;
 	}
+	*/
+	params.sort();
 
-	url = `search.json${url?'?':''}${url}`;
+	// Search is dirty. Restart from beginning
+	if(params.toString() !== oldparams.toString()){
+		nfrom = 0;
+	} else if(dir === 1){
+		nfrom += Math.max(Number(params.get('size')), 25);
+	} else if(dir === -1){
+		nfrom = Math.max(nfrom - Math.max(Number(params.get('size')), 25), 0);
+	}
+	params.seapp('from', nfrom);
+
+	url = `search.json?${params.toString()}`;
 	fetch(url).then(response => {
 		if(!response.ok){ throw 'response not ok'; }
 		return response.json();
 	}).then(response => {
-		search_control.getSearchBox().dataset.last = query;
-		from = nfrom;
+		window.history.replaceState(null, '', `search?${params.toString()}`);
 		let result = elementEmpty('result');
 		result_source.clear();
 
@@ -175,8 +194,8 @@ search_control.getSearchButton().addEventListener('click', e => {
 	return false;
 });
 
-document.getElementById('result-size').addEventListener(
-	'change', e => { from = 0; doSearch(); }
+document.getElementById('size').addEventListener(
+	'change', e => doSearch()
 );
 document.getElementById('result-prev').addEventListener(
 	'click', e => doSearch(-1)
@@ -185,10 +204,46 @@ document.getElementById('result-next').addEventListener(
 	'click', e => doSearch(1)
 );
 document.querySelectorAll('select[name="sort"]').forEach(e => {
-	e.addEventListener('change', x => { from = 0; doSearch() });
+	e.addEventListener('change', x => doSearch());
 });
 document.querySelectorAll('select[name="dir"]').forEach(e => {
-	e.addEventListener('change', x => { from = 0; doSearch() });
+	e.addEventListener('change', x => doSearch());
 });
 
+// If there's a query string, use that to rebuild the search form
+if(window.location.search){
+	let params = new URL(window.location.toString()).searchParams;
+	params.delete('from');
+
+	// Handle the query separately
+	let q = params.get('q');
+	if(q !== null) search_control.getSearchBox().value = q;
+	params.delete('q');
+
+	// Iterate over the parameter keys and extract any duplicates
+	let keys = params.keys().toArray().filter((v,i,a) => {
+		return a.indexOf(v) === i;
+	});
+	// Iterate over the unique keys and push values
+	// into same-named elements
+	keys.forEach(k => {
+		let vals = params.getAll(k);
+		let els = document.querySelectorAll(`[name=${k}]`)
+		if(vals.length === 0 || els.length === 0) return;
+
+		let eli = 0;
+		vals.forEach(v => {
+			switch(els[eli].tagName){
+				case 'SELECT':
+					els[eli].querySelector(`option[value="${v}"]`).selected = true;
+					break
+				case 'INPUT': els[eli].value = v;
+			}
+			// Move the element index forward if possible,
+			// to handle multiple elements with the same name
+			eli = Math.min((els.length - 1),(eli + 1));
+		});
+	});
+	doSearch();
+}
 search_control.getSearchBox().focus();
