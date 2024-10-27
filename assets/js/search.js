@@ -235,7 +235,8 @@ if(window.location.search){
 		vals.forEach(v => {
 			switch(els[eli].tagName){
 				case 'SELECT':
-					els[eli].querySelector(`option[value="${v}"]`).selected = true;
+					const opt = els[eli].querySelector(`option[value="${v}"]`);
+					if(opt) opt.selected = true;
 					break
 				case 'INPUT': els[eli].value = v;
 			}
