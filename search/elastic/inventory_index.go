@@ -42,6 +42,8 @@ func (es *Elastic) InventorySortByFields() [][2]string {
 }
 
 func (es *Elastic) NewInventoryIndex() (util.InventoryIndex, error) {
+	// Any field used for sorting needs to be normalized, even if it's
+	// not indexed
 	iname := fmt.Sprintf("inventory-%x", time.Now().UnixMicro())
 	err := es.createIndex(iname,
 		&types.TypeMapping{
@@ -60,7 +62,7 @@ func (es *Elastic) NewInventoryIndex() (util.InventoryIndex, error) {
 				"bottom":        &types.FloatNumberProperty{Index: &yes},
 				"unit":          &types.TextProperty{Index: &yes},
 				"keyword":       &types.KeywordProperty{Index: &yes, Normalizer: &clean},
-				"barcode":       &types.KeywordProperty{Index: &yes, Normalizer: &clean},
+				"barcode":       &types.KeywordProperty{Index: &yes},
 				"container_id":  &types.IntegerNumberProperty{Index: &yes},
 				"path_cache":    &types.TextProperty{Index: &yes},
 				"remark":        &types.TextProperty{Index: &yes},
@@ -76,7 +78,7 @@ func (es *Elastic) NewInventoryIndex() (util.InventoryIndex, error) {
 					Properties: map[string]types.Property{
 						"id":           &types.IntegerNumberProperty{Index: &yes},
 						"name":         &types.TextProperty{Index: &yes},
-						"display_name": &types.KeywordProperty{Index: &no},
+						"display_name": &types.KeywordProperty{Index: &no, Normalizer: &clean},
 						"number":       &types.KeywordProperty{Index: &yes, Normalizer: &clean},
 						"api":          &types.KeywordProperty{Index: &yes, Normalizer: &clean},
 					},
@@ -97,14 +99,14 @@ func (es *Elastic) NewInventoryIndex() (util.InventoryIndex, error) {
 					Properties: map[string]types.Property{
 						"id":           &types.IntegerNumberProperty{Index: &yes},
 						"name":         &types.TextProperty{Index: &yes},
-						"display_name": &types.KeywordProperty{Index: &no},
+						"display_name": &types.KeywordProperty{Index: &no, Normalizer: &clean},
 						"prospect": &types.ObjectProperty{
 							Dynamic: &dynamicmapping.False,
 							Enabled: &yes,
 							Properties: map[string]types.Property{
 								"id":           &types.IntegerNumberProperty{Index: &yes},
 								"name":         &types.TextProperty{Index: &yes},
-								"display_name": &types.KeywordProperty{Index: &no},
+								"display_name": &types.KeywordProperty{Index: &no, Normalizer: &clean},
 								"ardf":         &types.KeywordProperty{Index: &yes, Normalizer: &clean},
 							},
 						},
