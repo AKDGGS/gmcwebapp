@@ -6,22 +6,95 @@
 					<div id="next-btn" class="next-btn">&#x25B6;</div>
 					<div id="popup-closer">&#215;</div>
 				</div>
-				<div id="popup-content" class="popup-content"></div>
+				<div id="popup-content" class="ol-popup-content"></div>
 			</div>
 			<script id="tmpl-popup" type="x-tmpl-mustache">
-				[[#name]]<div><b>Name: </b><a href="../well/[[well_id]]"> [[name]] [[#well_id]] - [[well_id]] [[/well_id]]</a></div>[[/name]]
-				[[#api_number]]<div><b>API Number:</b> [[api_number]]</div>[[/api_number]]
-				[[#well_number]]<div><b>Well Number:</b> [[well_number]]</div>[[/well_number]]
-				[[#measured_depth]]<div><b>Measured Depth:</b> [[measured_depth]] [[#unit]][[unit]][[/unit]]</div>[[/measured_depth]]
-				[[#vertical_depth]]<div><b>Vertical Depth:</b> [[vertical_depth]] [[#unit]][[unit]][[/unit]]</div>[[/vertical_depth]]
-				[[#elevation]]<div><b>Elevation:</b> [[elevation]] [[#unit]] [[unit]][[/unit]]</div>[[/elevation]]
-				[[#is_onshore]]<div><b>Onshore:</b> [[is_onshore]]<br/></div>[[/is_onshore]]
-				[[#is_federal]]<div><b>Federal:</b> [[is_federal]]<br/></div>[[/is_federal]]
-				[[#permit_status]]<div><b>Permit Status:</b> [[permit_status]]</div>[[/permit_status]]
-				[[#permit_number]]<div><b>Permit Number:</b> [[permit_number]]</div>[[/permit_number]]
-				[[#completion_status]]<div><b>Completion Status:</b> [[completion_status]]</div>[[/completion_status]]
-				[[#completion_date]]<div><b>Completion Date:</b> [[completion_date]]</div>[[/completion_date]]
-				[[#spud_date]]<div><b>Spud Date:</b> [[spud_date]]</div>[[/spud_date]]
-				[[#keywords.0]]<div><br/><b>Keywords:</b></div>[[/keywords.0]]
-				[[#keywords]]<div class="indent"><a href="[[keywordsURL]]">[[keywords]]</a> [[count]]</div>[[/keywords]]
+				<table>
+					<tbody>
+						[[#name]]
+						<tr>
+							<th>Name:</th>
+							<td><a href="../well/[[well_id]]"> [[name]] [[#well_id]] - [[well_id]] [[/well_id]]</a></td>
+						</tr>
+						[[/name]]
+						[[#api_number]]
+						<tr>
+							<th>API Number:</th>
+							<td>[[api_number]]</td>
+						</tr>
+						[[/api_number]]
+						[[#well_number]]
+						<tr>
+							<th>Well Number:</th>
+							<td>[[well_number]]</td>
+						</tr>
+						[[/well_number]]
+						[[#measured_depth]]
+						<tr>
+							<th>Measured Depth:</th>
+							<td>[[measured_depth]]</td>
+						</tr>
+						[[/measured_depth]]
+						[[#vertical_depth]]
+						<tr>
+							<th>Vertical_Depth:</th>
+							<td>[[vertical_depth]]</td>
+						</tr>
+						[[/vertical_depth]]
+						[[#elevation]]
+						<tr>
+							<th>Elevation:</th>
+							<td>[[elevation]]</td>
+						</tr>
+						[[/elevation]]
+						[[#is_onshore]]
+						<tr>
+							<th>Onshore:</th>
+							<td>[[is_onshore]]</td>
+						</tr>
+						[[/is_onshore]]
+						[[#is_federal]]
+						<tr>
+							<th>Federal:</th>
+							<td>[[is_federal]]</td>
+						</tr>
+						[[/is_federal]]
+						[[#permit_status]]
+						<tr>
+							<th>Permit Status:</th>
+							<td>[[permit_status]]</td>
+						</tr>
+						[[/permit_status]]
+						[[#permit_number]]
+						<tr>
+							<th>Permit Number:</th>
+							<td>[[permit_number]]</td>
+						</tr>
+						[[/permit_number]]
+						[[#completion_status]]
+						<tr>
+							<th>Completion Status:</th>
+							<td>[[completion_status]]</td>
+						</tr>
+						[[/completion_status]]
+						[[#completion_date]]
+						<tr>
+							<th>Completion Date:</th>
+							<td>[[completion_date]]</td>
+						</tr>
+						[[/completion_date]]
+						[[#spud_date]]
+						<tr>
+							<th>Spud Date:</th>
+							<td>[[spud_date]]</td>
+						</tr>
+						[[/spud_date]]
+						[[#keywords.0]]
+						<tr>
+							<th>Keywords:</th>
+							<td><a href="[[keywordsURL]]">[[keywords]]</a> [[count]]</td>
+						</tr>
+						[[/keywords.0]]
+					</tbody>
+				</table>
 			</script>
