@@ -10,46 +10,33 @@
 #map { height: 100%;}
 .indent {padding-left: 10px;}
 .ol-popup {
-	position: relative;
-	margin-top: 10px;
+	border: 2px solid #999;
 	background-color: #fff;
-	box-shadow: 0 1px 4px #00000033;
-	padding-bottom: 5px;
-	border: 1px solid #ccc;
-	bottom: 12px;
-	width: 250px;
-	visibility: hidden;
+	display: none;
 }
-.ol-popup-closer::after {
+.ol-popup-top {
+	padding: 2px 4px;
+	display: flex;
+	justify-content: space-around;
+	color: #fff;
+	background: linear-gradient(315deg, #276f93 94%, #999 94%);
+}
+#popup-closer {
+	font-weight: bold;
+	font-size: 22px;
 	cursor: pointer;
-	content: "\2715";
-	font-size: 20px;
-	margin-left: auto;
+	position: absolute;
+	right: 0;
+	padding-right: 7px;
+	top: 0;
+	bottom: 0;
+	margin:auto 0;
 }
 .popup-content {
 	padding: 10px 5px 5px 5px;
 	max-height: 300px;
 	overflow: auto;
 	font-size: 12px;
-}
-.popup-topbar {
-	background: linear-gradient(315deg, #276f93 94%, #999 94%);
-	padding: 5px;
-	display: flex;
-	justify-content: space-around;
-	align-items: center;
-	font-size: 14px;
-	cursor: default;
-	visibility: hidden;
-}
-.popup-topbar div {
-	color: #fff;
-	padding: 2px;
-	display: flex;
-	letter-spacing: 0.5px;
-	text-decoration: none;
-	transition: 0.6s;
-	user-select: none;
 }
 .prev-btn {
 	cursor: pointer;

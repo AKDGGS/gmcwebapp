@@ -1,6 +1,6 @@
 const popup = document.getElementById('popup');
 const content = document.getElementById('popup-content');
-const closer = document.getElementById('popup-closure');
+const closer = document.getElementById('popup-closer');
 const prevBtn = document.getElementById('prev-btn');
 const nextBtn = document.getElementById('next-btn');
 
@@ -36,6 +36,7 @@ let label_layer = new ol.layer.Vector({
 	declutter: true
 });
 
+popup.style.display = 'block';
 let map = new ol.Map({
 	target: 'map',
 	layers: [
