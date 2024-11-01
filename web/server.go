@@ -63,6 +63,8 @@ func (srv *Server) Start() error {
 
 	// Serves list of quality issues
 	mux.HandleFunc("/issues.json", srv.ServeIssues)
+	// Serves list of keywords
+	mux.HandleFunc("/keywords.json", srv.ServeKeywords)
 
 	// Upload page/endpoint
 	mux.HandleFunc("/upload/{$}", srv.ServeUpload)
