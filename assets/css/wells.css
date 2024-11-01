@@ -6,23 +6,23 @@
 .indent {padding-left: 10px;}
 
 .ol-popup {	border: 2px solid #999;	background-color: #fff;	display: none;}
-.ol-popup-top {	padding: 2px 4px;	display: flex;	justify-content: space-around;
-	color: #fff;	background: linear-gradient(315deg, #276f93 94%, #999 94%);}
 
-#popup-closer {	font-weight: bold; font-size: 22px; cursor: pointer;
-	position: absolute; right: 0; padding-right: 7px; top: 0; bottom: 0;
-	margin:auto 0;}
+.ol-popup-titlebar { height: 35px; font-size: 20px; padding-left: 15px;
+	display: flex; justify-content: space-between;	align-items: center;
+	color: #fff; background: linear-gradient(315deg, #276f93 94%, #999 94%);}
+#popup-page-number { width: 150px; text-align: center;}
+.popup-prev-btn, .popup-next-btn { font-size: 18px; cursor: pointer;
+	display: flex; align-items: center; justify-content: center; line-height: 1;
+	transform: translateY(-2px);  margin: 0 50px;}
+#popup-closer { font-size: 30px; font-weight: bold; cursor: pointer;
+	padding-right: 5px;}
 
-.ol-popup-content { max-height: 250px; min-width: 250px; overflow-y: auto; }
-.ol-popup-content table { border-collapse: collapse; width: 100%; }
-.ol-popup-content table:not(:last-of-type) { margin-bottom: 24px; }
+.ol-popup-content { max-height: 250px; min-width: 250px; overflow-y: auto;}
+.ol-popup-content table { border-collapse: collapse; width: 100%;}
+.ol-popup-content table:not(:last-of-type) { margin-bottom: 24px;}
 .ol-popup-content table th, .ol-popup-content table td { vertical-align: top;
 	padding: 4px 8px;	text-align: left;}
-
-.prev-btn {	cursor: pointer;}
-.next-btn {	cursor: pointer;}
-.wellList { display: block}
-
+	
 @media (min-width: 400px) {
 	.ol-popup {
 		width: 275px;

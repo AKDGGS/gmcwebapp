@@ -1,8 +1,8 @@
 const popup = document.getElementById('popup');
 const content = document.getElementById('popup-content');
 const closer = document.getElementById('popup-closer');
-const prevBtn = document.getElementById('prev-btn');
-const nextBtn = document.getElementById('next-btn');
+const prevBtn = document.getElementById('popup-prev-btn');
+const nextBtn = document.getElementById('popup-next-btn');
 
 const overlay = new ol.Overlay({
 	element: popup,
@@ -79,12 +79,12 @@ function displayOverlayContents(e) {
 		running = true;
 		if (e instanceof MouseEvent) {
 			switch (e.target.id) {
-				case "prev-btn":
+				case "popup-prev-btn":
 					if (currentPage > 0) {
 						currentPage--;
 					}
 					break;
-				case "next-btn":
+				case "popup-next-btn":
 					if (currentPage < fts.length - 1) {
 						currentPage++;
 					}
@@ -127,7 +127,7 @@ function displayOverlayContents(e) {
 					if (e instanceof ol.events.Event) {
 						overlay.setPosition(e.coordinate);
 					}
-					pageNumber.innerHTML = (currentPage + 1) + " of " + fts.length;
+					document.getElementById("popup-page-number").innerHTML = (currentPage + 1) + " of " + fts.length;
 					if (currentPage > 0) {
 						prevBtn.style.visibility = 'visible';
 					} else {
