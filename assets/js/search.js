@@ -42,7 +42,15 @@ function createSelect(label, name, vals, sz){
 	}
 	vals.forEach(v => {
 		let opt = document.createElement('option');
-		opt.textContent = v;
+		switch(typeof v){
+			case 'string':
+				opt.textContent = v;
+			break;
+			case 'object':
+				opt.textContent = v['name'];
+				opt.value = v['id'];
+			break;
+		}
 		sel.appendChild(opt);
 	});
 
@@ -171,7 +179,32 @@ const pro_kw = fetch('../keywords.json').then(r => {
 	if(window.console) console.log(err);
 });
 
-Promise.allSettled([pro_kw]).then(() => {
+const pro_co = fetch('../collections.json').then(r => {
+	if(!r.ok) throw 'collections response not ok';
+	return r.json();
+}).then(j => {
+	if(j.length < 1) return;
+	search_control.getSearchTools().appendChild(
+		createSelect('Collections', 'collection_id', j, 5)
+	);
+}).catch(err => {
+	if(window.console) console.log(err);
+});
+
+const pro_pr = fetch('../prospects.json').then(r => {
+	if(!r.ok) throw 'prospects response not ok';
+	return r.json();
+}).then(j => {
+	if(j.length < 1) return;
+	search_control.getSearchTools().appendChild(
+		createSelect('Prospects', 'prospect_id', j, 5)
+	);
+}).catch(err => {
+	if(window.console) console.log(err);
+});
+
+
+Promise.allSettled([pro_kw, pro_co, pro_pr]).then(() => {
 	let map = new ol.Map({
 		target: 'map',
 		controls: MAP_DEFAULTS.Controls.extend([

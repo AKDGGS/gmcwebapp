@@ -88,6 +88,38 @@ func (es *Elastic) SearchInventory(params *util.InventoryParams) (*util.Inventor
 		})
 	}
 
+	if len(params.CollectionIDs) > 0 {
+		bq := &types.BoolQuery{MinimumShouldMatch: 1}
+		for _, cid := range params.CollectionIDs {
+			bq.Should = append(bq.Should, types.Query{
+				Term: map[string]types.TermQuery{
+					"collection_id": types.TermQuery{
+						Value: cid,
+					},
+				},
+			})
+		}
+		qry.Filter = append(qry.Filter, types.Query{
+			Bool: bq,
+		})
+	}
+
+	if len(params.ProspectIDs) > 0 {
+		bq := &types.BoolQuery{MinimumShouldMatch: 1}
+		for _, cid := range params.ProspectIDs {
+			bq.Should = append(bq.Should, types.Query{
+				Term: map[string]types.TermQuery{
+					"prospect.id": types.TermQuery{
+						Value: cid,
+					},
+				},
+			})
+		}
+		qry.Filter = append(qry.Filter, types.Query{
+			Bool: bq,
+		})
+	}
+
 	if !params.Private {
 		src_filter.Excludes = append(
 			src_filter.Excludes,

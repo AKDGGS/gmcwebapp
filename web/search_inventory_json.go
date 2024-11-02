@@ -20,7 +20,9 @@ func (srv *Server) ServeSearchInventoryJSON(w http.ResponseWriter, r *http.Reque
 		)
 		return
 	}
+
 	q := r.URL.Query()
+
 	size, err := strconv.Atoi(q.Get("size"))
 	if err != nil {
 		size = 25
@@ -29,19 +31,39 @@ func (srv *Server) ServeSearchInventoryJSON(w http.ResponseWriter, r *http.Reque
 	} else if user != nil && size > 10000 {
 		size = 25
 	}
+
 	from, err := strconv.Atoi(q.Get("from"))
 	if err != nil || from < 0 {
 		from = 0
 	}
+
 	params := &sutil.InventoryParams{
 		Query:   q.Get("q"),
 		Size:    size,
 		From:    from,
 		Private: (user != nil),
 	}
+
 	if keywords, ok := q["keyword"]; ok {
 		params.Keywords = keywords
 	}
+
+	if ids, ok := q["prospect_id"]; ok {
+		for _, sid := range ids {
+			if id, err := strconv.Atoi(sid); err == nil {
+				params.ProspectIDs = append(params.ProspectIDs, id)
+			}
+		}
+	}
+
+	if ids, ok := q["collection_id"]; ok {
+		for _, sid := range ids {
+			if id, err := strconv.Atoi(sid); err == nil {
+				params.CollectionIDs = append(params.CollectionIDs, id)
+			}
+		}
+	}
+
 	if sorts, ok := q["sort"]; ok {
 		dirs, _ := q["dir"]
 		for i, v := range sorts {
@@ -52,6 +74,7 @@ func (srv *Server) ServeSearchInventoryJSON(w http.ResponseWriter, r *http.Reque
 			params.Sort = append(params.Sort, [2]string{v, dir})
 		}
 	}
+
 	result, err := srv.Search.SearchInventory(params)
 	if err != nil {
 		http.Error(
