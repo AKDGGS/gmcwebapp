@@ -9,6 +9,8 @@ import (
 )
 
 type DB interface {
+	// Lists all prospects
+	ListProspects() ([]*model.Prospect, error)
 	// Fetches the complete details for a Prospect
 	GetProspect(id int, flags int) (*model.Prospect, error)
 

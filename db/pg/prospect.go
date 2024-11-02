@@ -3,9 +3,29 @@ package pg
 import (
 	"context"
 
+	"gmc/assets"
 	dbf "gmc/db/flag"
 	"gmc/db/model"
+
+	"github.com/jackc/pgx/v5"
 )
+
+func (pg *Postgres) ListProspects() ([]*model.Prospect, error) {
+	q, err := assets.ReadString("pg/prospect/list.sql")
+	if err != nil {
+		return nil, err
+	}
+	rows, err := pg.pool.Query(context.Background(), q)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	prospects, err := pgx.CollectRows(rows, pgx.RowToAddrOfStructByNameLax[model.Prospect])
+	if err != nil {
+		return nil, err
+	}
+	return prospects, nil
+}
 
 func (pg *Postgres) GetProspect(id int, flags int) (*model.Prospect, error) {
 	conn, err := pg.pool.Acquire(context.Background())
