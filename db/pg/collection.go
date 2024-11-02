@@ -19,9 +19,9 @@ func (pg *Postgres) ListCollections() ([]*model.Collection, error) {
 		return nil, err
 	}
 	defer rows.Close()
-	inventory, err := pgx.CollectRows(rows, pgx.RowToAddrOfStructByNameLax[model.Collection])
+	collections, err := pgx.CollectRows(rows, pgx.RowToAddrOfStructByNameLax[model.Collection])
 	if err != nil {
 		return nil, err
 	}
-	return inventory, nil
+	return collections, nil
 }
