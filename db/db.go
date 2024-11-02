@@ -97,6 +97,9 @@ type DB interface {
 	// Deletes any number of issues
 	DeleteIssues(issues ...string) error
 
+	// Lists all collections
+	ListCollections() ([]*model.Collection, error)
+
 	// Lists quality assurance reports
 	ListQAReports() ([]map[string]string, error)
 	// Runs just the count of a specific QA report
