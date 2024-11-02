@@ -1,5 +1,6 @@
 .search-container { display: flex; flex-wrap: wrap; }
-.ol-search-tools label { display: block; font-size: 0.9em; font-weight: bold; }
+.ol-search-tools { padding: 8px; }
+.ol-search-tools label { display: block; font-size: 1em; font-weight: bold; }
 .ol-search-tools div:not(:first-child) { margin-top: 1.2em; }
 .noresults { margin: 1em; font-size: 1.2em; font-weight: bold; }
 .csp span:not(:last-of-type)::after { content: ", "; }

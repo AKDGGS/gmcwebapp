@@ -39,6 +39,9 @@ func (srv *Server) ServeSearchInventoryJSON(w http.ResponseWriter, r *http.Reque
 		From:    from,
 		Private: (user != nil),
 	}
+	if keywords, ok := q["keyword"]; ok {
+		params.Keywords = keywords
+	}
 	if sorts, ok := q["sort"]; ok {
 		dirs, _ := q["dir"]
 		for i, v := range sorts {

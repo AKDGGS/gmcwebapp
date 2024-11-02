@@ -72,6 +72,22 @@ func (es *Elastic) SearchInventory(params *util.InventoryParams) (*util.Inventor
 		})
 	}
 
+	if len(params.Keywords) > 0 {
+		bq := &types.BoolQuery{}
+		for _, kw := range params.Keywords {
+			bq.Must = append(bq.Must, types.Query{
+				Term: map[string]types.TermQuery{
+					"keyword": types.TermQuery{
+						Value: kw,
+					},
+				},
+			})
+		}
+		qry.Filter = append(qry.Filter, types.Query{
+			Bool: bq,
+		})
+	}
+
 	if !params.Private {
 		src_filter.Excludes = append(
 			src_filter.Excludes,

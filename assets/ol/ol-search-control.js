@@ -78,6 +78,9 @@ class SearchControl extends ol.control.Control {
 	getSearchBox() { return this.searchbox; }
 	getSearchTools() { return this.searchtools; }
 	getSearchButton() { return this.searchsubmit; }
+	inSearchTools(e) { return this.searchtools.contains(e); }
+	showSearchTools() { this.searchtools.style.display = 'block'; }
+	hideSearchTools() { this.searchtools.style.display = 'none'; }
 	toggleSearchTools() {
 		if(this.searchtools.style.display === 'block'){
 			this.searchtools.style.display = 'none';

@@ -16,11 +16,12 @@ type InventoryIndex interface {
 }
 
 type InventoryParams struct {
-	Query   string
-	From    int
-	Size    int
-	Private bool
-	Sort    [][2]string
+	Query    string
+	Keywords []string
+	From     int
+	Size     int
+	Private  bool
+	Sort     [][2]string
 }
 
 type InventoryResults struct {
