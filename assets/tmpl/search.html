@@ -3,10 +3,12 @@
 				<div id="map"></div>
 				<div id="result-control">
 					<div>
+						<button id="result-reset">Reset</button>
+						|
 						Showing
 						<select autocomplete="off" name="size" id="size">
 							<option>10</option>
-							<option selected>25</option>
+							<option data-default="true" selected>25</option>
 							<option>50</option>
 							<option>100</option>
 							<option>250</option>
@@ -28,21 +30,21 @@
 					<div>
 						Sort by
 						<select autocomplete="off" name="sort">
-						{{- range .sortby}}
-							<option value="{{index . 0}}">{{index . 1}}</option>
+						{{- range $i, $e := .sortby}}
+							<option {{if eq $i 0}}data-default="true" {{end}}value="{{index . 0}}">{{index . 1}}</option>
 						{{- end}}
 						</select>
 						<select autocomplete="off" name="dir">
-							<option selected="selected">Asc</option>
+							<option data-default="true" selected>Asc</option>
 							<option>Desc</option>
 						</select>
 						<select autocomplete="off" name="sort">
-						{{- range .sortby}}
-							<option value="{{index . 0}}">{{index . 1}}</option>
+						{{- range $i, $e := .sortby}}
+							<option {{if eq $i 0}}data-default="true" {{end}}value="{{index . 0}}">{{index . 1}}</option>
 						{{- end}}
 						</select>
 						<select autocomplete="off" name="dir">
-							<option selected="selected">Asc</option>
+							<option data-default="true" selected>Asc</option>
 							<option>Desc</option>
 						</select>
 					</div>

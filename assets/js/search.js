@@ -271,6 +271,21 @@ Promise.allSettled([
 	document.getElementById('result-next').addEventListener(
 		'click', e => doSearch(1)
 	);
+	document.getElementById('result-reset').addEventListener('click', e => {
+		elementEmpty('result');
+		result_source.clear();
+		elementDisplay('result-control', 'none');
+		document.querySelectorAll(
+			'#result-control select, .ol-search-tools select'
+		).forEach(e => Array.from(e.options).forEach(o => {
+			if(o.dataset.default) o.selected = true;
+			else o.selected = false;
+		}));
+		window.history.pushState(null, '', 'search');
+		search_control.hideSearchTools();
+		search_control.getSearchBox().value = '';
+		search_control.getSearchBox().focus();
+	});
 	document.querySelectorAll('select[name="sort"]').forEach(e => {
 		e.addEventListener('change', x => doSearch());
 	});
