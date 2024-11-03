@@ -1,5 +1,5 @@
 let search_control = new SearchControl({ moretools: true });
-let drawbox_control = new DrawBoxControl({ callback: e => { doSearch(); }});
+let drawbox_control = new DrawBoxControl({ callback: e => doSearch() });
 let result_source = new ol.source.Vector();
 let fmt = new ol.format.GeoJSON({
 	dataProjection: 'EPSG:4326',
@@ -26,38 +26,43 @@ URLSearchParams.prototype.apply = function(k,v){
 	}
 };
 
-// Convenience function: makes a select and label
-function createSelect(label, name, vals, sz){
-	let lbl = document.createElement('label');
-	lbl.htmlFor = name;
-	lbl.textContent = label;
+// Convenience function: makes a select and label for search tools
+function createToolSelect(label, name, url){
+	const pro = fetch(url).then(r => {
+		if(!r.ok) throw `${label} response not ok`;
+		return r.json();
+	}).then(vals => {
+		let lbl = document.createElement('label');
+		lbl.htmlFor = name;
+		lbl.textContent = label;
 
-	let sel = document.createElement('select');
-	sel.name = sel.id = name;
-	sel.autocomplete = 'off';
-	sel.addEventListener('change', e => { doSearch(); });
-	if(sz > 0){
+		let sel = document.createElement('select');
+		sel.name = sel.id = name;
+		sel.autocomplete = 'off';
 		sel.multiple = true;
-		sel.size = sz;
-	}
-	vals.forEach(v => {
-		let opt = document.createElement('option');
-		switch(typeof v){
-			case 'string':
-				opt.textContent = v;
-			break;
-			case 'object':
-				opt.textContent = v['name'];
-				opt.value = v['id'];
-			break;
-		}
-		sel.appendChild(opt);
-	});
+		sel.size = 5;
+		sel.addEventListener('change', e => doSearch());
+		vals.forEach(v => {
+			let opt = document.createElement('option');
+			switch(typeof v){
+				case 'string':
+					opt.textContent = v;
+				break;
+				case 'object':
+					opt.textContent = v['name'];
+					opt.value = v['id'];
+				break;
+			}
+			sel.appendChild(opt);
+		});
 
-	let div = document.createElement('div');
-	div.appendChild(lbl);
-	div.appendChild(sel);
-	return div;
+		let div = document.createElement('div');
+		div.appendChild(lbl);
+		div.appendChild(sel);
+		search_control.getSearchTools().appendChild(div);
+	}).catch(err => {
+		if(window.console) console.log(err);
+	});
 }
 
 // Convenience function: empties element of all child nodes
@@ -216,43 +221,11 @@ function updateFromURL(){
 	doSearch();
 }
 
-const pro_kw = fetch('../keywords.json').then(r => {
-	if(!r.ok) throw 'keywords response not ok';
-	return r.json();
-}).then(j => {
-	if(j.length < 1) return;
-	search_control.getSearchTools().appendChild(
-		createSelect('Keywords', 'keyword', j, 5)
-	);
-}).catch(err => {
-	if(window.console) console.log(err);
-});
-
-const pro_co = fetch('../collections.json').then(r => {
-	if(!r.ok) throw 'collections response not ok';
-	return r.json();
-}).then(j => {
-	if(j.length < 1) return;
-	search_control.getSearchTools().appendChild(
-		createSelect('Collections', 'collection_id', j, 5)
-	);
-}).catch(err => {
-	if(window.console) console.log(err);
-});
-
-const pro_pr = fetch('../prospects.json').then(r => {
-	if(!r.ok) throw 'prospects response not ok';
-	return r.json();
-}).then(j => {
-	if(j.length < 1) return;
-	search_control.getSearchTools().appendChild(
-		createSelect('Prospects', 'prospect_id', j, 5)
-	);
-}).catch(err => {
-	if(window.console) console.log(err);
-});
-
-Promise.allSettled([pro_kw, pro_co, pro_pr]).then(() => {
+Promise.allSettled([
+	createToolSelect('Keywords', 'keyword', '../keywords.json'),
+	createToolSelect('Collections', 'collection_id', '../collections.json'),
+	createToolSelect('Prospects', 'prospect_id', '../prospects.json')
+]).then(() => {
 	let map = new ol.Map({
 		target: 'map',
 		controls: MAP_DEFAULTS.Controls.extend([
@@ -310,6 +283,6 @@ Promise.allSettled([pro_kw, pro_co, pro_pr]).then(() => {
 
 	// Refresh search if user moves backwards or forwards in history
 	window.addEventListener('popstate', updateFromURL);
-});
 
-search_control.getSearchBox().focus();
+	search_control.getSearchBox().focus();
+});
