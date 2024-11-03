@@ -1,5 +1,5 @@
 let search_control = new SearchControl({ moretools: true });
-let drawbox_control = new DrawBoxControl({ callback: doSearch });
+let drawbox_control = new DrawBoxControl({ callback: e => { doSearch(); }});
 let result_source = new ol.source.Vector();
 let fmt = new ol.format.GeoJSON({
 	dataProjection: 'EPSG:4326',
@@ -35,7 +35,7 @@ function createSelect(label, name, vals, sz){
 	let sel = document.createElement('select');
 	sel.name = sel.id = name;
 	sel.autocomplete = 'off';
-	sel.addEventListener('change', doSearch);
+	sel.addEventListener('change', e => { doSearch(); });
 	if(sz > 0){
 		sel.multiple = true;
 		sel.size = sz;
@@ -103,6 +103,7 @@ function doSearch(dir){
 	*/
 	params.sort();
 
+	let update_url = true;
 	// Search is dirty. Restart from beginning
 	if(params.toString() !== oldparams.toString()){
 		nfrom = 0;
@@ -110,6 +111,8 @@ function doSearch(dir){
 		nfrom += Math.max(Number(params.get('size')), 25);
 	} else if(dir === -1){
 		nfrom = Math.max(nfrom - Math.max(Number(params.get('size')), 25), 0);
+	} else if(dir === 0 || typeof dir === 'undefined'){
+		update_url = false;
 	}
 	params.apply('from', nfrom);
 
@@ -118,7 +121,9 @@ function doSearch(dir){
 		if(!response.ok){ throw 'response not ok'; }
 		return response.json();
 	}).then(response => {
-		window.history.replaceState(null, '', `search?${params.toString()}`);
+		if(update_url){
+			window.history.pushState(null, '', `search?${params.toString()}`);
+		}
 		let result = elementEmpty('result');
 		result_source.clear();
 
@@ -167,6 +172,50 @@ function doSearch(dir){
 	});
 }
 
+function updateFromURL(){
+	let params = new URL(window.location.toString()).searchParams;
+	params.delete('from');
+
+	// Handle the query separately
+	let q = params.get('q');
+	if(q !== null) search_control.getSearchBox().value = q;
+	params.delete('q');
+
+	// Iterate over the parameter keys and extract any duplicates
+	let keys = params.keys().toArray().filter((v,i,a) => {
+		return a.indexOf(v) === i;
+	});
+	// Iterate over the unique keys and push values
+	// into same-named elements
+	let show = false;
+	keys.forEach(k => {
+		let vals = params.getAll(k);
+		let els = document.querySelectorAll(`[name=${k}]`)
+		if(vals.length === 0 || els.length === 0) return;
+
+		let eli = 0;
+		vals.forEach(v => {
+			if(!show && search_control.inSearchTools(els[eli])) show = true;
+			switch(els[eli].tagName){
+				case 'SELECT':
+					Array.from(els[eli].options).every(o => {
+						if(o.value === v || o.textContent === v){
+							return o.selected = true;
+						}
+						return true;
+					});
+					break
+				case 'INPUT': els[eli].value = v;
+			}
+			// Move the element index forward if possible,
+			// to handle multiple elements with the same name
+			eli = Math.min((els.length - 1),(eli + 1));
+		});
+	});
+	if(show) search_control.showSearchTools();
+	doSearch();
+}
+
 const pro_kw = fetch('../keywords.json').then(r => {
 	if(!r.ok) throw 'keywords response not ok';
 	return r.json();
@@ -202,7 +251,6 @@ const pro_pr = fetch('../prospects.json').then(r => {
 }).catch(err => {
 	if(window.console) console.log(err);
 });
-
 
 Promise.allSettled([pro_kw, pro_co, pro_pr]).then(() => {
 	let map = new ol.Map({
@@ -258,49 +306,10 @@ Promise.allSettled([pro_kw, pro_co, pro_pr]).then(() => {
 	});
 
 	// If there's a query string, use that to rebuild the search form
-	if(window.location.search){
-		let params = new URL(window.location.toString()).searchParams;
-		params.delete('from');
+	if(window.location.search) updateFromURL();
 
-		// Handle the query separately
-		let q = params.get('q');
-		if(q !== null) search_control.getSearchBox().value = q;
-		params.delete('q');
-
-		// Iterate over the parameter keys and extract any duplicates
-		let keys = params.keys().toArray().filter((v,i,a) => {
-			return a.indexOf(v) === i;
-		});
-		// Iterate over the unique keys and push values
-		// into same-named elements
-		let show = false;
-		keys.forEach(k => {
-			let vals = params.getAll(k);
-			let els = document.querySelectorAll(`[name=${k}]`)
-			if(vals.length === 0 || els.length === 0) return;
-
-			let eli = 0;
-			vals.forEach(v => {
-				if(!show && search_control.inSearchTools(els[eli])) show = true;
-				switch(els[eli].tagName){
-					case 'SELECT':
-						Array.from(els[eli].options).every(o => {
-							if(o.value === v || o.textContent === v){
-								return o.selected = true;
-							}
-							return true;
-						});
-						break
-					case 'INPUT': els[eli].value = v;
-				}
-				// Move the element index forward if possible,
-				// to handle multiple elements with the same name
-				eli = Math.min((els.length - 1),(eli + 1));
-			});
-		});
-		if(show) search_control.showSearchTools();
-		doSearch();
-	}
+	// Refresh search if user moves backwards or forwards in history
+	window.addEventListener('popstate', updateFromURL);
 });
 
 search_control.getSearchBox().focus();
