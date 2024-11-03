@@ -27,6 +27,7 @@ class SearchControl extends ol.control.Control {
 		}
 
 		this.searchbox = document.createElement('input');
+		this.searchbox.setAttribute('name', 'ol-search-searchbox');
 		this.searchbox.setAttribute('autocomplete', 'off');
 		this.searchbox.setAttribute('type', 'text');
 		this.searchbox.setAttribute('placeholder', 'Search for ...');
