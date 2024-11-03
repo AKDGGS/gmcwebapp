@@ -24,7 +24,7 @@
 						{{- if .APINumber}}
 						<tr>
 							<th>API Number</th>
-							<td><div><a href="../search#q=api:{{.APINumber}}">{{.APINumber}}</a></div></td>
+							<td><div><a href="../inventory/search?q=well.api:{{.APINumber}}">{{.APINumber}}</a></div></td>
 						</tr>
 						{{- end}}
 						<tr>
@@ -96,7 +96,7 @@
 						<tr>
 							<th>Quadrangle</th>
 							<td>{{- range $i, $qd := .Quadrangles}}{{- if ne $i 0}}, {{- end}}
-								<a href="../search#quadrangle_id={{$qd.ID}}">{{$qd.Name}}</a>{{- end}}
+								{{$qd.Name}}{{- end}}
 							</td>
 						</tr>
 						{{- end}}
@@ -157,7 +157,7 @@
 					<tbody>
 						{{- range .KeywordSummary}}
 						<tr>
-							<td><a href="../search#q=well_id:{{$.well.ID}}{{range .Keywords}}&keyword={{.}}{{- end}}">{{range $i, $kw := .Keywords}}{{if ne $i 0}} &gt; {{end}}{{$kw}}{{- end}}</a></td>
+							<td><a href="../inventory/search?q=well.id:{{$.well.ID}}{{range .Keywords}}&keyword={{.}}{{- end}}">{{range $i, $kw := .Keywords}}{{if ne $i 0}} &gt; {{end}}{{$kw}}{{- end}}</a></td>
 							<td>{{.Count}}</td>
 						</tr>
 						{{- end}}

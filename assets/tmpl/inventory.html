@@ -184,7 +184,7 @@
 						<tr>
 							<th>Keywords</th>
 							<td>{{- range $i, $kw := .Keywords}}{{- if ne $i 0}}, {{- end}}
-								<a href="../search#keyword={{$kw}}">{{$kw}}</a>{{- end}}
+								<a href="../inventory/search?keyword={{$kw}}">{{$kw}}</a>{{- end}}
 							</td>
 						</tr>
 						{{- end}}

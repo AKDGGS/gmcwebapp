@@ -66,7 +66,7 @@
 						<tr>
 							<th>Quadrangle</th>
 							<td>{{- range $i, $qd := .Quadrangles}}{{- if ne $i 0}}, {{- end}}
-								<a href="../search#quadrangle_id={{$qd.ID}}">{{$qd.Name}}</a>{{- end}}
+								{{$qd.Name}}{{- end}}
 							</td>
 						</tr>
 						{{- end}}
@@ -74,7 +74,7 @@
 						<tr>
 							<th>Mining District</th>
 							<td>{{- range $i, $md := .MiningDistricts}}{{- if ne $i 0}}, {{- end}}
-								<a href="../search#mining_district_id={{$md.ID}}">{{$md.Name}}</a>{{- end}}
+								{{$md.Name}}{{- end}}
 							</td>
 						</tr>
 						{{- end}}
@@ -137,7 +137,7 @@
 					<tbody>
 						{{- range .KeywordSummary}}
 						<tr>
-							<td><a href="../search#borehole_id:{{$.borehole.ID}}prospect_id:{{$.borehole.Prospect.ID}}{{range .Keywords}}&keyword={{.}}{{- end}}">{{- range $i, $kw := .Keywords}}{{- if ne $i 0}} &gt; {{end}}{{$kw}}{{- end}}</a></td>
+							<td><a href="../inventory/search?q=borehole.id:{{$.borehole.ID}}{{range .Keywords}}&keyword={{.}}{{- end}}">{{- range $i, $kw := .Keywords}}{{- if ne $i 0}} &gt; {{end}}{{$kw}}{{- end}}</a></td>
 							<td>{{.Count}}</td>
 						</tr>
 						{{- end}}

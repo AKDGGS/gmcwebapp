@@ -6,7 +6,7 @@
 						{{- if .Name}}
 						<tr>
 							<th>Name</th>
-							<td><a href="../search#prospect_id={{.ID}}">{{.Name}}</a></td>
+							<td><a href="../inventory/search?prospect_id={{.ID}}">{{.Name}}</a></td>
 						</tr>
 						{{- end}}
 						{{- if .AltNames}}
@@ -30,13 +30,13 @@
 						{{- if .Quadrangles}}
 						<tr>
 							<th>Quadrangle</th>
-							<td>{{range $i, $qd := .Quadrangles}}{{if ne $i 0}}, {{- end}}<a href="../search#quadrangle_id={{$qd.ID}}">{{$qd.Name}}</a>{{- end}}</td>
+							<td>{{range $i, $qd := .Quadrangles}}{{if ne $i 0}}, {{- end}}{{$qd.Name}}{{- end}}</td>
 						</tr>
 						{{- end}}
 						{{- if .MiningDistricts}}
 						<tr>
 							<th>Mining District</th>
-							<td>{{range $i, $md := .MiningDistricts}}{{if ne $i 0}}, {{- end}}<a href="../search#mining_district_id={{$md.ID}}">{{$md.Name}}</a>{{- end}}</td>
+							<td>{{range $i, $md := .MiningDistricts}}{{if ne $i 0}}, {{- end}}{{$md.Name}}{{- end}}</td>
 						</tr>
 						{{- end}}
 					</tbody>
@@ -97,7 +97,7 @@
 					<tbody>
 						{{- range .KeywordSummary}}
 						<tr>
-							<td><a href="../search#prospect_id={{$.prospect.ID}}{{range .Keywords}}&keyword={{.}}{{- end}}">{{- range $i, $kw := .Keywords}}{{- if ne $i 0}} &gt; {{end}}{{$kw}}{{- end}}</a></td>
+							<td><a href="../inventory/search?prospect_id={{$.prospect.ID}}{{range .Keywords}}&keyword={{.}}{{- end}}">{{- range $i, $kw := .Keywords}}{{- if ne $i 0}} &gt; {{end}}{{$kw}}{{- end}}</a></td>
 							<td>{{.Count}}</td>
 						</tr>
 						{{- end}}
