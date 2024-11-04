@@ -1,8 +1,8 @@
 const popup = document.getElementById('popup');
 const content = document.getElementById('popup-content');
 const closer = document.getElementById('popup-closer');
-const prevBtn = document.getElementById('popup-prev-btn');
-const nextBtn = document.getElementById('popup-next-btn');
+const prev_btn = document.getElementById('popup-prev-btn');
+const next_btn = document.getElementById('popup-next-btn');
 
 const overlay = new ol.Overlay({
 	element: popup,
@@ -90,10 +90,10 @@ function displayOverlayContents(e) {
 					}
 					break;
 			}
-			prevBtn.disable = true;
-			prevBtn.style.color = '#868686BF';
-			nextBtn.disable = true;
-			nextBtn.style.color = '#868686BF';
+			prev_btn.disable = true;
+			prev_btn.style.color = '#868686BF';
+			next_btn.disable = true;
+			next_btn.style.color = '#868686BF';
 		} else {
 			currentPage = 0;
 		}
@@ -129,17 +129,17 @@ function displayOverlayContents(e) {
 					}
 					document.getElementById("popup-page-number").innerHTML = (currentPage + 1) + " of " + fts.length;
 					if (currentPage > 0) {
-						prevBtn.style.visibility = 'visible';
+						prev_btn.style.visibility = 'visible';
 					} else {
-						prevBtn.style.visibility = 'hidden';
+						prev_btn.style.visibility = 'hidden';
 					}
 					if (currentPage < (fts.length - 1)) {
-						nextBtn.style.visibility = 'visible';
+						next_btn.style.visibility = 'visible';
 					} else {
-						nextBtn.style.visibility = 'hidden';
+						next_btn.style.visibility = 'hidden';
 					}
-					prevBtn.style.color = "#fff";
-					nextBtn.style.color = "#fff";
+					prev_btn.style.color = "#fff";
+					next_btn.style.color = "#fff";
 					running = false;
 				})
 				.catch(err => {
@@ -150,8 +150,8 @@ function displayOverlayContents(e) {
 	}
 }
 //Popup
-prevBtn.addEventListener("click", displayOverlayContents);
-nextBtn.addEventListener("click", displayOverlayContents);
+prev_btn.addEventListener("click", displayOverlayContents);
+next_btn.addEventListener("click", displayOverlayContents);
 closer.addEventListener("click", function() {
 	overlay.setPosition(undefined);
 	closer.blur();
