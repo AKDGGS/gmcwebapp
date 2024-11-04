@@ -22,26 +22,3 @@
 .ol-popup-content table:not(:last-of-type) { margin-bottom: 24px;}
 .ol-popup-content table th, .ol-popup-content table td { vertical-align: top;
 	padding: 4px 8px;	text-align: left;}
-	
-@media (min-width: 400px) {
-	.ol-popup {
-		width: 275px;
-	}
-	.popup-content {
-		font-size: 14px;
-	}
-	.popup-topbar {
-		font-size: 16px;
-	}
-}
-@media (min-width: 640px) {
-	.ol-popup {
-		width: 325px;
-	}
-	.popup-content {
-		font-size: 16px;
-	}
-	.popup-topbar {
-		font-size: 18px;
-	}
-}
