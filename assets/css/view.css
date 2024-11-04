@@ -29,13 +29,9 @@ table { max-width: 600px; }
 #stash-dest table th, #stash-dest table td { text-align: left; vertical-align: top; border: 1px solid #bbb; padding: 4px 8px; }
 #stash-dest table tr:nth-child(odd){ background-color: #eee; }
 .ol-popup { border: 2px solid #999; background-color: #fff; display: none; }
-.ol-popup-top {
-	padding: 2px 4px;
-	display: flex;
-	color: #fff;
-	background: linear-gradient(315deg, #276f93 94%, #999 94%);
-}
-.ol-popup-top-title { text-align: center; font-size: 18px; flex-grow: 1; }
+.ol-popup-titlebar { max-height: 35px; font-size: 20px; padding-left: 15px; display: flex;
+	justify-content: space-between;	align-items: center; color: #fff;
+	background: linear-gradient(315deg, #276f93 94%, #999 94%);}
 .ol-popup-content { max-height: 250px; min-width: 250px; overflow-y: auto; }
 .ol-popup-content table { border-collapse: collapse; width: 100%; }
 .ol-popup-content table:not(:last-of-type) { margin-bottom: 24px; }
@@ -44,10 +40,7 @@ table { max-width: 600px; }
 	padding: 4px 8px;
 	text-align: left;
 }
-#popup-closer { font-weight: bold; font-size: 22px; cursor: pointer;
-	position: absolute; right: 0; padding-right: 7px; top: 0; bottom: 0;
-	margin:auto 0;
-}
+#popup-closer { font-size: 30px; font-weight: bold; cursor: pointer; padding-right: 5px;}
 
 .file-list-container {
 	display: inline-block;
