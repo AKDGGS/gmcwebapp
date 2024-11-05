@@ -10,6 +10,10 @@ SELECT
 	cd.core_diameter,
 	cd.name AS core_name,
 	cd.unit AS core_unit,
+	NULLIF(jsonb_strip_nulls(jsonb_build_object(
+		'gte', LEAST(i.interval_bottom, i.interval_top),
+		'lte', GREATEST(i.interval_bottom, i.interval_top)
+	)), jsonb_build_object()) AS interval,
 	i.interval_top,
 	i.interval_bottom,
 	i.interval_unit,

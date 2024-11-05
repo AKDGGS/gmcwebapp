@@ -44,6 +44,25 @@ func (srv *Server) ServeSearchInventoryJSON(w http.ResponseWriter, r *http.Reque
 		Private: (user != nil),
 	}
 
+	if t := q.Get("top"); t != "" {
+		if n, err := strconv.ParseFloat(t, 64); err == nil {
+			params.IntervalTop = &n
+		}
+	}
+	if t := q.Get("bottom"); t != "" {
+		if n, err := strconv.ParseFloat(t, 64); err == nil {
+			params.IntervalBottom = &n
+		}
+	}
+	// Save people from flipping top and bottom values
+	if params.IntervalTop != nil && params.IntervalBottom != nil {
+		if *params.IntervalTop > *params.IntervalBottom {
+			t := params.IntervalTop
+			params.IntervalTop = params.IntervalBottom
+			params.IntervalBottom = t
+		}
+	}
+
 	if keywords, ok := q["keyword"]; ok {
 		params.Keywords = keywords
 	}

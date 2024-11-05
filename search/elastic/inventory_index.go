@@ -58,6 +58,7 @@ func (es *Elastic) NewInventoryIndex() (util.InventoryIndex, error) {
 				"diameter":      &types.FloatNumberProperty{Index: &yes},
 				"core_name":     &types.TextProperty{Index: &yes},
 				"core_unit":     &types.TextProperty{Index: &yes},
+				"interval":      &types.FloatRangeProperty{Index: &yes},
 				"top":           &types.FloatNumberProperty{Index: &yes},
 				"bottom":        &types.FloatNumberProperty{Index: &yes},
 				"unit":          &types.TextProperty{Index: &yes},

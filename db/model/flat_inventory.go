@@ -33,7 +33,11 @@ type FlatInventory struct {
 	Description    *string         `json:"description,omitempty"`
 	Note           []string        `json:"note,omitempty"`
 	Issue          []string        `json:"issue,omitempty"`
-	Well           []struct {
+	Interval       *struct {
+		GTE *float64 `db:"gte" json:"gte,omitempty"`
+		LTE *float64 `db:"lte" json:"lte,omitempty"`
+	} `json:"interval,omitempty"`
+	Well []struct {
 		ID          int32    `json:"id"`
 		DisplayName string   `json:"display_name"`
 		Name        []string `json:"name,omitempty"`

@@ -23,6 +23,7 @@ func (es *Elastic) SearchInventory(params *util.InventoryParams) (*util.Inventor
 			"description",
 			"note",
 			"remark",
+			"interval",
 			"outcrop.year",
 			"shotline.year",
 			"borehole.name",
@@ -83,9 +84,7 @@ func (es *Elastic) SearchInventory(params *util.InventoryParams) (*util.Inventor
 				},
 			})
 		}
-		qry.Filter = append(qry.Filter, types.Query{
-			Bool: bq,
-		})
+		qry.Filter = append(qry.Filter, types.Query{Bool: bq})
 	}
 
 	if len(params.CollectionIDs) > 0 {
@@ -99,8 +98,24 @@ func (es *Elastic) SearchInventory(params *util.InventoryParams) (*util.Inventor
 				},
 			})
 		}
+		qry.Filter = append(qry.Filter, types.Query{Bool: bq})
+	}
+
+	if params.IntervalTop != nil || params.IntervalBottom != nil {
+		nrq := types.NumberRangeQuery{}
+		if params.IntervalTop != nil {
+			n := types.Float64(*params.IntervalTop)
+			nrq.Gte = &n
+		}
+		if params.IntervalBottom != nil {
+			n := types.Float64(*params.IntervalBottom)
+			nrq.Lte = &n
+		}
+
 		qry.Filter = append(qry.Filter, types.Query{
-			Bool: bq,
+			Range: map[string]types.RangeQuery{
+				"interval": nrq,
+			},
 		})
 	}
 
@@ -115,9 +130,7 @@ func (es *Elastic) SearchInventory(params *util.InventoryParams) (*util.Inventor
 				},
 			})
 		}
-		qry.Filter = append(qry.Filter, types.Query{
-			Bool: bq,
-		})
+		qry.Filter = append(qry.Filter, types.Query{Bool: bq})
 	}
 
 	if !params.Private {
