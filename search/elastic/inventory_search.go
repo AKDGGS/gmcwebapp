@@ -73,9 +73,9 @@ func (es *Elastic) SearchInventory(params *util.InventoryParams) (*util.Inventor
 	}
 
 	if len(params.Keywords) > 0 {
-		bq := &types.BoolQuery{}
+		bq := &types.BoolQuery{MinimumShouldMatch: 1}
 		for _, kw := range params.Keywords {
-			bq.Must = append(bq.Must, types.Query{
+			bq.Should = append(bq.Should, types.Query{
 				Term: map[string]types.TermQuery{
 					"keyword": types.TermQuery{
 						Value: kw,
