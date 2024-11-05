@@ -106,20 +106,7 @@ function displayOverlayContents(e) {
 					return response.json();
 				})
 				.then(data => {
-					for (let i = 0; i < data.keywords.length; i++) {
-						let arr = data.keywords[i].keywords.toString().split(",");
-						let qParams = "";
-						for (let j = 0; j < arr.length; j++) {
-							qParams = qParams.concat("&keyword=" + arr[j]);
-						}
-						data.keywords[i].keywords = data.keywords[i]
-							.keywords.toString().replaceAll(",", ", ");
-						data.keywords[i]["keywordsURL"] = encodeURI("search#q=well_id:" +
-							well_id + qParams);
-					}
-					data["nameURL"] = encodeURI("well/" + well_id);
 					data["well_id"] = well_id;
-
 					let t = mustache.render(document.getElementById("tmpl-popup").innerHTML, data, {}, ['[[', ']]']);
 					document.getElementById("popup-content").innerHTML = t;
 					document.getElementById('popup-topbar').style.visibility = 'visible';
