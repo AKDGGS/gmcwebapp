@@ -8,22 +8,23 @@ let fmt = new ol.format.GeoJSON({
 
 // Extends URLSearchParams to apply custom behavior when appending values
 URLSearchParams.prototype.apply = function(k,v){
-	if(typeof v === 'string' && v.trim() === '') return;
+	if(typeof v === 'string' && v.trim() === '') return this;
 	switch(k){
 		case 'size':
 			if(Number(v) !== 25) this.append(k,v);
-		return;
+		break;
 		case 'from':
 			if(Number(v) > 0) this.append(k,v);
-		return
+		break;
 		case 'sort':
 			if(v !== '_score') this.append(k,v);
-		return
+		break;
 		case 'dir':
 			if(v.toLowerCase() !== 'asc') this.append(k,'desc');
-		return
+		break;
 		default: this.append(k,v.trim());
 	}
+	return this;
 };
 
 // Convenience function: makes a select and label for search tools
@@ -63,6 +64,7 @@ function createToolSelect(label, name, url){
 	}).catch(err => {
 		if(window.console) console.log(err);
 	});
+	return pro;
 }
 
 // Convenience function: empties element of all child nodes
@@ -84,21 +86,14 @@ function doSearch(dir){
 	if(search_active) return;
 	search_active = true;
 
-	let oldparams = new URL(window.location.toString()).searchParams;
-	let nfrom = Number(oldparams.get('from'));
-	oldparams.delete('from');
-	oldparams.sort();
-
-	let params = new URLSearchParams();
-
+	let new_sp = new URLSearchParams();
 	document.querySelectorAll(
 		'#result-control select, .ol-search-tools select'
 	).forEach(e => Array.from(e.options).forEach(o => {
 		if(!o.selected) return;
-		params.apply(e.name, (o.value !== '' ? o.value : o.textContent));
+		new_sp.apply(e.name, (o.value !== '' ? o.value : o.textContent));
 	}));
-
-	params.apply('q', search_control.getSearchBox().value);
+	new_sp.apply('q', search_control.getSearchBox().value).sort();
 	/*
 	let feat = drawbox_control.getFeature();
 	if(feat !== null){
@@ -106,28 +101,27 @@ function doSearch(dir){
 		url += `${url?'&':''}geojson=${encodeURIComponent(geojson)}`;
 	}
 	*/
-	params.sort();
 
-	let update_url = true;
-	// Search is dirty. Restart from beginning
-	if(params.toString() !== oldparams.toString()){
-		nfrom = 0;
-	} else if(dir === 1){
-		nfrom += Math.max(Number(params.get('size')), 25);
-	} else if(dir === -1){
-		nfrom = Math.max(nfrom - Math.max(Number(params.get('size')), 25), 0);
-	} else if(dir === 0 || typeof dir === 'undefined'){
-		update_url = false;
+	let old_sp = new URLSearchParams(window.location.search);
+	old_sp.sort();
+	let old_qs = old_sp.toString();
+	let nfrom = Number(old_sp.get('from'));
+	old_sp.delete('from');
+
+	if(new_sp.toString() !== old_sp.toString()) nfrom = 0;
+	else if(dir === 1) nfrom += Math.max(Number(new_sp.get('size')), 25);
+	else if(dir === -1) {
+		nfrom = Math.max(nfrom - Math.max(Number(new_sp.get('size')), 25), 0);
 	}
-	params.apply('from', nfrom);
+	new_sp.apply('from', nfrom).sort();
 
-	url = `search.json?${params.toString()}`;
+	url = `search.json?${new_sp.toString()}`;
 	fetch(url).then(response => {
 		if(!response.ok){ throw 'response not ok'; }
 		return response.json();
 	}).then(response => {
-		if(update_url){
-			window.history.pushState(null, '', `search?${params.toString()}`);
+		if(new_sp.toString() !== old_qs){
+			window.history.pushState(null, '', `search?${new_sp.toString()}`);
 		}
 		let result = elementEmpty('result');
 		result_source.clear();
@@ -178,7 +172,7 @@ function doSearch(dir){
 }
 
 function updateFromURL(){
-	let params = new URL(window.location.toString()).searchParams;
+	let params = new URLSearchParams(window.location.search);
 	params.delete('from');
 
 	// Handle the query separately
