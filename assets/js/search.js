@@ -29,6 +29,8 @@ URLSearchParams.prototype.apply = function(k,v){
 
 // Convenience function: makes a select and label for search tools
 function createToolSelect(label, name, url){
+	let div = document.createElement('div');
+	search_control.getSearchTools().appendChild(div);
 	const pro = fetch(url).then(r => {
 		if(!r.ok) throw `${label} response not ok`;
 		return r.json();
@@ -56,11 +58,8 @@ function createToolSelect(label, name, url){
 			}
 			sel.appendChild(opt);
 		});
-
-		let div = document.createElement('div');
 		div.appendChild(lbl);
 		div.appendChild(sel);
-		search_control.getSearchTools().appendChild(div);
 	}).catch(err => {
 		if(window.console) console.log(err);
 	});
