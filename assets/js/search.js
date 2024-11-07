@@ -10,15 +10,9 @@ let fmt = new ol.format.GeoJSON({
 URLSearchParams.prototype.apply = function(k,v){
 	if(typeof v === 'string' && v.trim() === '') return this;
 	switch(k){
-		case 'size':
-			if(Number(v) !== 25) this.append(k,v);
-		break;
-		case 'from':
-			if(Number(v) > 0) this.append(k,v);
-		break;
-		case 'sort':
-			if(v !== '_score') this.append(k,v);
-		break;
+		case 'size': if(Number(v) !== 25) this.append(k,v); break;
+		case 'from': if(Number(v) > 0) this.append(k,v); break;
+		case 'sort': if(v !== '_score') this.append(k,v); break;
 		case 'dir':
 			if(v.toLowerCase() !== 'asc') this.append(k,'desc');
 		break;
@@ -35,31 +29,15 @@ function createToolSelect(label, name, url){
 		if(!r.ok) throw `${label} response not ok`;
 		return r.json();
 	}).then(vals => {
-		let lbl = document.createElement('label');
-		lbl.htmlFor = name;
-		lbl.textContent = label;
-
-		let sel = document.createElement('select');
-		sel.name = sel.id = name;
-		sel.autocomplete = 'off';
-		sel.multiple = true;
-		sel.size = 5;
-		sel.addEventListener('change', e => doSearch());
-		vals.forEach(v => {
-			let opt = document.createElement('option');
-			switch(typeof v){
-				case 'string':
-					opt.textContent = v;
-				break;
-				case 'object':
-					opt.textContent = v['name'];
-					opt.value = v['id'];
-				break;
-			}
-			sel.appendChild(opt);
-		});
-		div.appendChild(lbl);
-		div.appendChild(sel);
+		div.innerHTML = `<label for="${name}">${label}</label>` +
+			`<select name="${name}" autocomplete="off" size="5" multiple>` +
+			(vals.reduce((a,v) => {
+				switch(typeof v){
+					case 'string': return a += `<option>${v}</option>`;
+					case 'object':
+						return a += `<option value="${v.id}">${v.name}</option>`;
+				}
+			}, '')) + '</select>';
 	}).catch(err => {
 		if(window.console) console.log(err);
 	});
@@ -87,11 +65,18 @@ function doSearch(dir){
 
 	let new_sp = new URLSearchParams();
 	document.querySelectorAll(
-		'#result-control select, .ol-search-tools select'
-	).forEach(e => Array.from(e.options).forEach(o => {
-		if(!o.selected) return;
-		new_sp.apply(e.name, (o.value !== '' ? o.value : o.textContent));
-	}));
+		'#result-control select, .ol-search-tools select, .ol-search-tools input'
+	).forEach(e => {
+		switch(e.tagName){
+			case 'SELECT':
+				Array.from(e.options).forEach(o => {
+					if(!o.selected) return;
+					new_sp.apply(e.name, (o.value !== '' ? o.value : o.textContent));
+				});
+			break;
+			case 'INPUT': new_sp.apply(e.name, e.value); break;
+		}
+	});
 	new_sp.apply('q', search_control.getSearchBox().value).sort();
 	/*
 	let feat = drawbox_control.getFeature();
@@ -243,17 +228,24 @@ Promise.allSettled([
 	});
 
 	search_control.getSearchBox().addEventListener('keydown', e => {
-		if (e.keyCode == 13){
-			doSearch();
-			e.preventDefault();
-			return false;
-		}
+		if (e.keyCode == 13){ doSearch(); e.preventDefault(); }
 	});
 	search_control.getSearchButton().addEventListener('click', e => {
 		doSearch();
 		e.preventDefault();
 		return false;
 	});
+
+	let div = document.createElement('div');
+	div.innerHTML = '<label for="top">Interval</label>' +
+		'Top: <input type="text" name="top" autocomplete="off" size="5">' +
+		'Bottom: <input type="text" name="bottom" autocomplete="off" size="5">';
+	div.querySelectorAll('input').forEach(el => {
+		el.addEventListener('keydown', e => {
+			if (e.keyCode == 13){ doSearch(); e.preventDefault(); }
+		});
+	});
+	search_control.getSearchTools().appendChild(div);
 
 	document.getElementById('size').addEventListener(
 		'change', e => doSearch()
@@ -269,11 +261,17 @@ Promise.allSettled([
 		result_source.clear();
 		elementDisplay('result-control', 'none');
 		document.querySelectorAll(
-			'#result-control select, .ol-search-tools select'
-		).forEach(e => Array.from(e.options).forEach(o => {
-			if(o.dataset.default) o.selected = true;
-			else o.selected = false;
-		}));
+			'#result-control select, .ol-search-tools select, .ol-search-tools input'
+		).forEach(e => {
+			switch(e.tagName){
+				case 'SELECT':
+					return Array.from(e.options).forEach(o => {
+						if(o.dataset.default) o.selected = true;
+						else o.selected = false;
+					});
+				case 'INPUT': return e.value = '';
+			}
+		});
 		window.history.pushState(null, '', 'search');
 		search_control.hideSearchTools();
 		search_control.getSearchBox().value = '';
@@ -288,7 +286,6 @@ Promise.allSettled([
 
 	// If there's a query string, use that to rebuild the search form
 	if(window.location.search) updateFromURL();
-
 	// Refresh search if user moves backwards or forwards in history
 	window.addEventListener('popstate', updateFromURL);
 
