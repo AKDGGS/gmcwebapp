@@ -10,6 +10,15 @@ import (
 )
 
 func (srv *Server) ServeWells(w http.ResponseWriter, r *http.Request) {
+	user, err := srv.Auths.CheckRequest(w, r)
+	if err != nil {
+		http.Error(
+			w,
+			fmt.Sprintf("authentication error: %s", err),
+			http.StatusBadRequest,
+		)
+		return
+	}
 	buf := bytes.Buffer{}
 	if err := assets.ExecuteTemplate("tmpl/wells.html", &buf, nil); err != nil {
 		http.Error(
@@ -32,6 +41,7 @@ func (srv *Server) ServeWells(w http.ResponseWriter, r *http.Request) {
 			"../js/wells.js",
 		},
 		"redirect": "wells/",
+		"user":     user,
 	}
 
 	tbuf := bytes.Buffer{}
