@@ -16,13 +16,29 @@
 				<a class="soa-apptmpl-logo" title="The Great State of Alaska" href="http://alaska.gov"></a>
 				<a class="soa-apptmpl-logo-dggs" title="The Division of Geological &amp; Geophysical Surveys" href="http://dggs.alaska.gov"></a>
 				<div class="soa-apptmpl-header-nav">
-					{{- if .user}}
-					<a href="../qa/">Q/A</a>
-					<a href="../logout{{if .redirect}}?redirect={{.redirect}}{{end}}">Logout</a>
-					{{- else}}
-					<a href="../login{{if .redirect}}?redirect={{.redirect}}{{end}}">Login</a>
-					{{- end}}
-					<a href="../help">Help/Contact</a>
+					<div class="soa-apptmpl-menu-hamburger-container">
+					<div class="soa-apptmpl-menu-hamburger">
+						<input type="checkbox" id="soa-apptmpl-menu-toggle" />
+						<label for="soa-apptmpl-menu-toggle" class="soa-apptmpl-hamburger">
+							<span></span>
+							<span></span>
+							<span></span>
+						</label>
+						<nav class="soa-apptmpl-menu">
+							<ul>
+								{{- if .user}}
+								<li><a href="../qa/">Q/A</a></li>
+								<li><a href="../logout{{if .redirect}}?redirect={{.redirect}}{{end}}">Logout</a></li>
+								{{- else}}
+								<li><a href="../login{{if .redirect}}?redirect={{.redirect}}{{end}}">Login</a></li>
+								{{- end}}
+								<li><a href="../inventory/search">Inventory Search</a></li>
+								<li><a href="../wells">Wells Overview</a></li>
+								<li><a href="../help">Help/Contact</a></li>
+							</ul>
+						</nav>
+					</div>
+				</div>
 				</div>
 			</div>
 			<div class="soa-apptmpl-header-breadcrumb">

@@ -43,6 +43,64 @@ body {
 .soa-apptmpl-header-nav a:hover, .soa-apptmpl-header-breadcrumb a:hover {
 	text-decoration: underline;
 }
+.soa-apptmpl-menu-hamburger-container {
+	display: flex;
+	justify-content: flex-end;
+	align-items: center;
+}
+.soa-apptmpl-menu-hamburger {
+	text-align: right;
+	margin-left: auto;
+}
+.soa-apptmpl-hamburger {
+	position: relative;
+	display: block;
+	width: 30px;
+	height: 30px;
+	cursor: pointer;
+	margin-right: 5px;
+}
+.soa-apptmpl-hamburger span {
+	display: block;
+	width: 30px;
+	height: 3px;
+	background-color: #fff;
+	margin-bottom: 5px;
+	transition: all 0.3s;
+}
+.soa-apptmpl-hamburger span:last-child {
+	margin-bottom: 0;
+}
+#soa-apptmpl-menu-toggle {
+	display: none;
+}
+.soa-apptmpl-menu {
+	position: absolute;
+	top: 30px;
+	right: 0;
+	left: auto;
+	background-color: #072f49;
+	width: auto;
+	padding: 10px;
+	display: none;
+	z-index: 1000;
+	margin-right: 7px;
+}
+#soa-apptmpl-menu-toggle:checked ~ .soa-apptmpl-menu {
+	display: block;
+}
+.soa-apptmpl-menu ul {
+	list-style: none;
+	padding: 0;
+	margin: 0;
+}
+.soa-apptmpl-menu li {
+	margin-bottom: 10px;
+}
+.soa-apptmpl-menu a {
+	color: #fff;
+	text-decoration: none;
+}
 .soa-apptmpl-logo, .soa-apptmpl-logo-dggs {
 	display: block;
 	float: left;
