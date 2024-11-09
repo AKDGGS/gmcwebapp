@@ -38,6 +38,7 @@ function createToolSelect(label, name, url){
 						return a += `<option value="${v.id}">${v.name}</option>`;
 				}
 			}, '')) + '</select>';
+		div.querySelector('select').addEventListener('change', e => doSearch());
 	}).catch(err => {
 		if(window.console) console.log(err);
 	});
