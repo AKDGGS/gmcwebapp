@@ -6,17 +6,6 @@ let fmt = new ol.format.GeoJSON({
 	featureProjection: 'EPSG:3857'
 });
 
-// Extends URLSearchParams to apply custom behavior when appending values
-URLSearchParams.prototype.apply = function(k,v){
-	if(typeof v === 'string' && v.trim() === '') return this;
-	switch(k){
-		case 'from': if(Number(v) > 0) this.append(k,v); break;
-		break;
-		default: this.append(k,v.trim());
-	}
-	return this;
-};
-
 // Convenience function: makes a select and label for search tools
 function createToolSelect(label, name, url){
 	let div = document.createElement('div');
@@ -68,13 +57,17 @@ function doSearch(dir){
 			case 'SELECT':
 				Array.from(e.options).forEach(o => {
 					if(!o.selected || o.dataset.default) return;
-					new_sp.apply(e.name, (o.value !== '' ? o.value : o.textContent));
+					new_sp.append(e.name, (o.value !== '' ? o.value : o.textContent));
 				});
 			break;
-			case 'INPUT': new_sp.apply(e.name, e.value); break;
+			case 'INPUT':
+				if(e.value.trim() !== '') new_sp.append(e.name, e.value.trim());
+			break;
 		}
 	});
-	new_sp.apply('q', search_control.getSearchBox().value).sort();
+	let q = search_control.getSearchBox().value.trim();
+	if(q !== '') new_sp.append('q', q);
+	new_sp.sort();
 	/*
 	let feat = drawbox_control.getFeature();
 	if(feat !== null){
@@ -94,7 +87,8 @@ function doSearch(dir){
 	else if(dir === -1) {
 		nfrom = Math.max(nfrom - Math.max(Number(new_sp.get('size')), 25), 0);
 	}
-	new_sp.apply('from', nfrom).sort();
+	if(nfrom > 0) new_sp.append('from', nfrom);
+	new_sp.sort();
 
 	url = `search.json?${new_sp.toString()}`;
 	fetch(url).then(response => {
