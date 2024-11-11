@@ -10,11 +10,7 @@ let fmt = new ol.format.GeoJSON({
 URLSearchParams.prototype.apply = function(k,v){
 	if(typeof v === 'string' && v.trim() === '') return this;
 	switch(k){
-		case 'size': if(Number(v) !== 25) this.append(k,v); break;
 		case 'from': if(Number(v) > 0) this.append(k,v); break;
-		case 'sort': if(v !== '_score') this.append(k,v); break;
-		case 'dir':
-			if(v.toLowerCase() !== 'asc') this.append(k,'desc');
 		break;
 		default: this.append(k,v.trim());
 	}
@@ -71,7 +67,7 @@ function doSearch(dir){
 		switch(e.tagName){
 			case 'SELECT':
 				Array.from(e.options).forEach(o => {
-					if(!o.selected) return;
+					if(!o.selected || o.dataset.default) return;
 					new_sp.apply(e.name, (o.value !== '' ? o.value : o.textContent));
 				});
 			break;
@@ -105,7 +101,7 @@ function doSearch(dir){
 		if(!response.ok){ throw 'response not ok'; }
 		return response.json();
 	}).then(response => {
-		if(new_sp.toString() !== old_qs){
+		if(new_sp.toString() !== old_qs || !window.location.href.includes('?')){
 			window.history.pushState(null, '', `search?${new_sp.toString()}`);
 		}
 		let result = elementEmpty('result');
@@ -157,47 +153,63 @@ function doSearch(dir){
 }
 
 function updateFromURL(){
-	let params = new URLSearchParams(window.location.search);
-	params.delete('from');
+	let pr = new URLSearchParams(window.location.search);
+	pr.delete('from');
 
 	// Handle the query separately
-	let q = params.get('q');
-	if(q !== null) search_control.getSearchBox().value = q;
-	params.delete('q');
+	let q = pr.get('q');
+	search_control.getSearchBox().value = (q == null ? '' : q);
+	pr.delete('q');
 
-	// Iterate over the parameter keys and extract any duplicates
-	let keys = params.keys().toArray().filter((v,i,a) => {
+	// Fetch distinct keys
+	let keys = pr.keys().toArray().filter((v,i,a) => {
 		return a.indexOf(v) === i;
 	});
-	// Iterate over the unique keys and push values
-	// into same-named elements
-	let show = false;
-	keys.forEach(k => {
-		let vals = params.getAll(k);
-		let els = document.querySelectorAll(`[name=${k}]`)
-		if(vals.length === 0 || els.length === 0) return;
 
-		let eli = 0;
-		vals.forEach(v => {
-			if(!show && search_control.inSearchTools(els[eli])) show = true;
-			switch(els[eli].tagName){
-				case 'SELECT':
-					Array.from(els[eli].options).every(o => {
-						if(o.value === v || o.textContent === v){
-							return o.selected = true;
-						}
-						return true;
-					});
-					break
-				case 'INPUT': els[eli].value = v;
-			}
-			// Move the element index forward if possible,
-			// to handle multiple elements with the same name
-			eli = Math.min((els.length - 1),(eli + 1));
-		});
+	// Determine if the advanced controls need to be shown
+	let shown = Array.from(document.querySelectorAll(
+		'.ol-search-tools input, .ol-search-tools select'
+	)).map(e => e.name).some(v => keys.includes(v));
+
+	document.querySelectorAll(
+		'#result-control select, .ol-search-tools select, .ol-search-tools input'
+	).forEach(e => {
+		switch(e.tagName){
+			case 'SELECT':
+				let vals = pr.getAll(e.name);
+				let vlen = vals.length;
+
+				Array.from(e.options).forEach(o => {
+					if(vlen === 0){
+						return o.selected = (o.dataset.default ? true : false);
+					}
+
+					let i = vals.indexOf((o.value !== '' ? o.value : o.textContent));
+					o.selected = (i >= 0);
+					if(i >= 0){
+						pr.delete(e.name, vals[i]);
+						if(!e.multiple) vals = [];
+						else vals.splice(vals, i);
+					}
+				});
+			break;
+
+			case 'INPUT':
+				let v = pr.get(e.name);
+				e.value = (v === null ? '' : v);
+				pr.delete(e.name, v);
+			break;
+		}
 	});
-	if(show) search_control.showSearchTools();
-	doSearch();
+
+	if(shown) search_control.showSearchTools();
+	else search_control.hideSearchTools();
+	if(window.location.href.includes('?')) doSearch();
+	else {
+		elementEmpty('result');
+		result_source.clear();
+		elementDisplay('result-control', 'none');
+	}
 }
 
 Promise.allSettled([
@@ -258,24 +270,8 @@ Promise.allSettled([
 		'click', e => doSearch(1)
 	);
 	document.getElementById('result-reset').addEventListener('click', e => {
-		elementEmpty('result');
-		result_source.clear();
-		elementDisplay('result-control', 'none');
-		document.querySelectorAll(
-			'#result-control select, .ol-search-tools select, .ol-search-tools input'
-		).forEach(e => {
-			switch(e.tagName){
-				case 'SELECT':
-					return Array.from(e.options).forEach(o => {
-						if(o.dataset.default) o.selected = true;
-						else o.selected = false;
-					});
-				case 'INPUT': return e.value = '';
-			}
-		});
 		window.history.pushState(null, '', 'search');
-		search_control.hideSearchTools();
-		search_control.getSearchBox().value = '';
+		updateFromURL();
 		search_control.getSearchBox().focus();
 	});
 	document.querySelectorAll('select[name="sort"]').forEach(e => {
@@ -286,7 +282,7 @@ Promise.allSettled([
 	});
 
 	// If there's a query string, use that to rebuild the search form
-	if(window.location.search) updateFromURL();
+	if(window.location.href.includes('?')) updateFromURL();
 	// Refresh search if user moves backwards or forwards in history
 	window.addEventListener('popstate', updateFromURL);
 

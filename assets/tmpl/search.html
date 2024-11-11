@@ -35,8 +35,8 @@
 						{{- end}}
 						</select>
 						<select autocomplete="off" name="dir">
-							<option data-default="true" selected>Asc</option>
-							<option>Desc</option>
+							<option value="asc" data-default="true" selected>Asc</option>
+							<option value="desc">Desc</option>
 						</select>
 						<select autocomplete="off" name="sort">
 						{{- range $i, $e := .sortby}}
@@ -44,8 +44,8 @@
 						{{- end}}
 						</select>
 						<select autocomplete="off" name="dir">
-							<option data-default="true" selected>Asc</option>
-							<option>Desc</option>
+							<option value="asc" data-default="true" selected>Asc</option>
+							<option value="desc" >Desc</option>
 						</select>
 					</div>
 				</div>
