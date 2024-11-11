@@ -27,14 +27,18 @@ type InventoryParams struct {
 	IntervalBottom *float64
 	From           int
 	Size           int
-	Private        bool
+	IncludePrivate bool
 	Sort           [][2]string
 }
 
-func (ip *InventoryParams) ParseQuery(q url.Values) {
+func (ip *InventoryParams) ParseQuery(q url.Values, authd bool) {
 	var err error
+
+	// If the user is authenticated, include private inventory
+	ip.IncludePrivate = authd
+
 	ip.Size, err = strconv.Atoi(q.Get("size"))
-	if err != nil {
+	if err != nil || (authd && ip.Size > 10000) || (!authd && ip.Size > 1000) {
 		ip.Size = 25
 	}
 

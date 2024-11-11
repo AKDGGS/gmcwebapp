@@ -20,13 +20,7 @@ func (srv *Server) ServeSearchInventoryJSON(w http.ResponseWriter, r *http.Reque
 	}
 
 	params := &sutil.InventoryParams{}
-	params.ParseQuery(r.URL.Query())
-	if (user == nil && params.Size > 1000) || (user != nil && params.Size > 10000) {
-		params.Size = 25
-	}
-	if user != nil {
-		params.Private = true
-	}
+	params.ParseQuery(r.URL.Query(), (user != nil))
 
 	result, err := srv.Search.SearchInventory(params)
 	if err != nil {

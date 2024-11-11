@@ -133,7 +133,8 @@ func (es *Elastic) SearchInventory(params *util.InventoryParams) (*util.Inventor
 		qry.Filter = append(qry.Filter, types.Query{Bool: bq})
 	}
 
-	if !params.Private {
+	// Exclude private inventory if needed
+	if !params.IncludePrivate {
 		src_filter.Excludes = append(
 			src_filter.Excludes,
 			"path_cache",
@@ -141,7 +142,6 @@ func (es *Elastic) SearchInventory(params *util.InventoryParams) (*util.Inventor
 			"can_publish",
 			"issue",
 		)
-
 		qry.Filter = append(qry.Filter, types.Query{
 			Match: map[string]types.MatchQuery{
 				"can_publish": {Query: "true"},
@@ -158,7 +158,7 @@ func (es *Elastic) SearchInventory(params *util.InventoryParams) (*util.Inventor
 		From:    params.From,
 		Total:   r.Hits.Total.Value,
 		Time:    time.Duration(time.Duration(r.Took) * time.Millisecond),
-		Private: params.Private,
+		Private: params.IncludePrivate,
 	}
 
 	for _, hit := range r.Hits.Hits {
