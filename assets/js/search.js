@@ -10,7 +10,7 @@ let fmt = new ol.format.GeoJSON({
 function createToolSelect(label, name, url){
 	let div = document.createElement('div');
 	search_control.getSearchTools().appendChild(div);
-	const pro = fetch(url).then(r => {
+	return fetch(url).then(r => {
 		if(!r.ok) throw `${label} response not ok`;
 		return r.json();
 	}).then(vals => {
@@ -27,21 +27,6 @@ function createToolSelect(label, name, url){
 	}).catch(err => {
 		if(window.console) console.log(err);
 	});
-	return pro;
-}
-
-// Convenience function: empties element of all child nodes
-function elementEmpty(el){
-	if(typeof el === 'string') el = document.getElementById(el);
-	while(el.lastChild) el.removeChild(el.lastChild);
-	return el
-}
-
-// Convenience function: alters CSS display property
-function elementDisplay(el, disp){
-	if(typeof el === 'string') el = document.getElementById(el);
-	el.style.display = disp;
-	return el;
 }
 
 let search_active = false;
@@ -98,27 +83,24 @@ function doSearch(dir){
 		if(new_sp.toString() !== old_qs || !window.location.href.includes('?')){
 			window.history.pushState(null, '', `search?${new_sp.toString()}`);
 		}
-		let result = elementEmpty('result');
 		result_source.clear();
 
 		// If there's no results
 		if (response?.hits === undefined){
-			let div = document.createElement('div');
-			div.textContent = 'No results found.';
-			div.className = 'noresults';
-			result.appendChild(div);
-			elementDisplay('result-control', 'none');
+			document.querySelector('#result').innerHTML =
+				'<div class="noresults">No results found.</div>';
+			document.querySelector('#result-control').style.display = 'none';
 			search_active = false;
 			return
 		}
 
-		elementEmpty('result-from').textContent = (response.from + 1);
-		elementEmpty('result-to').textContent = (
+		document.querySelector('#result-from').textContent = (response.from + 1);
+		document.querySelector('#result-to').textContext = (
 			response.from + response.hits.length
 		);
-		elementEmpty('result-total').textContent = response.total;
-		document.getElementById('result-prev').disabled = (response.from === 0);
-		document.getElementById('result-next').disabled = (
+		document.querySelector('#result-total').textContent = response.total;
+		document.querySelector('#result-prev').disabled = (response.from === 0);
+		document.querySelector('#result-next').disabled = (
 			(response.from + response.hits.length) >= response.total
 		);
 
@@ -131,13 +113,12 @@ function doSearch(dir){
 				});
 			}
 		});
-
-		result.innerHTML = mustache.render(
+		document.querySelector('#result').innerHTML = mustache.render(
 			document.getElementById('tmpl-search').innerHTML,
 			response, {}, ['[[', ']]']
 		);
 
-		elementDisplay('result-control', 'block');
+		document.querySelector('#result-control').style.display = 'block';
 		search_active = false;
 	}).catch(err => {
 		if(window.console) console.log(err);
@@ -200,9 +181,9 @@ function updateFromURL(){
 	else search_control.hideSearchTools();
 	if(window.location.href.includes('?')) doSearch();
 	else {
-		elementEmpty('result');
+		document.querySelector('#result').innerHTML = '';
 		result_source.clear();
-		elementDisplay('result-control', 'none');
+		document.querySelector('#result-control').style.display = 'none';
 	}
 }
 
