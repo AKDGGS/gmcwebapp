@@ -63,7 +63,7 @@ body {
 .soa-apptmpl-hamburger span {
 	display: block;
 	width: 30px;
-	height: 3px;
+	height: 2px;
 	background-color: #fff;
 	margin-bottom: 5px;
 	transition: all 0.3s;
@@ -76,7 +76,7 @@ body {
 }
 .soa-apptmpl-menu {
 	position: absolute;
-	top: 30px;
+	top: 50px;
 	right: 0;
 	left: auto;
 	background-color: #072f49;
@@ -85,6 +85,7 @@ body {
 	display: none;
 	z-index: 1000;
 	margin-right: 7px;
+	box-shadow: 0 0 10px rgba(3, 18, 29, 0.8);
 }
 #soa-apptmpl-menu-toggle:checked ~ .soa-apptmpl-menu {
 	display: block;
@@ -99,6 +100,7 @@ body {
 }
 .soa-apptmpl-menu a {
 	color: #fff;
+	font-size: 16px;
 	text-decoration: none;
 }
 .soa-apptmpl-logo, .soa-apptmpl-logo-dggs {
