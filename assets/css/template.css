@@ -47,13 +47,13 @@ body {
 	display: flex;
 	justify-content: flex-end;
 	align-items: center;
+	position: relative;
 }
 .soa-apptmpl-menu-hamburger {
 	text-align: right;
 	margin-left: auto;
 }
 .soa-apptmpl-hamburger {
-	position: relative;
 	display: block;
 	width: 30px;
 	height: 30px;
@@ -76,9 +76,7 @@ body {
 }
 .soa-apptmpl-menu {
 	position: absolute;
-	top: 50px;
 	right: 0;
-	left: auto;
 	background-color: #072f49;
 	width: auto;
 	padding: 10px;
