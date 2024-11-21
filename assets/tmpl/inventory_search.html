@@ -5,14 +5,14 @@
 							<th>ID</th>
 							<th>Related</th>
 							<th>Sample/<br>Slide</th>
-							<th>Box/<br>Set</th>
-							<th>Core No/<br>Diameter</th>
+							<th class="nsm">Box/<br>Set</th>
+							<th class="nsm">Core No/<br>Diameter</th>
 							<th>Top/<br>Bottom</th>
 							<th>Keywords</th>
-							<th>Collection</th>
+							<th class="nsm">Collection</th>
 							[[#private]]
-							<th>Barcode</th>
-							<th>Location /<br>Quality</th>
+							<th class="nsm">Barcode</th>
+							<th class="nsm">Location /<br>Quality</th>
 							[[/private]]
 						</tr>
 					</thead>
@@ -23,15 +23,17 @@
 							<td>
 								[[#well]]
 								<div>
-									Well: <a href="../well/[[id]]">
+									<span class="nsm">Well: </span>
+									<a href="../well/[[id]]">
 										[[display_name]][[#number]] - [[number]][[/number]]
 									</a>
-									[[#api]]<br>API: [[api]][[/api]]
+									[[#api]]<div class="nsm">API: [[api]]</div>[[/api]]
 								</div>
 								[[/well]]
 								[[#outcrop]]
 								<div>
-									Outcrop: <a href="../outcrop/[[id]]">
+									<span class="nsm">Outcrop: </span>
+									<a href="../outcrop/[[id]]">
 										[[name]][[#number]] - [[number]][[/number]]
 									</a>
 								</div>
@@ -39,38 +41,41 @@
 								[[#borehole]]
 								[[#prospect]]
 								<div>
-									Prospect: <a href="../prospect/[[id]]">[[display_name]]</a>
+									<span class="nsm">Prospect: </span>
+									<a href="../prospect/[[id]]">[[display_name]]</a>
 								</div>
 								[[/prospect]]
 								<div>
-									Borehole: <a href="../borehole/[[id]]">[[display_name]]</a>
+									<span class="nsm">Borehole: </span>
+									<a href="../borehole/[[id]]">[[display_name]]</a>
 								</div>
 								[[/borehole]]
 								[[#shotline]]
 								<div>
-									Shotline: <a href="../shotline/[[id]]">[[name]]</a>
-									[[#max]]<div>Shotpoints: [[min]] - [[max]]</div>[[/max]]
+									<span class="nsm">Shotline: </span>
+									<a href="../shotline/[[id]]">[[name]]</a>
+									[[#max]]<div class="nsm">Shotpoints: [[min]] - [[max]]</div>[[/max]]
 								</div>
 								[[/shotline]]
 								[[#publication]]
 								<div>
 									Publication: [[title]] [[#year]]([[year]])[[/year]]
 									[[#description]]
-										<br> Description: [[description]]
+										<div class="nsm"> Description: [[description]]</div>
 									[[/description]]
 								</div>
 								[[/publication]]
-								[[#project]]<div>Project: [[.]][[/project]]
+								[[#project]]<div class="nsm">Project: [[.]][[/project]]
 							</td>
 							<td>
 								[[sample]]
 								[[#slide]]<br>[[slide]][[/slide]]
 							</td>
-							<td>
+							<td class="nsm">
 								[[box]]
 								[[#set]]<br>[[.]][[/set]]
 							</td>
-							<td>
+							<td class="nsm">
 								[[core]]
 								[[#diameter]]<br>[[.]][[/diameter]]
 							</td>
@@ -81,10 +86,10 @@
 							<td class="csp">
 								[[#keyword]]<span>[[.]]</span>[[/keyword]]
 							</td>
-							<td>[[collection]]</td>
+							<td class="nsm">[[collection]]</td>
 							[[#private]]
-							<td>[[display_barcode]]</td>
-							<td>
+							<td class="nsm">[[display_barcode]]</td>
+							<td class="nsm">
 								[[path_cache]]
 								[[#issue.0]]
 								<div class="quality">[[#issue]]<span>[[.]]</span>[[/issue]]</div>

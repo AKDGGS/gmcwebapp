@@ -5,6 +5,7 @@ let fmt = new ol.format.GeoJSON({
 	dataProjection: 'EPSG:4326',
 	featureProjection: 'EPSG:3857'
 });
+let map;
 
 // Convenience function: makes a select and label for search tools
 function createToolSelect(label, name, url){
@@ -91,6 +92,7 @@ function doSearch(dir){
 				'<div class="noresults">No results found.</div>';
 			document.querySelector('#result-control').style.display = 'none';
 			search_active = false;
+			map.updateSize();
 			return
 		}
 
@@ -119,6 +121,7 @@ function doSearch(dir){
 		);
 
 		document.querySelector('#result-control').style.display = 'block';
+		map.updateSize();
 		search_active = false;
 	}).catch(err => {
 		if(window.console) console.log(err);
@@ -192,7 +195,7 @@ Promise.allSettled([
 	createToolSelect('Collections', 'collection_id', '../collections.json'),
 	createToolSelect('Prospects', 'prospect_id', '../prospects.json')
 ]).then(() => {
-	let map = new ol.Map({
+	map = new ol.Map({
 		target: 'map',
 		controls: MAP_DEFAULTS.Controls.extend([
 			search_control, drawbox_control

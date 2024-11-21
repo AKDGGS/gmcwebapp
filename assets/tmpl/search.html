@@ -3,8 +3,10 @@
 				<div id="map"></div>
 				<div id="result-control">
 					<div>
-						<button id="result-reset">Reset</button>
-						|
+						<span class="nsm">
+							<button id="result-reset">Reset</button>
+							|
+						</span>
 						Showing
 						<select autocomplete="off" name="size" id="size">
 							<option>10</option>
@@ -20,12 +22,14 @@
 							<option>10000</option>
 							{{- end}}
 						</select>
-						|
-						<button id="result-prev">Previous</button>
-						Displaying <span id="result-from"></span>
-						- <span id="result-to"></span> of
-						<span id="result-total"></span>
-						<button id="result-next">Next</button>
+						<span class="nsm">|</span>
+						<span class="smb">
+							<button id="result-prev">Previous</button>
+							Displaying <span id="result-from"></span>
+							- <span id="result-to"></span> of
+							<span id="result-total"></span>
+							<button id="result-next">Next</button>
+						</span>
 					</div>
 					<div>
 						Sort by
@@ -38,6 +42,7 @@
 							<option value="asc" data-default="true" selected>Asc</option>
 							<option value="desc">Desc</option>
 						</select>
+						<span class="smb"></span>
 						<select autocomplete="off" name="sort">
 						{{- range $i, $e := .sortby}}
 							<option {{if eq $i 0}}data-default="true" {{end}}value="{{index . 0}}">{{index . 1}}</option>
