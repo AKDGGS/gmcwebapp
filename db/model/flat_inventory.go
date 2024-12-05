@@ -3,6 +3,8 @@ package model
 import (
 	"encoding/json"
 	"fmt"
+	"strconv"
+	"strings"
 )
 
 type FlatInventory struct {
@@ -80,4 +82,98 @@ type FlatInventory struct {
 
 func (f *FlatInventory) StringID() string {
 	return fmt.Sprintf("%d", f.ID)
+}
+
+func FlatInventoryFields() []string {
+	return []string{
+		"ID",
+		"Collection ID",
+		"Collection",
+		"Sample Number",
+		"Slide Number",
+		"Box Number",
+		"Set Number",
+		"Core Number",
+		"Core Diameter",
+		"Core Name",
+		"Core Unit",
+		"Interval Top",
+		"Interval Bottom",
+		"Interval Unit",
+		"Keywords",
+		"Barcode",
+		"Container ID",
+		"Container",
+		"Project ID",
+		"Project",
+	}
+}
+
+func (f *FlatInventory) AsStringArray() []string {
+	return []string{
+		qfmt(f.ID),
+		qfmt(f.CollectionID),
+		qfmt(f.Collection),
+		qfmt(f.SampleNumber),
+		qfmt(f.SlideNumber),
+		qfmt(f.BoxNumber),
+		qfmt(f.SetNumber),
+		qfmt(f.CoreNumber),
+		qfmt(f.CoreDiameter),
+		qfmt(f.CoreName),
+		qfmt(f.CoreUnit),
+		qfmt(f.IntervalTop),
+		qfmt(f.IntervalBottom),
+		qfmt(f.IntervalUnit),
+		qfmt(f.Keyword),
+		qfmt(f.DisplayBarcode),
+		qfmt(f.ContainerID),
+		qfmt(f.ContainerPath),
+		qfmt(f.ProjectID),
+		qfmt(f.Project),
+	}
+}
+
+func qfmt(v interface{}) string {
+	switch t := v.(type) {
+	case int32:
+		return strconv.FormatInt(int64(t), 10)
+	case *int32:
+		if t == nil {
+			return ""
+		}
+		return strconv.FormatInt(int64(*t), 10)
+	case int64:
+		return strconv.FormatInt(t, 10)
+	case *int64:
+		if t == nil {
+			return ""
+		}
+		return strconv.FormatInt(*t, 10)
+	case float64:
+		return strconv.FormatFloat(t, 'f', 2, 64)
+	case *float64:
+		if t == nil {
+			return ""
+		}
+		return strconv.FormatFloat(*t, 'f', 2, 64)
+	case float32:
+		return strconv.FormatFloat(float64(t), 'f', 2, 32)
+	case *float32:
+		if t == nil {
+			return ""
+		}
+		return strconv.FormatFloat(float64(*t), 'f', 2, 32)
+	case string:
+		return t
+	case *string:
+		if t == nil {
+			return ""
+		}
+		return *t
+	case []string:
+		return strings.Join(t, "; ")
+	default:
+		return ""
+	}
 }
