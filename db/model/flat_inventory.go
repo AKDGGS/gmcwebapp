@@ -87,6 +87,7 @@ func (f *FlatInventory) StringID() string {
 func FlatInventoryFields() []string {
 	return []string{
 		"ID",
+		"Related",
 		"Collection ID",
 		"Collection",
 		"Sample Number",
@@ -110,8 +111,78 @@ func FlatInventoryFields() []string {
 }
 
 func (f *FlatInventory) AsStringArray() []string {
+	var rel strings.Builder
+	for _, w := range f.Well {
+		if rel.Len() > 0 {
+			rel.WriteString("\n")
+		}
+		rel.WriteString("Well: ")
+		rel.WriteString(w.DisplayName)
+		if w.Number != nil {
+			rel.WriteString(" - ")
+			rel.WriteString(*w.Number)
+		}
+		if w.API != nil {
+			rel.WriteString("\nAPI: ")
+			rel.WriteString(*w.API)
+		}
+	}
+	for _, o := range f.Outcrop {
+		if rel.Len() > 0 {
+			rel.WriteString("\n")
+		}
+		rel.WriteString("Outcrop: ")
+		rel.WriteString(o.Name)
+		if o.Number != nil {
+			rel.WriteString(" - ")
+			rel.WriteString(*o.Number)
+		}
+	}
+	for _, b := range f.Borehole {
+		if rel.Len() > 0 {
+			rel.WriteString("\n")
+		}
+		if b.Prospect.DisplayName != "" {
+			rel.WriteString("Prospect: ")
+			rel.WriteString(b.Prospect.DisplayName)
+			rel.WriteString("\n")
+		}
+		rel.WriteString("Borehole: ")
+		rel.WriteString(b.DisplayName)
+	}
+	for _, s := range f.Shotline {
+		if rel.Len() > 0 {
+			rel.WriteString("\n")
+		}
+		rel.WriteString("Shotline: ")
+		rel.WriteString(s.Name)
+		if s.Max != nil {
+			rel.WriteString("\nShotpoints: ")
+			rel.WriteString(strconv.FormatFloat(*s.Min, 'f', 2, 64))
+			rel.WriteString(" - ")
+			rel.WriteString(strconv.FormatFloat(*s.Max, 'f', 2, 64))
+		}
+	}
+	for _, p := range f.Publication {
+		if rel.Len() > 0 {
+			rel.WriteString("\n")
+		}
+		rel.WriteString("Publication: ")
+		rel.WriteString(p.Title)
+		if p.Year != nil {
+			rel.WriteString(" (")
+			rel.WriteString(strconv.FormatInt(int64(*p.Year), 10))
+			rel.WriteString(")")
+		}
+		if p.Description != "" {
+			rel.WriteString("\nDescription: ")
+			rel.WriteString(p.Description)
+		}
+	}
+
 	return []string{
 		qfmt(f.ID),
+		rel.String(),
 		qfmt(f.CollectionID),
 		qfmt(f.Collection),
 		qfmt(f.SampleNumber),

@@ -41,7 +41,7 @@ func (srv *Server) ServeSearchInventoryCSV(w http.ResponseWriter, r *http.Reques
 	params := &sutil.InventoryParams{}
 	params.ParseQuery(r.URL.Query(), (user != nil))
 	params.From = 0
-	params.Size = 1000
+	params.Size = 10000
 
 	for {
 		result, err := srv.Search.SearchInventory(params)
