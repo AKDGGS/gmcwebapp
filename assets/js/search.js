@@ -96,6 +96,7 @@ function doSearch(dir){
 			return
 		}
 
+		document.getElementById('result-csv').href = `search.csv?${new_sp.toString()}`;
 		document.querySelector('#result-from').textContent = (response.from + 1);
 		document.querySelector('#result-to').textContext = (
 			response.from + response.hits.length
