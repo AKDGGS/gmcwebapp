@@ -84,10 +84,36 @@ func (f *FlatInventory) StringID() string {
 	return fmt.Sprintf("%d", f.ID)
 }
 
-func FlatInventoryFields() []string {
+func FlatInventoryFields(full bool) []string {
+	if full {
+		return []string{
+			"ID",
+			"Related",
+			"Project ID",
+			"Project",
+			"Collection ID",
+			"Collection",
+			"Sample Number",
+			"Slide Number",
+			"Box Number",
+			"Set Number",
+			"Core Number",
+			"Core Diameter",
+			"Core Name",
+			"Core Unit",
+			"Interval Top",
+			"Interval Bottom",
+			"Interval Unit",
+			"Keywords",
+			"Barcode",
+			"Container",
+		}
+	}
 	return []string{
 		"ID",
 		"Related",
+		"Project ID",
+		"Project",
 		"Collection ID",
 		"Collection",
 		"Sample Number",
@@ -102,15 +128,10 @@ func FlatInventoryFields() []string {
 		"Interval Bottom",
 		"Interval Unit",
 		"Keywords",
-		"Barcode",
-		"Container ID",
-		"Container",
-		"Project ID",
-		"Project",
 	}
 }
 
-func (f *FlatInventory) AsStringArray() []string {
+func (f *FlatInventory) AsStringArray(full bool) []string {
 	var rel strings.Builder
 	for _, w := range f.Well {
 		if rel.Len() > 0 {
@@ -180,9 +201,35 @@ func (f *FlatInventory) AsStringArray() []string {
 		}
 	}
 
+	if full {
+		return []string{
+			qfmt(f.ID),
+			rel.String(),
+			qfmt(f.ProjectID),
+			qfmt(f.Project),
+			qfmt(f.CollectionID),
+			qfmt(f.Collection),
+			qfmt(f.SampleNumber),
+			qfmt(f.SlideNumber),
+			qfmt(f.BoxNumber),
+			qfmt(f.SetNumber),
+			qfmt(f.CoreNumber),
+			qfmt(f.CoreDiameter),
+			qfmt(f.CoreName),
+			qfmt(f.CoreUnit),
+			qfmt(f.IntervalTop),
+			qfmt(f.IntervalBottom),
+			qfmt(f.IntervalUnit),
+			qfmt(f.Keyword),
+			qfmt(f.DisplayBarcode),
+			qfmt(f.ContainerPath),
+		}
+	}
 	return []string{
 		qfmt(f.ID),
 		rel.String(),
+		qfmt(f.ProjectID),
+		qfmt(f.Project),
 		qfmt(f.CollectionID),
 		qfmt(f.Collection),
 		qfmt(f.SampleNumber),
@@ -197,11 +244,6 @@ func (f *FlatInventory) AsStringArray() []string {
 		qfmt(f.IntervalBottom),
 		qfmt(f.IntervalUnit),
 		qfmt(f.Keyword),
-		qfmt(f.DisplayBarcode),
-		qfmt(f.ContainerID),
-		qfmt(f.ContainerPath),
-		qfmt(f.ProjectID),
-		qfmt(f.Project),
 	}
 }
 

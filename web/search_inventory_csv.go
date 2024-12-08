@@ -36,7 +36,7 @@ func (srv *Server) ServeSearchInventoryCSV(w http.ResponseWriter, r *http.Reques
 
 	w.Header().Set("Content-Type", "text/csv")
 
-	cwr.Write(model.FlatInventoryFields())
+	cwr.Write(model.FlatInventoryFields(user != nil))
 
 	params := &sutil.InventoryParams{}
 	params.ParseQuery(r.URL.Query(), (user != nil))
@@ -51,7 +51,7 @@ func (srv *Server) ServeSearchInventoryCSV(w http.ResponseWriter, r *http.Reques
 		}
 
 		for _, h := range result.Hits {
-			cwr.Write(h.AsStringArray())
+			cwr.Write(h.AsStringArray(user != nil))
 		}
 
 		params.From = (result.From + len(result.Hits))
