@@ -7,6 +7,21 @@ let fmt = new ol.format.GeoJSON({
 });
 let map;
 
+// Compare to URLSearchParams for equality, optionally ignoring 'from'
+URLSearchParams.prototype.equals = function(u2, igf){
+	const u1 = this;
+	const keys = [... new Set(
+		u1.keys().toArray().concat(u2.keys().toArray())
+	)];
+	return keys.every(k => {
+		if(igf === true && k === 'from') return true;
+		const a1 = u1.getAll(k).sort();
+		const a2 = u2.getAll(k).sort();
+		if(a1.length !== a2.length) return false;
+		return a1.every((e,i) => (e === a2[i]));
+	});
+};
+
 // Convenience function: makes a select and label for search tools
 function createToolSelect(label, name, url){
 	let div = document.createElement('div');
@@ -53,7 +68,7 @@ function doSearch(dir){
 	});
 	let q = search_control.getSearchBox().value.trim();
 	if(q !== '') new_sp.append('q', q);
-	new_sp.sort();
+
 	/*
 	let feat = drawbox_control.getFeature();
 	if(feat !== null){
@@ -63,25 +78,20 @@ function doSearch(dir){
 	*/
 
 	let old_sp = new URLSearchParams(window.location.search);
-	old_sp.sort();
-	let old_qs = old_sp.toString();
 	let nfrom = Number(old_sp.get('from'));
-	old_sp.delete('from');
 
-	if(new_sp.toString() !== old_sp.toString()) nfrom = 0;
+	if(!new_sp.equals(old_sp, true)) nfrom = 0;
 	else if(dir === 1) nfrom += Math.max(Number(new_sp.get('size')), 25);
 	else if(dir === -1) {
 		nfrom = Math.max(nfrom - Math.max(Number(new_sp.get('size')), 25), 0);
 	}
 	if(nfrom > 0) new_sp.append('from', nfrom);
-	new_sp.sort();
 
-	url = `search.json?${new_sp.toString()}`;
-	fetch(url).then(response => {
+	fetch(`search.json?${new_sp.toString()}`).then(response => {
 		if(!response.ok){ throw 'response not ok'; }
 		return response.json();
 	}).then(response => {
-		if(new_sp.toString() !== old_qs || !window.location.href.includes('?')){
+		if(!new_sp.equals(old_sp)){
 			window.history.pushState(null, '', `search?${new_sp.toString()}`);
 		}
 		result_source.clear();
@@ -168,7 +178,7 @@ function updateFromURL(){
 					if(i >= 0){
 						pr.delete(e.name, vals[i]);
 						if(!e.multiple) vals = [];
-						else vals.splice(vals, i);
+						else vals.splice(i, 1);
 					}
 				});
 			break;
