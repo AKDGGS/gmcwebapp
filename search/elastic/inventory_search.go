@@ -8,6 +8,7 @@ import (
 	"gmc/search/util"
 
 	"github.com/elastic/go-elasticsearch/v8/typedapi/types"
+	"github.com/elastic/go-elasticsearch/v8/typedapi/types/enums/geoshaperelation"
 	"github.com/elastic/go-elasticsearch/v8/typedapi/types/enums/operator"
 )
 
@@ -69,6 +70,19 @@ func (es *Elastic) SearchInventory(params *util.InventoryParams) (*util.Inventor
 			QueryString: &types.QueryStringQuery{
 				DefaultOperator: &operator.And,
 				Query:           params.Query,
+			},
+		})
+	}
+
+	if params.GeoJSON != "" {
+		qry.Must = append(qry.Must, types.Query{
+			GeoShape: &types.GeoShapeQuery{
+				GeoShapeQuery: map[string]types.GeoShapeFieldQuery{
+					"geometries": types.GeoShapeFieldQuery{
+						Relation: &geoshaperelation.Intersects,
+						Shape:    json.RawMessage(params.GeoJSON),
+					},
+				},
 			},
 		})
 	}

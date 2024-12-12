@@ -69,13 +69,12 @@ function doSearch(dir){
 	let q = search_control.getSearchBox().value.trim();
 	if(q !== '') new_sp.append('q', q);
 
-	/*
 	let feat = drawbox_control.getFeature();
 	if(feat !== null){
-		let geojson = fmt.writeGeometry(feat.getGeometry());
-		url += `${url?'&':''}geojson=${encodeURIComponent(geojson)}`;
+		new_sp.append('geojson', fmt.writeGeometry(
+			feat.getGeometry(), { decimals: 5 }
+		));
 	}
-	*/
 
 	let old_sp = new URLSearchParams(window.location.search);
 	let nfrom = Number(old_sp.get('from'));
@@ -145,10 +144,19 @@ function updateFromURL(){
 	let pr = new URLSearchParams(window.location.search);
 	pr.delete('from');
 
-	// Handle the query separately
+	// Handle the contents of the search box
 	let q = pr.get('q');
 	search_control.getSearchBox().value = (q == null ? '' : q);
 	pr.delete('q');
+
+	// Handle draw box
+	drawbox_control.source.clear();
+	let geojson = pr.get('geojson');
+	if(geojson !== null){
+		drawbox_control.source.addFeature(
+			new ol.Feature({geometry: fmt.readGeometry(geojson)})
+		);
+	}
 
 	// Fetch distinct keys
 	let keys = pr.keys().toArray().filter((v,i,a) => {

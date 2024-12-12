@@ -25,6 +25,7 @@ type InventoryParams struct {
 	CollectionIDs  []int
 	IntervalTop    *float64
 	IntervalBottom *float64
+	GeoJSON        string
 	From           int
 	Size           int
 	IncludePrivate bool
@@ -48,6 +49,7 @@ func (ip *InventoryParams) ParseQuery(q url.Values, authd bool) {
 	}
 
 	ip.Query = q.Get("q")
+	ip.GeoJSON = q.Get("geojson")
 
 	if t := q.Get("top"); t != "" {
 		if n, err := strconv.ParseFloat(t, 64); err == nil {
