@@ -1,6 +1,15 @@
-			
-			<div class="search-container">	
+
+			<div class="search-container">
 				<div id="map"></div>
+				<div id="popup" class="ol-popup">
+					<div id="popup-topbar" class="ol-popup-titlebar">
+						<div id="popup-prev-btn" class="popup-nav-btn">&#x25C0;</div>
+						<div id="popup-page-number"></div>
+						<div id="popup-next-btn" class="popup-nav-btn">&#x25B6;</div>
+						<div id="popup-closer">&#215;</div>
+					</div>
+					<div id="popup-content" class="ol-popup-content"></div>
+				</div>
 				<div id="result-control">
 					<div>
 						<span class="nsm">
@@ -60,3 +69,161 @@
 				</div>
 				<div id="result"></div>
 			</div>
+			<script id="tmpl-popup" type="x-tmpl-mustache">
+				[[#.]]
+				<table>
+					<tbody>
+						[[#borehole]]
+						[[#prospect]]
+						[[#display_name]]
+						<tr>
+							<th>Prospect Name</th>
+							<td><a href="../prospect/[[id]]">[[display_name]] [[id]]</a></td>
+						</tr>
+						[[/display_name]]
+						[[/prospect]]
+						[[#display_name]]
+						<tr>
+							<th>Borehole Name</th>
+							<td><a href="../borehole/[[id]]">[[display_name]] [[id]]</a></td>
+						</tr>
+						[[/display_name]]
+						[[/borehole]]
+						[[#outcrop]]
+						[[#name]]
+						<tr>
+							<th>Name:</th>
+							<td>
+								<a href="../outcrop/[[id]]">
+									[[name]][[#number]] - [[number]][[/number]]
+								</a>
+								</td>
+						</tr>
+						[[/name]]
+						[[/outcrop]]
+						[[#shotline]]
+						[[#name]]
+						<tr>
+							<th>Name:</th>
+							<td>
+								<a href="../shotline/[[id]]">[[name]]</a>
+							</td>
+						</tr>
+						[[/name]]
+						[[#max]]
+						<tr>
+							<th>Shotpoints:</th>
+							<td>
+								[[min]] - [[max]]
+							</td>
+						[[/max]]
+						[[#set]]
+						<tr>
+							<th>Set:</th>
+							<td>[[set]]</td>
+						</tr>
+						[[/set]]
+						[[/shotline]]
+						[[#well]]
+						[[#display_name]]
+						<tr>
+							<th>Name:</th>
+							<td>
+								<a href="../well/[[id]]">[[display_name]]</a>
+							</td>
+						</tr>
+						[[/display_name]]
+						[[#number]]
+						<tr>
+							<th>Number:</th>
+							<td>[[number]]</td>
+						</tr>
+						[[/number]]
+						[[#api]]
+						<tr>
+							<th>API Number:</th>
+							<td>[[api]]</td>
+						</tr>
+						[[/api]]
+						[[/well]]
+						[[#project]]
+						<tr>
+							<th>Project:</th>
+							<td>[[project]]</td>
+						</tr>
+						[[/project]]
+						[[#publication]]
+						[[#title]]
+						<tr>
+							<th>Name:</th>
+							<td>[[title]] [[id]]</td>
+						</tr>
+						[[/title]]
+						[[/publication]]
+						[[#description]]
+						<tr>
+							<th>Description:</th>
+							<td>[[description]]</td>
+						</tr>
+						[[/description]]
+						[[#slide]]
+						<tr>
+							<th>Sample/Slide:</th>
+							<td>[[slide]]</td>
+						</tr>
+						[[/slide]]
+						[[#box]]
+						<tr>
+							<th>Box:</th>
+							<td>[[box]]</td>
+						</tr>
+						[[/box]]
+						[[#diameter]]
+						<tr>
+							<th>Diameter:</th>
+							<td>[[diameter]]</td>
+						</tr>
+						[[/diameter]]
+						[[#top]]
+						<tr>
+							<th>Interval Top</th>
+							<td>[[top]] [[unit]]</td>
+						</tr>
+						[[/top]]
+						[[#bottom]]
+						<tr>
+							<th>Interval Bottom</th>
+							<td>[[bottom]] [[unit]]</td>
+						</tr>
+						[[/bottom]]
+						[[#collection]]
+						<tr>
+							<th>Collection:</th>
+							<td>[[collection]]</td>
+						</tr>
+						[[/collection]]
+						[[#keyword.0]]
+						<tr>
+							<th>Keywords:</th>
+						</tr>
+						[[/keyword.0]]
+						[[#keyword.0]]
+						<tr>
+							[[#borehole]]
+							<td><a href="../inventory/search?q=[[#id]]borehole.id:[[id]][[/id]][[#keyword]]&keyword=[[.]][[/keyword]]">[[#keyword]][[.]], [[/keyword]]</a>[[count]]
+							[[/borehole]]
+							[[#outcrop]]
+							<td><a href="../inventory/search?q=[[#id]]outcrop.id:[[id]][[/id]][[#keyword]]&keyword=[[.]][[/keyword]]">[[#keyword]][[.]], [[/keyword]]</a>[[count]]
+							[[/outcrop]]
+							[[#shotline]]
+							<td><a href="../inventory/search?q=[[#id]]shotline.id:[[id]][[/id]][[#keyword]]&keyword=[[.]][[/keyword]]">[[#keyword]][[.]], [[/keyword]]</a>[[count]]
+							[[/shotline]]
+							[[#well]]
+							<td><a href="../inventory/search?q=[[#id]]well.id:[[id]][[/id]][[#keyword]]&keyword=[[.]][[/keyword]]">[[#keyword]][[.]], [[/keyword]]</a>[[count]]
+							[[/well]]
+						</tr>
+						[[/keyword.0]]
+					</tbody>
+				</table>
+			[[/.]]
+			</script>

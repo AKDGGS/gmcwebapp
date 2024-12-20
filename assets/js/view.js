@@ -11,6 +11,7 @@ if(typeof geojson !== 'undefined'){
 			autoPan: { animation: { duration: 100 } }
 		});
 		let template = document.getElementById('tmpl-popup');
+		popup.classList.add('show');
 
 		popup.style.display = 'block';
 		let map = new ol.Map({
@@ -68,6 +69,7 @@ if(typeof geojson !== 'undefined'){
 						ft.getProperties(), {}, ['[[', ']]']
 					);
 				}
+				document.querySelector("#popup-content table").classList.add('show');
 				overlay.setPosition(ol.extent.getCenter(
 					fts[0].getGeometry().getExtent()
 				));

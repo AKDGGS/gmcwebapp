@@ -117,14 +117,17 @@ function doSearch(dir){
 		);
 
 		response.hits.forEach(hit => {
-			if ('geometries' in hit){
-				hit['geometries'].forEach(g => {
-					let feat = fmt.readFeature(g)
-					feat.setProperties(hit, true)
-					result_source.addFeature(feat);
+			if ('geometries' in hit) {
+				let feat = new ol.Feature({
+					geometry: new ol.geom.GeometryCollection(
+						hit.geometries.map(g => fmt.readFeature(g).getGeometry())
+					)
 				});
+				feat.setProperties(hit, true);
+				result_source.addFeature(feat);
 			}
 		});
+
 		document.querySelector('#result').innerHTML = mustache.render(
 			document.getElementById('tmpl-search').innerHTML,
 			response, {}, ['[[', ']]']
@@ -230,11 +233,65 @@ Promise.allSettled([
 			})
 		]
 	});
+	let popup = new ol.Overlay({
+		element: document.querySelector('#popup'),
+		autoPan: { animation: { duration: 100 } }
+	});
+	map.addOverlay(popup);
 
-	map.on('pointermove', function(e){
+	map.on('pointermove', e => {
 		e.map.getTargetElement().style.cursor = (
 			e.map.hasFeatureAtPixel(e.pixel) ? 'pointer' : ''
 		);
+	});
+
+	map.on('click', e => {
+		let fts = map.getFeaturesAtPixel(e.pixel);
+		if (!fts.length) return popup.setPosition();
+		popup.setPosition(e.coordinate);
+		popup.getElement().querySelector('#popup-content').innerHTML = mustache.render(
+			document.querySelector('#tmpl-popup').innerHTML,
+			fts.map(f => f.getProperties()), {}, ['[[', ']]']
+		);
+		displayPopupContents(0);
+	});
+
+	// The popup's display is initially none to prevent the popup from being briefly
+	// displayed when the map first loads. Adding show changes the
+	// display to block allowing the popup to be visible when a feature is clicked.
+	popup.getElement().classList.add('show');
+
+	function displayPopupContents(d) {
+		let el = popup.getElement();
+		let tables = Array.from(el.querySelectorAll('#popup-content table'));
+		let cur = el.querySelector('#popup-content .show');
+		if (!cur) cur = tables[0];
+		let idx = tables.indexOf(cur);
+		tables.scrollTop = 0;
+		if (idx >= 0 && idx < tables.length) {
+			tables[idx].classList.toggle('show');
+		}
+		if (d != 0)	tables[idx + d].classList.toggle('show');
+		el.querySelector('#popup-page-number').innerHTML = ((idx + d) + 1) + ' of ' + tables.length;
+		el.querySelector('#popup-prev-btn').classList.toggle('visible', idx + d > 0);
+		el.querySelector('#popup-next-btn').classList.toggle('visible', idx + d < (tables.length - 1));
+	}
+
+	popup.getElement().querySelector('#popup-prev-btn').addEventListener(
+		'click', e => displayPopupContents(-1)
+	);
+
+	popup.getElement().querySelector('#popup-next-btn').addEventListener(
+		'click', e => displayPopupContents(1)
+	);
+
+	popup.getElement().querySelector('#popup-closer').addEventListener('click', e => {
+		popup.setPosition();
+		return false;
+	});
+
+	search_control.getSearchBox().addEventListener('focus', e => {
+		popup.setPosition();
 	});
 
 	search_control.getSearchBox().addEventListener('keydown', e => {

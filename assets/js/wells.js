@@ -36,7 +36,6 @@ let label_layer = new ol.layer.Vector({
 	declutter: true
 });
 
-popup.style.display = 'block';
 let map = new ol.Map({
 	target: 'map',
 	layers: [
@@ -108,7 +107,10 @@ function displayOverlayContents(e) {
 				.then(data => {
 					data["well_id"] = well_id;
 					let t = mustache.render(document.getElementById("tmpl-popup").innerHTML, data, {}, ['[[', ']]']);
+					popup.classList.add('show');
 					document.getElementById("popup-content").innerHTML = t;
+					document.getElementById("popup-content").classList.add('visible')
+					document.querySelector("#popup-content table").classList.add('show');
 					document.getElementById('popup-topbar').style.visibility = 'visible';
 					popup.style.visibility = 'visible';
 					if (e instanceof ol.events.Event) {
