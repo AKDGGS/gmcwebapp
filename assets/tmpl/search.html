@@ -37,22 +37,22 @@
 							|
 						</span>
 						Sort by
-						<select autocomplete="off" name="sort">
+						<select autocomplete="off" name="sort1">
 						{{- range $i, $e := .sortby}}
 							<option {{if eq $i 0}}data-default="true" {{end}}value="{{index . 0}}">{{index . 1}}</option>
 						{{- end}}
 						</select>
-						<select autocomplete="off" name="dir">
+						<select autocomplete="off" name="dir1">
 							<option value="asc" data-default="true" selected>Asc</option>
 							<option value="desc">Desc</option>
 						</select>
 						<span class="smb"></span>
-						<select autocomplete="off" name="sort">
+						<select autocomplete="off" name="sort2">
 						{{- range $i, $e := .sortby}}
 							<option {{if eq $i 0}}data-default="true" {{end}}value="{{index . 0}}">{{index . 1}}</option>
 						{{- end}}
 						</select>
-						<select autocomplete="off" name="dir">
+						<select autocomplete="off" name="dir2">
 							<option value="asc" data-default="true" selected>Asc</option>
 							<option value="desc" >Desc</option>
 						</select>

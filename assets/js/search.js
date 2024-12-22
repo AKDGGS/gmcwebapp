@@ -271,12 +271,9 @@ Promise.allSettled([
 		updateFromURL();
 		search_control.getSearchBox().focus();
 	});
-	document.querySelectorAll('select[name="sort"]').forEach(e => {
-		e.addEventListener('change', x => doSearch());
-	});
-	document.querySelectorAll('select[name="dir"]').forEach(e => {
-		e.addEventListener('change', x => doSearch());
-	});
+	document.querySelectorAll(
+		'select[name^="sort"], select[name^="dir"]'
+	).forEach(e => e.addEventListener('change', x => doSearch()));
 
 	// If there's a query string, use that to rebuild the search form
 	if(window.location.href.includes('?')) updateFromURL();

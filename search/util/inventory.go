@@ -2,9 +2,9 @@ package util
 
 import (
 	"encoding/json"
+	"fmt"
 	"net/url"
 	"strconv"
-	"strings"
 	"time"
 
 	"gmc/db/model"
@@ -92,15 +92,13 @@ func (ip *InventoryParams) ParseQuery(q url.Values, authd bool) {
 		}
 	}
 
-	if sorts, ok := q["sort"]; ok {
-		dirs, _ := q["dir"]
-		for i, v := range sorts {
-			dir := "asc"
-			if i < len(dirs) && strings.ToLower(dirs[i]) == "desc" {
-				dir = "desc"
-			}
-			ip.Sort = append(ip.Sort, [2]string{v, dir})
+	for i := 1; i <= 2; i++ {
+		sort := q.Get(fmt.Sprintf("sort%d", i))
+		dir := q.Get(fmt.Sprintf("dir%d", i))
+		if dir != "desc" {
+			dir = "asc"
 		}
+		ip.Sort = append(ip.Sort, [2]string{sort, dir})
 	}
 }
 

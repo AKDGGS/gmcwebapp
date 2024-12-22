@@ -47,9 +47,9 @@ func (es *Elastic) SearchInventory(params *util.InventoryParams) (*util.Inventor
 	if len(params.Sort) > 0 {
 		var sort []types.SortCombinations
 		for _, v := range params.Sort {
-			if v[0] == "_score" {
+			if v[0] == "_score" || v[0] == "" {
 				sort = append(sort, map[string]string{
-					v[0]: v[1],
+					"_score": v[1],
 				})
 			} else {
 				sort = append(sort, map[string]map[string]string{
