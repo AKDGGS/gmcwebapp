@@ -106,6 +106,7 @@ func (srv *Server) Start() error {
 	mux.HandleFunc("/inventory/search.json", srv.ServeSearchInventoryJSON)
 	mux.HandleFunc("/inventory/search.csv", srv.ServeSearchInventoryCSV)
 	mux.HandleFunc("/inventory/search", srv.ServeSearchInventoryPage)
+	mux.HandleFunc("/inventory/search-help", srv.ServeSearchInventoryHelp)
 
 	srv.http = http.Server{Handler: mux}
 	err = srv.http.Serve(listen)

@@ -13,7 +13,7 @@ import (
 	webu "gmc/web/util"
 )
 
-var redirect_rx *regexp.Regexp = regexp.MustCompile(`^(?:\.|borehole|inventory|outcrop|prospect|shotline|well|wells|qa)\/?(\d*|search)$`)
+var redirect_rx *regexp.Regexp = regexp.MustCompile(`^(?:\.|borehole|inventory|outcrop|prospect|shotline|well|wells|qa)\/?(\d*|search|search\-help)$`)
 
 func (auths *Auths) Logout(w http.ResponseWriter, r *http.Request) {
 	cookie, err := securecookie.New(

@@ -38,6 +38,10 @@ func New(cfg map[string]interface{}) (*Elastic, error) {
 
 func (es *Elastic) Shutdown() {}
 
+func (es *Elastic) Name() string {
+	return "elastic"
+}
+
 func (es *Elastic) createIndex(name string, tmap *types.TypeMapping) error {
 	window := 1000000
 	_, err := es.client.Indices.Create(name).Request(
