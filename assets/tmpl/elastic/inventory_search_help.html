@@ -19,10 +19,6 @@
 			</div>
 			<div class="gmc-block">
 				<h3 id="interface">Interface Features</h3>
-				<p>
-					"<b>Red oval</b>" at top right of image below shows location of help
-					link in inventory search interface
-				</p>
 				<img src="../img/inventory_help.jpg" style="border: 1px solid black">
 				<h4>Initial Search Options</h4>
 				<ul style="list-style: none">
@@ -36,24 +32,24 @@
 						cursor across desired region
 					</li>
 					<li>
-						<b>3.</b> Map Base Layers - Select desired map base layers from
-						drop-down menu
+						<b>3.</b> Location - Shows point location of cursor over map in
+						WGS84 latitude/longitude coordinates
 					</li>
 					<li>
 						<b>4.</b> Map Scale - Shows automatic map scale in kilometers and
 						miles
 					</li>
 					<li>
-						<b>5.</b> Location - Shows point location of cursor over map in
-						WGS84 latitude/longitude coordinates
-					</li>
-					<li>
-						<b>6.</b> Search Filter - Open/close advanced drop-down search
+						<b>5.</b> Search Filter - Open/close advanced drop-down search
 						filters by selecting 3-bars icon
 					</li>
 					<li>
-						<b>7.</b> Text Search Bar - Enter simple search text or use <a
+						<b>6.</b> Text Search Bar - Enter simple search text or use <a
 						href="#advanced">Advanced Search</a> filters
+					</li>
+					<li>
+						<b>7.</b> Map Base Layers - Select desired map base layers from
+						drop-down menu
 					</li>
 				</ul>
 				<h4>Search Results Options</h4>
@@ -71,8 +67,7 @@
 						selecting <b>Previous</b> and <b>Next</b> buttons
 					</li>
 					<li>
-						<b>11.</b> PDF/CSV - Download search results to <b>PDF</b> format
-						or to <b>CSV</b> file compatible with spreadsheets
+						<b>11.</b> CSV - Download search results to <b>CSV</b> file compatible with spreadsheets
 					</li>
 					<li>
 						<b>12.</b> Sort By - Sort search results by selecting choices
@@ -96,7 +91,7 @@
 				<ul>
 					<li>
 						After first search change <b>Showing</b> (#9)
-						count from 25 to 1000
+						count from 10 to 1000
 					</li>
 					<li>
 						Try to get specific, focus on single well or
@@ -112,11 +107,11 @@
 					<li>
 						Entering "<b>well:*</b>", "<b>borehole:*</b>",
 						"<b>outcrop:*</b>", or "<b>shotline:*</b>" in the
-						<b>Search Bar</b> (#7) to narrow down your results
+						<b>Search Bar</b> (#6) to narrow down your results
 					</li>
 					<li>
 						Once you find your well, highlight the API number and
-						cut &amp; paste it into the <b>Search Bar</b> (#7)
+						cut &amp; paste it into the <b>Search Bar</b> (#6)
 					</li>
 				</ul>
 				<h4>Common Search Examples</h4>
@@ -128,61 +123,61 @@
 					<tr>
 						<td>well and core</td>
 						<td>
-							<a href="./#q=50137200030000%20AND%20keyword%3Araw%20AND%20keyword%3Acore&amp;sort=collection&amp;sort=sort_keyword">50137200030000 AND keyword:raw AND keyword:core</a>
+							<a href="./search?q=50137200030000+AND+keyword%3Araw+AND+keyword%3Acore">50137200030000 AND keyword:raw AND keyword:core</a>
 						</td>
 					</tr>
 					<tr>
 						<td>well and cuttings</td>
 						<td>
-							<a href="./#q=50137200030000%20AND%20keyword%3Araw%20AND%20keyword%3Acuttings&amp;sort=collection&amp;sort=sort_keyword">50137200030000 AND keyword:raw AND keyword:cuttings</a>
+							<a href="./search?q=50137200030000+AND+keyword%3Araw+AND+keyword%3Acuttings">50137200030000 AND keyword:raw AND keyword:cuttings</a>
 						</td>
 					</tr>
 					<tr>
 						<td>well and processed</td>
 						<td>
-							<a href="./#q=50137200030000%20AND%20keyword%3Aprocessed&amp;sort=collection&amp;sort=sort_keyword">50137200030000 AND keyword:processed</a>
+							<a href="./search?q=50137200030000+AND+keyword%3Aprocessed">50137200030000 AND keyword:processed</a>
 						</td>
 					</tr>
 					<tr>
 						<td>well and thin section</td>
 						<td>
-							<a href="./#q=50137200030000%20AND%20keyword%3Aprocessed%20AND%20keyword%3Athin%20section&amp;sort=collection&amp;sort=sort_keyword">50137200030000 AND keyword:processed AND keyword:thin section</a>
+							<a href="./search?q=50137200030000+AND+keyword%3Aprocessed+AND+keyword%3A%22thin+section%22">50137200030000 AND keyword:processed AND keyword:"thin section"</a>
 						</td>
 					</tr>
 					<tr>
 						<td>well and unprocessed(raw)</td>
 						<td>
-							<a href="./#q=50137200030000%20AND%20keyword%3Araw&amp;sort=collection&amp;sort=sort_keyword">50137200030000 AND keyword:raw</a>
+							<a href="./search?q=50137200030000+AND+keyword%3Araw">50137200030000 AND keyword:raw</a>
 						</td>
 					</tr>
 					<tr>
 						<td>borehole in a bounding box</td>
 						<td>
-							<a href="./#q=borehole%3A*&amp;aoi=%7B%22type%22%3A%22Polygon%22%2C%22coordinates%22%3A%5B%5B%5B-158.6426%2C66.2137%5D%2C%5B-158.6426%2C67.9581%5D%2C%5B-150.7324%2C67.9581%5D%2C%5B-150.7324%2C66.2137%5D%2C%5B-158.6426%2C66.2137%5D%5D%5D%7D">borehole:*</a>
+							<a href="./search?q=borehole%3A*&geojson=%7B%22type%22%3A%22Polygon%22%2C%22coordinates%22%3A%5B%5B%5B-161.21727%2C61.75205%5D%2C%5B-155.15281%2C61.75205%5D%2C%5B-155.15281%2C59.4671%5D%2C%5B-161.21727%2C59.4671%5D%2C%5B-161.21727%2C61.75205%5D%5D%5D%7D">borehole:*</a>
 						</td>
 					</tr>
 					<tr>
 						<td>outcrop in a bounding box</td>
 						<td>
-							<a href="./#q=outcrop%3A*&amp;aoi=%7B%22type%22%3A%22Polygon%22%2C%22coordinates%22%3A%5B%5B%5B-158.6426%2C66.2137%5D%2C%5B-158.6426%2C67.9581%5D%2C%5B-150.7324%2C67.9581%5D%2C%5B-150.7324%2C66.2137%5D%2C%5B-158.6426%2C66.2137%5D%5D%5D%7D">outcrop:*</a>
+							<a href="./search?q=outcrop%3A*&geojson=%7B%22type%22%3A%22Polygon%22%2C%22coordinates%22%3A%5B%5B%5B-161.21727%2C61.75205%5D%2C%5B-155.15281%2C61.75205%5D%2C%5B-155.15281%2C59.4671%5D%2C%5B-161.21727%2C59.4671%5D%2C%5B-161.21727%2C61.75205%5D%5D%5D%7D">outcrop:*</a>
 						</td>
 					</tr>
 					<tr>
 						<td>shothole in a bounding box</td>
 						<td>
-							<a href="./#q=shotline%3A*&amp;aoi=%7B%22type%22%3A%22Polygon%22%2C%22coordinates%22%3A%5B%5B%5B-159.6973%2C68.4477%5D%2C%5B-159.6973%2C70.0656%5D%2C%5B-151.8750%2C70.0656%5D%2C%5B-151.8750%2C68.4477%5D%2C%5B-159.6973%2C68.4477%5D%5D%5D%7D">shotline:*</a>
+							<a href="./search?q=shotline%3A*&geojson=%7B%22type%22%3A%22Polygon%22%2C%22coordinates%22%3A%5B%5B%5B-161.04148%2C70.68522%5D%2C%5B-151.63719%2C70.68522%5D%2C%5B-151.63719%2C69.45734%5D%2C%5B-161.04148%2C69.45734%5D%2C%5B-161.04148%2C70.68522%5D%5D%5D%7D">shotline:*</a>
 						</td>
 					</tr>
 					<tr>
 						<td>pulp in a bounding box</td>
 						<td>
-							<a href="./#q=keyword%3Apulp&amp;aoi=%7B%22type%22%3A%22Polygon%22%2C%22coordinates%22%3A%5B%5B%5B-139.5703%2C55.3541%5D%2C%5B-139.5703%2C58.8819%5D%2C%5B-129.0234%2C58.8819%5D%2C%5B-129.0234%2C55.3541%5D%2C%5B-139.5703%2C55.3541%5D%5D%5D%7D&amp;sort=sample&amp;sort=sort_keyword">keyword:pulp</a>
+							<a href="./search?q=keyword%3Apulp&geojson=%7B%22type%22%3A%22Polygon%22%2C%22coordinates%22%3A%5B%5B%5B-161.04148%2C70.68522%5D%2C%5B-151.63719%2C70.68522%5D%2C%5B-151.63719%2C69.45734%5D%2C%5B-161.04148%2C69.45734%5D%2C%5B-161.04148%2C70.68522%5D%5D%5D%7D">keyword:pulp</a>
 						</td>
 					</tr>
 					<tr>
 						<td>map in a bounding box</td>
 						<td>
-							<a href="./#q=keyword%3Amap&amp;aoi=%7B%22type%22%3A%22Polygon%22%2C%22coordinates%22%3A%5B%5B%5B-158.7305%2C66.1427%5D%2C%5B-158.7305%2C67.7926%5D%2C%5B-149.7656%2C67.7926%5D%2C%5B-149.7656%2C66.1427%5D%2C%5B-158.7305%2C66.1427%5D%5D%5D%7D">keyword:map</a>
+							<a href="./search?q=keyword%3Amap&geojson=%7B%22type%22%3A%22Polygon%22%2C%22coordinates%22%3A%5B%5B%5B-151.63719%2C65.92831%5D%2C%5B-144.69383%2C65.92831%5D%2C%5B-144.69383%2C63.25314%5D%2C%5B-151.63719%2C63.25314%5D%2C%5B-151.63719%2C65.92831%5D%5D%5D%7D">keyword:map</a>
 						</td>
 					</tr>
 				</table>
@@ -200,22 +195,23 @@
 					<li>
 						Well: Enter first few letters of well name followed by
 						an asterisk or a valid API number
-						(<a href="./#q=well%3Akup*%20OR%2055307000010000"><b>well:kup*</b> OR <b>55307000010000</b></a>)
+						(<a href="./search?q=well.name%3Akup*"><b>well.name:kup*</b></a> OR
+						<a href="./search?q=50029200650100"><b>55307000010000</b></a>)
 					</li>
 					<li>
 						Prospect: Enter first few letters of prospect name followed by
 						an asterisk
-						(<a href="./#q=prospect%3Agold*"><b>prospect:gold*</b></a>)
+						(<a href="./search?q=prospect.name%3Agold*"><b>prospect.name:gold*</b></a>)
 					</li>
 					<li>
 						Outcrop: Enter first few letters of sample number followed
 						by an asterisk
-						(<a href="./#q=outcrop%3A06DL*"><b>outcrop:06DL*</b></a>)
+						(<a href="./search?q=outcrop.name%3A06DL*"><b>outcrop.name:06DL*</b></a>)
 					</li>
 					<li>
 						Seismic Shotline: Enter first few letters of shotline followed by
 						an asterisk
-						(<a href="./#q=shotline%3A37*"><b>shotline:37*</b></a>)
+						(<a href="./search?q=shotline.name%3A37*"><b>shotline.name:37*</b></a>)
 					</li>
 				</ul>
 				<h4>Bounding Search Box</h4>
@@ -281,10 +277,6 @@
 						share your search parameters with others
 					</li>
 					<li>
-						Select <b>PDF</b> link to save search results
-						as PDF table (the search url is also saved)
-					</li>
-					<li>
 						Click <b>CSV</b> link to save search results
 						as comma-delimited text file that can be imported into
 						spreadsheet
@@ -311,10 +303,10 @@
 					The Search Bar queries many different database fields.
 					Users may indicate which fields to query by specifying the
 					field name followed by a colon. For example, if you wanted
-					to query the USGS collection, looking for inventory around
-					the Barrow area you could search:
+					to query the USGS collection, looking for inventory with Barrow in
+					the name, you could search:
 				</p>
-				<pre><a href="./#q=barrow%20collection%3AUSGS">barrow collection:USGS</a></pre>
+				<pre><a href="./search?q=barrow+collection%3Ausgs">barrow collection:USGS</a></pre>
 
 				<p>
 					Numeric fields can be searched exactly the same as
@@ -322,7 +314,7 @@
 					cuttings in the database that had a top interval of 100,
 					you could search:
 				</p>
-				<pre><a href="./#q=cuttings%20top%3A100">cuttings top:100</a></pre>
+				<pre><a href="./search?size=25&q=cuttings+top%3A100">cuttings top:100</a></pre>
 
 				<p>
 					It is also possible to search for ranges in numeric
@@ -330,7 +322,7 @@
 					database that had a top interval between 500 and 550, you
 					could search:
 				</p>
-				<pre><a href="./#q=core%20top%3A[500%20TO%20500]">core top:[500 TO 550]</a></pre>
+				<pre><a href="./search?q=core+top%3A%5B500+TO+550%5D">core top:[500 TO 550]</a></pre>
 				<p><i><b>* Note:</b> "TO" inside the range is case sensitive</i></p>
 
 				<p>
@@ -339,7 +331,7 @@
 					mineral-related inventory that was not from an outcrop, you
 					could search:
 				</p>
-				<pre><a href="./#q=keyword%3Amineral%20NOT%20keyword%3Aoutcrop">keyword:mineral NOT keyword:outcrop</a></pre>
+				<pre><a href="./search?q=keyword%3Araw+AND+NOT+outcrop.id%3A*">keyword:raw AND NOT outcrop.id:* </a></pre>
 				<p><i><b>* Note:</b> "NOT" is case sensitive</i></p>
 
 				<p>
@@ -349,7 +341,7 @@
 					wanted to find inventory that was either core or cuttings,
 					you could search:
 				</p>
-				<pre><a href="./#q=keyword%3Acuttings%20OR%20keyword%3Acore">keyword:cuttings OR keyword:core</a></pre>
+				<pre><a href="./search?q=keyword%3Acuttings+OR+keyword%3Acore">keyword:cuttings OR keyword:core</a></pre>
 				<p><i><b>* Note:</b> "OR" is case sensitive</i></p>
 
 				<p>
@@ -358,7 +350,7 @@
 					find inventory with a well name that had terms starting
 					with "al", you could search:
 				</p>
-				<pre><a href="./#q=well%3Aal*">well:al*</a></pre>
+				<pre><a href="./search?q=well.name%3Aal*">well.name:al*</a></pre>
 
 				<p>
 					Wildcard searching pairs well with the NOT operator.
@@ -366,7 +358,7 @@
 					with "en" but not include any inventory with the "energy"
 					keyword, you could search:
 				</p>
-				<pre><a href="./#q=en*%20NOT%20keyword%3Aenergy">en* NOT keyword:energy</a></pre>
+				<pre><a href="./search?q=en*+NOT+keyword%3Aenergy">en* NOT keyword:energy</a></pre>
 
 				<p>
 					Often it is useful to group searches that feature
@@ -374,7 +366,7 @@
 					wells name that had terms starting with "al" or "en", but
 					omit cuttings for both, you could search:
 				</p>
-				<pre><a href="./#q=(well%3Aen*%20OR%20well%3Aal*)%20NOT%20keyword%3Acuttings">(well:en* OR well:al*) NOT keyword:cuttings</a></pre>
+				<pre><a href="./search?q=%28well.name%3Aen*+OR+well.name%3Aal*%29+NOT+keyword%3Acuttings">(well.name:en* OR well.name:al*) NOT keyword:cuttings</a></pre>
 
 				<h4>Keyword Search Options</h4>
 				<p>
@@ -389,13 +381,27 @@
 						</tr>
 					</thead>
 					<tbody>
+						{{- if $.user}}
+						<tr>
+							<td>barcode</td>
+							<td>Barcode (string)</td>
+						</tr>
+						<tr>
+							<td>container_id</td>
+							<td>Container ID (string)</td>
+						</tr>
+						<tr>
+							<td>path_cache</td>
+							<td>Location (string)</td>
+						</tr>
+						{{- end}}
 						<tr>
 							<td>top</td>
 							<td>Interval Top (numeric)</td>
 						</tr>
 						<tr>
 							<td>bottom</td>
-							<td>Interval Top (numeric)</td>
+							<td>Interval Bottom (numeric)</td>
 						</tr>
 						<tr>
 							<td>sample</td>
@@ -410,6 +416,14 @@
 							<td>Core Number (string)</td>
 						</tr>
 						<tr>
+							<td>core_name</td>
+							<td>Core Name (string)</td>
+						</tr>
+						<tr>
+							<td>core_unit</td>
+							<td>Core Unit (string)</td>
+						</tr>
+						<tr>
 							<td>set</td>
 							<td>Set Number (string)</td>
 						</tr>
@@ -418,93 +432,131 @@
 							<td>Box Number (string)</td>
 						</tr>
 						<tr>
+							<td>diameter</td>
+							<td>Diameter (numeric)</td>
+						</tr>
+						<tr>
 							<td>collection</td>
 							<td>Collection (string)</td>
+						</tr>
+						<tr>
+							<td>collection_id</td>
+							<td>Collection ID (numeric)</td>
 						</tr>
 						<tr>
 							<td>project</td>
 							<td>Project (string)</td>
 						</tr>
 						<tr>
-							<td>barcode</td>
-							<td>Barcode (string)</td>
+							<td>project_id</td>
+							<td>Project ID (numeric)</td>
 						</tr>
 						<tr>
-							<td>location</td>
-							<td>Location (string)</td>
-						</tr>
-						<tr>
-							<td>well</td>
-							<td>Well Name (string)</td>
-						</tr>
-						<tr>
-							<td>wellnumber</td>
-							<td>Well Number (string)</td>
-						</tr>
-						<tr>
-							<td>api</td>
-							<td>Well API Number (string)</td>
-						</tr>
-						<tr>
-							<td>borehole</td>
-							<td>Borehole Name (string)</td>
-						</tr>
-						<tr>
-							<td>prospect</td>
-							<td>Prospect Name (string)</td>
-						</tr>
-						<tr>
-							<td>ardf</td>
-							<td>ARDF Number (string)</td>
-						</tr>
-						<tr>
-							<td>outcrop</td>
-							<td>Outcrop Name (string)</td>
-						</tr>
-						<tr>
-							<td>outcropnumber</td>
-							<td>Outcrop Number (string)</td>
-						</tr>
-						<tr>
-							<td>shotline</td>
-							<td>Shotline Name (string)</td>
+							<td>can_publish</td>
+							<td>Can Publish (boolean)</td>
 						</tr>
 						<tr>
 							<td>keyword</td>
 							<td>Keyword Name (string)</td>
 						</tr>
 						<tr>
-							<td>quadrangle</td>
-							<td>Quadrangle Name (string)</td>
+							<td>well.name</td>
+							<td>Well Name (string)</td>
 						</tr>
 						<tr>
-							<td>note</td>
-							<td>Notes attached to inventory (string)</td>
+							<td>well.id</td>
+							<td>Well ID (numeric)</td>
 						</tr>
 						<tr>
-							<td>notetype</td>
-							<td>Type of notes attached to inventory (string)</td>
+							<td>well.number</td>
+							<td>Well Number (string)</td>
 						</tr>
 						<tr>
-							<td>publicationtitle</td>
+							<td>well.api</td>
+							<td>Well API Number (string)</td>
+						</tr>
+						<tr>
+							<td>borehole.name</td>
+							<td>Borehole Name (string)</td>
+						</tr>
+						<tr>
+							<td>borehole.id</td>
+							<td>Borehole ID (numeric)</td>
+						</tr>
+						<tr>
+							<td>prospect.name</td>
+							<td>Prospect Name (string)</td>
+						</tr>
+						<tr>
+							<td>prospect.id</td>
+							<td>Prospect ID (numeric)</td>
+						</tr>
+						<tr>
+							<td>prospect.ardf</td>
+							<td>ARDF Number (string)</td>
+						</tr>
+						<tr>
+							<td>outcrop.name</td>
+							<td>Outcrop Name (string)</td>
+						</tr>
+						<tr>
+							<td>outcrop.id</td>
+							<td>Outcrop ID (numeric)</td>
+						</tr>
+						<tr>
+							<td>outcrop.number</td>
+							<td>Outcrop Number (string)</td>
+						</tr>
+						<tr>
+							<td>outcrop.year</td>
+							<td>Outcrop Year (numeric)</td>
+						</tr>
+						<tr>
+							<td>shotline.name</td>
+							<td>Shotline Name (string)</td>
+						</tr>
+						<tr>
+							<td>shotline.id</td>
+							<td>Shotline ID (numeric)</td>
+						</tr>
+						<tr>
+							<td>shotline.year</td>
+							<td>Shotline Year (numeric)</td>
+						</tr>
+						<tr>
+							<td>shotline.min</td>
+							<td>Shotpoint min (numeric)</td>
+						</tr>
+						<tr>
+							<td>shotline.max</td>
+							<td>Shotpoint max (numeric)</td>
+						</tr>
+						{{- if $.user}}
+						<tr>
+							<td>issue</td>
+							<td>Issues attached to inventory (string)</td>
+						</tr>
+						{{- end}}
+						<tr>
+							<td>publication.title</td>
 							<td>
 								Title of publication attached to inventory (string)
 							</td>
 						</tr>
 						<tr>
-							<td>publicationdescription</td>
+							<td>publication.description</td>
 							<td>
 								Description of publication attached to inventory (string)
 							</td>
 						</tr>
 						<tr>
-							<td>publicationnumber</td>
+							<td>publication.number</td>
 							<td>
 								Number from publication attached to inventory (string)
 							</td>
 						</tr>
 						<tr>
-							<td>publicationseries</td>
+							<td>publication.series</td>
 							<td>
 								Series from publication attached to inventory (string)
 							</td>
