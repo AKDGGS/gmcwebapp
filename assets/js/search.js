@@ -1,5 +1,5 @@
 let search_control = new SearchControl({ moretools: true });
-let drawbox_control = new DrawBoxControl({ callback: e => doSearch() });
+let drawbox_control = new DrawBoxControl({ callback: e => doSearch(e) });
 let result_source = new ol.source.Vector();
 let fmt = new ol.format.GeoJSON({
 	dataProjection: 'EPSG:4326',
@@ -246,7 +246,14 @@ Promise.allSettled([
 	});
 
 	map.on('click', e => {
-		let fts = map.getFeaturesAtPixel(e.pixel);
+		let fts = [];
+		e.map.forEachFeatureAtPixel(e.pixel, (feature) => {
+		fts.push(feature);
+		}, {
+		layerFilter: (layer) => {
+			return layer.getSource() === result_source;
+		}
+		})
 		if (!fts.length) return popup.setPosition();
 		popup.setPosition(e.coordinate);
 		popup.getElement().querySelector('#popup-content').innerHTML = mustache.render(

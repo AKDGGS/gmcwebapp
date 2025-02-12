@@ -77,7 +77,7 @@ class DrawBoxControl extends ol.control.Control {
 				olDrawboxTooltipElement.style.display = 'block';
 			});
 		});
-		
+
 		this.drawLayer = new ol.layer.Vector({
 			source: src,
 			style: {
@@ -109,7 +109,6 @@ class DrawBoxControl extends ol.control.Control {
 	setMap(m) {
 		super.setMap(m);
 		this.drawLayer.setMap(m);
-		m.on('pointermove', this.drawRectangle.handleMouseMoveEvent);
 	}
 }
 
@@ -144,7 +143,7 @@ class DrawRectangle extends ol.interaction.Pointer {
 		}
 	}
 
-	handleMouseMoveEvent(evt) {
+	handleMoveEvent(evt) {
 		if (this.startPoint != null) {
 			const map = evt.map;
 			const currentPoint = map.getCoordinateFromPixel(evt.pixel);
