@@ -88,7 +88,7 @@ func (e *Entry) SetContent(content *[]byte) {
 			return
 		}
 
-		if err := gz.Flush(); err != nil {
+		if err := gz.Close(); err != nil {
 			return
 		}
 
@@ -113,7 +113,7 @@ func (e *Entry) SetContent(content *[]byte) {
 			return
 		}
 
-		if err := br.Flush(); err != nil {
+		if err := br.Close(); err != nil {
 			return
 		}
 
