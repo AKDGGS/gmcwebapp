@@ -240,20 +240,21 @@ Promise.allSettled([
 	map.addOverlay(popup);
 
 	map.on('pointermove', e => {
-		e.map.getTargetElement().style.cursor = (
-			e.map.hasFeatureAtPixel(e.pixel) ? 'pointer' : ''
-		);
+		const features = e.map.getFeaturesAtPixel(e.pixel);
+		if (features.some(feature => result_source.hasFeature(feature))) {
+			map.getViewport().style.cursor = 'pointer';
+		} else {
+			map.getViewport().style.cursor = 'inherit';
+		}
 	});
 
 	map.on('click', e => {
 		let fts = [];
 		e.map.forEachFeatureAtPixel(e.pixel, (feature) => {
-		fts.push(feature);
-		}, {
-		layerFilter: (layer) => {
-			return layer.getSource() === result_source;
-		}
-		})
+			if (result_source.hasFeature(feature)) {
+				fts.push(feature);
+			}
+		});
 		if (!fts.length) return popup.setPosition();
 		popup.setPosition(e.coordinate);
 		popup.getElement().querySelector('#popup-content').innerHTML = mustache.render(
