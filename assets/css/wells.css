@@ -4,3 +4,4 @@
 
 #map { height: 100%;}
 .indent {padding-left: 10px;}
+.csp span:not(:last-of-type)::after { content: ", "; }
