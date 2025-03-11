@@ -49,15 +49,17 @@ LDAP server's configuration requirements:
 
 Three common configurations using placeholder values are:
 
-Example 1: `bind_as_user` = true
+Example 1: This configuration uses the user's credentials to bind to the LDAP
+server if bind_as_user is set to true.
 ```
 - type: ldap
   ldap_url: ldaps://ldap4.example.com
-  bind_as_user = true
+  bind_as_user: true
   bind_dn: uid=<BIND_USERNAME>,ou=User,o=co.wv.uk.eu
 ```
 
-Example 2: `bind_as_user` = false
+Example 2: This configuration uses a specific user's credentials to bind to the
+LDAP server.
 ```
 - type: ldap
   ldap_url: ldaps://ldap4.example.com
@@ -67,14 +69,14 @@ Example 2: `bind_as_user` = false
   user_search: (CN={{.}})
 ```
 
-Example 3: `ca` = "/home/user/my_cert.pem"
+Example 3: This configuration uses a custom certificate with the LDAP server. The
+certificate field points to the certificate path.
 ```
 - type: ldap
-  ldap_url: ldaps://ldap4.example.com
   ldap_url: ldaps://SOAADCDC06.soa.alaska.gov
   bind_as_user: true
   base_dn: ou=User,ou=akk,ou=tru,ou=akd,dc=poc,dc=wv,dc=com
-  ca = "/home/user/my_cert.pem"
+  ca: "/home/user/my_cert.pem"
 ```
 
 #### Token Authentication
