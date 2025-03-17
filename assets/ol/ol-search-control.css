@@ -10,7 +10,7 @@
 	flex-wrap: wrap;
 	flex-direction: row;
 	align-items: center;
-	margin: 0 0 0 3em;
+	margin: 0;
 	border: 1px solid #428bca;
 	background-color: #fff;
 	border-radius: 5px;
@@ -58,5 +58,5 @@
 }
 
 @media only screen and (min-width: 600px) {
-	.ol-search { width: 550px; }
+	.ol-search { width: 500px; }
 }
