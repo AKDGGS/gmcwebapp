@@ -14,21 +14,25 @@ table { max-width: 600px; }
 .flex-break { height: 0; flex-basis: 100%; }
 .tb-fields { border-collapse: separate; }
 .tb-fields th, .tb-fields td {
-	text-align: left; vertical-align: top;
+	text-align: left;
+	vertical-align: top;
 	padding: 0 4px;
 }
 .tb-fields tr:not(:last-of-type) td { padding-bottom: 8px;}
 .tb-spacer-bg:not(:first-of-type) th, .tb-spacer-bg:not(:first-of-type) td {padding-top: 70px;}
 .tb-spacer-sm:not(:first-of-type) th, .tb-spacer-sm:not(:first-of-type) td {padding-top: 25px;}
 .tb-columns th {	padding-right: 50px; }
-
 #stash-button { margin-bottom: 8px; }
 #stash-dest { display: none; font-size: 12px; font-family: Tahoma, Geneva, sans-serif; }
 #stash-dest.shown { display: block; }
 #stash-dest table { border-collapse: collapse; }
-#stash-dest table th, #stash-dest table td { text-align: left; vertical-align: top; border: 1px solid #bbb; padding: 4px 8px; }
+#stash-dest table th, #stash-dest table td {
+	text-align: left;
+	vertical-align: top;
+	border: 1px solid #bbb;
+	padding: 4px 8px;
+}
 #stash-dest table tr:nth-child(odd){ background-color: #eee; }
-
 .file-list-container {
 	display: inline-block;
 	max-width: auto;
