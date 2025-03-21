@@ -39,6 +39,7 @@
 .ol-popup-content table { border-collapse: collapse; width: 100%; display: none; }
 .ol-popup-content table th, .ol-popup-content table td { vertical-align: top;
 	padding: 4px 8px;	text-align: left; }
+.ol-popup-content table td.indent { padding-left: 25px; }
 
 #tmpl-popup-nearby-neighbors { padding-left: 15px; }
 
