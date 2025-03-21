@@ -1,15 +1,3 @@
-const popup = document.getElementById('popup');
-const content = document.getElementById('popup-content');
-const closer = document.getElementById('popup-closer');
-const prev_btn = document.getElementById('popup-prev-btn');
-const next_btn = document.getElementById('popup-next-btn');
-
-const overlay = new ol.Overlay({
-	element: popup,
-	autoPan: { animation: { duration: 100 } }
-});
-let fts = [];
-
 let source = new ol.source.Vector({
 	url: 'points.json',
 	format: new ol.format.GeoJSON({
@@ -36,8 +24,16 @@ let label_layer = new ol.layer.Vector({
 	declutter: true
 });
 
+const popup = new ol.Overlay({
+	element: document.querySelector('#popup'),
+	autoPan: { animation: { duration: 100 } }
+});
+
 let map = new ol.Map({
 	target: 'map',
+	controls: MAP_DEFAULTS.Controls,
+	interactions: MAP_DEFAULTS.Interactions,
+	view: MAP_DEFAULTS.View,
 	layers: [
 		MAP_DEFAULTS.BaseLayers,
 		MAP_DEFAULTS.OverlayLayers,
@@ -49,112 +45,82 @@ let map = new ol.Map({
 			]
 		}),
 	],
-	overlays: [ overlay ],
-	view: MAP_DEFAULTS.View,
-	controls: MAP_DEFAULTS.Controls,
-	interactions: MAP_DEFAULTS.Interactions
+	overlays: [ popup ]
 });
 
-map.on('pointermove', function(e){
-	e.map.getTargetElement().style.cursor = (
-		e.map.hasFeatureAtPixel(e.pixel) ? 'pointer' : ''
-	);
+map.on('pointermove', e => {
+	if (e.map.getFeaturesAtPixel(e.pixel).some(f => source.hasFeature(f))) {
+		map.getViewport().style.cursor = 'pointer';
+	} else {
+		map.getViewport().style.cursor = 'inherit';
+	}
 });
 
-//Allows the overlay to be visible.
-//The overlay needs to be hidden by default to prevent it being
-//displayed at startup
-document.getElementById('popup-topbar').style.visibility = 'visible';
-popup.style.visibility = 'visible';
+let fts = new Map();
 
-//Pagination Code
-//Fetch the well data
-let currentPage;
-let running = false;
+map.on('click', e => {
+	fts = new Map();
+	popup.getElement().querySelector('#popup-content').innerHTML = '';
+	e.map.forEachFeatureAtPixel(e.pixel, f => {
+		fts.set(f.get('well_id'), null);
+	});
+	if (fts.size) {
+		if (!popup.getElement().classList.contains('show')) {
+			popup.getElement().classList.add('show');
+		}
+		displayPopupContents(0);
+		popup.setPosition(e.coordinate);
+	} else {
+		popup.setPosition();
+	}
+});
 
-function displayOverlayContents(e) {
-	if (!running) {
-		content.scrollTop = 0;
-		running = true;
-		if (e instanceof MouseEvent) {
-			switch (e.target.id) {
-				case "popup-prev-btn":
-					if (currentPage > 0) {
-						currentPage--;
-					}
-					break;
-				case "popup-next-btn":
-					if (currentPage < fts.length - 1) {
-						currentPage++;
-					}
-					break;
-			}
-			prev_btn.disable = true;
-			prev_btn.style.color = '#868686BF';
-			next_btn.disable = true;
-			next_btn.style.color = '#868686BF';
+function displayPopupContents(d) {
+	let fts_keys = Array.from(fts.keys());
+	if (fts.get(fts_keys[0]) === null) {idx = 0;}
+	let el = popup.getElement();
+	try {
+		if (!fts.get(fts_keys[idx + d])) {
+			fetch('detail.json?id=' + fts_keys[idx + d])
+			.then(response => {
+				if (!response.ok) throw new Error(response.status + " " + response.statusText);
+				return response.json();
+			}).then(data => {
+				fts.set(fts_keys[idx + d], data);
+				el.querySelector('#popup-content').innerHTML = mustache.render(
+					document.querySelector('#tmpl-popup').innerHTML, data, {}, ['[[', ']]']
+				);
+				el.querySelector('#popup-content table').classList.toggle('show');
+				el.querySelector('#popup-page-number').innerHTML = ((idx + d) + 1) + ' of ' + fts.size;
+				el.querySelector('#popup-prev-btn').classList.toggle('visible', idx + d > 0);
+				el.querySelector('#popup-next-btn').classList.toggle('visible', idx + d < (fts.size - 1));
+				idx += d;
+			}).catch(error => {
+				if (window.console) console.log(error);
+			});
 		} else {
-			currentPage = 0;
+			el.querySelector('#popup-content').innerHTML = mustache.render(
+				document.querySelector('#tmpl-popup').innerHTML, fts.get(fts_keys[idx + d]), {}, ['[[', ']]']
+			);
+			el.querySelector('#popup-content table').classList.toggle('show');
+			el.querySelector('#popup-page-number').innerHTML = ((idx + d) + 1) + ' of ' + fts.size;
+			el.querySelector('#popup-prev-btn').classList.toggle('visible', idx + d > 0);
+			el.querySelector('#popup-next-btn').classList.toggle('visible', idx + d < (fts.size - 1));
+			idx += d;
 		}
-		if (typeof fts[currentPage] !== "undefined") {
-			let well_id = fts[currentPage].get('well_id');
-			fetch('detail.json?id=' + well_id)
-				.then(response => {
-					if (!response.ok) throw new Error(response.status + " " +
-						response.statusText);
-					return response.json();
-				})
-				.then(data => {
-					data["well_id"] = well_id;
-					let t = mustache.render(document.getElementById("tmpl-popup").innerHTML, data, {}, ['[[', ']]']);
-					popup.classList.add('show');
-					document.getElementById("popup-content").innerHTML = t;
-					document.getElementById("popup-content").classList.add('visible')
-					document.querySelector("#popup-content table").classList.add('show');
-					document.getElementById('popup-topbar').style.visibility = 'visible';
-					popup.style.visibility = 'visible';
-					if (e instanceof ol.events.Event) {
-						overlay.setPosition(e.coordinate);
-					}
-					document.getElementById("popup-page-number").innerHTML = (currentPage + 1) + " of " + fts.length;
-					if (currentPage > 0) {
-						prev_btn.style.visibility = 'visible';
-					} else {
-						prev_btn.style.visibility = 'hidden';
-					}
-					if (currentPage < (fts.length - 1)) {
-						next_btn.style.visibility = 'visible';
-					} else {
-						next_btn.style.visibility = 'hidden';
-					}
-					prev_btn.style.color = "#fff";
-					next_btn.style.color = "#fff";
-					running = false;
-				})
-				.catch(err => {
-					alert(err);
-					running = false;
-				});
-		}
-	}
+	} catch (error) {console.error(error);}
 }
-//Popup
-prev_btn.addEventListener("click", displayOverlayContents);
-next_btn.addEventListener("click", displayOverlayContents);
-closer.addEventListener("click", function() {
-	overlay.setPosition(undefined);
-	closer.blur();
-	return false;
-});
 
-map.on('click', function(e) {
-	popup.style.visibility = "hidden";
-	document.getElementById('popup-topbar').style.visibility = 'hidden';
-	fts = map.getFeaturesAtPixel(e.pixel);
-	if (fts.length < 1) {
-		overlay.setPosition(undefined);
-		return
-	}
-	overlay.setPosition(e.coordinate);
-	displayOverlayContents(e);
+popup.getElement().querySelector('#popup-prev-btn').addEventListener(
+	'click', e => displayPopupContents(-1)
+);
+
+popup.getElement().querySelector('#popup-next-btn').addEventListener(
+	'click', e => displayPopupContents(1)
+);
+
+popup.getElement().querySelector('#popup-closer').addEventListener('click', e => {
+	popup.getElement().querySelector('#popup-content').innerHTML = '';
+	popup.setPosition();
+	return false;
 });

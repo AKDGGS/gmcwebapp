@@ -1,7 +1,5 @@
 .apptmpl-content { display: flex;	flex-flow: column;	height: 100%;
-	font-family: 'Open Sans','Helvetica Neue',Helvetica,Arial,sans-serif;}
-.apptmpl-content .content {	flex: 1 1 auto;}
-
-#map { height: 100%;}
-.indent {padding-left: 10px;}
+	font-family: 'Open Sans','Helvetica Neue',Helvetica,Arial,sans-serif; }
+.apptmpl-content .content {	flex: 1 1 auto; }
 .csp span:not(:last-of-type)::after { content: ", "; }
+#map { height: 100%; cursor: grab; }
