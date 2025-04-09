@@ -3,3 +3,4 @@
 .apptmpl-content .content {	flex: 1 1 auto; }
 .csp span:not(:last-of-type)::after { content: ", "; }
 #map { height: 100%; cursor: grab; }
+.ol-popup-content table { display: block; }

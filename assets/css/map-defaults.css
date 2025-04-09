@@ -23,7 +23,6 @@
 }
 .layer-switcher ul ul { margin-left: 4px; padding: 0; }
 .layer-switcher ul ul li { margin: 4px 0; }
-
 .ol-popup {
 	border: 2px solid #999;
 	background-color: #fff;
@@ -38,8 +37,19 @@
 	justify-content: space-between;
 	align-items: center;
 	color: #fff;
-	background: linear-gradient(315deg, #276f93 94%, #999 94%);
+	background-color: #276f93;
 	user-select: none;
+	position: relative;
+}
+.ol-popup-titlebar::before {
+	content: "";
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 0;
+	height: 0;
+	border-bottom: 25px solid transparent;
+	border-left: 25px solid #999;
 }
 #popup-page-number { width: 150px; text-align: center; }
 .popup-nav-btn {
@@ -66,5 +76,10 @@
 	padding: 4px 8px;	text-align: left; }
 .ol-popup-content table td.indent { padding-left: 25px; }
 #tmpl-popup-nearby-neighbors { padding-left: 15px; }
+.keyword-wrap {
+	max-width: 300px;
+	min-width: 300px;
+	word-wrap: break-word;
+}
 .visible { visibility: visible; }
 .show { display: block !important; }

@@ -6,29 +6,6 @@ let source = new ol.source.Vector({
 	})
 });
 
-let point_layer = new ol.layer.Vector({
-	source: source,
-	style: MAP_DEFAULTS.WellStyle
-});
-
-let label_layer = new ol.layer.Vector({
-	source: source,
-	renderBuffer: 1e3,
-	style: function(f) {
-		MAP_DEFAULTS.LabelStyle.getText().setText(
-			f.get('name') + (f.get('number') == undefined ? '' : ' - ') +
-			f.get('number')
-		);
-		return MAP_DEFAULTS.LabelStyle;
-	},
-	declutter: true
-});
-
-const popup = new ol.Overlay({
-	element: document.querySelector('#popup'),
-	autoPan: { animation: { duration: 100 } }
-});
-
 let map = new ol.Map({
 	target: 'map',
 	controls: MAP_DEFAULTS.Controls,
@@ -40,75 +17,74 @@ let map = new ol.Map({
 		new ol.layer.Group({
 			visible: true,
 			layers: [
-				point_layer,
-				label_layer
+				new ol.layer.Vector({
+					source: source,
+					style: MAP_DEFAULTS.WellStyle
+				}),
+				new ol.layer.Vector({
+					source: source,
+					renderBuffer: 1e3,
+					style: MAP_DEFAULTS.LabelStyle,
+					declutter: true
+				})
 			]
 		}),
-	],
-	overlays: [ popup ]
+	]
 });
+
+let popup = new ol.Overlay({
+	element: document.querySelector('#popup'),
+	autoPan: { animation: { duration: 100 } }
+});
+map.addOverlay(popup);
 
 map.on('pointermove', e => {
-	if (e.map.getFeaturesAtPixel(e.pixel).some(f => source.hasFeature(f))) {
-		map.getViewport().style.cursor = 'pointer';
-	} else {
-		map.getViewport().style.cursor = 'inherit';
-	}
+	let t = e.map.getFeaturesAtPixel(e.pixel).some(f => source.hasFeature(f));
+	map.getViewport().style.cursor = (t ? 'pointer' : 'inherit');
 });
 
-let fts = new Map();
-
+let fts = [];
 map.on('click', e => {
-	fts = new Map();
-	popup.getElement().querySelector('#popup-content').innerHTML = '';
-	e.map.forEachFeatureAtPixel(e.pixel, f => {
-		fts.set(f.get('well_id'), null);
-	});
-	if (fts.size) {
-		if (!popup.getElement().classList.contains('show')) {
-			popup.getElement().classList.add('show');
-		}
-		displayPopupContents(0);
+	popup.setPosition();
+	delete popup.getElement().querySelector('#popup-content').dataset.well_id;
+	popup.getElement().classList.add('show');
+	fts = e.map.getFeaturesAtPixel(e.pixel);
+	if(fts.length){
 		popup.setPosition(e.coordinate);
-	} else {
-		popup.setPosition();
+		displayPopupContents(0);
 	}
 });
 
 function displayPopupContents(d) {
-	let fts_keys = Array.from(fts.keys());
-	if (fts.get(fts_keys[0]) === null) {idx = 0;}
-	let el = popup.getElement();
-	try {
-		if (!fts.get(fts_keys[idx + d])) {
-			fetch('detail.json?id=' + fts_keys[idx + d])
-			.then(response => {
-				if (!response.ok) throw new Error(response.status + " " + response.statusText);
-				return response.json();
-			}).then(data => {
-				fts.set(fts_keys[idx + d], data);
-				el.querySelector('#popup-content').innerHTML = mustache.render(
-					document.querySelector('#tmpl-popup').innerHTML, data, {}, ['[[', ']]']
-				);
-				el.querySelector('#popup-content table').classList.toggle('show');
-				el.querySelector('#popup-page-number').innerHTML = ((idx + d) + 1) + ' of ' + fts.size;
-				el.querySelector('#popup-prev-btn').classList.toggle('visible', idx + d > 0);
-				el.querySelector('#popup-next-btn').classList.toggle('visible', idx + d < (fts.size - 1));
-				idx += d;
-			}).catch(error => {
-				if (window.console) console.log(error);
-			});
-		} else {
-			el.querySelector('#popup-content').innerHTML = mustache.render(
-				document.querySelector('#tmpl-popup').innerHTML, fts.get(fts_keys[idx + d]), {}, ['[[', ']]']
-			);
-			el.querySelector('#popup-content table').classList.toggle('show');
-			el.querySelector('#popup-page-number').innerHTML = ((idx + d) + 1) + ' of ' + fts.size;
-			el.querySelector('#popup-prev-btn').classList.toggle('visible', idx + d > 0);
-			el.querySelector('#popup-next-btn').classList.toggle('visible', idx + d < (fts.size - 1));
-			idx += d;
-		}
-	} catch (error) {console.error(error);}
+	let ct = popup.getElement().querySelector('#popup-content');
+	let idx = Math.max(fts.findIndex(e => e.get('well_id') == ct.dataset.well_id), 0);
+	switch(d){
+		case -1: if(fts[idx-1] !== undefined) idx--; break;
+		case 1: if(fts[idx+1] !== undefined) idx++; break;
+	}
+
+	if(fts[idx].get('_popup') === undefined){
+		fetch(`detail.json?id=${fts[idx].get('well_id')}`)
+		.then(response => {
+			if(!response.ok) throw new Error(`Error ${response.status}: ${response.statusText}`);
+			return response.json();
+		}).then(data => {
+			fts[idx].set('_popup', mustache.render(
+				document.querySelector('#tmpl-popup').innerHTML,
+				data, {}, ['[[', ']]']
+			), true);
+			displayPopupContents(d);
+		}).catch(err => {
+			if(window.console) console.log(err);
+		});
+		return;
+	}
+
+	ct.innerHTML = fts[idx].get('_popup');
+	ct.dataset.well_id = fts[idx].get('well_id');
+	document.querySelector('#popup-page-number').innerHTML = (idx+1) + ' of ' + fts.length;
+	document.querySelector('#popup-prev-btn').classList.toggle('visible', idx > 0);
+	document.querySelector('#popup-next-btn').classList.toggle('visible', (idx+1) < fts.length);
 }
 
 popup.getElement().querySelector('#popup-prev-btn').addEventListener(

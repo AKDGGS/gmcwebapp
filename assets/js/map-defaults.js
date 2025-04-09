@@ -110,17 +110,20 @@ const MAP_DEFAULTS = {
 		}
 		return MAP_DEFAULTS.DefaultStyle;
 	},
-	LabelStyle: new ol.style.Style({
-		text: new ol.style.Text({
-			offsetY: -12,
-			fill: new ol.style.Fill({
-				color: 'rgba(0,0,0,1)'
-			}),
-			backgroundFill: new ol.style.Fill({
-				color: 'rgba(255,255,255,0.1)'
+	LabelStyle: function(f){
+		return new ol.style.Style({
+			text: new ol.style.Text({
+				text: `${f.get('name')}${f.get('number')===undefined?'':` - ${f.get('number')}`}`,
+				offsetY: -12,
+				fill: new ol.style.Fill({
+					color: 'rgba(0,0,0,1)'
+				}),
+				backgroundFill: new ol.style.Fill({
+					color: 'rgba(255,255,255,0.1)'
+				})
 			})
-		})
-	}),
+		});
+	},
 	Controls: ol.control.defaults.defaults({
 		attribution: false
 	}).extend([
