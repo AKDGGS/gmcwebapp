@@ -8,6 +8,10 @@ file is first searched for in the location specified at the command line
 with `-conf`, then in `/etc/gmc.yaml`, and finally in `$HOME/.config/gmc.yaml`
 (on Linux.)
 
+## HTTPS
+HTTPS is optionally supported when the path to the listening certificate and key
+are defined in the gmc.yaml file.
+
 ### Database Configuration
 Currently only PostgreSQL (v12+) is a supported database. Support for
 additional databases can be added by implementing `gmc/db/DB`.

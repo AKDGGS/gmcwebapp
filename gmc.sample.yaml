@@ -1,5 +1,7 @@
 # address service listens on, defaults to '127.0.0.1:8080'.
 listen_address: 127.0.0.1:8080
+# listen_certificate: <path to listen certificate>
+# listen_key: <path to listen key>
 
 # Automatically shutdown when executable changes should only be enabled
 # during development. If not specified, defaults to false.

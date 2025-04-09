@@ -11,14 +11,16 @@ import (
 )
 
 type Config struct {
-	ListenAddress string           `yaml:"listen_address"`
-	SessionKey    string           `yaml:"session_key"`
-	MaxAge        int              `yaml:"session_max_age"`
-	AutoShutdown  bool             `yaml:"auto_shutdown"`
-	Database      DatabaseConfig   `yaml:"database"`
-	FileStore     *FileStoreConfig `yaml:"file_store"`
-	Search        SearchConfig     `yaml:"search"`
-	Auths         []AuthConfig     `yaml:"authentication"`
+	ListenAddress     string           `yaml:"listen_address"`
+	ListenCertificate string           `yaml:"listen_certificate"`
+	ListenKey         string           `yaml:"listen_key"`
+	SessionKey        string           `yaml:"session_key"`
+	MaxAge            int              `yaml:"session_max_age"`
+	AutoShutdown      bool             `yaml:"auto_shutdown"`
+	Database          DatabaseConfig   `yaml:"database"`
+	FileStore         *FileStoreConfig `yaml:"file_store"`
+	Search            SearchConfig     `yaml:"search"`
+	Auths             []AuthConfig     `yaml:"authentication"`
 
 	keybytes []byte `yaml:"-"`
 }
