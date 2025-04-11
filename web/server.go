@@ -108,11 +108,12 @@ func (srv *Server) Start() error {
 	mux.HandleFunc("/inventory/search", srv.ServeSearchInventoryPage)
 	mux.HandleFunc("/inventory/search-help", srv.ServeSearchInventoryHelp)
 
+	srv.http = http.Server{Handler: mux}
+
 	if srv.Config.ListenCertificate != "" && srv.Config.ListenKey != "" {
 		err = srv.http.ServeTLS(listen, srv.Config.ListenCertificate,
 			srv.Config.ListenKey)
 	} else {
-		srv.http = http.Server{Handler: mux}
 		err = srv.http.Serve(listen)
 	}
 	if err == http.ErrServerClosed {
