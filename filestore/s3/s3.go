@@ -33,6 +33,8 @@ func New(cfg map[string]interface{}) (*S3, error) {
 		return nil, fmt.Errorf("s3 secretaccesskey must exist and be a string")
 	}
 
+	region, _ := cfg["region"].(string)
+
 	bucket, ok := cfg["bucket"].(string)
 	if !ok {
 		return nil, fmt.Errorf("s3 bucket must exist and be a string")
@@ -46,6 +48,7 @@ func New(cfg map[string]interface{}) (*S3, error) {
 	// Setup S3 Connection
 	client, err := minio.New(endpoint, &minio.Options{
 		Creds:  credentials.NewStaticV4(accesskeyid, secretaccesskey, ""),
+		Region: region,
 		Secure: secure,
 	})
 	if err != nil {
