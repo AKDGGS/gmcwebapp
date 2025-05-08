@@ -14,6 +14,7 @@ require (
 )
 
 require (
+	codeberg.org/go-pdf/fpdf v0.11.0 // indirect
 	github.com/Azure/go-ntlmssp v0.0.0-20221128193559-754e69321358 // indirect
 	github.com/dustin/go-humanize v1.0.1 // indirect
 	github.com/elastic/elastic-transport-go/v8 v8.6.0 // indirect

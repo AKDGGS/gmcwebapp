@@ -105,6 +105,7 @@ func (srv *Server) Start() error {
 	mux.HandleFunc("/inventory/stash.json", srv.ServeInventoryStash)
 	mux.HandleFunc("/inventory/search.json", srv.ServeSearchInventoryJSON)
 	mux.HandleFunc("/inventory/search.csv", srv.ServeSearchInventoryCSV)
+	mux.HandleFunc("/inventory/search.pdf", srv.ServeSearchInventoryPDF)
 	mux.HandleFunc("/inventory/search", srv.ServeSearchInventoryPage)
 	mux.HandleFunc("/inventory/search-help", srv.ServeSearchInventoryHelp)
 

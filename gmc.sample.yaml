@@ -94,3 +94,7 @@ authentication:
   # failure for any logins. Should only be used for development.
   - type: always
     allow: true
+
+# limit number of search result records that can be exported to a 
+# non-streaming filetype. Setting to 0 leaves the number of records unlimited
+export_limit: 0

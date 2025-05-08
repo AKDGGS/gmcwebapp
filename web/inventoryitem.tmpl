@@ -1,0 +1,9 @@
+{{range .Well}}Well: {{.DisplayName}}{{if .Number}} - {{.Number -}}{{end}}
+{{if .API}}API - {{.API}}{{end -}}
+{{end}}{{range .Outcrop}}Outcrop: {{.Name}}{{if .Number}} - {{.Number}}{{end}}
+{{end}}{{range .Borehole}}{{if .Prospect.DisplayName}}Prospect: {{.Prospect.DisplayName}}{{end}}
+Borehole: {{.DisplayName}}
+{{end}}{{range .Shotline}}Shotline: {{.Name}}
+{{if .Max}}Shotpoints: {{.Min}} - {{.Max}}
+{{end}}{{end}}{{range .Publication}}Publication: {{.Title}}{{if .Year}} ({{.Year}}){{end}}
+{{if .Description}}Description: {{.Description}}{{end}}{{end -}}
