@@ -13,7 +13,8 @@ import (
 )
 
 type Dir struct {
-	path string
+	path     string
+	readonly bool
 }
 
 func New(cfg map[string]interface{}) (*Dir, error) {
@@ -22,7 +23,9 @@ func New(cfg map[string]interface{}) (*Dir, error) {
 		return nil, fmt.Errorf("directory path must exist and be a string")
 	}
 
-	return &Dir{path: path}, nil
+	readonly, _ := cfg["read_only"].(bool)
+
+	return &Dir{path: path, readonly: readonly}, nil
 }
 
 func (d *Dir) GetFile(name string) (*fsutil.File, error) {
@@ -63,6 +66,10 @@ func (d *Dir) GetFile(name string) (*fsutil.File, error) {
 }
 
 func (d *Dir) PutFile(f *fsutil.File) error {
+	if d.readonly {
+		return fmt.Errorf("read only filestore")
+	}
+
 	dir := filepath.Dir(filepath.Join(d.path, f.Name))
 	err := os.MkdirAll(dir, 0755)
 	if err != nil {
@@ -86,6 +93,10 @@ func (d *Dir) Shutdown() {
 }
 
 func (d *Dir) DeleteFile(f *fsutil.File) error {
+	if d.readonly {
+		return fmt.Errorf("read only filestore")
+	}
+
 	err := os.Remove(filepath.Join(d.path, f.Name))
 	if err != nil {
 		return fmt.Errorf("error deleting file: %w", err)

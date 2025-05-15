@@ -13,8 +13,9 @@ import (
 )
 
 type S3 struct {
-	client *minio.Client
-	bucket string
+	client   *minio.Client
+	bucket   string
+	readonly bool
 }
 
 func New(cfg map[string]interface{}) (*S3, error) {
@@ -45,6 +46,8 @@ func New(cfg map[string]interface{}) (*S3, error) {
 		secure = false
 	}
 
+	readonly, _ := cfg["read_only"].(bool)
+
 	// Setup S3 Connection
 	client, err := minio.New(endpoint, &minio.Options{
 		Creds:  credentials.NewStaticV4(accesskeyid, secretaccesskey, ""),
@@ -54,7 +57,7 @@ func New(cfg map[string]interface{}) (*S3, error) {
 	if err != nil {
 		return nil, err
 	}
-	return &S3{client: client, bucket: bucket}, nil
+	return &S3{client: client, bucket: bucket, readonly: readonly}, nil
 }
 
 func (s3 *S3) GetFile(name string) (*fsutil.File, error) {
@@ -88,6 +91,10 @@ func (s3 *S3) GetFile(name string) (*fsutil.File, error) {
 }
 
 func (s3 *S3) PutFile(file *fsutil.File) error {
+	if s3.readonly {
+		return fmt.Errorf("read only filestore")
+	}
+
 	// Check if bucket exists
 	exists, err := s3.client.BucketExists(context.Background(), s3.bucket)
 	if err != nil {
@@ -119,6 +126,10 @@ func (s3 *S3) Shutdown() {
 }
 
 func (s3 *S3) DeleteFile(file *fsutil.File) error {
+	if s3.readonly {
+		return fmt.Errorf("read only filestore")
+	}
+
 	exists, err := s3.client.BucketExists(context.Background(), s3.bucket)
 	if err != nil {
 		return err
