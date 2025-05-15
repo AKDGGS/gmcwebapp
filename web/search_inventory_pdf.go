@@ -58,7 +58,7 @@ func (srv *Server) ServeSearchInventoryPDF(w http.ResponseWriter, r *http.Reques
 		columnwidth = []float64{35.0, 20.0, 15.0, 15.0, 15.0, 22.0, 18.0, 25.0, 25.0}
 	}
 
-	tmpl, err := template.ParseFiles("web/inventoryitem.tmpl")
+	tmpl, err := template.ParseFiles("assets/tmpl/inventory_item.txt")
 	if err != nil {
 		http.Error(
 			w,
