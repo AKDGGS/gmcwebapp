@@ -3,6 +3,7 @@ package elastic
 import (
 	"encoding/json"
 	"time"
+	"fmt"
 
 	"gmc/db/model"
 	"gmc/search/util"
@@ -38,7 +39,7 @@ func (es *Elastic) SearchInventory(params *util.InventoryParams) (*util.Inventor
 	}
 
 	sea := es.client.Search().
-		Index("inventory").
+		Index(fmt.Sprintf("%s-inventory", es.index)).
 		From(params.From).
 		Size(params.Size).
 		TrackTotalHits(true).

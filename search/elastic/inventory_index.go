@@ -44,7 +44,7 @@ func (es *Elastic) InventorySortByFields() [][2]string {
 func (es *Elastic) NewInventoryIndex() (util.InventoryIndex, error) {
 	// Any field used for sorting needs to be normalized, even if it's
 	// not indexed
-	iname := fmt.Sprintf("inventory-%x", time.Now().UnixMicro())
+	iname := fmt.Sprintf("%s-inventory-%x", es.index, time.Now().UnixMicro())
 	err := es.createIndex(iname,
 		&types.TypeMapping{
 			Properties: map[string]types.Property{
@@ -156,6 +156,7 @@ func (es *Elastic) NewInventoryIndex() (util.InventoryIndex, error) {
 
 	return &ElasticInventoryIndex{
 		es: es, bulk: es.bulk(iname), index: iname,
+		alias: fmt.Sprintf("%s-inventory", es.index),
 	}, nil
 }
 
@@ -164,6 +165,7 @@ type ElasticInventoryIndex struct {
 	bulk  *bulk.Bulk
 	count int
 	index string
+	alias string
 }
 
 func (ii *ElasticInventoryIndex) Count() int {
@@ -210,7 +212,7 @@ func (ii *ElasticInventoryIndex) Commit() error {
 		return err
 	}
 	// Replace the inventory alias with the newly created index
-	old, err := ii.es.replaceAlias("inventory", ii.index)
+	old, err := ii.es.replaceAlias(ii.alias, ii.index)
 	if err != nil {
 		return err
 	}

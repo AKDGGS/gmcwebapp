@@ -11,6 +11,7 @@ import (
 
 type Elastic struct {
 	client *elastic.TypedClient
+	index  string
 }
 
 func New(cfg map[string]interface{}) (*Elastic, error) {
@@ -28,12 +29,17 @@ func New(cfg map[string]interface{}) (*Elastic, error) {
 		escfg.Password = pass
 	}
 
+	index, _ := cfg["index"].(string)
+	if index == "" {
+		index = "gmc"
+	}
+
 	cli, err := elastic.NewTypedClient(escfg)
 	if err != nil {
 		return nil, err
 	}
 
-	return &Elastic{client: cli}, nil
+	return &Elastic{client: cli, index: index}, nil
 }
 
 func (es *Elastic) Shutdown() {}
