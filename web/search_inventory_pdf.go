@@ -3,12 +3,12 @@ package web
 import (
 	"bytes"
 	"fmt"
-	"html/template"
 	"net/http"
 	"strconv"
 	"strings"
 	"time"
 
+	"gmc/assets"
 	sutil "gmc/search/util"
 
 	"codeberg.org/go-pdf/fpdf"
@@ -35,26 +35,6 @@ func (srv *Server) ServeSearchInventoryPDF(w http.ResponseWriter, r *http.Reques
 		params.Size = 10000
 	}
 
-	tmpl, err := template.ParseFiles("assets/tmpl/inventory_item.txt")
-	if err != nil {
-		http.Error(
-			w,
-			fmt.Sprintf("pdf creation error: %s", err),
-			http.StatusInternalServerError,
-		)
-		return
-	}
-
-	out, err := compressWriter(r.Header.Get("Accept-Encoding"), w)
-	if err != nil {
-		http.Error(
-			w,
-			fmt.Sprintf("compression error: %s", err),
-			http.StatusInternalServerError,
-		)
-		return
-	}
-	defer out.Close()
 	pdf := fpdf.New("P", "mm", "A4", "")
 	pdf.AddPage()
 	pdf.SetLineWidth(0.5)
@@ -135,7 +115,7 @@ func (srv *Server) ServeSearchInventoryPDF(w http.ResponseWriter, r *http.Reques
 			if len(nextrecord) == 0 {
 				h := result.Hits[i]
 				var buf bytes.Buffer
-				if err = tmpl.Execute(&buf, h); err != nil {
+				if err := assets.ExecuteTemplate("tmpl/inventory_item.txt", &buf, h); err != nil {
 					http.Error(
 						w,
 						fmt.Sprintf("data formatting error: %s", err),
@@ -245,6 +225,16 @@ func (srv *Server) ServeSearchInventoryPDF(w http.ResponseWriter, r *http.Reques
 		}
 		params.From = (result.From + len(result.Hits))
 		if int64(params.From) >= result.Total {
+			out, err := compressWriter(r.Header.Get("Accept-Encoding"), w)
+			if err != nil {
+				http.Error(
+					w,
+					fmt.Sprintf("compression error: %s", err),
+					http.StatusInternalServerError,
+				)
+				return
+			}
+			defer out.Close()
 			if err = pdf.Output(out); err != nil {
 				http.Error(
 					w,
