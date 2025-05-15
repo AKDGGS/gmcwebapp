@@ -35,6 +35,16 @@ func (srv *Server) ServeSearchInventoryPDF(w http.ResponseWriter, r *http.Reques
 		params.Size = 10000
 	}
 
+	tmpl, err := template.ParseFiles("assets/tmpl/inventory_item.txt")
+	if err != nil {
+		http.Error(
+			w,
+			fmt.Sprintf("pdf creation error: %s", err),
+			http.StatusInternalServerError,
+		)
+		return
+	}
+
 	out, err := compressWriter(r.Header.Get("Accept-Encoding"), w)
 	if err != nil {
 		http.Error(
@@ -58,15 +68,6 @@ func (srv *Server) ServeSearchInventoryPDF(w http.ResponseWriter, r *http.Reques
 		columnwidth = []float64{35.0, 20.0, 15.0, 15.0, 15.0, 22.0, 18.0, 25.0, 25.0}
 	}
 
-	tmpl, err := template.ParseFiles("assets/tmpl/inventory_item.txt")
-	if err != nil {
-		http.Error(
-			w,
-			fmt.Sprintf("pdf creation error: %s", err),
-			http.StatusInternalServerError,
-		)
-		return
-	}
 	nextrecord := []string{}
 	nextheight := 0.0
 	for {
