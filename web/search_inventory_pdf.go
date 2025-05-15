@@ -35,6 +35,16 @@ func (srv *Server) ServeSearchInventoryPDF(w http.ResponseWriter, r *http.Reques
 		params.Size = 10000
 	}
 
+	host := r.Header.Get("X-Forwarded-Host")
+	if host == "" {
+		host = r.Host
+	}
+
+	scheme := r.Header.Get("X-Forwarded-Proto")
+	if scheme == "" {
+		scheme = "http"
+	}
+
 	pdf := fpdf.New("P", "mm", "A4", "")
 	pdf.AddPage()
 	pdf.SetLineWidth(0.5)
@@ -71,6 +81,7 @@ func (srv *Server) ServeSearchInventoryPDF(w http.ResponseWriter, r *http.Reques
 
 			if pdf.GetY() < 11 {
 				if pdf.PageNo() == 1 {
+					queryurl := fmt.Sprintf("%s://%s/inventory/search?%s", scheme, host, r.URL.Query().Encode())
 					pdf.SetFont("Arial", "B", 12)
 					pdf.CellFormat(50, 5, "SEARCH RESULTS", "0", 0, "LM", false, 0, "")
 					pdf.SetFont("Arial", "B", 8)
@@ -80,7 +91,7 @@ func (srv *Server) ServeSearchInventoryPDF(w http.ResponseWriter, r *http.Reques
 					pdf.MultiCell(20, 3, "Query: ", "0", "LM", false)
 					pdf.SetFont("Arial", "", 8)
 					pdf.SetTextColor(0, 0, 255)
-					pdf.WriteLinkString(5, r.Host+r.URL.String(), r.Host+r.URL.String())
+					pdf.WriteLinkString(5, queryurl, queryurl)
 					pdf.SetTextColor(0, 0, 0)
 					pdf.SetFont("Arial", "B", 10)
 					pdf.Ln(-1)
