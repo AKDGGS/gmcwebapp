@@ -11,7 +11,7 @@ let map;
 URLSearchParams.prototype.equals = function(u2, igf){
 	const u1 = this;
 	const keys = [... new Set(
-		u1.keys().toArray().concat(u2.keys().toArray())
+		Array.from(u1.keys()).concat(Array.from(u2.keys()))
 	)];
 	return keys.every(k => {
 		if(igf === true && k === 'from') return true;
@@ -163,7 +163,7 @@ function updateFromURL(){
 	}
 
 	// Fetch distinct keys
-	let keys = pr.keys().toArray().filter((v,i,a) => {
+	let keys = Array.from(pr.keys()).filter((v,i,a) => {
 		return a.indexOf(v) === i;
 	});
 
