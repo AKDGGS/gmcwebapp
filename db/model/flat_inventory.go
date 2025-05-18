@@ -29,6 +29,8 @@ type FlatInventory struct {
 	ContainerPath  *string         `json:"path_cache,omitempty"`
 	Remark         *string         `json:"remark,omitempty"`
 	Geometries     json.RawMessage `json:"geometries,omitempty"`
+	Latitude       *float64        `db:"latitude" json:"latitude,omitempty"`
+	Longitude      *float64        `db:"longitude" json:"longitude,omitempty"`
 	ProjectID      *int32          `json:"project_id,omitempty"`
 	Project        *string         `json:"project,omitempty"`
 	CanPublish     *bool           `db:"can_publish" json:"can_publish,omitempty"`
@@ -88,6 +90,8 @@ func FlatInventoryFields(full bool) []string {
 	if full {
 		return []string{
 			"ID",
+			"Latitude",
+			"Longitude",
 			"Related",
 			"Project ID",
 			"Project",
@@ -112,6 +116,8 @@ func FlatInventoryFields(full bool) []string {
 	}
 	return []string{
 		"ID",
+		"Latitude",
+		"Longitude",
 		"Related",
 		"Project ID",
 		"Project",
@@ -206,6 +212,8 @@ func (f *FlatInventory) AsStringArray(full bool) []string {
 	if full {
 		return []string{
 			qfmt(f.ID),
+			qfmt(f.Latitude),
+			qfmt(f.Longitude),
 			rel.String(),
 			qfmt(f.ProjectID),
 			qfmt(f.Project),
@@ -230,6 +238,8 @@ func (f *FlatInventory) AsStringArray(full bool) []string {
 	}
 	return []string{
 		qfmt(f.ID),
+		qfmt(f.Latitude),
+		qfmt(f.Longitude),
 		rel.String(),
 		qfmt(f.ProjectID),
 		qfmt(f.Project),

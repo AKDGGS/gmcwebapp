@@ -32,6 +32,8 @@ SELECT
 	p.publication,
 	n.note,
 	g.geometries,
+	ll.latitude,
+	ll.longitude,
 	pj.project_id,
 	pj.name AS project,
 	iq.issues AS issue
@@ -145,6 +147,14 @@ LEFT OUTER JOIN (
 	WHERE ST_NPoints(geog::geometry) < 100
 	GROUP BY inventory_id
 ) AS g ON g.inventory_id = i.inventory_id
+LEFT OUTER JOIN (
+	SELECT DISTINCT (inventory_id)
+		inventory_id,
+		TRIM_SCALE(TRUNC(ST_Y(geog::GEOMETRY)::NUMERIC,5)) AS latitude,
+		TRIM_SCALE(TRUNC(ST_X(geog::GEOMETRY)::NUMERIC,5)) AS longitude
+	FROM inventory_geog
+	WHERE ST_GeometryType(geog::GEOMETRY) = 'ST_Point'
+) AS ll ON ll.inventory_id = i.inventory_id
 LEFT OUTER JOIN (
 	SELECT DISTINCT ON (inventory_id)
 		inventory_id, issues

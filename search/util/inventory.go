@@ -30,6 +30,7 @@ type InventoryParams struct {
 	Size               int
 	IncludePrivate     bool
 	IncludeDescription bool
+	IncludeLatLon      bool
 	Sort               [][2]string
 }
 

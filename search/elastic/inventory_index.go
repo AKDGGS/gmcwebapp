@@ -72,6 +72,8 @@ func (es *Elastic) NewInventoryIndex() (util.InventoryIndex, error) {
 				"can_publish":   &types.BooleanProperty{Index: &yes},
 				"description":   &types.TextProperty{Index: &yes},
 				"geometries":    &types.GeoShapeProperty{},
+				"longitude":     &types.FloatNumberProperty{Index: &no},
+				"latitude":      &types.FloatNumberProperty{Index: &no},
 				"note":          &types.TextProperty{Index: &yes},
 				"issue":         &types.KeywordProperty{Index: &yes, Normalizer: &clean},
 				"well": &types.ObjectProperty{

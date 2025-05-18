@@ -41,6 +41,11 @@ func (es *Elastic) SearchInventory(params *util.InventoryParams) (*util.Inventor
 		src_filter.Excludes = append(src_filter.Excludes, "description")
 	}
 
+	if !params.IncludeLatLon {
+		src_filter.Excludes = append(src_filter.Excludes, "latitude")
+		src_filter.Excludes = append(src_filter.Excludes, "longitude")
+	}
+
 	sea := es.client.Search().
 		Index(fmt.Sprintf("%s-inventory", es.index)).
 		From(params.From).
