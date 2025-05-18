@@ -107,6 +107,7 @@ func FlatInventoryFields(full bool) []string {
 			"Keywords",
 			"Barcode",
 			"Container",
+			"Description",
 		}
 	}
 	return []string{
@@ -128,6 +129,7 @@ func FlatInventoryFields(full bool) []string {
 		"Interval Bottom",
 		"Interval Unit",
 		"Keywords",
+		"Description",
 	}
 }
 
@@ -223,6 +225,7 @@ func (f *FlatInventory) AsStringArray(full bool) []string {
 			qfmt(f.Keyword),
 			qfmt(f.DisplayBarcode),
 			qfmt(f.ContainerPath),
+			qfmt(f.Description),
 		}
 	}
 	return []string{
@@ -244,6 +247,7 @@ func (f *FlatInventory) AsStringArray(full bool) []string {
 		qfmt(f.IntervalBottom),
 		qfmt(f.IntervalUnit),
 		qfmt(f.Keyword),
+		qfmt(f.Description),
 	}
 }
 

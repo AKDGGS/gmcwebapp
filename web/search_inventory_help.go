@@ -40,7 +40,7 @@ func (srv *Server) ServeSearchInventoryHelp(w http.ResponseWriter, r *http.Reque
 	params := map[string]interface{}{
 		"title":       "Inventory Search Help",
 		"content":     template.HTML(sbuf.String()),
-		"stylesheets": []string{ "../css/help.css" },
+		"stylesheets": []string{"../css/help.css"},
 		"scripts":     []string{},
 		"redirect":    "inventory/search-help",
 		"user":        user,

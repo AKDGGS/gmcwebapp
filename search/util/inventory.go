@@ -19,17 +19,18 @@ type InventoryIndex interface {
 }
 
 type InventoryParams struct {
-	Query          string
-	Keywords       []string
-	ProspectIDs    []int
-	CollectionIDs  []int
-	IntervalTop    *float64
-	IntervalBottom *float64
-	GeoJSON        string
-	From           int
-	Size           int
-	IncludePrivate bool
-	Sort           [][2]string
+	Query              string
+	Keywords           []string
+	ProspectIDs        []int
+	CollectionIDs      []int
+	IntervalTop        *float64
+	IntervalBottom     *float64
+	GeoJSON            string
+	From               int
+	Size               int
+	IncludePrivate     bool
+	IncludeDescription bool
+	Sort               [][2]string
 }
 
 func (ip *InventoryParams) ParseQuery(q url.Values, authd bool) {

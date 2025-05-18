@@ -2,8 +2,8 @@ package elastic
 
 import (
 	"encoding/json"
-	"time"
 	"fmt"
+	"time"
 
 	"gmc/db/model"
 	"gmc/search/util"
@@ -22,7 +22,6 @@ func (es *Elastic) SearchInventory(params *util.InventoryParams) (*util.Inventor
 			"container_id",
 			"core_name",
 			"core_unit",
-			"description",
 			"note",
 			"remark",
 			"interval",
@@ -36,6 +35,10 @@ func (es *Elastic) SearchInventory(params *util.InventoryParams) (*util.Inventor
 			"publication.description",
 			"publication.series",
 		},
+	}
+
+	if !params.IncludeDescription {
+		src_filter.Excludes = append(src_filter.Excludes, "description")
 	}
 
 	sea := es.client.Search().

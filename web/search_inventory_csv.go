@@ -40,6 +40,7 @@ func (srv *Server) ServeSearchInventoryCSV(w http.ResponseWriter, r *http.Reques
 
 	params := &sutil.InventoryParams{}
 	params.ParseQuery(r.URL.Query(), (user != nil))
+	params.IncludeDescription = true
 	params.From = 0
 	params.Size = 10000
 
