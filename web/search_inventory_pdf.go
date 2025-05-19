@@ -81,7 +81,18 @@ func (srv *Server) ServeSearchInventoryPDF(w http.ResponseWriter, r *http.Reques
 
 			if pdf.GetY() < 11 {
 				if pdf.PageNo() == 1 {
-					queryurl := fmt.Sprintf("%s://%s/inventory/search?%s", scheme, host, r.URL.Query().Encode())
+					var queryurl string
+					if srv.Config.BaseURL != "" {
+						if srv.Config.BaseURL[len(srv.Config.BaseURL)-1:] != "/" {
+							srv.Config.BaseURL += "/"
+						}
+						queryurl = fmt.Sprintf("%sinventory/search?%s", srv.Config.BaseURL, r.URL.Query().Encode())
+					} else {
+						if host[len(host)-1:] != "/" {
+							host += "/"
+						}
+						queryurl = fmt.Sprintf("%s://%sinventory/search?%s", scheme, host, r.URL.Query().Encode())
+					}
 					pdf.SetFont("Arial", "B", 12)
 					pdf.CellFormat(50, 5, "SEARCH RESULTS", "0", 0, "LM", false, 0, "")
 					pdf.SetFont("Arial", "B", 8)

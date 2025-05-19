@@ -98,3 +98,9 @@ authentication:
 # limit number of search result records that can be exported to a 
 # non-streaming filetype. Setting to 0 leaves the number of records unlimited
 export_limit: 0
+
+# Manually set base scheme and host that will appear in search query
+# URLs in exported search files, up to the hard-coded path 
+# "inventory/search?". Leave blank to use scheme and host the of the 
+# address client connected to, such as a proxy address.
+base_url: "http://maps.dggs.alaska.gov"
