@@ -200,7 +200,7 @@ SELECT
 		OR iv.container_id IN (
 			WITH RECURSIVE r AS (
 				SELECT container_id
-				FROM container WHERE barcode = $1
+				FROM container WHERE barcode = $1 OR alt_barcode = $1
 
 				UNION ALL
 
