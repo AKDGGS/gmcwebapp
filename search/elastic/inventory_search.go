@@ -11,6 +11,7 @@ import (
 	"github.com/elastic/go-elasticsearch/v8/typedapi/types"
 	"github.com/elastic/go-elasticsearch/v8/typedapi/types/enums/geoshaperelation"
 	"github.com/elastic/go-elasticsearch/v8/typedapi/types/enums/operator"
+	"github.com/elastic/go-elasticsearch/v8/typedapi/types/enums/textquerytype"
 )
 
 func (es *Elastic) SearchInventory(params *util.InventoryParams) (*util.InventoryResults, error) {
@@ -77,6 +78,8 @@ func (es *Elastic) SearchInventory(params *util.InventoryParams) (*util.Inventor
 	if params.Query != "" {
 		qry.Must = append(qry.Must, types.Query{
 			QueryString: &types.QueryStringQuery{
+				Lenient:         &yes,
+				Type:            &textquerytype.TextQueryType{Name: "cross_fields"},
 				DefaultOperator: &operator.And,
 				Query:           params.Query,
 			},
