@@ -27,6 +27,9 @@ func (pg *Postgres) GetSummaryByBarcode(barcode string, flags int) (*model.Summa
 	}
 
 	q, err := assets.ReadString("pg/summary/by_barcode.sql")
+	if err == ErrNoRows {
+		return nil, nil
+	}
 	if err != nil {
 		return nil, err
 	}
@@ -40,7 +43,7 @@ func (pg *Postgres) GetSummaryByBarcode(barcode string, flags int) (*model.Summa
 	summary, err := pgx.CollectOneRow(
 		rows, pgx.RowToStructByNameLax[model.Summary],
 	)
-	if err != nil {
+	if err != nil && err != ErrNoRows {
 		return nil, err
 	}
 	return &summary, nil
