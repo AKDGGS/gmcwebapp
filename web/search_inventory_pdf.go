@@ -169,18 +169,21 @@ func (srv *Server) ServeSearchInventoryPDF(w http.ResponseWriter, r *http.Reques
 					nextrecord[3] = *h.CoreNumber
 				}
 				if h.CoreDiameter != nil {
-					nextrecord[3] += "\n" + strconv.FormatFloat(*h.CoreDiameter, 'f', 2, 64)
+					nextrecord[3] += "\n" + strconv.FormatFloat(*h.CoreDiameter, 'f', -1, 64)
+					if h.CoreUnit != nil {
+						nextrecord[3] += " " + *h.CoreUnit
+					}
 				}
 				nextrecord[4] = ""
 				if h.IntervalTop != nil {
-					nextrecord[4] = strconv.FormatFloat(*h.IntervalTop, 'f', 2, 64)
+					nextrecord[4] = strconv.FormatFloat(*h.IntervalTop, 'f', -1, 64)
 					if h.IntervalUnit != nil {
 						nextrecord[4] += " " + *h.IntervalUnit
 					}
 					nextrecord[4] += "\n"
 				}
 				if h.IntervalBottom != nil {
-					nextrecord[4] += strconv.FormatFloat(*h.IntervalBottom, 'f', 2, 64)
+					nextrecord[4] += strconv.FormatFloat(*h.IntervalBottom, 'f', -1, 64)
 					if h.IntervalUnit != nil {
 						nextrecord[4] += " " + *h.IntervalUnit
 					}
