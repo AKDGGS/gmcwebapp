@@ -104,7 +104,7 @@ func (es *Elastic) SearchInventory(params *util.InventoryParams) (*util.Inventor
 		for _, kw := range params.Keywords {
 			bq.Should = append(bq.Should, types.Query{
 				MatchPhrase: map[string]types.MatchPhraseQuery{
-					"keyword": types.MatchPhraseQuery{
+					"keyword.keyword": types.MatchPhraseQuery{
 						Query: kw,
 					},
 				},
