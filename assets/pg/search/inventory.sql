@@ -51,8 +51,8 @@ LEFT OUTER JOIN (
 		iw.inventory_id,
 		jsonb_agg(jsonb_strip_nulls(jsonb_build_object(
 			'id', w.well_id,
-			'name', array_remove(array[w.name, w.alt_names], null),
-			'display_name', w.name,
+			'name', w.name,
+			'alt_names', w.alt_names,
 			'number', w.well_number,
 			'api', w.api_number
 		))) AS well
@@ -78,12 +78,12 @@ LEFT OUTER JOIN (
 		ib.inventory_id,
 		jsonb_agg(jsonb_strip_nulls(jsonb_build_object(
 			'id', b.borehole_id,
-			'name', array_remove(array[b.name, b.alt_names], null),
-			'display_name', b.name,
+			'name', b.name,
+			'alt_names', b.alt_names,
 			'prospect', jsonb_build_object(
 				'id', p.prospect_id,
-				'name', array_remove(array[p.name, p.alt_names], null),
-				'display_name', p.name,
+				'name', p.name,
+				'alt_names', p.alt_names,
 				'ardf', p.ardf_number
 			)
 	))) AS borehole

@@ -26,18 +26,18 @@ func fieldAlias(s string) *types.FieldAliasProperty {
 func (es *Elastic) InventorySortByFields() [][2]string {
 	return [][2]string{
 		[2]string{"_score", "Best Match"},
-		[2]string{"borehole.display_name", "Borehole"},
-		[2]string{"box", "Box"},
-		[2]string{"collection", "Collection"},
-		[2]string{"core", "Core Number"},
-		[2]string{"keyword", "Keywords"},
-		[2]string{"prospect.display_name", "Prospect"},
-		[2]string{"sample", "Sample"},
-		[2]string{"set", "Set Number"},
+		[2]string{"borehole.name_sort", "Borehole"},
+		[2]string{"box.sort", "Box"},
+		[2]string{"collection.sort", "Collection"},
+		[2]string{"core.sort", "Core Number"},
+		[2]string{"keyword.sort", "Keywords"},
+		[2]string{"prospect.name_sort", "Prospect"},
+		[2]string{"sample.sort", "Sample"},
+		[2]string{"set.sort", "Set Number"},
 		[2]string{"top", "Top"},
 		[2]string{"bottom", "Bottom"},
-		[2]string{"well.display_name", "Well"},
-		[2]string{"well.number", "Well Number"},
+		[2]string{"well.name_sort", "Well"},
+		[2]string{"well.number.sort", "Well Number"},
 	}
 }
 
@@ -48,24 +48,49 @@ func (es *Elastic) NewInventoryIndex() (util.InventoryIndex, error) {
 	err := es.createIndex(iname,
 		&types.TypeMapping{
 			Properties: map[string]types.Property{
-				"collection":    &types.KeywordProperty{Index: &yes, Normalizer: &clean},
+				"collection": &types.TextProperty{
+					Index: &yes,
+					Fields: map[string]types.Property{
+						"sort": &types.KeywordProperty{Index: &yes, Normalizer: &clean},
+					},
+				},
 				"collection_id": &types.IntegerNumberProperty{Index: &yes},
-				"sample":        &types.KeywordProperty{Index: &yes, Normalizer: &clean},
-				"slide":         &types.KeywordProperty{Index: &yes, Normalizer: &clean},
-				"box":           &types.KeywordProperty{Index: &yes, Normalizer: &clean},
-				"set":           &types.KeywordProperty{Index: &yes, Normalizer: &clean},
-				"core":          &types.KeywordProperty{Index: &yes, Normalizer: &clean},
-				"diameter":      &types.FloatNumberProperty{Index: &yes},
-				"core_name":     &types.TextProperty{Index: &yes},
-				"core_unit":     &types.TextProperty{Index: &yes},
-				"interval":      &types.FloatRangeProperty{Index: &yes},
-				"top":           &types.FloatNumberProperty{Index: &yes},
-				"bottom":        &types.FloatNumberProperty{Index: &yes},
-				"unit":          &types.TextProperty{Index: &yes},
+				"slide":         &types.TextProperty{Index: &yes},
+				"sample": &types.TextProperty{
+					Index: &yes,
+					Fields: map[string]types.Property{
+						"sort": &types.KeywordProperty{Index: &yes, Normalizer: &clean},
+					},
+				},
+				"box": &types.TextProperty{
+					Index: &yes,
+					Fields: map[string]types.Property{
+						"sort": &types.KeywordProperty{Index: &yes, Normalizer: &clean},
+					},
+				},
+				"set": &types.TextProperty{
+					Index: &yes,
+					Fields: map[string]types.Property{
+						"sort": &types.KeywordProperty{Index: &yes, Normalizer: &clean},
+					},
+				},
+				"core": &types.TextProperty{
+					Index: &yes,
+					Fields: map[string]types.Property{
+						"sort": &types.KeywordProperty{Index: &yes, Normalizer: &clean},
+					},
+				},
+				"diameter":  &types.FloatNumberProperty{Index: &yes},
+				"core_name": &types.TextProperty{Index: &yes},
+				"core_unit": &types.TextProperty{Index: &yes},
+				"interval":  &types.FloatRangeProperty{Index: &yes},
+				"top":       &types.FloatNumberProperty{Index: &yes},
+				"bottom":    &types.FloatNumberProperty{Index: &yes},
+				"unit":      &types.TextProperty{Index: &yes},
 				"keyword": &types.TextProperty{
 					Index: &yes,
 					Fields: map[string]types.Property{
-						"keyword": &types.KeywordProperty{Index: &yes, Normalizer: &clean},
+						"sort": &types.KeywordProperty{Index: &yes, Normalizer: &clean},
 					},
 				},
 				"barcode":      &types.KeywordProperty{Index: &yes},
@@ -80,16 +105,21 @@ func (es *Elastic) NewInventoryIndex() (util.InventoryIndex, error) {
 				"longitude":    &types.FloatNumberProperty{Index: &no},
 				"latitude":     &types.FloatNumberProperty{Index: &no},
 				"note":         &types.TextProperty{Index: &yes},
-				"issue":        &types.KeywordProperty{Index: &yes, Normalizer: &clean},
+				"issue":        &types.TextProperty{Index: &yes},
 				"well": &types.ObjectProperty{
 					Dynamic: &dynamicmapping.False,
 					Enabled: &yes,
 					Properties: map[string]types.Property{
-						"id":           &types.IntegerNumberProperty{Index: &yes},
-						"name":         &types.TextProperty{Index: &yes},
-						"display_name": &types.KeywordProperty{Index: &no, Normalizer: &clean},
-						"number":       &types.KeywordProperty{Index: &yes, Normalizer: &clean},
-						"api":          &types.KeywordProperty{Index: &yes, Normalizer: &clean},
+						"id":        &types.IntegerNumberProperty{Index: &yes},
+						"name":      &types.TextProperty{Index: &yes, CopyTo: []string{"well.name_sort"}},
+						"name_sort": &types.KeywordProperty{Index: &yes, Normalizer: &clean},
+						"alt_names": &types.TextProperty{Index: &yes, CopyTo: []string{"well.name"}},
+						"number": &types.TextProperty{
+							Index: &yes,
+							Fields: map[string]types.Property{
+								"sort": &types.KeywordProperty{Index: &yes, Normalizer: &clean},
+							},
+						},
 					},
 				},
 				"outcrop": &types.ObjectProperty{
@@ -98,7 +128,7 @@ func (es *Elastic) NewInventoryIndex() (util.InventoryIndex, error) {
 					Properties: map[string]types.Property{
 						"id":     &types.IntegerNumberProperty{Index: &yes},
 						"name":   &types.TextProperty{Index: &yes},
-						"number": &types.KeywordProperty{Index: &yes, Normalizer: &clean},
+						"number": &types.TextProperty{Index: &yes},
 						"year":   &types.IntegerNumberProperty{Index: &yes},
 					},
 				},
@@ -106,17 +136,19 @@ func (es *Elastic) NewInventoryIndex() (util.InventoryIndex, error) {
 					Dynamic: &dynamicmapping.False,
 					Enabled: &yes,
 					Properties: map[string]types.Property{
-						"id":           &types.IntegerNumberProperty{Index: &yes},
-						"name":         &types.TextProperty{Index: &yes},
-						"display_name": &types.KeywordProperty{Index: &no, Normalizer: &clean},
+						"id":        &types.IntegerNumberProperty{Index: &yes},
+						"name":      &types.TextProperty{Index: &yes, CopyTo: []string{"borehole.name_sort"}},
+						"name_sort": &types.KeywordProperty{Index: &yes, Normalizer: &clean},
+						"alt_names": &types.TextProperty{Index: &yes, CopyTo: []string{"borehole.name"}},
 						"prospect": &types.ObjectProperty{
 							Dynamic: &dynamicmapping.False,
 							Enabled: &yes,
 							Properties: map[string]types.Property{
-								"id":           &types.IntegerNumberProperty{Index: &yes},
-								"name":         &types.TextProperty{Index: &yes},
-								"display_name": &types.KeywordProperty{Index: &no, Normalizer: &clean},
-								"ardf":         &types.KeywordProperty{Index: &yes, Normalizer: &clean},
+								"id":        &types.IntegerNumberProperty{Index: &yes},
+								"name":      &types.TextProperty{Index: &yes, CopyTo: []string{"borehole.prospect.name_sort"}},
+								"name_sort": &types.KeywordProperty{Index: &yes, Normalizer: &clean},
+								"alt_names": &types.TextProperty{Index: &yes, CopyTo: []string{"borehole.prospect.name"}},
+								"ardf":      &types.TextProperty{Index: &yes},
 							},
 						},
 					},
@@ -125,10 +157,10 @@ func (es *Elastic) NewInventoryIndex() (util.InventoryIndex, error) {
 					Dynamic: &dynamicmapping.False,
 					Enabled: &yes,
 					Properties: map[string]types.Property{
-						"id":           fieldAlias("borehole.prospect.id"),
-						"name":         fieldAlias("borehole.prospect.name"),
-						"display_name": fieldAlias("borehole.prospect.display_name"),
-						"ardf":         fieldAlias("borehole.prospect.ardf"),
+						"id":        fieldAlias("borehole.prospect.id"),
+						"name":      fieldAlias("borehole.prospect.name"),
+						"name_sort": fieldAlias("borehole.prospect.name_sort"),
+						"ardf":      fieldAlias("borehole.prospect.ardf"),
 					},
 				},
 				"shotline": &types.ObjectProperty{

@@ -42,11 +42,11 @@ type FlatInventory struct {
 		LTE *float64 `db:"lte" json:"lte,omitempty"`
 	} `json:"interval,omitempty"`
 	Well []struct {
-		ID          int32    `json:"id"`
-		DisplayName string   `json:"display_name"`
-		Name        []string `json:"name,omitempty"`
-		Number      *string  `json:"number,omitempty"`
-		API         *string  `json:"api,omitempty"`
+		ID       int32   `json:"id"`
+		Name     string  `json:"name,omitempty"`
+		AltNames string  `json:"alt_names,omitempty"`
+		Number   *string `json:"number,omitempty"`
+		API      *string `json:"api,omitempty"`
 	} `json:"well,omitempty"`
 	Outcrop []struct {
 		ID     int32   `json:"id"`
@@ -55,14 +55,14 @@ type FlatInventory struct {
 		Year   *int32  `json:"year,omitempty"`
 	} `json:"outcrop,omitempty"`
 	Borehole []struct {
-		ID          int32    `json:"id"`
-		DisplayName string   `json:"display_name"`
-		Name        []string `json:"name,omitempty"`
-		Prospect    struct {
-			ID          int32    `json:"id"`
-			DisplayName string   `json:"display_name"`
-			Name        []string `json:"name,omitempty"`
-			ARDF        string   `json:"ardf,omitempty"`
+		ID       int32    `json:"id"`
+		Name     string `json:"name,omitempty"`
+		AltNames string   `json:"alt_names,omitempty"`
+		Prospect struct {
+			ID       int32    `json:"id"`
+			Name     string `json:"name,omitempty"`
+			AltNames string   `json:"alt_names,omitempty"`
+			ARDF     string   `json:"ardf,omitempty"`
 		} `json:"prospect,omitempty"`
 	} `json:"borehole,omitempty"`
 	Shotline []struct {
@@ -146,7 +146,7 @@ func (f *FlatInventory) AsStringArray(full bool) []string {
 			rel.WriteString("\n")
 		}
 		rel.WriteString("Well: ")
-		rel.WriteString(w.DisplayName)
+		rel.WriteString(w.Name)
 		if w.Number != nil {
 			rel.WriteString(" - ")
 			rel.WriteString(*w.Number)
@@ -171,13 +171,13 @@ func (f *FlatInventory) AsStringArray(full bool) []string {
 		if rel.Len() > 0 {
 			rel.WriteString("\n")
 		}
-		if b.Prospect.DisplayName != "" {
+		if b.Prospect.Name != "" {
 			rel.WriteString("Prospect: ")
-			rel.WriteString(b.Prospect.DisplayName)
+			rel.WriteString(b.Prospect.Name)
 			rel.WriteString("\n")
 		}
 		rel.WriteString("Borehole: ")
-		rel.WriteString(b.DisplayName)
+		rel.WriteString(b.Name)
 	}
 	for _, s := range f.Shotline {
 		if rel.Len() > 0 {

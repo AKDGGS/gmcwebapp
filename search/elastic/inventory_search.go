@@ -28,10 +28,13 @@ func (es *Elastic) SearchInventory(params *util.InventoryParams) (*util.Inventor
 			"interval",
 			"outcrop.year",
 			"shotline.year",
-			"borehole.name",
+			"borehole.name_sort",
+			"borehole.alt_names",
 			"borehole.prospect.ardf",
-			"borehole.prospect.name",
-			"well.name",
+			"borehole.prospect.name_sort",
+			"borehole.prospect.alt_names",
+			"well.name_sort",
+			"well.alt_names",
 			"publication.number",
 			"publication.description",
 			"publication.series",
@@ -104,7 +107,7 @@ func (es *Elastic) SearchInventory(params *util.InventoryParams) (*util.Inventor
 		for _, kw := range params.Keywords {
 			bq.Should = append(bq.Should, types.Query{
 				MatchPhrase: map[string]types.MatchPhraseQuery{
-					"keyword.keyword": types.MatchPhraseQuery{
+					"keyword.sort": types.MatchPhraseQuery{
 						Query: kw,
 					},
 				},
