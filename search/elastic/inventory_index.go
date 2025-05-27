@@ -114,6 +114,7 @@ func (es *Elastic) NewInventoryIndex() (util.InventoryIndex, error) {
 						"name":      &types.TextProperty{Index: &yes, CopyTo: []string{"well.name_sort"}},
 						"name_sort": &types.KeywordProperty{Index: &yes, Normalizer: &clean},
 						"alt_names": &types.TextProperty{Index: &yes, CopyTo: []string{"well.name"}},
+						"api":       &types.KeywordProperty{Index: &yes, Normalizer: &clean},
 						"number": &types.TextProperty{
 							Index: &yes,
 							Fields: map[string]types.Property{
