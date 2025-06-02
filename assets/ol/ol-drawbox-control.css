@@ -1,13 +1,10 @@
-.cancel-draw-button, .drawbox-button {
- 	font: 11px "Helvetica Neue", Arial, Helvetica, sans-serif !important;
- 	color: white !important;
- 	font-weight: normal;
-	height: 22px !important;
+.cancel-draw-button {
+ 	font-size: 11px;
+	font-family:"Helvetica Neue", Arial, Helvetica, sans-serif;
 }
 
 .ol-touch .cancel-draw-button, .ol-touch .drawbox-button {
 	font-size: 1.5em;
-	height: 33px !important;
 }
 
 .ol-drawbox-control {
@@ -23,17 +20,10 @@
 }
 
 .ol-drawbox-control .drawbox-button {
-	width: 22px;
  	background-image: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACEAAAAhCAMAAABgOjJdAAAAGXRFWHRTb2Z0d2FyZQB3d3cuaW5rc2NhcGUub3Jnm+48GgAAAAlwSFlzAAAETAAABEwBPXVQdQAAAkBQTFRFR3BM/wAA/wACym1/lNv/k9j/l9v+ldv//wAAn9n7/wAr/wA2/wAQ/wAS/wAz/wA4/wBA/wBA/wAz/wAz/wAY/wAJ/wA1/wAF1VVk7yAm/wA9/wBA/wAr/wAH/wA5/wAQ/wAV/wAC/wA8/wAX/wAF/wAL/wAL/wAN/wAL/wAA/wA3/wBG/wA2/wAj/wA5/wAk/wAP/wA6/wAz/wAu/wBJ/wA1/wA6/wAA/wA1nMzx/wAQ/wAQ/wAm/wAR/wAL/wAu/wAxp7PcuJGy/wAS+A0Qx32SxH6Twn2Twn6T4zpDyml8/wA3/wAz/wAUn8juxX2o7CU6/wAH/wAq/wAW/wAz/wAt/wAU/wBA/wAo/wAQ/wAJ/wAQu42q8R8p0GN4/wAR/wAU/wAT/wA9/wA5/wAyp8frwo2poMftp8bqxICsyneNxXeO2VFi0l13z2N4/wAJ/wAR/wAz/wAC6yU7/wA7/wBA/wAZ/wAWnsft0l53/wAf/wAW/wAT/wARn8bswYGfvoal/wAd/wAQ/wAS/wACwounvYqnyneOxXePzmZ711Fi8B8pzWZ6utLup9b3tdPwu9DsutHtwMDfu87qwb3cq8zu0HOI2nCFxa/O2G+Eyn2Q226DzH2P226Cu87rvcjlvMvoucnowbvavqC/wL7cvsbkxabE1XiKzZeyvp+/2HeIzZezyaTByqC80I+pyKjFrMnru83qrcjqusfmyJ+8yaXCvcnn13iJwbrZw5Kv1XmLwbzbz3SJ0Yylz3WKwpazyMaRggAAAI10Uk5TAAFu1Xch/Ldr/gYTc2EZIAQIBR5JdSJvsH4ZDCpzEnJWbRFOcHl4eXdsDgshMwkydhYKJwcYHwIdunBuL2d2Cx+DyWVy/v7+/ZHQFw9b/DV2citRFChZEC1tdnH9g9hsWl0VGyT+/vz+NP7+s6rYdGsjbHUaFEdSu6k6UGBovM3MPm9kb/79/v7XtITYdL55PwAAAcVJREFUOMtjYGAwMjUTLhViQAcC3Bb8UtKMQFZ4RCJPU7WYIJoCIQeRSB5efW5GBsEg+XwmcY0aYXMUBYx8CqoqTLIGutoMIQqiHBwcmupV9igqTGzUi4Disrx8DMkFLRyezMw9DRXsyMDSKY/Zy4VDkUeHoaRWnEPCbc6e/Rv6kMHUldNmeUhyMEXzM8gpa3BIuG6fvX5BLzKYPGP6cndJDtEwQwahFFu1rva566ZMRFHRO2n1zOxYO2sZoB/txUQqW9cumoeqoHfCkmUxAcrGWmCfKzlmLJ3Qiw4mLvTzl+OCeo2FsxcL6GdjhXt+VMVgVMEl55g6fyKGggmb0zOVBEAKtIyVc9PWTEGP/o07trQVl4kZMTAIyljb5WTNXjEJLXXs3juzo1vNWUyAwTBBFJhOV02fMRlFxbatc3e5S2qqiSgx8MszgdL6tMVTUdL6pp37QGldxdmUQYdHEZRf4pwsUfJLXX0nKL+I20ox8PEGAvOWorqNCUqek25U1QSKRwVzM2jrGsgyqagq8DGiqDB3aNYQZxK1CuViYOTW5+WJFxHmQsv7eoXlVvK+Mj6gXC4txW/BLYBRfnAlCZt56zEwAABDEkgUvjOgNAAAAABJRU5ErkJggg==");
- 	background-size: 16px, 16px;
+	background-size: contain;
  	background-repeat: no-repeat;
  	background-position: center;
-}
-
-.ol-touch .ol-drawbox-control .drawbox-button {
-	width: 33px;
-	height: 33px;
-	background-size: contain;
 }
 
 .ol-drawbox-control-active .drawbox-button {
@@ -47,7 +37,7 @@
 
 .ol-drawbox-control-active .cancel-draw-button {
  	display: block;
- 	width: 50px;
+ 	width: auto;
  	background-color: #919187;
  	border-top-left-radius: 0px;
  	border-bottom-left-radius: 0px;
@@ -61,7 +51,7 @@
 
 .ol-drawbox-control-active .cancel-draw-button:hover {
  	outline: none;
- 	background-color: #A0A098 !important;
+ 	background-color: #A0A098;
 }
 
 .ol-drawbox-tooltip {
