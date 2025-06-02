@@ -23,7 +23,25 @@ func fieldAlias(s string) *types.FieldAliasProperty {
 	return &types.FieldAliasProperty{Path: &s}
 }
 
-func (es *Elastic) InventorySortByFields() [][2]string {
+func (es *Elastic) InventorySortByFields(full bool) [][2]string {
+	if full {
+		return [][2]string{
+			[2]string{"_score", "Best Match"},
+			[2]string{"borehole.name_sort", "Borehole"},
+			[2]string{"box.sort", "Box"},
+			[2]string{"collection.sort", "Collection"},
+			[2]string{"core.sort", "Core Number"},
+			[2]string{"keyword.sort", "Keywords"},
+			[2]string{"prospect.name_sort", "Prospect"},
+			[2]string{"sample.sort", "Sample"},
+			[2]string{"set.sort", "Set Number"},
+			[2]string{"top", "Top"},
+			[2]string{"bottom", "Bottom"},
+			[2]string{"well.name_sort", "Well"},
+			[2]string{"well.number.sort", "Well Number"},
+			[2]string{"path_cache.sort", "Location"},
+		}
+	}
 	return [][2]string{
 		[2]string{"_score", "Best Match"},
 		[2]string{"borehole.name_sort", "Borehole"},
@@ -95,17 +113,22 @@ func (es *Elastic) NewInventoryIndex() (util.InventoryIndex, error) {
 				},
 				"barcode":      &types.KeywordProperty{Index: &yes},
 				"container_id": &types.IntegerNumberProperty{Index: &yes},
-				"path_cache":   &types.TextProperty{Index: &yes},
-				"remark":       &types.TextProperty{Index: &yes},
-				"project_id":   &types.IntegerNumberProperty{Index: &yes},
-				"project":      &types.TextProperty{Index: &yes},
-				"can_publish":  &types.BooleanProperty{Index: &yes},
-				"description":  &types.TextProperty{Index: &yes},
-				"geometries":   &types.GeoShapeProperty{},
-				"longitude":    &types.FloatNumberProperty{Index: &no},
-				"latitude":     &types.FloatNumberProperty{Index: &no},
-				"note":         &types.TextProperty{Index: &yes},
-				"issue":        &types.TextProperty{Index: &yes},
+				"path_cache": &types.TextProperty{
+					Index: &yes,
+					Fields: map[string]types.Property{
+						"sort": &types.KeywordProperty{Index: &yes, Normalizer: &clean},
+					},
+				},
+				"remark":      &types.TextProperty{Index: &yes},
+				"project_id":  &types.IntegerNumberProperty{Index: &yes},
+				"project":     &types.TextProperty{Index: &yes},
+				"can_publish": &types.BooleanProperty{Index: &yes},
+				"description": &types.TextProperty{Index: &yes},
+				"geometries":  &types.GeoShapeProperty{},
+				"longitude":   &types.FloatNumberProperty{Index: &no},
+				"latitude":    &types.FloatNumberProperty{Index: &no},
+				"note":        &types.TextProperty{Index: &yes},
+				"issue":       &types.TextProperty{Index: &yes},
 				"well": &types.ObjectProperty{
 					Dynamic: &dynamicmapping.False,
 					Enabled: &yes,

@@ -21,7 +21,7 @@ func (srv *Server) ServeSearchInventoryPage(w http.ResponseWriter, r *http.Reque
 	}
 	sparams := map[string]interface{}{
 		"user":   user,
-		"sortby": srv.Search.InventorySortByFields(),
+		"sortby": srv.Search.InventorySortByFields(user != nil),
 	}
 	sbuf := bytes.Buffer{}
 	if err := assets.ExecuteTemplate("tmpl/search.html", &sbuf, sparams); err != nil {
