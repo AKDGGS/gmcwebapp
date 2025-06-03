@@ -40,6 +40,7 @@ func (es *Elastic) InventorySortByFields(full bool) [][2]string {
 			[2]string{"well.name_sort", "Well"},
 			[2]string{"well.number.sort", "Well Number"},
 			[2]string{"path_cache.sort", "Location"},
+			[2]string{"barcode", "Barcode"},
 		}
 	}
 	return [][2]string{
