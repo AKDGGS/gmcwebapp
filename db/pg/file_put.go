@@ -20,7 +20,7 @@ func (pg *Postgres) PutFile(file *model.File, precommitFunc func() error) error 
 	}
 	var file_id int32
 	err = tx.QueryRow(context.Background(), insert_sql, file.Name, file.Description,
-		file.Size, file.Type, file.MD5).Scan(&file_id)
+		file.Size, file.Type).Scan(&file_id)
 	if err != nil {
 		if err == ErrNoRows {
 			return nil

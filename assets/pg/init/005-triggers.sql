@@ -174,20 +174,3 @@ FOR EACH ROW EXECUTE PROCEDURE modified_date_fn();
 DROP TRIGGER IF EXISTS well_modified_user_tr ON well;
 CREATE TRIGGER well_modified_user_tr BEFORE INSERT OR UPDATE ON well
 FOR EACH ROW EXECUTE PROCEDURE modified_user_fn();
-
-
--- Setup automatic md5 hashing for files
-CREATE OR REPLACE FUNCTION content_md5_fn()
-RETURNS TRIGGER AS $$
-BEGIN
-	IF NEW.content IS NOT NULL AND NEW.content_md5 IS NULL THEN
-		NEW.content_md5 = md5(NEW.content);
-	END IF;
-
-	RETURN NEW;
-END; $$ LANGUAGE 'plpgsql';
-
-DROP TRIGGER IF EXISTS content_md5_tr ON file;
-CREATE TRIGGER content_md5_tr
-BEFORE INSERT OR UPDATE ON file
-FOR EACH ROW EXECUTE PROCEDURE content_md5_fn();

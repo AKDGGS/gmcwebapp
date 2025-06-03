@@ -70,8 +70,6 @@ CREATE TABLE file (
 	mimetype VARCHAR(255) NOT NULL DEFAULT 'application/octet-stream',
 	size INT NOT NULL,
 	filename VARCHAR(255) NOT NULL,
-	content BYTEA NOT NULL,
-	content_md5 VARCHAR(32) UNIQUE NOT NULL
 );
 
 

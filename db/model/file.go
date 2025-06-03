@@ -8,7 +8,6 @@ type File struct {
 	Description *string `json:"description,omitempty"`
 	Type        string  `db:"mimetype" json:"mimetype"`
 	Size        int64   `json:"size"`
-	MD5         string  `db:"content_md5" json:"content_md5,omitempty"`
 
 	BoreholeIDs  []int    `json:"borehole_ids,omitempty"`
 	InventoryIDs []int    `json:"inventory_ids,omitempty"`

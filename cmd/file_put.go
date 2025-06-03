@@ -3,12 +3,9 @@ package cmd
 import (
 	"flag"
 	"fmt"
-	"math/rand"
 	"mime"
 	"os"
 	"path/filepath"
-	"strconv"
-	"time"
 
 	"gmc/config"
 	"gmc/db"
@@ -69,15 +66,10 @@ func FilePut(exec string, cfg *config.Config, cmd string, args []string) int {
 		if err != nil || file_info.Size() == 0 {
 			return 1
 		}
-		// temporary code until we decide what to do with the MD5.
-		source := rand.NewSource(time.Now().UnixNano())
-		random := rand.New(source)
-		MD5 := strconv.FormatInt(random.Int63(), 10)
 
 		file := model.File{
 			Name: file_info.Name(),
 			Size: file_info.Size(),
-			MD5:  MD5,
 		}
 
 		file.BoreholeIDs = append(file.BoreholeIDs, *borehole_id)

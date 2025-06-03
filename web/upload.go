@@ -2,7 +2,6 @@ package web
 
 import (
 	"fmt"
-	"math/rand"
 	"mime"
 	"net/http"
 	"path/filepath"
@@ -67,11 +66,6 @@ func (srv *Server) ServeUpload(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 		defer file.Close()
-		// temporary code until we decide what to do with the MD5.
-		source := rand.NewSource(time.Now().UnixNano())
-		random := rand.New(source)
-		MD5 := strconv.FormatInt(random.Int63(), 10)
-
 		mt := mime.TypeByExtension(filepath.Ext(fh.Filename))
 		if mt == "" {
 			mt = "application/octet-stream"
@@ -79,7 +73,6 @@ func (srv *Server) ServeUpload(w http.ResponseWriter, r *http.Request) {
 		f := model.File{
 			Name: fh.Filename,
 			Size: fh.Size,
-			MD5:  MD5,
 			Type: mt,
 		}
 		if id := r.FormValue("borehole_id"); id != "" {
