@@ -113,6 +113,7 @@ func (es *Elastic) NewInventoryIndex() (util.InventoryIndex, error) {
 					},
 				},
 				"barcode":      &types.KeywordProperty{Index: &yes},
+				"alt_barcode":  &types.KeywordProperty{Index: &yes},
 				"container_id": &types.IntegerNumberProperty{Index: &yes},
 				"path_cache": &types.TextProperty{
 					Index: &yes,

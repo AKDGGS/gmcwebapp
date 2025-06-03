@@ -195,8 +195,8 @@ func (srv *Server) ServeSearchInventoryPDF(w http.ResponseWriter, r *http.Reques
 
 				if user != nil {
 					nextrecord = append(nextrecord, "", "") //barcode, location
-					if h.DisplayBarcode != nil {
-						nextrecord[7] = *h.DisplayBarcode
+					if h.Barcode != nil {
+						nextrecord[7] = *h.Barcode
 					}
 					if h.ContainerPath != nil {
 						nextrecord[8] = *h.ContainerPath

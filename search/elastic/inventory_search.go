@@ -18,7 +18,7 @@ func (es *Elastic) SearchInventory(params *util.InventoryParams) (*util.Inventor
 	src_filter := &types.SourceFilter{
 		Includes: []string{"*"},
 		Excludes: []string{
-			"barcode",
+			"alt_barcode",
 			"collection_id",
 			"container_id",
 			"core_name",
@@ -167,7 +167,7 @@ func (es *Elastic) SearchInventory(params *util.InventoryParams) (*util.Inventor
 		src_filter.Excludes = append(
 			src_filter.Excludes,
 			"path_cache",
-			"display_barcode",
+			"barcode",
 			"can_publish",
 			"issue",
 		)

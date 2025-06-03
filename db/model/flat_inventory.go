@@ -23,8 +23,8 @@ type FlatInventory struct {
 	IntervalBottom *float64        `db:"interval_bottom" json:"bottom,omitempty"`
 	IntervalUnit   *string         `db:"interval_unit" json:"unit,omitempty"`
 	Keyword        []string        `json:"keyword,omitempty"`
-	Barcode        []string        `json:"barcode,omitempty"`
-	DisplayBarcode *string         `json:"display_barcode,omitempty"`
+	Barcode        *string         `json:"barcode,omitempty"`
+	AltBarcode     []string        `json:"alt_barcode,omitempty"`
 	ContainerID    *int32          `json:"container_id,omitempty"`
 	ContainerPath  *string         `json:"path_cache,omitempty"`
 	Remark         *string         `json:"remark,omitempty"`
@@ -55,14 +55,14 @@ type FlatInventory struct {
 		Year   *int32  `json:"year,omitempty"`
 	} `json:"outcrop,omitempty"`
 	Borehole []struct {
-		ID       int32    `json:"id"`
+		ID       int32  `json:"id"`
 		Name     string `json:"name,omitempty"`
-		AltNames string   `json:"alt_names,omitempty"`
+		AltNames string `json:"alt_names,omitempty"`
 		Prospect struct {
-			ID       int32    `json:"id"`
+			ID       int32  `json:"id"`
 			Name     string `json:"name,omitempty"`
-			AltNames string   `json:"alt_names,omitempty"`
-			ARDF     string   `json:"ardf,omitempty"`
+			AltNames string `json:"alt_names,omitempty"`
+			ARDF     string `json:"ardf,omitempty"`
 		} `json:"prospect,omitempty"`
 	} `json:"borehole,omitempty"`
 	Shotline []struct {
@@ -231,7 +231,7 @@ func (f *FlatInventory) AsStringArray(full bool) []string {
 			qfmt(f.IntervalBottom),
 			qfmt(f.IntervalUnit),
 			qfmt(f.Keyword),
-			qfmt(f.DisplayBarcode),
+			qfmt(f.Barcode),
 			qfmt(f.ContainerPath),
 			qfmt(f.Description),
 		}
