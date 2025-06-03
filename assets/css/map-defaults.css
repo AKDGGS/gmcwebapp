@@ -10,6 +10,9 @@
 	background-color: #fff8;
 	position: absolute;
 }
+.ol-zoom-in, .ol-zoom-out {
+	cursor: pointer;
+}
 .layer-switcher { top: unset; bottom: 8px; right: 8px; }
 .layer-switcher button { background-color: #fff8; }
 .layer-switcher ul { margin: 8px; padding: 0; }
