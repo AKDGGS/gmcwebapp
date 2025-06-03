@@ -168,7 +168,6 @@ func (es *Elastic) SearchInventory(params *util.InventoryParams) (*util.Inventor
 			src_filter.Excludes,
 			"path_cache",
 			"barcode",
-			"can_publish",
 			"issue",
 		)
 		qry.Filter = append(qry.Filter, types.Query{
