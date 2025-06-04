@@ -135,11 +135,12 @@ func (es *Elastic) NewInventoryIndex() (util.InventoryIndex, error) {
 					Dynamic: &dynamicmapping.False,
 					Enabled: &yes,
 					Properties: map[string]types.Property{
-						"id":        &types.IntegerNumberProperty{Index: &yes},
-						"name":      &types.TextProperty{Index: &yes, CopyTo: []string{"well.name_sort"}},
-						"name_sort": &types.KeywordProperty{Index: &yes, Normalizer: &clean},
-						"alt_names": &types.TextProperty{Index: &yes, CopyTo: []string{"well.name"}},
-						"api":       &types.KeywordProperty{Index: &yes, Normalizer: &clean},
+						"id":         &types.IntegerNumberProperty{Index: &yes},
+						"name":       &types.TextProperty{Index: &yes, CopyTo: []string{"well.name_sort"}},
+						"name_sort":  &types.KeywordProperty{Index: &yes, Normalizer: &clean},
+						"alt_names":  &types.TextProperty{Index: &yes, CopyTo: []string{"well.name"}},
+						"api":        &types.KeywordProperty{Index: &yes, Normalizer: &clean},
+						"is_onshore": &types.BooleanProperty{Index: &yes},
 						"number": &types.TextProperty{
 							Index: &yes,
 							Fields: map[string]types.Property{

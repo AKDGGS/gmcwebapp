@@ -42,11 +42,12 @@ type FlatInventory struct {
 		LTE *float64 `db:"lte" json:"lte,omitempty"`
 	} `json:"interval,omitempty"`
 	Well []struct {
-		ID       int32   `json:"id"`
-		Name     string  `json:"name,omitempty"`
-		AltNames string  `json:"alt_names,omitempty"`
-		Number   *string `json:"number,omitempty"`
-		API      *string `json:"api,omitempty"`
+		ID        int32   `json:"id"`
+		Name      string  `json:"name,omitempty"`
+		AltNames  string  `json:"alt_names,omitempty"`
+		Number    *string `json:"number,omitempty"`
+		API       *string `json:"api,omitempty"`
+		IsOnshore *bool   `json:"is_onshore,omitempty"`
 	} `json:"well,omitempty"`
 	Outcrop []struct {
 		ID     int32   `json:"id"`

@@ -54,7 +54,8 @@ LEFT OUTER JOIN (
 			'name', w.name,
 			'alt_names', w.alt_names,
 			'number', w.well_number,
-			'api', w.api_number
+			'api', w.api_number,
+			'is_onshore', w.is_onshore
 		))) AS well
 	FROM inventory_well AS iw
 	JOIN well AS w ON w.well_id = iw.well_id
