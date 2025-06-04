@@ -35,6 +35,7 @@ func (es *Elastic) SearchInventory(params *util.InventoryParams) (*util.Inventor
 			"borehole.prospect.alt_names",
 			"well.name_sort",
 			"well.alt_names",
+			"well.is_onshore",
 			"publication.number",
 			"publication.description",
 			"publication.series",
