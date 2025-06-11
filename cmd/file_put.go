@@ -23,27 +23,29 @@ func FilePut(exec string, cfg *config.Config, cmd string, args []string) int {
 	well_id := flagset.Int("well_id", 0, "Well ID linked to file")
 	flagset.SetOutput(os.Stdout)
 	flagset.Usage = func() {
-		fmt.Printf("Usage: %s %s <filename>\n",
+		fmt.Printf("Usage: %s %s <inventory flag> <inventory id> <filename ...>\n",
 			exec, cmd)
 		flagset.PrintDefaults()
 	}
-	if err := flagset.Parse(args); err == flag.ErrHelp {
-		flagset.Usage()
+	if err := flagset.Parse(args); err != nil {
+		if err == flag.ErrHelp {
+			return 0
+		}
 		return 1
 	}
+
 	if *borehole_id == 0 && *inventory_id == 0 && *outcrop_id == 0 && *prospect_id == 0 && *well_id == 0 {
-		fmt.Fprintf(os.Stderr, "linking flag (-well_id, -outcrop_id) is required\n")
+		fmt.Fprintf(os.Stderr, "no inventory flag (-borehole_id, -inventory_id, -outcrop_id, -prospect_id, -well_id) provided\n")
 		flagset.Usage()
 		return 1
 	}
 
-	if len(flagset.Args()) < 1 {
-		fmt.Fprintf(os.Stderr, "filename required\n")
+	if len(flagset.Args()) == 0 {
+		fmt.Fprintf(os.Stderr, "no filenames provided\n")
 		flagset.Usage()
 		return 1
 	}
 
-	filenames := flagset.Args()
 	db, err := db.New(cfg.Database)
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "%s: %s\n", exec, err)
@@ -61,22 +63,25 @@ func FilePut(exec string, cfg *config.Config, cmd string, args []string) int {
 		return 1
 	}
 
-	for _, filename := range filenames {
+	exit_code := 0
+	for _, filename := range flagset.Args() {
 		file_info, err := os.Stat(filename)
 		if err != nil || file_info.Size() == 0 {
-			return 1
+			fmt.Fprintf(os.Stderr, "%s: %s\n", exec, err)
+			exit_code = 1
+			continue
 		}
 
 		file := model.File{
-			Name: file_info.Name(),
-			Size: file_info.Size(),
+			Name:         file_info.Name(),
+			Size:         file_info.Size(),
+			BoreholeIDs:  []int{*borehole_id},
+			InventoryIDs: []int{*inventory_id},
+			OutcropIDs:   []int{*outcrop_id},
+			ProspectIDs:  []int{*prospect_id},
+			WellIDs:      []int{*well_id},
 		}
 
-		file.BoreholeIDs = append(file.BoreholeIDs, *borehole_id)
-		file.InventoryIDs = append(file.InventoryIDs, *inventory_id)
-		file.OutcropIDs = append(file.OutcropIDs, *outcrop_id)
-		file.ProspectIDs = append(file.ProspectIDs, *prospect_id)
-		file.WellIDs = append(file.WellIDs, *well_id)
 		// Add the file to the database
 		err = db.PutFile(&file, func() error {
 			file_obj, err := os.Open(filename)
@@ -104,8 +109,8 @@ func FilePut(exec string, cfg *config.Config, cmd string, args []string) int {
 		})
 		if err != nil {
 			fmt.Fprintf(os.Stderr, "%s\n", err)
-			return 1
+			exit_code = 1
 		}
 	}
-	return 0
+	return exit_code
 }

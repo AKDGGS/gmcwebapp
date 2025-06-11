@@ -32,11 +32,11 @@ func TestFile(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	db, err := db.New(cfg.DatabaseURL)
+	db, err := db.New(cfg.Database)
 	if err != nil {
 		t.Fatal(err)
 	}
-	fs, err := filestore.New(cfg.FileStore)
+	fs, err := filestore.New(*cfg.FileStore)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -69,14 +69,9 @@ func TestFile(t *testing.T) {
 		if err != nil {
 			t.Fatal(err)
 		}
-		// temporary code until we decide what to do with the MD5.
-		source := rand.NewSource(time.Now().UnixNano())
-		r := rand.New(source)
-		MD5 := strconv.FormatInt(r.Int63(), 10)
 		file := model.File{
 			Name: f.Name(),
 			Size: int64(len(f_contents)),
-			MD5:  MD5,
 		}
 
 		file.BoreholeIDs = append(file.BoreholeIDs, 1)
@@ -134,7 +129,7 @@ func TestFsPutGetFile(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	fs, err := filestore.New(cfg.FileStore)
+	fs, err := filestore.New(*cfg.FileStore)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -168,16 +163,13 @@ func TestFsPutGetFile(t *testing.T) {
 		if err != nil {
 			t.Fatal(err)
 		}
-		// temporary code until we decide what to do with the MD5.
-		source := rand.NewSource(time.Now().UnixNano())
-		r := rand.New(source)
-		MD5 := strconv.FormatInt(r.Int63(), 10)
 		file := model.File{
 			Name: f.Name(),
 			Size: int64(len(f_contents)),
-			MD5:  MD5,
 		}
 		// if id is 0, create a random by_file_id
+		source := rand.NewSource(time.Now().UnixNano())
+		r := rand.New(source)
 		if p.ID == 0 {
 			file.ID = r.Int31n(5000) + 1
 		} else {
@@ -239,7 +231,7 @@ func TestDBPutGetFile(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	db, err := db.New(cfg.DatabaseURL)
+	db, err := db.New(cfg.Database)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -271,14 +263,9 @@ func TestDBPutGetFile(t *testing.T) {
 		if err != nil {
 			t.Fatal(err)
 		}
-		// temporary code until we decide what to do with the MD5.
-		source := rand.NewSource(time.Now().UnixNano())
-		r := rand.New(source)
-		MD5 := strconv.FormatInt(r.Int63(), 10)
 		file := model.File{
 			Name: f.Name(),
 			Size: int64(len(f_contents)),
-			MD5:  MD5,
 		}
 		switch p.P_type {
 		case "borehole":

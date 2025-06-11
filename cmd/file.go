@@ -35,7 +35,7 @@ func printFileUsage(exec, cmd string) {
 	fmt.Printf("Usage: %s %s <subcommand> ...\n", exec, cmd)
 	fmt.Printf("Subcommands:\n")
 	fmt.Printf("  put [args] <filename ...>\n")
-	fmt.Printf("      upload file to filestore\n")
-	fmt.Printf("  get [args] <filename ...>\n")
+	fmt.Printf("      upload files to filestore\n")
+	fmt.Printf("  get [args] -out <output directory> <file ids ...>\n")
 	fmt.Printf("      download file from filestore\n")
 }
