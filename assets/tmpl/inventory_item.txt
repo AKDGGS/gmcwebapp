@@ -7,3 +7,4 @@ Borehole: {{.Name}}
 {{if .Max}}Shotpoints: {{.Min}} - {{.Max}}
 {{end}}{{end}}{{range .Publication}}Publication: {{.Title}}{{if .Year}} ({{.Year}}){{end}}
 {{if .Description}}Description: {{.Description}}{{end}}{{end -}}
+{{if .Project}}Project: {{.Project}}{{end -}}
