@@ -1,6 +1,7 @@
 package web
 
 import (
+	"encoding/json"
 	"fmt"
 	"net/http"
 	"strings"
@@ -24,17 +25,16 @@ func (srv *Server) ServeAPIAudit(w http.ResponseWriter, r *http.Request) {
 		)
 	}
 	q := r.URL.Query()
-	remark := strings.TrimSpace(q.Get("remark"))
-	var js []byte
-	if remark == "" || len(q["c"]) == 0 {
+	barcode := strings.TrimSpace(q.Get("barcode"))
+	if barcode == "" {
 		http.Error(
 			w,
-			"parameter error: remark and container list can't be empty",
+			"parameter error: barcode can't be empty",
 			http.StatusBadRequest,
 		)
 		return
 	} else {
-		err = srv.DB.AddAudit(remark, q["c"])
+		results, err := srv.DB.Audit(barcode)
 		if err != nil {
 			http.Error(
 				w,
@@ -43,7 +43,21 @@ func (srv *Server) ServeAPIAudit(w http.ResponseWriter, r *http.Request) {
 			)
 			return
 		}
-		js = []byte(`{"success":true}`)
+		var js []byte
+		// If no details are returned, return an empty JSON object
+		if results == nil {
+			js = []byte("{}")
+		} else {
+			js, err = json.Marshal(results)
+		}
+		if err != nil {
+			http.Error(
+				w,
+				fmt.Sprintf("json marshal error: %s", err),
+				http.StatusInternalServerError,
+			)
+			return
+		}
 		w.Header().Set("Content-Type", "application/json")
 		w.Header().Set("Content-Length", fmt.Sprintf("%d", len(js)))
 		w.Write(js)

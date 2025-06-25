@@ -58,8 +58,8 @@ type DB interface {
 	// Updates container_id (dest) for inventory in barcodes_to_move
 	MoveInventoryAndContainers(dest string, barcodes_to_move []string, username string) error
 
-	// Adds Audit to db
-	AddAudit(remark string, container_list []string) error
+	// Fetches barcodes in a container to one level deep
+	Audit(barcode string) ([]*model.ContainerBarcodes, error)
 
 	// Updates container_id (dest) for inventory in source
 	MoveInventoryAndContainersContents(src string, dest string) error
