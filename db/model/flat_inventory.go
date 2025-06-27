@@ -8,35 +8,35 @@ import (
 )
 
 type FlatInventory struct {
-	ID             int32           `json:"id"`
-	Collection     *string         `json:"collection,omitempty"`
-	CollectionID   *int32          `json:"collection_id,omitempty"`
-	SampleNumber   *string         `json:"sample,omitempty"`
-	SlideNumber    *string         `json:"slide,omitempty"`
-	BoxNumber      *string         `json:"box,omitempty"`
-	SetNumber      *string         `json:"set,omitempty"`
-	CoreNumber     *string         `json:"core,omitempty"`
-	CoreDiameter   *float64        `json:"diameter,omitempty"`
-	CoreName       *string         `json:"core_name,omitempty"`
-	CoreUnit       *string         `json:"core_unit,omitempty"`
-	IntervalTop    *float64        `db:"interval_top" json:"top,omitempty"`
-	IntervalBottom *float64        `db:"interval_bottom" json:"bottom,omitempty"`
-	IntervalUnit   *string         `db:"interval_unit" json:"unit,omitempty"`
-	Keyword        []string        `json:"keyword,omitempty"`
-	Barcode        *string         `json:"barcode,omitempty"`
-	AltBarcode     []string        `json:"alt_barcode,omitempty"`
-	ContainerID    *int32          `json:"container_id,omitempty"`
-	ContainerPath  *string         `json:"path_cache,omitempty"`
-	Remark         *string         `json:"remark,omitempty"`
-	Geometries     json.RawMessage `json:"geometries,omitempty"`
-	Latitude       *float64        `db:"latitude" json:"latitude,omitempty"`
-	Longitude      *float64        `db:"longitude" json:"longitude,omitempty"`
-	ProjectID      *int32          `json:"project_id,omitempty"`
-	Project        *string         `json:"project,omitempty"`
-	CanPublish     *bool           `db:"can_publish" json:"can_publish,omitempty"`
-	Description    *string         `json:"description,omitempty"`
-	Note           []string        `json:"note,omitempty"`
-	Issue          []string        `json:"issue,omitempty"`
+	ID             int32             `json:"id"`
+	Collection     *string           `json:"collection,omitempty"`
+	CollectionID   *int32            `json:"collection_id,omitempty"`
+	SampleNumber   *string           `json:"sample,omitempty"`
+	SlideNumber    *string           `json:"slide,omitempty"`
+	BoxNumber      *string           `json:"box,omitempty"`
+	SetNumber      *string           `json:"set,omitempty"`
+	CoreNumber     *string           `json:"core,omitempty"`
+	CoreDiameter   *float64          `json:"diameter,omitempty"`
+	CoreName       *string           `json:"core_name,omitempty"`
+	CoreUnit       *string           `json:"core_unit,omitempty"`
+	IntervalTop    *float64          `db:"interval_top" json:"top,omitempty"`
+	IntervalBottom *float64          `db:"interval_bottom" json:"bottom,omitempty"`
+	IntervalUnit   *string           `db:"interval_unit" json:"unit,omitempty"`
+	Keyword        []string          `json:"keyword,omitempty"`
+	Barcode        *string           `json:"barcode,omitempty"`
+	AltBarcode     []string          `json:"alt_barcode,omitempty"`
+	ContainerID    *int32            `json:"container_id,omitempty"`
+	ContainerPath  *string           `json:"path_cache,omitempty"`
+	Remark         *string           `json:"remark,omitempty"`
+	Geometries     []json.RawMessage `json:"geometries,omitempty"`
+	Latitude       *float64          `db:"latitude" json:"latitude,omitempty"`
+	Longitude      *float64          `db:"longitude" json:"longitude,omitempty"`
+	ProjectID      *int32            `json:"project_id,omitempty"`
+	Project        *string           `json:"project,omitempty"`
+	CanPublish     *bool             `db:"can_publish" json:"can_publish,omitempty"`
+	Description    *string           `json:"description,omitempty"`
+	Note           []string          `json:"note,omitempty"`
+	Issue          []string          `json:"issue,omitempty"`
 	Interval       *struct {
 		GTE *float64 `db:"gte" json:"gte,omitempty"`
 		LTE *float64 `db:"lte" json:"lte,omitempty"`
