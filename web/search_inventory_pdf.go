@@ -260,15 +260,11 @@ func (srv *Server) ServeSearchInventoryPDF(w http.ResponseWriter, r *http.Reques
 				return
 			}
 			defer out.Close()
+			w.Header().Set("Content-Type", "application/pdf")
 			if err = pdf.Output(out); err != nil {
-				http.Error(
-					w,
-					fmt.Sprintf("pdf creation error: %s", err),
-					http.StatusInternalServerError,
-				)
+				fmt.Fprintf(out, "\r\n\r\npdf write error: %s", err)
 				return
 			}
-			w.Header().Set("Content-Type", "application/pdf")
 			return
 		}
 	}
