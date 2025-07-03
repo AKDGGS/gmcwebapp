@@ -13,6 +13,8 @@ require (
 	gopkg.in/yaml.v2 v2.4.0
 )
 
+require github.com/pierrec/lz4/v4 v4.1.21 // indirect
+
 require (
 	codeberg.org/go-pdf/fpdf v0.11.0 // indirect
 	github.com/Azure/go-ntlmssp v0.0.0-20221128193559-754e69321358 // indirect
@@ -30,8 +32,10 @@ require (
 	github.com/klauspost/cpuid/v2 v2.2.8 // indirect
 	github.com/kr/text v0.2.0 // indirect
 	github.com/minio/md5-simd v1.1.2 // indirect
+	github.com/parquet-go/parquet-go v0.25.1
 	github.com/rogpeppe/go-internal v1.6.1 // indirect
 	github.com/rs/xid v1.5.0 // indirect
+	github.com/twpayne/go-geom v1.6.1
 	go.opentelemetry.io/otel v1.27.0 // indirect
 	go.opentelemetry.io/otel/metric v1.27.0 // indirect
 	go.opentelemetry.io/otel/trace v1.27.0 // indirect
