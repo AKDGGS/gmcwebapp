@@ -10,7 +10,7 @@ import (
 type FlatInventory struct {
 	ID             int32             `json:"id" parquet:"id,uncompressed"`
 	Collection     *string           `json:"collection,omitempty" parquet:"collection,uncompressed,omitempty"`
-	CollectionID   *int32            `json:"collection_id,omitempty" parquet:"collection_id,uncompressed,omitempty"`
+	CollectionID   *int32            `json:"collection_id,omitempty" parquet:"-"`
 	SampleNumber   *string           `json:"sample,omitempty" parquet:"sample,uncompressed,omitempty"`
 	SlideNumber    *string           `json:"slide,omitempty" parquet:"slide,uncompressed,omitempty"`
 	BoxNumber      *string           `json:"box,omitempty" parquet:"box,uncompressed,omitempty"`
@@ -23,53 +23,53 @@ type FlatInventory struct {
 	IntervalBottom *float64          `db:"interval_bottom" json:"bottom,omitempty" parquet:"bottom,uncompressed,omitempty"`
 	IntervalUnit   *string           `db:"interval_unit" json:"unit,omitempty" parquet:"unit,uncompressed,omitempty"`
 	Keyword        []string          `json:"keyword,omitempty" parquet:"keyword,uncompressed,omitempty"`
-	Barcode        *string           `json:"barcode,omitempty" parquet:"barcode,uncompressed,omitempty`
+	Barcode        *string           `json:"barcode,omitempty" parquet:"barcode,uncompressed,omitempty"`
 	AltBarcode     []string          `json:"alt_barcode,omitempty" parquet:"alt_barcode,uncompressed,omitempty"`
-	ContainerID    *int32            `json:"container_id,omitempty" parquet:"container_id,uncompressed,omitempty"`
-	ContainerPath  *string           `json:"path_cache,omitempty" parquet:"path_cache,uncompressed,omitempty"`
-	Remark         *string           `json:"remark,omitempty" parquet:"remark,uncompressed,omitempty"`
-	Geometries     []json.RawMessage `json:"geometries,omitempty" parquet:"geometries,uncompressed,omitempty"`
-	Latitude       *float64          `db:"latitude" json:"latitude,omitempty" parquet:"latitude,uncompressed,omitempty"`
-	Longitude      *float64          `db:"longitude" json:"longitude,omitempty" parquet:"longitude,uncompressed,omitempty"`
-	ProjectID      *int32            `json:"project_id,omitempty" parquet:"project_id,uncompressed,omitempty"`
+	ContainerID    *int32            `json:"container_id,omitempty" parquet:"-"`
+	ContainerPath  *string           `json:"path_cache,omitempty" parquet:"container,uncompressed,omitempty"`
+	Remark         *string           `json:"remark,omitempty" parquet:"-"`
+	Geometries     []json.RawMessage `json:"geometries,omitempty" parquet:"-"`
+	Latitude       *float64          `db:"latitude" json:"latitude,omitempty" parquet:"-"`
+	Longitude      *float64          `db:"longitude" json:"longitude,omitempty" parquet:"-"`
+	ProjectID      *int32            `json:"project_id,omitempty" parquet:"-"`
 	Project        *string           `json:"project,omitempty" parquet:"project,uncompressed,omitempty"`
 	CanPublish     *bool             `db:"can_publish" json:"can_publish,omitempty" parquet:"can_publish,uncompressed,omitempty"`
 	Description    *string           `json:"description,omitempty" parquet:"description,uncompressed,omitempty"`
-	Note           []string          `json:"note,omitempty" parquet:"note,uncompressed,omitempty"`
+	Note           []string          `json:"note,omitempty" parquet:"-"`
 	Issue          []string          `json:"issue,omitempty" parquet:"issue,uncompressed,omitempty"`
 	Interval       *struct {
-		GTE *float64 `db:"gte" json:"gte,omitempty" parquet:"gte,uncompressed,omitempty"`
-		LTE *float64 `db:"lte" json:"lte,omitempty" parquet:"let,uncompressed,omitempty"`
-	} `json:"interval,omitempty" parquet:"interval,omitempty"`
+		GTE *float64 `db:"gte" json:"gte,omitempty" parquet:"-"`
+		LTE *float64 `db:"lte" json:"lte,omitempty" parquet:"-"`
+	} `json:"interval,omitempty" parquet:"-"`
 	Well []struct {
 		ID        int32   `json:"id" parquet:"id,uncompressed"`
 		Name      string  `json:"name,omitempty" parquet:"name,uncompressed,omitempty"`
-		AltNames  string  `json:"alt_names,omitempty" parquet:"alt_names,uncompressed,omitempty"`
+		AltNames  string  `json:"alt_names,omitempty" parquet:"-"`
 		Number    *string `json:"number,omitempty" parquet:"number,uncompressed,omitempty"`
 		API       *string `json:"api,omitempty" parquet:"api,uncompressed,omitempty"`
-		IsOnshore *bool   `json:"is_onshore,omitempty" parquet:"is_onshore,uncompressed,omitempty"`
+		IsOnshore *bool   `json:"is_onshore,omitempty" parquet:"-"`
 	} `json:"well,omitempty" parquet:"well,omitempty"`
 	Outcrop []struct {
 		ID     int32   `json:"id"  parquet:"id,uncompressed"`
 		Name   string  `json:"name" parquet:"name,uncompressed"`
 		Number *string `json:"number,omitempty" parquet:"number,uncompressed,omitempty"`
-		Year   *int32  `json:"year,omitempty" parquet:"year,uncompressed,omitempty"`
+		Year   *int32  `json:"year,omitempty" parquet:"-"`
 	} `json:"outcrop,omitempty" parquet:"outcrop,omitempty"`
 	Borehole []struct {
 		ID       int32  `json:"id" parquet:"id,uncompressed"`
 		Name     string `json:"name,omitempty" parquet:"name,uncompressed,omitempty"`
-		AltNames string `json:"alt_names,omitempty" parquet:"alt_names,uncompressed,omitempty"`
+		AltNames string `json:"alt_names,omitempty" parquet:"-"`
 		Prospect struct {
 			ID       int32  `json:"id" parquet:"id,uncompressed"`
 			Name     string `json:"name,omitempty" parquet:"name,uncompressed,omitempty"`
-			AltNames string `json:"alt_names,omitempty" parquet:"alt_names,uncompressed,omitempty"`
-			ARDF     string `json:"ardf,omitempty" parquet:"ardf,uncompressed,omitempty"`
+			AltNames string `json:"alt_names,omitempty" parquet:"-"`
+			ARDF     string `json:"ardf,omitempty" parquet:"-"`
 		} `json:"prospect,omitempty" parquet:"prospect,omitempty"`
 	} `json:"borehole,omitempty" parquet:"borehole,omitempty"`
 	Shotline []struct {
 		ID   int32    `json:"id" parquet:"id,uncompressed"`
 		Name string   `json:"name" parquet:"name,uncompressed"`
-		Year *int32   `json:"year,omitempty" parquet:"year,uncompressed,omitempty"`
+		Year *int32   `json:"year,omitempty" parquet:"-"`
 		Min  *float64 `json:"min,omitempty" parquet:"min,uncompressed,omitempty"`
 		Max  *float64 `json:"max,omitempty" parquet:"max,uncompressed,omitempty"`
 	} `json:"shotline,omitempty" parquet:"shotline,omitempty"`
@@ -77,9 +77,9 @@ type FlatInventory struct {
 		ID          int32  `json:"id" parquet:"id,uncompressed"`
 		Title       string `json:"title" parquet:"title,uncompressed"`
 		Year        *int32 `json:"year,omitempty" parquet:"year,uncompressed,omitempty"`
-		Description string `json:"description,omitempty" parquet:"description,uncompressed,omitempty"`
-		Number      string `json:"number,omitempty" parquet:"number,uncompressed,omitempty"`
-		Series      string `json:"series,omitempty" parquet:"series,uncompressed,omitempty"`
+		Description string `json:"description,omitempty" parquet:"-"`
+		Number      string `json:"number,omitempty" parquet:"-"`
+		Series      string `json:"series,omitempty" parquet:"-"`
 	} `json:"publication,omitempty" parquet:"publication,omitempty"`
 }
 
@@ -94,9 +94,7 @@ func FlatInventoryFields(full bool) []string {
 			"Latitude",
 			"Longitude",
 			"Related",
-			"Project ID",
 			"Project",
-			"Collection ID",
 			"Collection",
 			"Sample Number",
 			"Slide Number",
@@ -120,9 +118,7 @@ func FlatInventoryFields(full bool) []string {
 		"Latitude",
 		"Longitude",
 		"Related",
-		"Project ID",
 		"Project",
-		"Collection ID",
 		"Collection",
 		"Sample Number",
 		"Slide Number",
@@ -216,9 +212,7 @@ func (f *FlatInventory) AsStringArray(full bool) []string {
 			qfmt(f.Latitude),
 			qfmt(f.Longitude),
 			rel.String(),
-			qfmt(f.ProjectID),
 			qfmt(f.Project),
-			qfmt(f.CollectionID),
 			qfmt(f.Collection),
 			qfmt(f.SampleNumber),
 			qfmt(f.SlideNumber),
@@ -242,9 +236,7 @@ func (f *FlatInventory) AsStringArray(full bool) []string {
 		qfmt(f.Latitude),
 		qfmt(f.Longitude),
 		rel.String(),
-		qfmt(f.ProjectID),
 		qfmt(f.Project),
-		qfmt(f.CollectionID),
 		qfmt(f.Collection),
 		qfmt(f.SampleNumber),
 		qfmt(f.SlideNumber),

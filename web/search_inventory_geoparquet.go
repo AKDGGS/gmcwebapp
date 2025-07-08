@@ -108,12 +108,26 @@ func (srv *Server) ServeSearchInventoryParquet(w http.ResponseWriter, r *http.Re
 					fmt.Fprintf(out, "\r\n\r\ngemometry marshal error: %s", err)
 					return
 				}
+			} else {
+				point := geom.NewPoint(geom.XY).MustSetCoords([]float64{0, 0})
+				wkbbytes, err = wkb.Marshal(point, wkb.NDR)
+				if err != nil {
+					fmt.Fprintf(out, "\r\n\r\ngeometry marshal error: %s", err)
+					return
+				}
+				if !slices.Contains(geometrytypes, "Point") {
+					geometrytypes = append(geometrytypes, "Point")
+				}
 			}
 			item := InventoryItem{
 				FlatInventory: h,
 				Geometry:      wkbbytes,
 			}
 			item.Geometry = wkbbytes
+			if user == nil {
+				item.Issue = make([]string, 0)
+				item.CanPublish = nil
+			}
 			itemsbatch = append(itemsbatch, item)
 		}
 

@@ -7,6 +7,9 @@ import (
 
 	"gmc/db/model"
 	sutil "gmc/search/util"
+
+	"github.com/twpayne/go-geom"
+	"github.com/twpayne/go-geom/encoding/geojson"
 )
 
 func (srv *Server) ServeSearchInventoryGeoJSON(w http.ResponseWriter, r *http.Request) {
@@ -66,6 +69,13 @@ func (srv *Server) ServeSearchInventoryGeoJSON(w http.ResponseWriter, r *http.Re
 			}
 			feature.Type = "Feature"
 			feature.FlatInventory = h
+			feature.Geometries = make([]json.RawMessage, 0)
+			feature.Longitude = nil
+			feature.Latitude = nil
+			if user == nil {
+				feature.Issue = make([]string, 0)
+				feature.CanPublish = nil
+			}
 			if len(h.Geometries) > 0 {
 				if err = json.Unmarshal(h.Geometries[0], &feature.Geometry); err != nil {
 					fmt.Fprintf(out, "\r\n\r\ngeometry unmarshal error: %s", err)
@@ -82,6 +92,16 @@ func (srv *Server) ServeSearchInventoryGeoJSON(w http.ResponseWriter, r *http.Re
 					return
 				}
 			} else {
+				point := geom.NewPoint(geom.XY).MustSetCoords([]float64{0, 0})
+				geobytes, err := geojson.Marshal(point)
+				if err != nil {
+					fmt.Fprintf(out, "\r\n\r\ngeometry marshal error: %s", err)
+					return
+				}
+				if err = json.Unmarshal(geobytes, &feature.Geometry); err != nil {
+					fmt.Fprintf(out, "\r\n\r\ngeometry unmarshal error: %s", err)
+					return
+				}
 				data, err = json.Marshal(feature)
 				if err != nil {
 					fmt.Fprintf(out, "\r\n\r\nfeature marshal error: %s", err)

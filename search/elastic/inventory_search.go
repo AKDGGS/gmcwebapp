@@ -39,6 +39,7 @@ func (es *Elastic) SearchInventory(params *util.InventoryParams) (*util.Inventor
 			"publication.number",
 			"publication.description",
 			"publication.series",
+			"project_id",
 		},
 	}
 
