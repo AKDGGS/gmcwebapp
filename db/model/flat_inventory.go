@@ -26,7 +26,7 @@ type FlatInventory struct {
 	Barcode        *string           `json:"barcode,omitempty" parquet:"barcode,uncompressed,omitempty"`
 	AltBarcode     []string          `json:"alt_barcode,omitempty" parquet:"alt_barcode,uncompressed,omitempty"`
 	ContainerID    *int32            `json:"container_id,omitempty" parquet:"-"`
-	ContainerPath  *string           `json:"path_cache,omitempty" parquet:"container,uncompressed,omitempty"`
+	ContainerPath  *string           `json:"container,omitempty" parquet:"container,uncompressed,omitempty"`
 	Remark         *string           `json:"remark,omitempty" parquet:"-"`
 	Geometries     []json.RawMessage `json:"geometries,omitempty" parquet:"-"`
 	Latitude       *float64          `db:"latitude" json:"latitude,omitempty" parquet:"-"`

@@ -168,7 +168,7 @@ func (es *Elastic) SearchInventory(params *util.InventoryParams) (*util.Inventor
 	if !params.IncludePrivate {
 		src_filter.Excludes = append(
 			src_filter.Excludes,
-			"path_cache",
+			"container",
 			"barcode",
 			"issue",
 		)
