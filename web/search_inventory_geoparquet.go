@@ -136,7 +136,10 @@ func (srv *Server) ServeSearchInventoryParquet(w http.ResponseWriter, r *http.Re
 			fmt.Fprintf(out, "\r\n\r\nwrite error: %s", err)
 			return
 		}
-
+		if err = writer.Flush(); err != nil {
+			fmt.Fprintf(out, "\r\n\r\nflush error: %s", err)
+			return
+		}
 		params.From = (result.From + len(result.Hits))
 
 		if int64(params.From) >= result.Total {
