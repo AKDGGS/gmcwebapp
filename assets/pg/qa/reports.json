@@ -110,7 +110,7 @@
 	},{
 		"description": "Duplicate barcodes between container and inventory",
 		"file": "inventory_container_duplicate_barcode.sql",
-		"level": "warning"
+		"level": "critical"
 	},{
 		"description": "Points not referenced in other tables",
 		"file": "point_no_links.sql",
