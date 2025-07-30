@@ -19,6 +19,8 @@ func KeywordCommand(cfg *config.Config, exec string, cmd string, args []string) 
 		fmt.Printf("      add new keyword(s)\n")
 		fmt.Printf("  del <keywords ...>\n")
 		fmt.Printf("      remove existing keyword(s)\n")
+		fmt.Printf("  rename <oldname> <newname>\n")
+		fmt.Printf("      rename an existing keyword\n")
 	}
 
 	if len(args) < 1 {
@@ -85,6 +87,22 @@ func KeywordCommand(cfg *config.Config, exec string, cmd string, args []string) 
 		}
 
 		if err := db.DeleteKeywords(args[1:]...); err != nil {
+			fmt.Fprintf(os.Stderr, "%s: %s\n", exec, err)
+			return 1
+		}
+	case "rename":
+		if len(args) != 3 {
+			fmt.Fprintf(os.Stderr, "%s: old and new keyword names required\n", exec)
+			return 1
+		}
+
+		db, err := db.New(cfg.Database)
+		if err != nil {
+			fmt.Fprintf(os.Stderr, "%s: %s\n", exec, err)
+			return 1
+		}
+
+		if err := db.RenameKeyword(args[1], args[2]); err != nil {
 			fmt.Fprintf(os.Stderr, "%s: %s\n", exec, err)
 			return 1
 		}

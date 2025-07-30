@@ -63,3 +63,34 @@ func (pg *Postgres) enumAddValues(enum string, values ...string) error {
 	}
 	return nil
 }
+
+func (pg *Postgres) enumRename(enum, old_name, new_name string) error {
+	tx, err := pg.pool.Begin(context.Background())
+	if err != nil {
+		return err
+	}
+	defer tx.Rollback(context.Background())
+
+	clean_enum, err := tx.Conn().PgConn().EscapeString(enum)
+	if err != nil {
+		return err
+	}
+	clean_old_name, err := tx.Conn().PgConn().EscapeString(old_name)
+	if err != nil {
+		return err
+	}
+	clean_new_name, err := tx.Conn().PgConn().EscapeString(new_name)
+	if err != nil {
+		return err
+	}
+	q := fmt.Sprintf(
+		"ALTER TYPE \"%s\" RENAME VALUE '%s' TO '%s'", clean_enum, clean_old_name, clean_new_name,
+	)
+	if _, err := tx.Exec(context.Background(), q); err != nil {
+		return err
+	}
+	if err := tx.Commit(context.Background()); err != nil {
+		return err
+	}
+	return nil
+}

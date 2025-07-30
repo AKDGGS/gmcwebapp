@@ -14,6 +14,10 @@ func (pg *Postgres) AddKeywords(keywords ...string) error {
 	return pg.enumAddValues("keyword", keywords...)
 }
 
+func (pg *Postgres) RenameKeyword(old_name, new_name string) error {
+	return pg.enumRename("keyword", old_name, new_name)
+}
+
 func (pg *Postgres) DeleteKeywords(keywords ...string) error {
 	// Build new list of keywords by removing the deleted keywords
 	// from the current list

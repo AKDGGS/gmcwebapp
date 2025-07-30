@@ -91,6 +91,8 @@ type DB interface {
 	AddKeywords(keywords ...string) error
 	// Deletes any number of keywords
 	DeleteKeywords(keywords ...string) error
+	// Change the name of a keyword
+	RenameKeyword(old_name, new_name string) error
 
 	// Lists available issues
 	ListIssues() ([]string, error)
