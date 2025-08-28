@@ -8,14 +8,6 @@ import (
 )
 
 func (srv *Server) ServeFile(w http.ResponseWriter, r *http.Request) {
-	if srv.FileStore == nil {
-		http.Error(
-			w,
-			"configuration error: filestore path not defined",
-			http.StatusInternalServerError,
-		)
-		return
-	}
 	id, err := strconv.Atoi(r.PathValue("id"))
 	if err != nil {
 		http.Error(
@@ -35,8 +27,16 @@ func (srv *Server) ServeFile(w http.ResponseWriter, r *http.Request) {
 		)
 		return
 	}
+	if db_file == nil {
+		http.Error(
+			w,
+			"file does not exist",
+			http.StatusNotFound,
+		)
+		return
+	}
 	// Fetch the file from filestore
-	fs_file, err := srv.FileStore.GetFile(fmt.Sprintf("%d/%s",
+	fs_file, err := srv.FileStores.GetFile(fmt.Sprintf("%d/%s",
 		db_file.ID, db_file.Name,
 	))
 	if err != nil {

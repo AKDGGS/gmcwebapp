@@ -11,18 +11,18 @@ import (
 )
 
 type Config struct {
-	ListenAddress     string           `yaml:"listen_address"`
-	ListenCertificate string           `yaml:"listen_certificate"`
-	ListenKey         string           `yaml:"listen_key"`
-	SessionKey        string           `yaml:"session_key"`
-	MaxAge            int              `yaml:"session_max_age"`
-	AutoShutdown      bool             `yaml:"auto_shutdown"`
-	Database          DatabaseConfig   `yaml:"database"`
-	FileStore         *FileStoreConfig `yaml:"file_store"`
-	Search            SearchConfig     `yaml:"search"`
-	Auths             []AuthConfig     `yaml:"authentication"`
-	ExportLimit       int              `yaml:"export_limit"`
-	BaseURL           string           `yaml:"base_url"`
+	ListenAddress     string             `yaml:"listen_address"`
+	ListenCertificate string             `yaml:"listen_certificate"`
+	ListenKey         string             `yaml:"listen_key"`
+	SessionKey        string             `yaml:"session_key"`
+	MaxAge            int                `yaml:"session_max_age"`
+	AutoShutdown      bool               `yaml:"auto_shutdown"`
+	Database          DatabaseConfig     `yaml:"database"`
+	FileStores        *[]FileStoreConfig `yaml:"file_stores"`
+	Search            SearchConfig       `yaml:"search"`
+	Auths             []AuthConfig       `yaml:"authentication"`
+	ExportLimit       int                `yaml:"export_limit"`
+	BaseURL           string             `yaml:"base_url"`
 
 	keybytes []byte `yaml:"-"`
 }

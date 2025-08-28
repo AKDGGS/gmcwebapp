@@ -15,12 +15,12 @@ import (
 )
 
 type Server struct {
-	Config    *config.Config
-	DB        db.DB
-	Search    search.Search
-	FileStore filestore.FileStore
-	Auths     *auth.Auths
-	http      http.Server
+	Config     *config.Config
+	DB         db.DB
+	Search     search.Search
+	FileStores filestore.FileStores
+	Auths      *auth.Auths
+	http       http.Server
 }
 
 func (srv *Server) Start() error {

@@ -13,14 +13,6 @@ import (
 )
 
 func (srv *Server) ServeUpload(w http.ResponseWriter, r *http.Request) {
-	if srv.FileStore == nil {
-		http.Error(
-			w,
-			"filestore not configured",
-			http.StatusInternalServerError,
-		)
-		return
-	}
 	user, err := srv.Auths.CheckRequest(w, r)
 	if err != nil {
 		http.Error(
@@ -137,7 +129,7 @@ func (srv *Server) ServeUpload(w http.ResponseWriter, r *http.Request) {
 		}
 		err = srv.DB.PutFile(&f, func() error {
 			//Add the file to the filestore
-			err := srv.FileStore.PutFile(&fsutil.File{
+			err := srv.FileStores.PutFile(&fsutil.File{
 				Name:         fmt.Sprintf("%d/%s", f.ID, fh.Filename),
 				Size:         fh.Size,
 				LastModified: time.Now(),

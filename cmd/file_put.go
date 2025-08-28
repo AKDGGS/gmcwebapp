@@ -53,13 +53,8 @@ func FilePut(exec string, cfg *config.Config, cmd string, args []string) int {
 		return 1
 	}
 
-	if cfg.FileStore == nil {
-		fmt.Fprintf(os.Stderr, "no file store configured\n")
-		return 1
-	}
-	fs, err := filestore.New(*cfg.FileStore)
+	fs, err := filestore.NewFileStores(cfg.FileStores)
 	if err != nil {
-		fmt.Fprintf(os.Stderr, "%s: %s\n", exec, err)
 		return 1
 	}
 

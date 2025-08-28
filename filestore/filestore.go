@@ -16,7 +16,7 @@ type FileStore interface {
 	Shutdown()
 }
 
-func New(cfg config.FileStoreConfig) (FileStore, error) {
+func NewStore(cfg config.FileStoreConfig) (FileStore, error) {
 	var stor FileStore
 	var err error
 	switch cfg.Type {

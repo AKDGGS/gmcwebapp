@@ -31,25 +31,29 @@ database:
   max_connections: 4
 
 # The gmcwebapp requires a place to store and reference already stored
-# files. "dir" and "s3" types are supported. Only one type of file_store
-# can be specified.
-file_store:
-  # Files are stored in a directory at a specific path.
-  type: dir
-  path: /storage/gmc
+# files. "dir" and "s3" types are supported. Multiple redundant locations
+# can be specified. If a file operation fails on one location the same
+# operation will be attempted on the next location listed until it 
+# succeeds or all locations are exhausted. 
+file_stores:
+    # Files are stored in a directory at a specific path.
+  - type: dir
+    path: /storage/gmc
 
-  # Files are stored in an S3 compatible object store.
-  type: s3
-  # S3 endpoint - name of server to use
-  endpoint: localhost:9000
-  # S3 use HTTPS?
-  secure: false
-  # S3 accesskeyid - change this!
-  accesskeyid: my_access_key
-  # S3 secretaccesskey - change this!
-  secretaccesskey: my_secret_access_key
-  # S3 bucket name
-  bucket: gmc
+    # Files are stored in an S3 compatible object store.
+  - type: s3
+    # S3 endpoint - name of server to use
+    endpoint: localhost:9000
+    # S3 use HTTPS?
+    secure: false
+    # S3 accesskeyid - change this!
+    accesskeyid: my_access_key
+    # S3 secretaccesskey - change this!d
+    secretaccesskey: my_secret_access_key
+    # S3 bucket name
+    bucket: gmc
+    # S3 region (if needed)
+    region: us-east-1
 
 # Search provider. Only one type of search provider can be specified.
 search:
@@ -57,6 +61,7 @@ search:
   url: http://localhost:9200
   user: elastic
   pass: mypassword
+  index: gmc-inventory
 
 # More than one authentication scheme may be configured. In the event of an
 # authentication attempt, schemes are tried one at a time in the order

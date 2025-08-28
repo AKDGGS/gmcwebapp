@@ -33,17 +33,15 @@ func ServerCommand(cfg *config.Config, exec string) int {
 		return 1
 	}
 
-	var stor filestore.FileStore
-	if cfg.FileStore != nil {
-		stor, err = filestore.New(*cfg.FileStore)
-		if err != nil {
-			fmt.Fprintf(os.Stderr, "%s: %s\n", exec, err)
-			return 1
-		}
+	var fs filestore.FileStores
+	fs, err = filestore.NewFileStores(cfg.FileStores)
+	if err != nil {
+		fmt.Fprintf(os.Stderr, "%s: %s\n", exec, err)
+		return 1
 	}
 
 	srv := web.Server{
-		Config: cfg, DB: db, Search: sea, FileStore: stor, Auths: auths,
+		Config: cfg, DB: db, Search: sea, FileStores: fs, Auths: auths,
 	}
 	if cfg.AutoShutdown {
 		expath, err := filepath.Abs(exec)
