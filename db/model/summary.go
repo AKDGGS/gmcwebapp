@@ -1,14 +1,17 @@
 package model
 
 type Summary struct {
-	Barcodes     []string `json:"barcodes,omitempty"`
-	BarcodeTotal int32    `json:"barcode_total,omitempty"`
-	Container    *string  `json:"path_cache,omitempty"`
-	Total        *int32   `json:"container_total,omitempty"`
-	Keywords     []string `json:"keywords,omitempty"`
+	Barcodes []string `json:"barcodes,omitempty"`
+	Total    *int32   `json:"container_total,omitempty"`
+	Keywords []string `json:"keywords,omitempty"`
 
 	//transient fields that are generated on-the-fly
 	//these fields don't exist in the database
+	Containers []struct {
+		Name  string `json:"name,omitempty"`
+		Path  string `json:"path,omitempty"`
+		Total *int32 `json:"total,omitempty"`
+	} `json:"containers,omitempty"`
 
 	Collections []struct {
 		Collection      string `json:"collection,omitempty"`

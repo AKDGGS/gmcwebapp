@@ -1,25 +1,19 @@
-WITH ivs AS (
-	SELECT ARRAY_AGG(inventory_id) AS ids
-	FROM inventory
-	WHERE active AND (
-		barcode = $1
-		OR alt_barcode = $1
-		OR container_id IN (
-			WITH RECURSIVE r AS (
-				SELECT container_id
-				FROM container
-				WHERE barcode = $1
-					OR alt_barcode = $1
-
-				UNION ALL
-
-				SELECT co.container_id
-				FROM r
-				JOIN container AS co
-					ON r.container_id = co.parent_container_id
-			) SELECT container_id FROM r
-		)
-	)
+WITH target AS (
+  SELECT container_id, name, path_cache, barcode, alt_barcode
+  FROM container
+  WHERE barcode = $1
+     OR alt_barcode = $1
+),
+ivs AS (
+  SELECT ARRAY_AGG(i.inventory_id) AS ids
+  FROM inventory i
+  JOIN target t ON i.container_id = t.container_id
+  WHERE i.active
+),
+top_level_child_containers AS (
+  SELECT c.container_id, c.name, c.path_cache, c.barcode, c.alt_barcode
+  FROM container c
+  JOIN target t ON c.parent_container_id = t.container_id
 ), kws AS (
 	SELECT
 		ARRAY_AGG(DISTINCT kw.keyword ORDER BY kw.keyword) AS keywords
@@ -31,20 +25,41 @@ WITH ivs AS (
 ), bcs AS (
 	SELECT
 	ARRAY_AGG(DISTINCT COALESCE(i.barcode, i.alt_barcode)
-		ORDER BY COALESCE(i.barcode, i.alt_barcode)) AS barcodes,
-	COUNT(DISTINCT COALESCE(i.barcode, i.alt_barcode)) AS barcode_total
+		ORDER BY COALESCE(i.barcode, i.alt_barcode)) AS barcodes
 	FROM ivs
 	JOIN inventory AS i ON i.inventory_id = ANY(ivs.ids)
-	WHERE COALESCE(barcode, alt_barcode) IS NOT NULL
+	JOIN target t ON i.container_id = t.container_id
+	WHERE COALESCE(i.barcode, i.alt_barcode) IS NOT NULL
+		AND COALESCE(i.barcode, i.alt_barcode) <> COALESCE(t.barcode, t.alt_barcode)
+	LIMIT 100
 ), cts AS (
-		SELECT
-			c.path_cache AS container,
-			COUNT(i.inventory_id) AS container_total
-		FROM ivs
-		JOIN inventory AS i ON i.inventory_id = ANY(ivs.ids)
-		JOIN container AS c ON c.container_id = i.container_id
-		GROUP BY c.path_cache
-	-- ) AS q
+	SELECT
+		jsonb_agg(obj ORDER BY obj->>'container') AS containers
+	FROM (
+		SELECT jsonb_build_object(
+			'name', t.name,
+			'path', t.path_cache,
+			'total', COUNT(i.inventory_id)
+		) AS obj
+		FROM target t
+		LEFT JOIN inventory i ON i.container_id = t.container_id AND i.active
+			AND COALESCE(i.barcode, i.alt_barcode) <> COALESCE(t.barcode, t.alt_barcode)
+		GROUP BY t.name, t.path_cache
+		HAVING COUNT(i.inventory_id) > 0
+
+		UNION ALL
+
+		SELECT jsonb_build_object(
+			'name', c.name,
+			'path', c.path_cache,
+			'total', COUNT(i.inventory_id)
+		) AS obj
+		FROM top_level_child_containers c
+		LEFT JOIN inventory i ON i.container_id = c.container_id AND i.active
+			AND COALESCE(i.barcode, i.alt_barcode) <> COALESCE(c.barcode, c.alt_barcode)
+		GROUP BY c.name, c.path_cache
+		HAVING COUNT(i.inventory_id) > 0
+	) q
 ), cls AS (
 	SELECT
 		jsonb_agg(cb) AS collections
@@ -130,7 +145,7 @@ WITH ivs AS (
 			LIMIT 100
 	) AS q
 )
-SELECT barcodes, barcode_total, kws.keywords, cts.container, cls.collections,
+SELECT barcodes, kws.keywords, cts.containers, cls.collections,
 	bhs.boreholes, ocs.outcrops, sls.shotlines, ws.wells
 FROM ivs, bcs, kws, cts, cls, bhs, ocs, sls, ws
 LIMIT 100
