@@ -94,6 +94,5 @@ func (pg *Postgres) DeleteFile(file *model.File, rm_links bool) error {
 		return fmt.Errorf("File ID %d not found", file.ID)
 	}
 	// All files successfully added to the file table
-	tx.Commit(context.Background())
-	return nil
+	return tx.Commit(context.Background())
 }

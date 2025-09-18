@@ -142,6 +142,5 @@ func (pg *Postgres) PutFile(file *model.File, precommitFunc func() error) error 
 		return err
 	}
 	// All files successfully added to the file table
-	tx.Commit(context.Background())
-	return nil
+	return tx.Commit(context.Background())
 }
