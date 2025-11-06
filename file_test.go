@@ -36,7 +36,7 @@ func TestFile(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	fs, err := filestore.New(*cfg.FileStore)
+	fs, err := filestore.NewFileStores(cfg.FileStores)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -129,7 +129,7 @@ func TestFsPutGetFile(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	fs, err := filestore.New(*cfg.FileStore)
+	fs, err := filestore.NewFileStores(cfg.FileStores)
 	if err != nil {
 		t.Fatal(err)
 	}
