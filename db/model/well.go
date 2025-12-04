@@ -11,6 +11,7 @@ type Well struct {
 	AltNames         *string        `db:"alt_names" json:"alt_names,omitempty"`
 	Number           *string        `db:"number" json:"number,omitempty"`
 	APINumber        *string        `db:"api_number" json:"api_number,omitempty"`
+	AltAPINumber     *string        `db:"alt_api_number" json:"alt_api_number,omitempty"`
 	Onshore          bool           `db:"onshore" json:"onshore"`
 	Federal          bool           `db:"federal" json:"federal"`
 	SpudDate         *time.Time     `db:"spud_date" json:"spud_date,omitempty"`

@@ -27,6 +27,12 @@
 							<td><div><a href="../inventory/search?q=well.api:{{.APINumber}}">{{.APINumber}}</a></div></td>
 						</tr>
 						{{- end}}
+						{{- if .AltAPINumber}}
+						<tr>
+							<th>Alt. API Number</th>
+							<td>{{.AltAPINumber}}</td>
+						</tr>
+						{{- end}}
 						<tr>
 							<th>Onshore</th>
 							<td>{{- if .Onshore}}Yes{{- else}}No{{- end}}</td>

@@ -513,6 +513,12 @@
 							<td>{{.APINumber}}</td>
 						</tr>
 						{{- end}}
+						{{- if .AltAPINumber}}
+						<tr>
+							<th>Alternative API Number</th>
+							<td>{{.AltAPINumber}}</td>
+						</tr>
+						{{- end}}
 						{{- range .Organizations}}
 						<tr>
 							<th>{{if .Current}}Current{{else}}Previous{{- end}} Operator</th>

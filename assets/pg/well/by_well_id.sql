@@ -4,6 +4,7 @@ SELECT
 	w.alt_names,
 	w.well_number AS "number",
 	w.api_number,
+	w.alt_api_number,
 	w.is_onshore AS onshore,
 	w.is_federal AS federal,
 	w.permit_status,
