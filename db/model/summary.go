@@ -1,41 +1,30 @@
 package model
 
 type Summary struct {
-	Barcodes []string `json:"barcodes,omitempty"`
-	Total    *int32   `json:"container_total,omitempty"`
-	Keywords []string `json:"keywords,omitempty"`
+	Barcodes     []string `json:"barcodes,omitempty"`
+	BarcodeCount int32    `json:"barcode_count,omitempty"`
+	Keywords     []string `json:"keywords,omitempty"`
 
 	//transient fields that are generated on-the-fly
 	//these fields don't exist in the database
-	Containers []struct {
-		Name  string `json:"name,omitempty"`
-		Path  string `json:"path,omitempty"`
-		Total *int32 `json:"total,omitempty"`
-	} `json:"containers,omitempty"`
-
-	Collections []struct {
-		Collection      string `json:"collection,omitempty"`
-		CollectionTotal *int32 `json:"collection_total,omitempty"`
-	} `json:"collections,omitempty"`
+	ParentContainers []string `json:"parent_containers,omitempty"`
+	ChildContainers  []string `json:"child_containers,omitempty"`
+	Collections      []string `json:"collections,omitempty"`
 
 	Boreholes []struct {
-		Borehole      *string `json:"borehole,omitempty"`
-		Prospect      *string `json:"prospect,omitempty"`
-		BoreholeTotal *int32  `json:"borehole_total,omitempty"`
+		Borehole *string `json:"borehole,omitempty"`
+		Prospect *string `json:"prospect,omitempty"`
 	} `json:"boreholes,omitempty"`
 
 	Outcrops []struct {
-		Outcrop      *string `json:"outcrop,omitempty"`
-		OutcropTotal *int32  `json:"outcrop_total,omitempty"`
+		Outcrop *string `json:"outcrop,omitempty"`
 	} `json:"outcrops,omitempty"`
 
 	Shotlines []struct {
-		Shotline      *string `json:"shotline,omitempty"`
-		ShotlineTotal *int32  `json:"shotline_total,omitempty"`
+		Shotline *string `json:"shotline,omitempty"`
 	} `json:"shotlines,omitempty"`
 
 	Wells []struct {
-		Well      *string `json:"well,omitempty"`
-		WellTotal *int32  `json:"well_total,omitempty"`
+		Well *string `json:"well,omitempty"`
 	} `json:"wells,omitempty"`
 }

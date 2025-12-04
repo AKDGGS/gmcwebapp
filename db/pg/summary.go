@@ -16,16 +16,6 @@ func (pg *Postgres) GetSummaryByBarcode(barcode string, flags int) (*model.Summa
 	}
 	defer conn.Release()
 
-	count, err := cQryValue[int64](
-		conn, "pg/container/get_count_by_barcode.sql", barcode,
-	)
-	if err != nil {
-		return nil, err
-	}
-	if count == 0 {
-		return nil, nil
-	}
-
 	q, err := assets.ReadString("pg/summary/by_barcode.sql")
 	if err == ErrNoRows {
 		return nil, nil

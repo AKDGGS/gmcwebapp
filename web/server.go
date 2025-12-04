@@ -51,8 +51,7 @@ func (srv *Server) Start() error {
 	mux.HandleFunc("/wells/detail.json", srv.ServeWellsDetail)
 
 	// API endpoints
-	mux.HandleFunc("/api/summary.json", srv.ServeAPISummary)
-	mux.HandleFunc("/api/inventory.json", srv.ServeAPIInventoryDetail)
+	mux.HandleFunc("/api/lookup.json", srv.ServeAPILookup)
 	mux.HandleFunc("/api/move.json", srv.ServeAPIMoveInventoryAndContainers)
 	mux.HandleFunc("/api/audit.json", srv.ServeAPIAudit)
 	mux.HandleFunc("/api/move_contents.json", srv.ServeAPIMoveInventoryAndContainersContents)

@@ -40,6 +40,9 @@ type DB interface {
 	// each individual item
 	GetFlatInventory(func(*model.FlatInventory) error) error
 
+	// Fetches the number of containers or inventory items associated with the barcode
+	GetBarcodeCounts(barcode string) (int, int, error)
+
 	// Fetches the complete details for a Summary by barcode
 	GetSummaryByBarcode(barcode string, flags int) (*model.Summary, error)
 
