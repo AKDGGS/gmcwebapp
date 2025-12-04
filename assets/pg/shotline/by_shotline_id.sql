@@ -3,8 +3,8 @@ SELECT sl.shotline_id AS id,
 	sl.alt_names,
 	sl.year,
 	sl.remark,
-	MIN(sp.shotpoint_number) AS shotpointMin,
-	MAX(sp.shotpoint_number) AS shotpointMax
+	MIN(sp.shotpoint_number) AS shotpoint_min,
+	MAX(sp.shotpoint_number) AS shotpoint_max
 FROM shotline AS sl
 JOIN shotpoint AS sp
 	ON sp.shotline_id = sl.shotline_id
