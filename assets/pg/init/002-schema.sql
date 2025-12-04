@@ -275,6 +275,7 @@ CREATE TABLE well (
 
 	well_number VARCHAR(50) NULL,
 	api_number VARCHAR(14) NULL,
+	alt_api_number VARCHAR(14) NULL,
 	is_onshore BOOLEAN NOT NULL DEFAULT true,
 	is_federal BOOLEAN NOT NULL DEFAULT false,
 
@@ -386,6 +387,13 @@ CREATE TABLE outcrop (
 	modified_date TIMESTAMP WITHOUT TIME ZONE NULL,
 	modified_user VARCHAR(64) NULL,
 	stash JSONB NULL
+);
+
+
+CREATE TABLE outcrop_url (
+	outcrop_id integer NOT NULL,
+	url_id integer NOT NULL,
+	PRIMARY KEY(outcrop_id, url_id)
 );
 
 
