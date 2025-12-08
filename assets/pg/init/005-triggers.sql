@@ -176,41 +176,63 @@ CREATE TRIGGER well_modified_user_tr BEFORE INSERT OR UPDATE ON well
 FOR EACH ROW EXECUTE PROCEDURE modified_user_fn();
 
 
--- Enforces barcode and alt_barcode cross-table uniqueness in the inventory and container tables on INSERT/UPDATE
-CREATE OR REPLACE FUNCTION inventory_container_barcode_unique_fn()
-RETURNS trigger AS $$
+-- Enforces barcode uniqueness for container (in both container and inventory)
+CREATE OR REPLACE FUNCTION container_barcode_unique_fn()
+RETURNS TRIGGER AS $$
 DECLARE
-	err_msg TEXT;
-	ot TEXT;
+	id INT;
 BEGIN
-	IF TG_TABLE_NAME = 'inventory' THEN ot := 'container';
-	ELSIF TG_TABLE_NAME = 'container' THEN ot := 'inventory';
-	ELSE RETURN NEW;
-	END IF;
-	EXECUTE format(
-		'SELECT CASE
-			WHEN $1 = t.barcode THEN $1 || '' already exists in %I.barcode''
-			WHEN $1 = t.alt_barcode THEN $1 || '' already exists in %I.alt_barcode''
-			WHEN $2 = t.barcode THEN $2 || '' already exists in %I.barcode''
-			WHEN $2 = t.alt_barcode THEN $2 || '' already exists in %I.alt_barcode''
-			END
-			FROM %I t
-			WHERE $1 IN (t.barcode, t.alt_barcode) OR $2 IN (t.barcode, t.alt_barcode)
-			LIMIT 1',
-			ot, ot, ot, ot, ot
-		)
-	INTO err_msg USING NEW.barcode, NEW.alt_barcode;
-	IF err_msg IS NOT NULL THEN RAISE EXCEPTION '%', err_msg;
+	IF NEW.active THEN
+		SELECT c.container_id INTO id
+		FROM container AS c
+		WHERE c.active AND c.container_id <> NEW.container_id AND (
+			NEW.barcode IN (c.barcode, c.alt_barcode)
+			OR NEW.alt_barcode IN (c.barcode, c.alt_barcode)
+		) LIMIT 1;
+		IF FOUND THEN
+			RAISE EXCEPTION 'barcode already used by container_id %', id;
+		END IF;
+
+		SELECT i.inventory_id INTO id
+		FROM inventory AS i
+		WHERE i.active AND (
+			NEW.barcode IN (i.barcode, i.alt_barcode)
+			OR NEW.alt_barcode IN (i.barcode, i.alt_barcode)
+		) LIMIT 1;
+		IF FOUND THEN
+			RAISE EXCEPTION 'barcode already used by inventory_id %', id;
+		END IF;
 	END IF;
 	RETURN NEW;
 END; $$ LANGUAGE 'plpgsql';
 
-DROP TRIGGER IF EXISTS inventory_container_barcode_unique_tr ON container;
-CREATE OR REPLACE TRIGGER inventory_container_barcode_unique_tr
+DROP TRIGGER IF EXISTS container_barcode_unique_tr ON container;
+CREATE OR REPLACE TRIGGER container_barcode_unique_tr
 BEFORE INSERT OR UPDATE ON container
-FOR EACH ROW EXECUTE FUNCTION inventory_container_barcode_unique_fn();
+FOR EACH ROW EXECUTE FUNCTION container_barcode_unique_fn();
 
-DROP TRIGGER IF EXISTS inventory_container_barcode_unique_tr ON inventory;
-CREATE OR REPLACE TRIGGER inventory_container_barcode_unique_tr
+
+-- Prevents inventory barcodes from matching container barcodes
+CREATE OR REPLACE FUNCTION inventory_barcode_unique_fn()
+RETURNS TRIGGER AS $$
+DECLARE
+	id INT;
+BEGIN
+	IF NEW.active THEN
+		SELECT c.container_id INTO id
+		FROM container AS c
+		WHERE c.active AND (
+			NEW.barcode IN (c.barcode, c.alt_barcode)
+			OR NEW.alt_barcode IN (c.barcode, c.alt_barcode)
+		) LIMIT 1;
+		IF FOUND THEN
+			RAISE EXCEPTION 'barcode already used by container_id %', id;
+		END IF;
+	END IF;
+	RETURN NEW;
+END; $$ LANGUAGE 'plpgsql';
+
+DROP TRIGGER IF EXISTS inventory_barcode_unique_tr ON inventory;
+CREATE OR REPLACE TRIGGER inventory_barcode_unique_tr
 BEFORE INSERT OR UPDATE ON inventory
-FOR EACH ROW EXECUTE FUNCTION inventory_container_barcode_unique_fn();
+FOR EACH ROW EXECUTE FUNCTION inventory_barcode_unique_fn();
