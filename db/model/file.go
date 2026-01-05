@@ -1,6 +1,9 @@
 package model
 
-import "fmt"
+import (
+	"fmt"
+	"math"
+)
 
 type File struct {
 	ID          int32   `db:"id" json:"id,omitempty"`
@@ -18,11 +21,12 @@ type File struct {
 }
 
 func (f *File) FormattedSize() string {
-	if f.Size < 1024 {
-		return fmt.Sprintf("%d B", f.Size)
-	} else if f.Size < 1048576 {
-		return fmt.Sprintf("%.1f KB", float64(f.Size)/1024)
-	} else {
-		return fmt.Sprintf("%.1f MB", float64(f.Size)/(1048576))
+	units := []string{"B", "KiB", "MiB", "GiB", "TiB", "PiB", "EiB"}
+	if f.Size == 0 {
+		return "0 B"
 	}
+
+	idx := min(int(math.Log2(float64(f.Size))/10), len(units)-1)
+	value := float64(f.Size) / math.Pow(1024, float64(idx))
+	return fmt.Sprintf("%.2f %s", value, units[idx])
 }

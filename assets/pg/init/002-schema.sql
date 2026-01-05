@@ -68,7 +68,7 @@ CREATE TABLE file (
 	file_id SERIAL PRIMARY KEY,
 	description VARCHAR(255) NULL,
 	mimetype VARCHAR(255) NOT NULL DEFAULT 'application/octet-stream',
-	size INT NOT NULL,
+	size BIGINT NOT NULL,
 	filename VARCHAR(255) NOT NULL
 );
 
