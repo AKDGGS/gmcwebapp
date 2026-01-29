@@ -6,7 +6,7 @@ import (
 	"strings"
 )
 
-const dict = "ABCDEFGHIJKLMNOPQRSTUVWXYZ123456789$%*+-./:"
+const dict = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789$%*+-./:"
 
 type Token struct {
 	ID          int32
