@@ -127,6 +127,10 @@ func (srv *Server) ServeUpload(w http.ResponseWriter, r *http.Request) {
 			}
 			f.WellIDs = append(f.WellIDs, well_id)
 		}
+		barcodes := r.MultipartForm.Value["barcode"]
+		if len(barcodes) > 0 {
+			f.Barcodes = append(f.Barcodes, barcodes...)
+		}
 		err = srv.DB.PutFile(&f, func() error {
 			//Add the file to the filestore
 			err := srv.FileStores.PutFile(&fsutil.File{
