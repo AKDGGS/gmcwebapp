@@ -133,16 +133,17 @@ func (srv *Server) ServeUpload(w http.ResponseWriter, r *http.Request) {
 		}
 		err = srv.DB.PutFile(&f, func() error {
 			//Add the file to the filestore
-			err := srv.FileStores.PutFile(&fsutil.File{
+			fsfile := &fsutil.File{
 				Name:         fmt.Sprintf("%d/%s", f.ID, fh.Filename),
 				Size:         fh.Size,
 				LastModified: time.Now(),
 				ContentType:  mt,
-				Content:      file,
-			})
-			if err != nil {
+			}
+			fsfile.SetContent(file, true)
+			if err := srv.FileStores.PutFile(fsfile); err != nil {
 				return err
 			}
+			fmt.Printf("Sum: %x\n", fsfile.GetHash())
 			return nil
 		})
 		if err != nil {

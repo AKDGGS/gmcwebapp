@@ -52,17 +52,18 @@ func (d *Dir) GetFile(name string) (*fsutil.File, error) {
 	md_b := big.NewInt(stat.ModTime().UnixMicro()).Bytes()
 	sz_b := big.NewInt(stat.Size()).Bytes()
 
-	return &fsutil.File{
+	fl := &fsutil.File{
 		Name:         stat.Name(),
 		Size:         stat.Size(),
 		LastModified: stat.ModTime(),
 		ContentType:  mt,
-		Content:      file,
 		ETag: fmt.Sprintf("%s-%s",
 			base64.RawStdEncoding.EncodeToString(md_b),
 			base64.RawStdEncoding.EncodeToString(sz_b),
 		),
-	}, nil
+	}
+	fl.SetContent(file, false)
+	return fl, nil
 }
 
 func (d *Dir) PutFile(f *fsutil.File) error {
@@ -81,7 +82,7 @@ func (d *Dir) PutFile(f *fsutil.File) error {
 	}
 	defer file.Close()
 
-	_, err = io.Copy(file, f.Content)
+	_, err = io.Copy(file, f)
 	if err != nil {
 		return err
 	}

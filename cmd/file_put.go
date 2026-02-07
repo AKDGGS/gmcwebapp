@@ -90,14 +90,14 @@ func FilePut(exec string, cfg *config.Config, cmd string, args []string) int {
 			}
 
 			//Add the file to the filestore
-			err = fs.PutFile(&fsutil.File{
+			fsfile := &fsutil.File{
 				Name:         fmt.Sprintf("%d/%s", file.ID, file_info.Name()),
 				Size:         file_info.Size(),
 				LastModified: file_info.ModTime(),
 				ContentType:  mt,
-				Content:      file_obj,
-			})
-			if err != nil {
+			}
+			fsfile.SetContent(file_obj, true)
+			if err := fs.PutFile(fsfile); err != nil {
 				return fmt.Errorf("error putting file in filestore: %w", err)
 			}
 			return nil

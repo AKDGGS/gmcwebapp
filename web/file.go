@@ -36,7 +36,7 @@ func (srv *Server) ServeFile(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	// Fetch the file from filestore
-	fs_file, err := srv.FileStores.GetFile(fmt.Sprintf("%d/%s",
+	fsfile, err := srv.FileStores.GetFile(fmt.Sprintf("%d/%s",
 		db_file.ID, db_file.Name,
 	))
 	if err != nil {
@@ -55,16 +55,16 @@ func (srv *Server) ServeFile(w http.ResponseWriter, r *http.Request) {
 		}
 		return
 	}
-	defer fs_file.Content.Close()
+	defer fsfile.Close()
 	// Suggest filename to the browser
 	w.Header().Set(
 		"Content-Disposition",
-		fmt.Sprintf("inline; filename=\"%s\"", fs_file.Name),
+		fmt.Sprintf("inline; filename=\"%s\"", fsfile.Name),
 	)
 	// Set the ETag if available
-	if fs_file.ETag != "" {
-		w.Header().Set("ETag", fs_file.ETag)
+	if fsfile.ETag != "" {
+		w.Header().Set("ETag", fsfile.ETag)
 	}
-	http.ServeContent(w, r, fs_file.Name, fs_file.LastModified, fs_file.Content)
+	http.ServeContent(w, r, fsfile.Name, fsfile.LastModified, fsfile)
 	return
 }

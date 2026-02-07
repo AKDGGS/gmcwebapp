@@ -80,14 +80,15 @@ func (s3 *S3) GetFile(name string) (*fsutil.File, error) {
 		}
 		return nil, err
 	}
-	return &fsutil.File{
+	fl := &fsutil.File{
 		Name:         path.Base(stat.Key),
 		ETag:         stat.ETag,
 		LastModified: stat.LastModified,
 		Size:         stat.Size,
 		ContentType:  stat.ContentType,
-		Content:      obj,
-	}, nil
+	}
+	fl.SetContent(obj, false)
+	return fl, nil
 }
 
 func (s3 *S3) PutFile(file *fsutil.File) error {
@@ -113,7 +114,7 @@ func (s3 *S3) PutFile(file *fsutil.File) error {
 
 	_, err = s3.client.PutObject(
 		context.Background(), s3.bucket, file.Name,
-		file.Content, file.Size, minio.PutObjectOptions{},
+		file, file.Size, minio.PutObjectOptions{},
 	)
 	if err != nil {
 		return err
