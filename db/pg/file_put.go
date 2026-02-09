@@ -8,7 +8,7 @@ import (
 	"gmc/db/model"
 )
 
-func (pg *Postgres) PutFile(file *model.File, precommitFunc func() error) error {
+func (pg *Postgres) PutFile(file *model.File, precommitFunc func(*model.File) error) error {
 	tx, err := pg.pool.Begin(context.Background())
 	if err != nil {
 		return err
@@ -138,9 +138,23 @@ func (pg *Postgres) PutFile(file *model.File, precommitFunc func() error) error 
 			}
 		}
 	}
-	if err = precommitFunc(); err != nil {
+
+	if err = precommitFunc(file); err != nil {
 		return err
 	}
+
+	if file.Hash != nil {
+		hashsql, err := assets.ReadString("pg/file/update_hash.sql")
+		if err != nil {
+			return err
+		}
+		_, err = tx.Exec(context.Background(), hashsql, file.Hash, file.ID)
+		if err != nil {
+			return err
+		}
+		fmt.Println(file.Hash)
+	}
+
 	// All files successfully added to the file table
 	return tx.Commit(context.Background())
 }

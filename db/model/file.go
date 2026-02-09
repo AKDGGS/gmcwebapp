@@ -11,6 +11,7 @@ type File struct {
 	Description *string `json:"description,omitempty"`
 	Type        string  `db:"mimetype" json:"mimetype"`
 	Size        int64   `json:"size"`
+	Hash        *string `json:"file_hash,omitempty"`
 
 	BoreholeIDs  []int    `json:"borehole_ids,omitempty"`
 	InventoryIDs []int    `json:"inventory_ids,omitempty"`

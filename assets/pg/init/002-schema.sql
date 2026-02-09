@@ -64,12 +64,14 @@ CREATE TABLE url (
 	url TEXT
 );
 
+
 CREATE TABLE file (
 	file_id SERIAL PRIMARY KEY,
 	description VARCHAR(255) NULL,
 	mimetype VARCHAR(255) NOT NULL DEFAULT 'application/octet-stream',
 	size BIGINT NOT NULL,
-	filename VARCHAR(255) NOT NULL
+	filename VARCHAR(255) NOT NULL,
+	file_hash TEXT UNIQUE NOT NULL
 );
 
 

@@ -131,7 +131,7 @@ func (srv *Server) ServeUpload(w http.ResponseWriter, r *http.Request) {
 		if len(barcodes) > 0 {
 			f.Barcodes = append(f.Barcodes, barcodes...)
 		}
-		err = srv.DB.PutFile(&f, func() error {
+		err = srv.DB.PutFile(&f, func(dbfile *model.File) error {
 			//Add the file to the filestore
 			fsfile := &fsutil.File{
 				Name:         fmt.Sprintf("%d/%s", f.ID, fh.Filename),
@@ -143,7 +143,8 @@ func (srv *Server) ServeUpload(w http.ResponseWriter, r *http.Request) {
 			if err := srv.FileStores.PutFile(fsfile); err != nil {
 				return err
 			}
-			fmt.Printf("Sum: %x\n", fsfile.GetHash())
+			hash := fmt.Sprintf("%x", fsfile.GetHash())
+			dbfile.Hash = &hash
 			return nil
 		})
 		if err != nil {

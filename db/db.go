@@ -53,7 +53,7 @@ type DB interface {
 	GetFile(id int) (*model.File, error)
 
 	// Put file
-	PutFile(*model.File, func() error) error
+	PutFile(*model.File, func(*model.File) error) error
 
 	// Delete a file from the file and linking tables
 	DeleteFile(file *model.File, rm_links bool) error
