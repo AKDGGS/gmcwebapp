@@ -195,7 +195,6 @@ SELECT
 	WHERE iv.active AND
 	(
 		iv.barcode = $1
-		OR iv.barcode = ('GMC-' || $1 )
 		OR iv.alt_barcode = $1
 		OR iv.container_id IN (
 			WITH RECURSIVE r AS (

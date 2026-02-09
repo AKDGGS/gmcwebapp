@@ -13,6 +13,7 @@ func (pg *Postgres) RecodeInventoryAndContainer(old_barcode string, new_barcode 
 		return err
 	}
 	defer tx.Rollback(context.Background())
+
 	// First, try updating the barcode
 	q, err := assets.ReadString("pg/inventory/update_barcode.sql")
 	if err != nil {
@@ -31,6 +32,7 @@ func (pg *Postgres) RecodeInventoryAndContainer(old_barcode string, new_barcode 
 		return err
 	}
 	rowsAffected := ir.RowsAffected() + cr.RowsAffected()
+
 	// If those updates fail, try updating the alt_barcode
 	if rowsAffected == 0 {
 		q, err = assets.ReadString("pg/inventory/update_alt_barcode.sql")
@@ -51,27 +53,7 @@ func (pg *Postgres) RecodeInventoryAndContainer(old_barcode string, new_barcode 
 		}
 	}
 	rowsAffected += ir.RowsAffected() + cr.RowsAffected()
-	// If those updates fail, try appending "GMC-" to the barcode
-	if (rowsAffected) == 0 {
-		old_barcode = "GMC-" + old_barcode
-		q, err = assets.ReadString("pg/inventory/update_barcode.sql")
-		if err != nil {
-			return err
-		}
-		ir, err = tx.Exec(context.Background(), q, old_barcode, new_barcode)
-		if err != nil {
-			return err
-		}
-		q, err = assets.ReadString("pg/container/update_barcode.sql")
-		if err != nil {
-			return err
-		}
-		cr, err = tx.Exec(context.Background(), q, old_barcode, new_barcode)
-		if err != nil {
-			return err
-		}
-	}
-	rowsAffected += ir.RowsAffected() + cr.RowsAffected()
+
 	if (rowsAffected) == 0 {
 		return fmt.Errorf("recode failed")
 	}
