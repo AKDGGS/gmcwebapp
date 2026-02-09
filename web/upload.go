@@ -67,6 +67,7 @@ func (srv *Server) ServeUpload(w http.ResponseWriter, r *http.Request) {
 			Size: fh.Size,
 			Type: mt,
 		}
+
 		if id := r.FormValue("borehole_id"); id != "" {
 			borehole_id, err := strconv.Atoi(id)
 			if err != nil {
@@ -79,6 +80,7 @@ func (srv *Server) ServeUpload(w http.ResponseWriter, r *http.Request) {
 			}
 			f.BoreholeIDs = append(f.BoreholeIDs, borehole_id)
 		}
+
 		if id := r.FormValue("inventory_id"); id != "" {
 			inventory_id, err := strconv.Atoi(id)
 			if err != nil {
@@ -91,6 +93,7 @@ func (srv *Server) ServeUpload(w http.ResponseWriter, r *http.Request) {
 			}
 			f.InventoryIDs = append(f.InventoryIDs, inventory_id)
 		}
+
 		if id := r.FormValue("outcrop_id"); id != "" {
 			outcrop_id, err := strconv.Atoi(id)
 			if err != nil {
@@ -103,6 +106,7 @@ func (srv *Server) ServeUpload(w http.ResponseWriter, r *http.Request) {
 			}
 			f.OutcropIDs = append(f.OutcropIDs, outcrop_id)
 		}
+
 		if id := r.FormValue("prospect_id"); id != "" {
 			prospect_id, err := strconv.Atoi(id)
 			if err != nil {
@@ -115,6 +119,7 @@ func (srv *Server) ServeUpload(w http.ResponseWriter, r *http.Request) {
 			}
 			f.ProspectIDs = append(f.ProspectIDs, prospect_id)
 		}
+
 		if id := r.FormValue("well_id"); id != "" {
 			well_id, err := strconv.Atoi(id)
 			if err != nil {
@@ -127,10 +132,11 @@ func (srv *Server) ServeUpload(w http.ResponseWriter, r *http.Request) {
 			}
 			f.WellIDs = append(f.WellIDs, well_id)
 		}
-		barcodes := r.MultipartForm.Value["barcode"]
-		if len(barcodes) > 0 {
-			f.Barcodes = append(f.Barcodes, barcodes...)
+
+		if barcode := r.FormValue("barcode"); barcode != "" {
+			f.Barcode = barcode
 		}
+
 		err = srv.DB.PutFile(&f, func(dbfile *model.File) error {
 			//Add the file to the filestore
 			fsfile := &fsutil.File{

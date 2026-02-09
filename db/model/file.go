@@ -11,14 +11,15 @@ type File struct {
 	Description *string `json:"description,omitempty"`
 	Type        string  `db:"mimetype" json:"mimetype"`
 	Size        int64   `json:"size"`
-	Hash        *string `json:"file_hash,omitempty"`
+	Hash        *string `db:"file_hash" json:"file_hash,omitempty"`
 
-	BoreholeIDs  []int    `json:"borehole_ids,omitempty"`
-	InventoryIDs []int    `json:"inventory_ids,omitempty"`
-	OutcropIDs   []int    `json:"outcrop_ids,omitempty"`
-	ProspectIDs  []int    `json:"prospect_ids,omitempty"`
-	WellIDs      []int    `json:"well_ids,omitempty"`
-	Barcodes     []string `json:"barcodes,omitempty"`
+	// Transient fields that don't directly exist in the file table
+	Barcode      string `json:"barcode,omitempty"`
+	BoreholeIDs  []int  `json:"borehole_ids,omitempty"`
+	InventoryIDs []int  `json:"inventory_ids,omitempty"`
+	OutcropIDs   []int  `json:"outcrop_ids,omitempty"`
+	ProspectIDs  []int  `json:"prospect_ids,omitempty"`
+	WellIDs      []int  `json:"well_ids,omitempty"`
 }
 
 func (f *File) FormattedSize() string {
