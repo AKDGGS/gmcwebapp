@@ -17,6 +17,16 @@ type File struct {
 	content      io.ReadSeekCloser
 }
 
+// The way this calculates a hash is problematic if downstream
+// the upload process uses seeking.
+// Currently (2/9/26) all of our uploads use io.ReadCloser (no seek)
+func (f *File) SetContent(c io.ReadSeekCloser, hash bool) {
+	if hash {
+		f.hasher = md5.New()
+	}
+	f.content = c
+}
+
 func (f *File) Read(p []byte) (int, error) {
 	i, e := f.content.Read(p)
 	if f.hasher != nil {
@@ -33,13 +43,6 @@ func (f *File) Seek(o int64, w int) (int64, error) {
 
 func (f *File) Close() error {
 	return f.content.Close()
-}
-
-func (f *File) SetContent(c io.ReadSeekCloser, hash bool) {
-	if hash {
-		f.hasher = md5.New()
-	}
-	f.content = c
 }
 
 func (f *File) GetHash() []byte {
