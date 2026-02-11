@@ -17,6 +17,13 @@ type File struct {
 	content      io.ReadSeekCloser
 }
 
+type FileStat struct {
+	Name         string
+	Size         int64
+	LastModified time.Time
+	Hash         string
+}
+
 // The way this calculates a hash is problematic if downstream
 // the upload process uses seeking.
 // Currently (2/9/26) all of our uploads use io.ReadCloser (no seek)

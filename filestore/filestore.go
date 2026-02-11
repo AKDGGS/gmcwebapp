@@ -13,6 +13,7 @@ type FileStore interface {
 	GetFile(string) (*fsutil.File, error)
 	PutFile(*fsutil.File) error
 	DeleteFile(*fsutil.File) error
+	StatFile(name string) (*fsutil.FileStat, error)
 	Shutdown()
 }
 

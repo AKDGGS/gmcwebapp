@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"os"
 	"path"
+	"regexp"
 
 	fsutil "gmc/filestore/util"
 
@@ -146,4 +147,26 @@ func (s3 *S3) DeleteFile(file *fsutil.File) error {
 		return err
 	}
 	return nil
+}
+
+func (s3 S3) StatFile(name string) (*fsutil.FileStat, error) {
+	info, err := s3.client.StatObject(context.Background(), s3.bucket, name, minio.GetObjectOptions{Checksum: true})
+	if err != nil {
+		return nil, err
+	}
+	var hash string
+	matched, err := regexp.MatchString(`^[a-fA-F0-9]{32}$`, info.ETag)
+	if err != nil {
+		return nil, err
+	}
+	if matched {
+		hash = info.ETag
+	}
+	filestat := &fsutil.FileStat{
+		Name:         name,
+		Size:         info.Size,
+		LastModified: info.LastModified,
+		Hash:         hash,
+	}
+	return filestat, nil
 }

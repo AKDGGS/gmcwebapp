@@ -76,6 +76,23 @@ func (fs FileStores) DeleteFile(file *fsutil.File) error {
 	return errors.New(errlist.String())
 }
 
+func (fs FileStores) StatFile(name string) (*fsutil.FileStat, error) {
+	if len(fs.stores) == 0 {
+		return nil, fmt.Errorf("no filestores configured")
+	}
+	var errlist strings.Builder
+	for _, store := range fs.stores {
+		stat, err := store.StatFile(name)
+		if err != nil {
+			errlist.WriteString("\n")
+			errlist.WriteString(err.Error())
+		} else {
+			return stat, nil
+		}
+	}
+	return nil, errors.New(errlist.String())
+}
+
 func (fs FileStores) Shutdown() {
 	for _, store := range fs.stores {
 		store.Shutdown()

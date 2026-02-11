@@ -108,3 +108,24 @@ func (d *Dir) DeleteFile(f *fsutil.File) error {
 	}
 	return nil
 }
+
+func (d *Dir) StatFile(name string) (*fsutil.FileStat, error) {
+	fp := filepath.Join(d.path, name)
+	if !filepath.IsAbs(fp) {
+		return nil, os.ErrPermission
+	}
+	file, err := os.Open(fp)
+	if err != nil {
+		return nil, err
+	}
+	stat, err := file.Stat()
+	if err != nil {
+		return nil, err
+	}
+	filestat := &fsutil.FileStat{
+		Name:         stat.Name(),
+		Size:         stat.Size(),
+		LastModified: stat.ModTime(),
+	}
+	return filestat, nil
+}
