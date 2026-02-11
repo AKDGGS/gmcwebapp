@@ -146,7 +146,6 @@ func (pg *Postgres) PutFile(file *model.File, precommitFunc func(*model.File) er
 		if err != nil {
 			return err
 		}
-		fmt.Println(file.Hash)
 	}
 
 	// All files successfully added to the file table
