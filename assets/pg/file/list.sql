@@ -4,5 +4,5 @@ SELECT
 	f.description,
 	f.mimetype,
 	f.size::numeric,
-    f.file_hash
+	f.file_hash
 FROM file AS f

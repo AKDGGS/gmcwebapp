@@ -90,7 +90,7 @@ func FileGet(exec string, cfg *config.Config, cmd string, args []string) int {
 	}
 	exit_code := 0
 	for _, db_file := range valid_db_files {
-		fsfile, err := fs.GetFile(fmt.Sprintf("%d/%s", db_file.ID, db_file.Name))
+		fsfile, err := fs.GetFile(fmt.Sprintf("%d/%s", db_file.ID, *db_file.Name))
 		if err != nil {
 			fmt.Fprintf(os.Stderr, "%s: %s\n", exec, err)
 			exit_code = 1
@@ -98,12 +98,12 @@ func FileGet(exec string, cfg *config.Config, cmd string, args []string) int {
 		}
 		defer fsfile.Close()
 
-		f, err := os.OpenFile(filepath.Join(*out, db_file.Name), os.O_CREATE|os.O_EXCL|os.O_WRONLY, 0644)
+		f, err := os.OpenFile(filepath.Join(*out, *db_file.Name), os.O_CREATE|os.O_EXCL|os.O_WRONLY, 0644)
 		if err != nil {
 			if os.IsExist(err) {
 				fmt.Fprintf(
 					os.Stderr, "%s: a file with the same name already exists: %s\n",
-					exec, db_file.Name,
+					exec, *db_file.Name,
 				)
 			} else {
 				fmt.Fprintf(os.Stderr, "%s: error creating file: %s\n", exec, err)

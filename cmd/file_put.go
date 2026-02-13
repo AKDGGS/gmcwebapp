@@ -66,10 +66,11 @@ func FilePut(exec string, cfg *config.Config, cmd string, args []string) int {
 			exit_code = 1
 			continue
 		}
-
+		fn := file_info.Name()
+		fz := file_info.Size()
 		file := model.File{
-			Name:         file_info.Name(),
-			Size:         file_info.Size(),
+			Name:         &fn,
+			Size:         &fz,
 			BoreholeIDs:  []int{*borehole_id},
 			InventoryIDs: []int{*inventory_id},
 			OutcropIDs:   []int{*outcrop_id},
