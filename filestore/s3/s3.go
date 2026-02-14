@@ -152,6 +152,9 @@ func (s3 *S3) DeleteFile(file *fsutil.File) error {
 func (s3 S3) StatFile(name string) (*fsutil.FileStat, error) {
 	info, err := s3.client.StatObject(context.Background(), s3.bucket, name, minio.GetObjectOptions{Checksum: true})
 	if err != nil {
+		if minio.ToErrorResponse(err).Code == "NoSuchKey" {
+			return nil, os.ErrNotExist
+		}
 		return nil, err
 	}
 	var hash string

@@ -22,6 +22,8 @@ func FileCommand(cfg *config.Config, exec, cmd string, args []string) int {
 		return FilePut(exec, cfg, fmt.Sprintf("%s %s", cmd, subcmd), args[1:])
 	case "get":
 		return FileGet(exec, cfg, fmt.Sprintf("%s %s", cmd, subcmd), args[1:])
+	case "health":
+		return FileHealth(exec, cfg, fmt.Sprintf("%s %s", cmd, subcmd), args[1:])
 	default:
 		fmt.Fprintf(os.Stderr, "%s %s '%s' is not a recognized subcommand\n",
 			exec, cmd, subcmd)
@@ -38,4 +40,6 @@ func printFileUsage(exec, cmd string) {
 	fmt.Printf("      upload files to filestore\n")
 	fmt.Printf("  get [args] -out <output directory> <file ids ...>\n")
 	fmt.Printf("      download file from filestore\n")
+	fmt.Printf("  health\n")
+	fmt.Printf("      check health of all files in filestore\n")
 }

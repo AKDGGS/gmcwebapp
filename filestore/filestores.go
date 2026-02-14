@@ -3,7 +3,6 @@ package filestore
 import (
 	"errors"
 	"fmt"
-	"strings"
 
 	"gmc/config"
 	fsutil "gmc/filestore/util"
@@ -32,65 +31,61 @@ func (fs FileStores) GetFile(name string) (*fsutil.File, error) {
 	if len(fs.stores) == 0 {
 		return nil, fmt.Errorf("no filestores configured")
 	}
-	var errlist strings.Builder
+	var errlist error
 	for _, store := range fs.stores {
 		file, err := store.GetFile(name)
 		if err == nil {
 			return file, nil
 		}
-		errlist.WriteString("\n")
-		errlist.WriteString(err.Error())
+		errlist = errors.Join(errlist, err)
 	}
-	return nil, errors.New(errlist.String())
+	return nil, errlist
 }
 
 func (fs FileStores) PutFile(file *fsutil.File) error {
 	if len(fs.stores) == 0 {
 		return fmt.Errorf("no filestores configured")
 	}
-	var errlist strings.Builder
+	var errlist error
 	for _, store := range fs.stores {
 		if err := store.PutFile(file); err != nil {
-			errlist.WriteString("\n")
-			errlist.WriteString(err.Error())
+			errlist = errors.Join(errlist, err)
 		} else {
 			return nil
 		}
 	}
-	return errors.New(errlist.String())
+	return errlist
 }
 
 func (fs FileStores) DeleteFile(file *fsutil.File) error {
 	if len(fs.stores) == 0 {
 		return fmt.Errorf("no filestores configured")
 	}
-	var errlist strings.Builder
+	var errlist error
 	for _, store := range fs.stores {
 		if err := store.DeleteFile(file); err != nil {
-			errlist.WriteString("\n")
-			errlist.WriteString(err.Error())
+			errlist = errors.Join(errlist, err)
 		} else {
 			return nil
 		}
 	}
-	return errors.New(errlist.String())
+	return errlist
 }
 
 func (fs FileStores) StatFile(name string) (*fsutil.FileStat, error) {
 	if len(fs.stores) == 0 {
 		return nil, fmt.Errorf("no filestores configured")
 	}
-	var errlist strings.Builder
+	var errlist error
 	for _, store := range fs.stores {
 		stat, err := store.StatFile(name)
 		if err != nil {
-			errlist.WriteString("\n")
-			errlist.WriteString(err.Error())
+			errlist = errors.Join(errlist, err)
 		} else {
 			return stat, nil
 		}
 	}
-	return nil, errors.New(errlist.String())
+	return nil, errlist
 }
 
 func (fs FileStores) Shutdown() {
