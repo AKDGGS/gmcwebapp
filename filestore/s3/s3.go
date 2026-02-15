@@ -73,11 +73,8 @@ func (s3 *S3) GetFile(name string) (*fsutil.File, error) {
 	// error can be returned
 	stat, err := obj.Stat()
 	if err != nil {
-		switch v := err.(type) {
-		case minio.ErrorResponse:
-			if v.Code == "NoSuchKey" {
-				return nil, &os.PathError{Op: "stat", Path: name, Err: err}
-			}
+		if minio.ToErrorResponse(err).Code == "NoSuchKey" {
+			return nil, &os.PathError{Op: "stat", Path: name, Err: err}
 		}
 		return nil, err
 	}

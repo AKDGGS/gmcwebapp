@@ -5,7 +5,6 @@ import (
 	"flag"
 	"fmt"
 	"os"
-	"strconv"
 
 	"gmc/config"
 	"gmc/db"
@@ -31,22 +30,18 @@ func FileHealth(exec string, cfg *config.Config, cmd string, args []string) int 
 		fmt.Fprintf(os.Stderr, "%s: %s\n", os.Args[0], err)
 		return 1
 	}
+	failed := false
 	err = db.ListFiles(func(f *model.File) error {
-		if f.Name != nil {
-			id := strconv.Itoa(int(f.ID))
-			_, innererr := fs.StatFile(id + "/" + *f.Name)
-			if innererr != nil {
-				for _, curerr := range innererr.(interface{ Unwrap() []error }).Unwrap() {
-					if !errors.Is(curerr, os.ErrNotExist) {
-						return innererr
-					}
-				}
-				fmt.Fprintf(os.Stderr, "%s: file not found (%d): %s\n", exec, f.ID, *f.Name)
+		fp := fmt.Sprintf("%d/%s", f.ID, *f.Name)
+		if _, serr := fs.StatFile(fp); serr != nil {
+			failed = true
+			if errors.Is(serr, os.ErrNotExist) {
+				fmt.Fprintf(os.Stderr, "file not found: %s\n", fp)
 			}
 		}
 		return nil
 	})
-	if err != nil {
+	if err != nil || failed {
 		return 1
 	}
 	return 0
