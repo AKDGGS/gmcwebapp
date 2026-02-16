@@ -40,6 +40,6 @@ func printFileUsage(exec, cmd string) {
 	fmt.Printf("      upload files to filestore\n")
 	fmt.Printf("  get [args] -out <output directory> <file ids ...>\n")
 	fmt.Printf("      download file from filestore\n")
-	fmt.Printf("  health\n")
-	fmt.Printf("      check health of all files in filestore\n")
+	fmt.Printf("  health [args]\n")
+	fmt.Printf("      check (and fix) health of all files in filestore\n")
 }

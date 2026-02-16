@@ -1,7 +1,7 @@
 UPDATE file SET
-	filename = COALESCE($2, filename),
-	description = COALESCE($3, description),
-	size = COALESCE($4, size),
-	mimetype = COALESCE($5, mimetype),
-	file_hash = COALESCE($6, file_hash)
-WHERE file_id = $1
+	filename = $1,
+	description = $2,
+	size = $3,
+	mimetype = $4,
+	file_hash = $5
+WHERE file_id = $6

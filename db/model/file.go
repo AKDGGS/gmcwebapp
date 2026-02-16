@@ -7,10 +7,10 @@ import (
 
 type File struct {
 	ID          int32   `db:"id" json:"id,omitempty"`
-	Name        *string `json:"name,omitempty"`
+	Name        string  `json:"name,omitempty"`
 	Description *string `json:"description,omitempty"`
-	Type        *string `db:"mimetype" json:"mimetype"`
-	Size        *int64  `json:"size"`
+	Type        string  `db:"mimetype" json:"mimetype"`
+	Size        int64   `json:"size"`
 	Hash        *string `db:"file_hash" json:"file_hash,omitempty"`
 
 	// Transient fields that don't directly exist in the file table
@@ -24,11 +24,11 @@ type File struct {
 
 func (f *File) FormattedSize() string {
 	units := []string{"B", "KiB", "MiB", "GiB", "TiB", "PiB", "EiB"}
-	if f.Size == nil || *f.Size == 0 {
+	if f.Size == 0 {
 		return "0 B"
 	}
 
-	idx := min(int(math.Log2(float64(*f.Size))/10), len(units)-1)
-	value := float64(*f.Size) / math.Pow(1024, float64(idx))
+	idx := min(int(math.Log2(float64(f.Size))/10), len(units)-1)
+	value := float64(f.Size) / math.Pow(1024, float64(idx))
 	return fmt.Sprintf("%.2f %s", value, units[idx])
 }

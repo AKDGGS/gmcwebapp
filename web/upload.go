@@ -63,9 +63,9 @@ func (srv *Server) ServeUpload(w http.ResponseWriter, r *http.Request) {
 			mt = "application/octet-stream"
 		}
 		f := model.File{
-			Name: &fh.Filename,
-			Size: &fh.Size,
-			Type: &mt,
+			Name: fh.Filename,
+			Size: fh.Size,
+			Type: mt,
 		}
 
 		if id := r.FormValue("borehole_id"); id != "" {

@@ -49,8 +49,9 @@ func (pg *Postgres) PutFile(file *model.File, precommitFunc func(*model.File) er
 		if err != nil {
 			return err
 		}
-		err = tx.QueryRow(context.Background(), insert_sql, file.Name, file.Description,
-			file.Size, file.Type).Scan(&file.ID)
+		err = tx.QueryRow(context.Background(), insert_sql,
+			file.Name, file.Description, file.Size, file.Type,
+		).Scan(&file.ID)
 		if err != nil {
 			if err == ErrNoRows {
 				return nil
@@ -87,7 +88,7 @@ func (pg *Postgres) PutFile(file *model.File, precommitFunc func(*model.File) er
 				return err
 			}
 		}
-	// Handle an update
+		// Handle an update
 	} else {
 		update_sql, err := assets.ReadString("pg/file/update.sql")
 		if err != nil {
@@ -95,8 +96,8 @@ func (pg *Postgres) PutFile(file *model.File, precommitFunc func(*model.File) er
 		}
 		_, err = tx.Exec(
 			context.Background(), update_sql,
-			file.ID, file.Description, file.Size,
-			file.Type, file.Hash,
+			file.Name, file.Description, file.Size,
+			file.Type, file.Hash, file.ID,
 		)
 		if err != nil {
 			return err

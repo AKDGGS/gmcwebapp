@@ -37,7 +37,7 @@ func (srv *Server) ServeFile(w http.ResponseWriter, r *http.Request) {
 	}
 	// Fetch the file from filestore
 	fsfile, err := srv.FileStores.GetFile(fmt.Sprintf("%d/%s",
-		db_file.ID, *db_file.Name,
+		db_file.ID, db_file.Name,
 	))
 	if err != nil {
 		if _, ok := err.(*os.PathError); ok {
