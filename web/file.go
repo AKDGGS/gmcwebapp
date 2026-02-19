@@ -1,6 +1,7 @@
 package web
 
 import (
+	"errors"
 	"fmt"
 	"net/http"
 	"os"
@@ -40,12 +41,14 @@ func (srv *Server) ServeFile(w http.ResponseWriter, r *http.Request) {
 		db_file.ID, db_file.Name,
 	))
 	if err != nil {
-		if _, ok := err.(*os.PathError); ok {
-			http.Error(
-				w,
-				"get file error: file not found in filestore",
-				http.StatusNotFound,
-			)
+		if errors.Is(err, os.ErrNotExist) {
+			if pathErr, ok := errors.AsType[*os.PathError](err); ok {
+				http.Error(
+					w,
+					fmt.Sprintf("file not found: %s", pathErr.Path),
+					http.StatusNotFound,
+				)
+			}
 		} else {
 			http.Error(
 				w,

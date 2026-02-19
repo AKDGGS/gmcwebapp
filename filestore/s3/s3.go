@@ -74,7 +74,7 @@ func (s3 *S3) GetFile(name string) (*fsutil.File, error) {
 	stat, err := obj.Stat()
 	if err != nil {
 		if minio.ToErrorResponse(err).Code == "NoSuchKey" {
-			return nil, &os.PathError{Op: "stat", Path: name, Err: err}
+			return nil, &os.PathError{Op: "stat", Path: name, Err: os.ErrNotExist}
 		}
 		return nil, err
 	}
