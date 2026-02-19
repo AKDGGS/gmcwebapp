@@ -1,9 +1,11 @@
 package cmd
 
 import (
+	"crypto/md5"
 	"errors"
 	"flag"
 	"fmt"
+	"io"
 	"os"
 
 	"gmc/config"
@@ -11,6 +13,15 @@ import (
 	"gmc/db/model"
 	"gmc/filestore"
 )
+
+func hashStream(f io.Reader) (string, error) {
+	hasher := md5.New()
+	if _, err := io.Copy(hasher, f); err != nil {
+		return "", err
+	}
+	hash := fmt.Sprintf("%x", hasher.Sum(nil))
+	return hash, nil
+}
 
 func FileHealth(exec string, cfg *config.Config, cmd string, args []string) int {
 	flagset := flag.NewFlagSet(cmd, flag.ContinueOnError)
@@ -50,25 +61,41 @@ func FileHealth(exec string, cfg *config.Config, cmd string, args []string) int 
 			failed = true
 			if errors.Is(serr, os.ErrNotExist) {
 				fmt.Fprintf(os.Stderr, "file not found: %s\n", fp)
+			} else {
+				fmt.Fprintf(os.Stderr, "error getting file stat: %s\n", serr)
 			}
-		} else {
-			dirty := false
-			if *fix_sz && stat.Size != f.Size {
-				f.Size = stat.Size
+			return nil
+		}
+		dirty := false
+		if *fix_sz && stat.Size != f.Size {
+			f.Size = stat.Size
+			dirty = true
+		}
+		if *fix_hash {
+			rhash := stat.Hash
+			if rhash == "" {
+				srcfile, gerr := fs.GetFile(fmt.Sprintf("%d/%s", f.ID, f.Name))
+				if gerr != nil {
+					failed = true
+					fmt.Fprintf(os.Stderr, "error fetching file: %s\n", gerr)
+					return nil
+				}
+				rhash, gerr = hashStream(srcfile)
+				if gerr != nil {
+					failed = true
+					fmt.Fprintf(os.Stderr, "error hashing file: %s\n", gerr)
+					return nil
+				}
+			}
+			if f.Hash == nil || *f.Hash != rhash {
+				f.Hash = &rhash
 				dirty = true
 			}
+		}
 
-			if *fix_hash && stat.Hash != "" {
-				if f.Hash == nil || stat.Hash != *f.Hash {
-					f.Hash = &stat.Hash
-					dirty = true
-				}
-			}
-
-			if dirty {
-				if derr := db.PutFile(f, nil); derr != nil {
-					fmt.Printf("error updating file: %s\n", derr)
-				}
+		if dirty {
+			if derr := db.PutFile(f, nil); derr != nil {
+				fmt.Printf("error updating file: %s\n", derr)
 			}
 		}
 
