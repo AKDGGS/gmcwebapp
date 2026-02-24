@@ -37,6 +37,7 @@ type FlatInventory struct {
 	Description    *string           `json:"description,omitempty" parquet:"description,uncompressed,omitempty"`
 	Note           []string          `json:"note,omitempty" parquet:"-"`
 	Issue          []string          `json:"issue,omitempty" parquet:"issue,uncompressed,omitempty"`
+	Filename       []string          `json:"filename,omitempty" parquet:"-"`
 	Interval       *struct {
 		GTE *float64 `db:"gte" json:"gte,omitempty" parquet:"-"`
 		LTE *float64 `db:"lte" json:"lte,omitempty" parquet:"-"`

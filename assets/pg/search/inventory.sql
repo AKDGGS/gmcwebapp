@@ -36,7 +36,8 @@ SELECT
 	ll.longitude,
 	pj.project_id,
 	pj.name AS project,
-	iq.issues AS issue
+	iq.issues AS issue,
+	f.filenames AS filename
 FROM inventory AS i
 LEFT OUTER JOIN container AS ct
 	ON ct.container_id = i.container_id AND ct.active
@@ -162,4 +163,12 @@ LEFT OUTER JOIN (
 	FROM inventory_quality
 	ORDER BY inventory_id, check_date DESC
 ) AS iq ON iq.inventory_id = i.inventory_id
+LEFT OUTER JOIN (
+	SELECT
+	    inventory_id, 
+	    array_agg(fl.filename) AS filenames
+	FROM inventory_file AS if
+	JOIN file fl ON if.file_id = fl.file_id
+	GROUP BY inventory_id
+) AS f ON f.inventory_id = i.inventory_id
 WHERE i.active

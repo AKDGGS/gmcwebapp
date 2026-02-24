@@ -131,6 +131,7 @@ func (es *Elastic) NewInventoryIndex() (util.InventoryIndex, error) {
 				"latitude":    &types.FloatNumberProperty{Index: &no},
 				"note":        &types.TextProperty{Index: &yes},
 				"issue":       &types.TextProperty{Index: &yes},
+				"filename":    &types.TextProperty{Index: &yes},
 				"well": &types.ObjectProperty{
 					Dynamic: &dynamicmapping.False,
 					Enabled: &yes,
