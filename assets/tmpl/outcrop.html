@@ -115,7 +115,7 @@
 				{{- if .Files}}
 				<div id="file-list-container">
 					{{- range .Files}}
-					<div data-file_id="{{.ID}}" data-mimetype="{{.Type}}" data-size="{{.Size}}">
+					<div data-file_id="{{.ID}}" data-name="{{.Name}}" data-mimetype="{{.Type}}" data-size="{{.Size}}">
 						<a href="../file/{{.ID}}">{{.Name}}</a>
 						({{.FormattedSize}})
 					</div>

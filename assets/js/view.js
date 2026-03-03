@@ -108,7 +108,7 @@ if(document.getElementById('filedrop')){
 	);
 }
 
-if (document.getElementById('stash-button')){
+if(document.getElementById('stash-button')){
 	let stash = document.getElementById('stash-button');
 	let dest = document.getElementById('stash-dest');
 	stash.addEventListener('click', (e) => {
@@ -141,6 +141,37 @@ if (document.getElementById('stash-button')){
 			});
 		}
 		return false;
+	});
+}
+
+if(document.getElementById('file-list-container')){
+	let fl = document.getElementById('file-list-container');
+	Array.from(fl.querySelectorAll('div')).forEach((e,i) => {
+		if(e.dataset.mimetype.startsWith('text/csv') && e.dataset.size < 8192){
+			let fset = document.createElement('fieldset');
+			fset.className = 'csv';
+			let lgd = document.createElement('legend');
+			lgd.appendChild(document.createTextNode(e.dataset.name));
+			fset.appendChild(lgd);
+
+			let tbl = document.createElement('table');
+			Papa.parse(`../file/${e.dataset.file_id}`, {
+				download: true,
+				header: false,
+				skipEmptyLines: true,
+				step: function(r,p){
+					tbl.appendChild(r.data.reduce((a,v) => {
+						let td = document.createElement(p.readHeader ? 'td' : 'th');
+						td.appendChild(document.createTextNode(v));
+						a.appendChild(td);
+						return a;
+					}, document.createElement('tr')));
+					p.readHeader = true
+				}
+			});
+			fset.appendChild(tbl);
+			document.querySelector('.apptmpl-content').appendChild(fset);
+		}
 	});
 }
 

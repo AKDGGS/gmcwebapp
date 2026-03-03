@@ -22,6 +22,11 @@ table { max-width: 600px; }
 .tb-spacer-bg:not(:first-of-type) th, .tb-spacer-bg:not(:first-of-type) td {padding-top: 70px;}
 .tb-spacer-sm:not(:first-of-type) th, .tb-spacer-sm:not(:first-of-type) td {padding-top: 25px;}
 .tb-columns th {	padding-right: 50px; }
+.csv { display: flex; overflow-x: scroll; min-width: 0; max-width: 100vw; }
+.csv table { margin: 4px 0 4px 0; border-collapse: collapse; white-space: nowrap; }
+.csv th, .csv td { border: 1px solid black; padding: 0 2px 0 2px; }
+.csv table th { text-align: center; font-size: 14px; border-top: none; }
+.csv table td { text-align: right; font-size: 12px; }
 #stash-button { margin-bottom: 8px; }
 #stash-dest { display: none; font-size: 12px; font-family: Tahoma, Geneva, sans-serif; }
 #stash-dest.shown { display: block; }

@@ -91,6 +91,9 @@ func (srv *Server) Start() error {
 	mux.HandleFunc("/js/mustache.js", func(w http.ResponseWriter, r *http.Request) {
 		assets.ServeStaticPath("js/mustache-v4.2.0.js", w, r.Header)
 	})
+	mux.HandleFunc("/js/papaparse.js", func(w http.ResponseWriter, r *http.Request) {
+		assets.ServeStaticPath("js/papaparse-v5.5.3.js", w, r.Header)
+	})
 
 	// Pages for each type by ID
 	mux.HandleFunc("/well/{id}", srv.ServeWell)
