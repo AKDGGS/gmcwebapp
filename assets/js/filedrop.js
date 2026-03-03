@@ -166,13 +166,13 @@ function FileDrop(drop_zone, file_list_container) {
 					let percent_completed_file = Math.round((event.loaded / event.total) * 100);
 					pb_file.style.width = percent_completed_file + '%';
 					let elapsed_time_file = (Date.now() - pb_start_time) / 1000;
-					pb_file_progress.textContent = pb_size_formatter(Math.round(event.loaded / elapsed_time_file)) + '/S';
+					pb_file_progress.textContent = pb_size_formatter(Math.round(event.loaded / elapsed_time_file)) + '/s';
 					pb_file_name.textContent = file.name;
 
 					let percent_completed_total = Math.round(((total_loaded + event.loaded) / total_size) * 100);
 					pb_total.style.width = percent_completed_total + '%';
 					let elapsed_time_total = (Date.now() - pb_start_time) / 1000;
-					pb_total_progress.textContent = pb_size_formatter(Math.round(event.loaded / elapsed_time_total)) + '/S';
+					pb_total_progress.textContent = pb_size_formatter(Math.round(event.loaded / elapsed_time_total)) + '/s';
 				}
 			});
 
@@ -181,7 +181,7 @@ function FileDrop(drop_zone, file_list_container) {
 					file_id = xhr.getResponseHeader("file_id");
 					total_loaded += file.size;
 					let elapsed_time_total = (Date.now() - pb_start_time) / 1000;
-					pb_total_progress.textContent = pb_size_formatter(Math.round(total_size / elapsed_time_total)) + '/S';
+					pb_total_progress.textContent = pb_size_formatter(Math.round(total_size / elapsed_time_total)) + '/s';
 					pb_total_count.textContent =
 						pb_count + ' / ' + files.length + " Files Transferred";
 					add_file_to_page(file);

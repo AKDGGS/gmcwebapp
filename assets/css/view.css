@@ -33,7 +33,7 @@ table { max-width: 600px; }
 	padding: 4px 8px;
 }
 #stash-dest table tr:nth-child(odd){ background-color: #eee; }
-.file-list-container {
+#file-list-container {
 	display: inline-block;
 	max-width: auto;
 	word-break: break-all;
