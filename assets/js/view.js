@@ -1,4 +1,9 @@
 if(typeof geojson !== 'undefined'){
+	// Unhide map elements
+	document.querySelectorAll('.fs-map').forEach(
+		e => e.style.display = 'flex'
+	);
+
 	if(document.getElementById('map')){
 		let fmt = new ol.format.GeoJSON({
 			dataProjection: 'EPSG:4326',

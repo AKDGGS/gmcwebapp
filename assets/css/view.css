@@ -9,7 +9,7 @@ table { max-width: 600px; }
 .files div:not(:last-of-type) { margin-bottom: 16px; }
 .apptmpl-content { display: flex; flex-wrap: wrap;}
 .apptmpl-content fieldset { flex-grow: 1;}
-.fs-map {	display: flex; flex-grow: 10; }
+.fs-map { display: none; flex-grow: 10; }
 .fs-detail { min-width: 350px; flex-basis: 0; }
 .flex-break { height: 0; flex-basis: 100%; }
 .tb-fields { border-collapse: separate; }
@@ -21,7 +21,7 @@ table { max-width: 600px; }
 .tb-fields tr:not(:last-of-type) td { padding-bottom: 8px;}
 .tb-spacer-bg:not(:first-of-type) th, .tb-spacer-bg:not(:first-of-type) td {padding-top: 70px;}
 .tb-spacer-sm:not(:first-of-type) th, .tb-spacer-sm:not(:first-of-type) td {padding-top: 25px;}
-.tb-columns th {	padding-right: 50px; }
+.tb-columns th { padding-right: 50px; }
 .csv { display: flex; overflow-x: scroll; min-width: 0; max-width: 100vw; }
 .csv table { margin: 4px 0 4px 0; border-collapse: collapse; white-space: nowrap; }
 .csv th, .csv td { border: 1px solid black; padding: 0 2px 0 2px; }
