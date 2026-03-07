@@ -12,8 +12,8 @@ import (
 type FileStore interface {
 	GetFile(string) (*fsutil.File, error)
 	PutFile(*fsutil.File) error
-	DeleteFile(*fsutil.File) error
-	StatFile(name string) (*fsutil.FileStat, error)
+	DeleteFile(string) error
+	StatFile(string) (*fsutil.FileStat, error)
 	Shutdown()
 }
 

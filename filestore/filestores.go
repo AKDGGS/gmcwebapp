@@ -57,13 +57,13 @@ func (fs FileStores) PutFile(file *fsutil.File) error {
 	return errlist
 }
 
-func (fs FileStores) DeleteFile(file *fsutil.File) error {
+func (fs FileStores) DeleteFile(name string) error {
 	if len(fs.stores) == 0 {
 		return fmt.Errorf("no filestores configured")
 	}
 	var errlist error
 	for _, store := range fs.stores {
-		if err := store.DeleteFile(file); err != nil {
+		if err := store.DeleteFile(name); err != nil {
 			errlist = errors.Join(errlist, err)
 		} else {
 			return nil

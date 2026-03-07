@@ -124,7 +124,7 @@ func (s3 *S3) Shutdown() {
 	// Do nothing
 }
 
-func (s3 *S3) DeleteFile(file *fsutil.File) error {
+func (s3 *S3) DeleteFile(name string) error {
 	if s3.readonly {
 		return fmt.Errorf("read only filestore")
 	}
@@ -137,7 +137,7 @@ func (s3 *S3) DeleteFile(file *fsutil.File) error {
 		return nil
 	}
 	err = s3.client.RemoveObject(
-		context.Background(), s3.bucket, file.Name,
+		context.Background(), s3.bucket, name,
 		minio.RemoveObjectOptions{},
 	)
 	if err != nil {

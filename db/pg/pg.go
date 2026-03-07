@@ -98,6 +98,17 @@ func (pg *Postgres) queryRows(name string, args ...interface{}) ([]map[string]in
 	return rs, nil
 }
 
+func (pg *Postgres) executeSQL(name string, args ...interface{}) error {
+	q, err := assets.ReadString(name)
+	if err != nil {
+		return err
+	}
+	if _, err := pg.pool.Exec(context.Background(), q, args...); err != nil {
+		return err
+	}
+	return nil
+}
+
 func (pg *Postgres) queryTable(name string, args ...interface{}) (*model.Table, error) {
 	q, err := assets.ReadString(name)
 	if err != nil {

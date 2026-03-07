@@ -93,16 +93,16 @@ func (d *Dir) Shutdown() {
 	// Do nothing
 }
 
-func (d *Dir) DeleteFile(f *fsutil.File) error {
+func (d *Dir) DeleteFile(name string) error {
 	if d.readonly {
 		return fmt.Errorf("read only filestore")
 	}
 
-	err := os.Remove(filepath.Join(d.path, f.Name))
+	err := os.Remove(filepath.Join(d.path, name))
 	if err != nil {
 		return fmt.Errorf("error deleting file: %w", err)
 	}
-	err = os.Remove(filepath.Dir(filepath.Join(d.path, f.Name)))
+	err = os.Remove(filepath.Dir(filepath.Join(d.path, name)))
 	if err != nil {
 		return fmt.Errorf("error deleting directory: %w", err)
 	}

@@ -24,6 +24,8 @@ func FileCommand(cfg *config.Config, exec, cmd string, args []string) int {
 		return FileGet(exec, cfg, fmt.Sprintf("%s %s", cmd, subcmd), args[1:])
 	case "health":
 		return FileHealth(exec, cfg, fmt.Sprintf("%s %s", cmd, subcmd), args[1:])
+	case "del", "delete", "rm":
+		return FileDelete(exec, cfg, fmt.Sprintf("%s %s", cmd, subcmd), args[1:])
 	default:
 		fmt.Fprintf(os.Stderr, "%s %s '%s' is not a recognized subcommand\n",
 			exec, cmd, subcmd)
@@ -36,10 +38,13 @@ func FileCommand(cfg *config.Config, exec, cmd string, args []string) int {
 func printFileUsage(exec, cmd string) {
 	fmt.Printf("Usage: %s %s <subcommand> ...\n", exec, cmd)
 	fmt.Printf("Subcommands:\n")
-	fmt.Printf("  put [args] <filename ...>\n")
-	fmt.Printf("      upload files to filestore\n")
+	fmt.Printf("  del, delete, rm <id>\n")
+	fmt.Printf("      deletes a file\n")
 	fmt.Printf("  get [args] -out <output directory> <file ids ...>\n")
-	fmt.Printf("      download file from filestore\n")
+	fmt.Printf("      retrieves and saves a file locally\n")
 	fmt.Printf("  health [args]\n")
-	fmt.Printf("      check (and fix) health of all files in filestore\n")
+	fmt.Printf("      check (and optionally fix) files\n")
+	fmt.Printf("  put [args] <filename ...>\n")
+	fmt.Printf("      add files to filestore and database\n")
+
 }
