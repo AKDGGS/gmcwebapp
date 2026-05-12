@@ -161,6 +161,14 @@ func (srv *Server) ServeUpload(w http.ResponseWriter, r *http.Request) {
 			)
 			return
 		}
-		w.Header().Set("file_id", strconv.Itoa(int(f.ID)))
+		if _, err = fmt.Fprintf(w, `{"file_id": "%d"}`, f.ID); err != nil {
+			http.Error(
+				w,
+				fmt.Sprintf("error encoding response: %s", err),
+				http.StatusInternalServerError,
+			)
+			return
+		}
+		w.Header().Set("Content-Type", "application/json")
 	}
 }

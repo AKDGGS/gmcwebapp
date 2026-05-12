@@ -1,72 +1,57 @@
 function FileDrop(drop_zone, file_list_container) {
 	let div_header = document.createElement('div');
-	div_header.className = 'filedrop-header';
+	div_header.className = 'header';
 	drop_zone.appendChild(div_header);
 
-	let span = document.createElement('span');
-	span.className = 'filedrop-center-text filedrop-upload-text';
-	span.textContent = 'Drag or ';
-	div_header.appendChild(span);
-
-	let upload_link = document.createElement('a');
-	upload_link.href = '#';
-	upload_link.className = 'filedrop-upload-link';
-	upload_link.textContent = 'select';
-	span.appendChild(upload_link);
-	span.appendChild(document.createTextNode(' to upload files'));
+	let upload_link = document.getElementById('upload-link');
 
 	let filedrop_container = document.createElement('div');
-	filedrop_container.className = 'filedrop-container';
+	filedrop_container.className = 'container';
 	drop_zone.appendChild(filedrop_container);
 
 	// Add manual selection
 	let file_input = document.createElement('input');
 	file_input.type = 'file';
-	file_input.className = 'filedrop-file-input';
+	file_input.className = 'file-input';
 	file_input.multiple = true;
 	filedrop_container.appendChild(file_input);
 
 	//Add error div
 	let error_div = document.createElement('div');
-	error_div.className = 'filedrop-error-div';
+	error_div.className = 'error-div';
 	let error_span = document.createElement('span');
-	error_span.className = 'filedrop-center-text';
-	error_span.textContent = 'These files failed to upload:';
+	error_span.className = 'center-text';
+	error_span.textContent = 'These files failed to upload with the following error: ';
 	error_div.appendChild(error_span);
 	filedrop_container.appendChild(error_div);
 
 	//Add first progress bar
 	let pb_file = document.createElement('div');
-	pb_file.className = 'filedrop-pb filedrop-pb-file';
+	pb_file.className = 'pb pb-file';
 
 	let pb_file_progress = document.createElement('span');
-	pb_file_progress.className = 'filedrop-pb-text filedrop-pb-file-progress';
+	pb_file_progress.className = 'pb-text pb-file-progress';
 	pb_file.appendChild(pb_file_progress);
 
 	let pb_file_name = document.createElement('span');
-	pb_file_name.className = 'filedrop-pb-text filedrop-pb-file-name';
+	pb_file_name.className = 'pb-text pb-file-name';
 	pb_file.appendChild(pb_file_name);
 
 	filedrop_container.appendChild(pb_file);
 
 	//Add second progress bar
 	let pb_total = document.createElement('div');
-	pb_total.className = 'filedrop-pb filedrop-pb-total';
+	pb_total.className = 'pb pb-total';
 
 	let pb_total_progress = document.createElement('span');
-	pb_total_progress.className = 'filedrop-pb-text filedrop-pb-total-progress';
+	pb_total_progress.className = 'pb-text pb-total-progress';
 	pb_total.appendChild(pb_total_progress);
 
 	let pb_total_count = document.createElement('span');
-	pb_total_count.className = 'filedrop-pb-text filedrop-pb-total-count';
+	pb_total_count.className = 'pb-text pb-total-count';
 	pb_total.appendChild(pb_total_count);
 
 	filedrop_container.appendChild(pb_total);
-
-	// append file list container
-	if (file_list_container){
-		filedrop_container.appendChild(file_list_container);
-	}
 
 	let pb_uploading = false;
 	let pb_all_files = [];
@@ -84,9 +69,9 @@ function FileDrop(drop_zone, file_list_container) {
 			return;
 		}
 		pb_uploading = true;
-		const uploadText = document.querySelector('.filedrop-upload-text');
+		const uploadText = document.querySelector('.upload-text');
 		uploadText.classList.add('uploading');
-		let error_div = document.querySelector('.filedrop-error-div');
+		let error_div = document.querySelector('.error-div');
 		if (error_div) {
 			error_div.style.display = 'none';
 			error_div.failed_files = [];
@@ -99,7 +84,7 @@ function FileDrop(drop_zone, file_list_container) {
 		let files = e.dataTransfer.files;
 		pb_total_count.textContent = pb_count + ' / ' + files.length + " Files Transfered";
 		upload_files(files, () => {
-			const uploadText = document.querySelector('.filedrop-upload-text');
+			const uploadText = document.querySelector('.upload-text');
 			uploadText.classList.remove('uploading');
 			pb_uploading = false;
 		});
@@ -110,7 +95,7 @@ function FileDrop(drop_zone, file_list_container) {
 		if (pb_uploading) {
 			return
 		}
-		let error_div = document.querySelector('.filedrop-error-div');
+		let error_div = document.querySelector('.error-div');
 		if (error_div) {
 			error_div.style.display = 'none';
 			error_div.failed_files = [];
@@ -126,7 +111,7 @@ function FileDrop(drop_zone, file_list_container) {
 		let files = file_input.files;
 		pb_count += 1;
 		upload_files(files, () => {
-			const uploadText = document.querySelector('.filedrop-upload-text');
+			const uploadText = document.querySelector('.upload-text');
 			uploadText.classList.remove('uploading');
 			pb_uploading = false;
 		});
@@ -178,7 +163,17 @@ function FileDrop(drop_zone, file_list_container) {
 
 			xhr.addEventListener('load', (event) => {
 				if (xhr.status == 200) {
-					file_id = xhr.getResponseHeader("file_id");
+					try {
+						data = JSON.parse(xhr.responseText);
+					} catch(e) {
+						upload_error('Malformed JSON response');
+						return;
+					}
+					file_id= data?.file_id;
+					if (file_id == undefined) {
+						upload_error('No file_id in response');
+						return;
+					}
 					total_loaded += file.size;
 					let elapsed_time_total = (Date.now() - pb_start_time) / 1000;
 					pb_total_progress.textContent = pb_size_formatter(Math.round(total_size / elapsed_time_total)) + '/s';
@@ -187,12 +182,12 @@ function FileDrop(drop_zone, file_list_container) {
 					add_file_to_page(file);
 					pb_uploaded_files.push(file.name);
 				} else {
-					upload_error();
+					upload_error(`HTTP error ${xhr.status}`);
 				}
 			});
 
 			xhr.addEventListener('error', (event) => {
-				upload_error();
+				upload_error('Error reading XML response');
 			});
 
 			pb_count++
@@ -209,10 +204,7 @@ function FileDrop(drop_zone, file_list_container) {
 	}
 
 	function add_file_to_page(file) {
-		const file_div = document.createElement('div');
 		const filename_container = document.createElement('div');
-		filename_container.className = "filedrop-file-list-container";
-
 		const file_link = document.createElement('a');
 		file_link.href = `../file/${file_id}`;
 		file_link.textContent = file.name;
@@ -222,18 +214,16 @@ function FileDrop(drop_zone, file_list_container) {
 		const file_size = document.createTextNode(` (${pb_size_formatter(file.size)})`);
 		filename_container.appendChild(file_size);
 
-		file_div.appendChild(filename_container);
-		const container = document.querySelector('.filedrop-container');
-		const progress_bar = container.querySelector('.filedrop-pb-total');
-		container.insertBefore(file_div, progress_bar.nextSibling);
+		file_list_container.appendChild(filename_container);
 	}
 
-	function upload_error() {
-		const uploadText = document.querySelector('.filedrop-upload-text');
+	function upload_error(err) {
+		const uploadText = document.querySelector('.upload-text');
 		uploadText.classList.remove('uploading');
 		pb_uploading = false;
-		let error_div = document.querySelector('.filedrop-error-div');
+		let error_div = document.querySelector('.error-div');
 		error_div.style.display = 'flex';
+		error_span.textContent += err;
 
 		let failed_files = pb_all_files.filter(file => !pb_uploaded_files.includes(file));
 		let le = document.createElement('ul');
