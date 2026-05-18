@@ -22,7 +22,7 @@ func main() {
 		fmt.Printf("  start, server\n")
 		fmt.Printf("      start HTTP server\n")
 		fmt.Printf("  db, database\n")
-		fmt.Printf("      initialize, verify, or drop a database\n")
+		fmt.Printf("      initialize, verify, clean or drop a database\n")
 		fmt.Printf("  genkey, keygen\n")
 		fmt.Printf("      generate a random session key\n")
 		fmt.Printf("  token, tk\n")

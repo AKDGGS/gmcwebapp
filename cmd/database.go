@@ -19,6 +19,8 @@ func DatabaseCommand(cfg *config.Config, exec string, cmd string, args []string)
 		fmt.Printf("      verify database configuration\n")
 		fmt.Printf("  drop\n")
 		fmt.Printf("      drops entire database schema (DANGER!)\n")
+		fmt.Printf("  clean\n")
+		fmt.Printf("      delete inactive inventory\n")
 	}
 
 	if len(args) < 1 {
@@ -54,6 +56,18 @@ func DatabaseCommand(cfg *config.Config, exec string, cmd string, args []string)
 		}
 
 		fmt.Printf("Verification successful.\n")
+
+	case "clean":
+		db, err := db.New(cfg.Database)
+		if err != nil {
+			fmt.Fprintf(os.Stderr, "%s: %s\n", os.Args[0], err)
+			return 1
+		}
+		err = db.Clean()
+		if err != nil {
+			fmt.Fprintf(os.Stderr, "%s: %s\n", os.Args[0], err)
+			return 1
+		}
 
 	case "drop":
 		db, err := db.New(cfg.Database)

@@ -128,6 +128,9 @@ type DB interface {
 	// development.
 	SchemaDrop() error
 
+	//Remove deleted inventory
+	Clean() error
+
 	// Shutdown this database connection
 	Shutdown()
 }
