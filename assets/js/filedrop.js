@@ -140,11 +140,8 @@ function FileDrop(drop_zone, file_list_container) {
 
 			let xhr = new XMLHttpRequest();
 
-			['borehole_id', 'inventory_id', 'outcrop_id', 'prospect_id', 'shotline_id', 'well_id'].forEach(n => {
-				if (drop_zone.dataset[n]) {
-					form_data.append(n, drop_zone.dataset[n]);
-				}
-			});
+			let pq = ['borehole_id', 'inventory_id', 'outcrop_id', 'prospect_id', 'shotline_id', 'well_id'].filter(v => drop_zone.dataset[v]).map(v => `${v}=${drop_zone.dataset[v]}`).join('&');
+			let upload_url = '../upload' + (pq ? '?' + pq : '');
 
 			xhr.upload.addEventListener('progress', (event) => {
 				if (event.lengthComputable) {
@@ -169,7 +166,7 @@ function FileDrop(drop_zone, file_list_container) {
 						upload_error('Malformed JSON response');
 						return;
 					}
-					file_id= data?.file_id;
+					file_id = data?.[0]?.file_id;
 					if (file_id == undefined) {
 						upload_error('No file_id in response');
 						return;
@@ -191,7 +188,7 @@ function FileDrop(drop_zone, file_list_container) {
 			});
 
 			pb_count++
-			xhr.open('POST', '../upload/');
+			xhr.open('POST', upload_url);
 			xhr.addEventListener('load', nextFile);
 			xhr.send(form_data);
 		}

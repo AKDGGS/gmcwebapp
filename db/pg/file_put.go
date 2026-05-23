@@ -8,7 +8,7 @@ import (
 	"gmc/db/model"
 )
 
-func (pg *Postgres) PutFile(file *model.File, precommitFunc func(*model.File) error) error {
+func (pg *Postgres) PutFile(file *model.File, precommitFunc func(*model.File) (bool, error)) error {
 	tx, err := pg.pool.Begin(context.Background())
 	if err != nil {
 		return err
@@ -43,8 +43,8 @@ func (pg *Postgres) PutFile(file *model.File, precommitFunc func(*model.File) er
 		}
 	}
 
-	// Handle an insert
 	if file.ID == 0 {
+		// Handle an insert
 		insert_sql, err := assets.ReadString("pg/file/insert.sql")
 		if err != nil {
 			return err
@@ -58,38 +58,8 @@ func (pg *Postgres) PutFile(file *model.File, precommitFunc func(*model.File) er
 			}
 			return err
 		}
-
-		if len(file.BoreholeIDs) > 0 {
-			insert_sql, err := assets.ReadString("pg/file/insert_borehole.sql")
-			if err != nil {
-				return err
-			}
-			for _, b := range file.BoreholeIDs {
-				if b != 0 {
-					_, err = tx.Exec(context.Background(), insert_sql, file.ID, b)
-					if err != nil {
-						return err
-					}
-				}
-			}
-		}
-
-		if err = precommitFunc(file); err != nil {
-			return err
-		}
-
-		if file.Hash != nil {
-			hashsql, err := assets.ReadString("pg/file/update_hash.sql")
-			if err != nil {
-				return err
-			}
-			_, err = tx.Exec(context.Background(), hashsql, file.Hash, file.ID)
-			if err != nil {
-				return err
-			}
-		}
-		// Handle an update
 	} else {
+		// Handle an update
 		update_sql, err := assets.ReadString("pg/file/update.sql")
 		if err != nil {
 			return err
@@ -109,9 +79,24 @@ func (pg *Postgres) PutFile(file *model.File, precommitFunc func(*model.File) er
 		if err != nil {
 			return err
 		}
-		for _, b := range file.InventoryIDs {
-			if b != 0 {
-				_, err = tx.Exec(context.Background(), insert_sql, file.ID, b)
+		for _, id := range file.InventoryIDs {
+			if id != 0 {
+				_, err = tx.Exec(context.Background(), insert_sql, file.ID, id)
+				if err != nil {
+					return err
+				}
+			}
+		}
+	}
+
+	if len(file.BoreholeIDs) > 0 {
+		insert_sql, err := assets.ReadString("pg/file/insert_borehole.sql")
+		if err != nil {
+			return err
+		}
+		for _, id := range file.BoreholeIDs {
+			if id != 0 {
+				_, err = tx.Exec(context.Background(), insert_sql, file.ID, id)
 				if err != nil {
 					return err
 				}
@@ -124,9 +109,9 @@ func (pg *Postgres) PutFile(file *model.File, precommitFunc func(*model.File) er
 		if err != nil {
 			return err
 		}
-		for _, b := range file.OutcropIDs {
-			if b != 0 {
-				_, err = tx.Exec(context.Background(), insert_sql, file.ID, b)
+		for _, id := range file.OutcropIDs {
+			if id != 0 {
+				_, err = tx.Exec(context.Background(), insert_sql, file.ID, id)
 				if err != nil {
 					return err
 				}
@@ -139,9 +124,9 @@ func (pg *Postgres) PutFile(file *model.File, precommitFunc func(*model.File) er
 		if err != nil {
 			return err
 		}
-		for _, b := range file.ProspectIDs {
-			if b != 0 {
-				_, err = tx.Exec(context.Background(), insert_sql, file.ID, b)
+		for _, id := range file.ProspectIDs {
+			if id != 0 {
+				_, err = tx.Exec(context.Background(), insert_sql, file.ID, id)
 				if err != nil {
 					return err
 				}
@@ -154,9 +139,9 @@ func (pg *Postgres) PutFile(file *model.File, precommitFunc func(*model.File) er
 		if err != nil {
 			return err
 		}
-		for _, well := range file.WellIDs {
-			if well != 0 {
-				_, err = tx.Exec(context.Background(), insert_sql, file.ID, well)
+		for _, id := range file.WellIDs {
+			if id != 0 {
+				_, err = tx.Exec(context.Background(), insert_sql, file.ID, id)
 				if err != nil {
 					return err
 				}
@@ -164,6 +149,26 @@ func (pg *Postgres) PutFile(file *model.File, precommitFunc func(*model.File) er
 		}
 	}
 
-	// All files successfully added to the file table
+	if precommitFunc != nil {
+		req_update, err := precommitFunc(file)
+		if err != nil {
+			return err
+		}
+		if req_update {
+			update_sql, err := assets.ReadString("pg/file/update.sql")
+			if err != nil {
+				return err
+			}
+			_, err = tx.Exec(
+				context.Background(), update_sql,
+				file.Name, file.Description, file.Size,
+				file.Type, file.Hash, file.ID,
+			)
+			if err != nil {
+				return err
+			}
+		}
+	}
+
 	return tx.Commit(context.Background())
 }

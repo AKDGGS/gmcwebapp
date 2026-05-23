@@ -77,10 +77,10 @@ func FilePut(exec string, cfg *config.Config, cmd string, args []string) int {
 		}
 
 		// Add the file to the database
-		err = db.PutFile(&file, func(dbfile *model.File) error {
+		err = db.PutFile(&file, func(dbfile *model.File) (bool, error) {
 			file_obj, err := os.Open(filename)
 			if err != nil {
-				return err
+				return false, err
 			}
 
 			mt := mime.TypeByExtension(filepath.Ext(file_info.Name()))
@@ -98,12 +98,11 @@ func FilePut(exec string, cfg *config.Config, cmd string, args []string) int {
 
 			fsfile.SetContent(file_obj, true)
 			if err := fs.PutFile(fsfile); err != nil {
-				return fmt.Errorf("error putting file in filestore: %w", err)
+				return false, fmt.Errorf("error putting file in filestore: %w", err)
 			}
 			hash := fmt.Sprintf("%x", fsfile.GetHash())
 			dbfile.Hash = &hash
-
-			return nil
+			return true, nil
 		})
 		if err != nil {
 			fmt.Fprintf(os.Stderr, "%s\n", err)

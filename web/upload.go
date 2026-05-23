@@ -1,7 +1,9 @@
 package web
 
 import (
+	"encoding/json"
 	"fmt"
+	"io"
 	"mime"
 	"net/http"
 	"path/filepath"
@@ -11,6 +13,13 @@ import (
 	"gmc/db/model"
 	fsutil "gmc/filestore/util"
 )
+
+type UploadStatus struct {
+	ID    int32  `json:"file_id,omitempty"`
+	Name  string `json:"name,omitempty"`
+	Size  int64  `json:"size,omitempty"`
+	Error string `json:"error,omitempty"`
+}
 
 func (srv *Server) ServeUpload(w http.ResponseWriter, r *http.Request) {
 	user, err := srv.Auths.CheckRequest(w, r)
@@ -30,145 +39,133 @@ func (srv *Server) ServeUpload(w http.ResponseWriter, r *http.Request) {
 		)
 		return
 	}
-	err = r.ParseMultipartForm(33554432) // 32MB
+
+	q := r.URL.Query()
+	inventory_ids, err := strsToInts(q["inventory_id"])
 	if err != nil {
-		http.Error(
-			w,
-			fmt.Sprintf("parse error: %s", err),
-			http.StatusInternalServerError,
-		)
+		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
-	if r.MultipartForm == nil || r.MultipartForm.File == nil {
-		http.Error(
-			w,
-			"multipart form of file is nil",
-			http.StatusBadRequest,
-		)
+
+	borehole_ids, err := strsToInts(q["borehole_id"])
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
-	for _, fh := range r.MultipartForm.File["file"] {
-		file, err := fh.Open()
+	outcrop_ids, err := strsToInts(q["outcrop_id"])
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	prospect_ids, err := strsToInts(q["prospect_id"])
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	well_ids, err := strsToInts(q["well_id"])
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	barcode := q.Get("barcode")
+
+	var results []UploadStatus
+
+	mr, err := r.MultipartReader()
+	if err != nil {
+		http.Error(w, "no files uploaded", http.StatusInternalServerError)
+		return
+	}
+	for {
+		pt, err := mr.NextPart()
+		if err == io.EOF {
+			break
+		}
 		if err != nil {
 			http.Error(
 				w,
-				fmt.Sprintf("failed to open file: %s", err),
+				fmt.Sprintf("multipart error: %s", err),
 				http.StatusInternalServerError,
 			)
 			return
 		}
-		defer file.Close()
-		mt := mime.TypeByExtension(filepath.Ext(fh.Filename))
-		if mt == "" {
-			mt = "application/octet-stream"
-		}
-		f := model.File{
-			Name: fh.Filename,
-			Size: fh.Size,
-			Type: mt,
-		}
 
-		if id := r.FormValue("borehole_id"); id != "" {
-			borehole_id, err := strconv.Atoi(id)
+		if fn := pt.FileName(); fn != "" {
+			stat := UploadStatus{Name: fn}
+
+			// Determine mime type, set default on failure
+			mt := mime.TypeByExtension(filepath.Ext(fn))
+			if mt == "" {
+				mt = "application/octet-stream"
+			}
+
+			f := model.File{
+				Name:         fn,
+				Type:         mt,
+				Barcode:      barcode,
+				InventoryIDs: inventory_ids,
+				BoreholeIDs:  borehole_ids,
+				OutcropIDs:   outcrop_ids,
+				ProspectIDs:  prospect_ids,
+				WellIDs:      well_ids,
+			}
+
+			err = srv.DB.PutFile(&f, func(dbfile *model.File) (bool, error) {
+				stat.ID = f.ID
+				//Add the file to the filestore
+				fsfile := &fsutil.File{
+					Name:         fmt.Sprintf("%d/%s", f.ID, fn),
+					Size:         -1,
+					LastModified: time.Now(),
+					ContentType:  mt,
+				}
+				fsfile.SetContent(pt, true)
+				if err := srv.FileStores.PutFile(fsfile); err != nil {
+					return false, err
+				}
+				stat.Size = fsfile.GetReadSize()
+				hash := fmt.Sprintf("%x", fsfile.GetHash())
+				dbfile.Hash = &hash
+				dbfile.Size = fsfile.GetReadSize()
+				return true, nil
+			})
+			pt.Close()
+
 			if err != nil {
-				http.Error(
-					w,
-					"invalid borehole_id",
-					http.StatusBadRequest,
+				// Try to cleanup file from filestore
+				srv.FileStores.DeleteFile(
+					fmt.Sprintf("%d/%s", stat.ID, stat.Name),
 				)
-				return
-			}
-			f.BoreholeIDs = append(f.BoreholeIDs, borehole_id)
-		}
 
-		if id := r.FormValue("inventory_id"); id != "" {
-			inventory_id, err := strconv.Atoi(id)
-			if err != nil {
-				http.Error(
-					w,
-					"invalid inventory_id",
-					http.StatusBadRequest,
-				)
-				return
+				stat.ID = 0
+				stat.Size = 0
+				stat.Error = err.Error()
 			}
-			f.InventoryIDs = append(f.InventoryIDs, inventory_id)
+			results = append(results, stat)
 		}
-
-		if id := r.FormValue("outcrop_id"); id != "" {
-			outcrop_id, err := strconv.Atoi(id)
-			if err != nil {
-				http.Error(
-					w,
-					"invalid outcrop_id",
-					http.StatusBadRequest,
-				)
-				return
-			}
-			f.OutcropIDs = append(f.OutcropIDs, outcrop_id)
-		}
-
-		if id := r.FormValue("prospect_id"); id != "" {
-			prospect_id, err := strconv.Atoi(id)
-			if err != nil {
-				http.Error(
-					w,
-					"invalid prospect_id",
-					http.StatusBadRequest,
-				)
-				return
-			}
-			f.ProspectIDs = append(f.ProspectIDs, prospect_id)
-		}
-
-		if id := r.FormValue("well_id"); id != "" {
-			well_id, err := strconv.Atoi(id)
-			if err != nil {
-				http.Error(
-					w,
-					"invalid well_id",
-					http.StatusBadRequest,
-				)
-				return
-			}
-			f.WellIDs = append(f.WellIDs, well_id)
-		}
-
-		if barcode := r.FormValue("barcode"); barcode != "" {
-			f.Barcode = barcode
-		}
-
-		err = srv.DB.PutFile(&f, func(dbfile *model.File) error {
-			//Add the file to the filestore
-			fsfile := &fsutil.File{
-				Name:         fmt.Sprintf("%d/%s", f.ID, fh.Filename),
-				Size:         fh.Size,
-				LastModified: time.Now(),
-				ContentType:  mt,
-			}
-			fsfile.SetContent(file, true)
-			if err := srv.FileStores.PutFile(fsfile); err != nil {
-				return err
-			}
-			hash := fmt.Sprintf("%x", fsfile.GetHash())
-			dbfile.Hash = &hash
-			return nil
-		})
-		if err != nil {
-			http.Error(
-				w,
-				fmt.Sprintf("error putting file in database or filestore: %s", err),
-				http.StatusInternalServerError,
-			)
-			return
-		}
-		if _, err = fmt.Fprintf(w, `{"file_id": "%d"}`, f.ID); err != nil {
-			http.Error(
-				w,
-				fmt.Sprintf("error encoding response: %s", err),
-				http.StatusInternalServerError,
-			)
-			return
-		}
-		w.Header().Set("Content-Type", "application/json")
 	}
+
+	jsn, err := json.Marshal(results)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	w.Header().Set("Content-Type", "application/json")
+	w.Write(jsn)
+}
+
+func strsToInts(arr []string) ([]int, error) {
+	if arr == nil {
+		return []int{}, nil
+	}
+	ns := make([]int, len(arr))
+	for i, s := range arr {
+		n, err := strconv.Atoi(s)
+		if err != nil {
+			return nil, fmt.Errorf("invalid number: %s", s)
+		}
+		ns[i] = n
+	}
+	return ns, nil
 }

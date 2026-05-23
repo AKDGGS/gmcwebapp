@@ -70,7 +70,7 @@ func (srv *Server) Start() error {
 	mux.HandleFunc("/prospects.json", srv.ServeProspects)
 
 	// Upload page/endpoint
-	mux.HandleFunc("/upload/{$}", srv.ServeUpload)
+	mux.HandleFunc("/upload", srv.ServeUpload)
 
 	// General assets
 	mux.HandleFunc("/css/", assets.ServeStatic)
