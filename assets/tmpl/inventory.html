@@ -575,24 +575,17 @@
 
 			<fieldset>
 				<legend>Files</legend>
-				{{- if $.user}}
-				<div id="filedrop" data-inventory_id="{{.ID}}">
-					<div class="header">
-						<span id="upload-link" class="center-text upload-text">Drag or <a href="#" class="upload-link">select</a> to upload files</span>
-					</div>
-				{{- end}}
-				<div id="file-list-container" class="file-list-container">
-				{{- if .Files}}
-					{{- range .Files}}
-					<div data-file_id="{{.ID}}" data-name="{{.Name}}" data-mimetype="{{.Type}}" data-size="{{.Size}}">
-						<a href="../file/{{.ID}}">{{.Name}}</a>
-						({{.FormattedSize}})
-					</div>
+				<div data-inventory_id="{{.ID}}" {{- if $.user}} class="filedrop" {{- end}}>
+					<div id="file-list-container" class="file-list-container">
+					{{- if .Files}}
+						{{- range .Files}}
+						<div data-file_id="{{.ID}}" data-name="{{.Name}}" data-mimetype="{{.Type}}" data-size="{{.Size}}">
+							<a href="../file/{{.ID}}">{{.Name}}</a>
+							({{.FormattedSize}})
+						</div>
+						{{- end}}
 					{{- end}}
-				{{- if $.user}}
-				</div>
-				{{- end}}
-				{{- end}}
+					</div>
 				</div>
 			</fieldset>
 			{{- end}}
