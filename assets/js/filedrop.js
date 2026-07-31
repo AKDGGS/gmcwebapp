@@ -193,6 +193,9 @@ function FileDrop(drop_zone, file_list_container){
 	}
 
 	function add_file_to_page(file){
+		if (file_list_container.querySelector(`[data-file_id="${file_id}"]`)) {
+			return;
+		}
 		const filename_container = document.createElement('div');
 		const file_link = document.createElement('a');
 		file_link.href = `../file/${file_id}`;
@@ -200,6 +203,9 @@ function FileDrop(drop_zone, file_list_container){
 		filename_container.appendChild(file_link);
 		const file_size = document.createTextNode(` (${size_formatter(file.size)})`);
 		filename_container.appendChild(file_size);
+		filename_container.setAttribute("data-file_id", file_id);
+		filename_container.setAttribute("data-name", file.name);
+		filename_container.setAttribute("data-size", file.size);
 		file_list_container.appendChild(filename_container);
 	}
 
