@@ -99,48 +99,84 @@ func (srv *Server) ServeUpload(w http.ResponseWriter, r *http.Request) {
 				mt = "application/octet-stream"
 			}
 
-			f := model.File{
-				Name:         fn,
-				Type:         mt,
-				Barcode:      barcode,
-				InventoryIDs: inventory_ids,
-				BoreholeIDs:  borehole_ids,
-				OutcropIDs:   outcrop_ids,
-				ProspectIDs:  prospect_ids,
-				WellIDs:      well_ids,
+			// Fetch a new ID
+			id, err := srv.DB.GetFileNextID()
+			if err != nil {
+				stat.Error = err.Error()
+				results = append(results, stat)
+				continue
 			}
 
-			err = srv.DB.PutFile(&f, func(dbfile *model.File) (bool, error) {
-				stat.ID = f.ID
-				//Add the file to the filestore
-				fsfile := &fsutil.File{
-					Name:         fmt.Sprintf("%d/%s", f.ID, fn),
-					Size:         -1,
-					LastModified: time.Now(),
-					ContentType:  mt,
-				}
-				fsfile.SetContent(pt, true)
-				if err := srv.FileStores.PutFile(fsfile); err != nil {
-					return false, err
-				}
-				stat.Size = fsfile.GetReadSize()
-				hash := fmt.Sprintf("%x", fsfile.GetHash())
-				dbfile.Hash = &hash
-				dbfile.Size = fsfile.GetReadSize()
-				return true, nil
-			})
-			pt.Close()
+			// Add file to file store
+			fsfile := &fsutil.File{
+				Name:         fmt.Sprintf("%d/%s", id, fn),
+				Size:         -1,
+				LastModified: time.Now(),
+				ContentType:  mt,
+			}
+			fsfile.SetContent(pt, true)
+			if err := srv.FileStores.PutFile(fsfile); err != nil {
+				stat.Error = err.Error()
+				results = append(results, stat)
+				continue
+			}
 
+			hash := fmt.Sprintf("%x", fsfile.GetHash())
+
+			f, err := srv.DB.GetFileByHash(hash)
 			if err != nil {
 				// Try to cleanup file from filestore
-				srv.FileStores.DeleteFile(
-					fmt.Sprintf("%d/%s", stat.ID, stat.Name),
-				)
-
-				stat.ID = 0
-				stat.Size = 0
+				srv.FileStores.DeleteFile(fmt.Sprintf("%d/%s", id, fn))
 				stat.Error = err.Error()
+				results = append(results, stat)
+				continue
 			}
+
+			if f == nil {
+				// If there's no existing file, add the file
+				f = &model.File{
+					ID:           id,
+					Name:         fn,
+					Size:         fsfile.GetReadSize(),
+					Hash:         &hash,
+					Type:         mt,
+					Barcode:      barcode,
+					InventoryIDs: inventory_ids,
+					BoreholeIDs:  borehole_ids,
+					OutcropIDs:   outcrop_ids,
+					ProspectIDs:  prospect_ids,
+					WellIDs:      well_ids,
+				}
+				if err := srv.DB.AddFile(f); err != nil {
+					// Try to cleanup file from filestore
+					srv.FileStores.DeleteFile(
+						fmt.Sprintf("%d/%s", stat.ID, stat.Name),
+					)
+					stat.Error = err.Error()
+					results = append(results, stat)
+					continue
+				}
+			} else {
+				// If the file already exists, delete the new upload
+				srv.FileStores.DeleteFile(fmt.Sprintf("%d/%s", id, fn))
+
+				// Update the existing file
+				f.Barcode = barcode
+				f.InventoryIDs = inventory_ids
+				f.BoreholeIDs = borehole_ids
+				f.OutcropIDs = outcrop_ids
+				f.ProspectIDs = prospect_ids
+				f.WellIDs = well_ids
+				if err := srv.DB.UpdateFile(f); err != nil {
+					// Do not try to clean up the file here, it already exists
+					stat.Error = err.Error()
+					results = append(results, stat)
+					continue
+				}
+			}
+
+			stat.ID = f.ID
+			stat.Size = f.Size
 			results = append(results, stat)
 		}
 	}

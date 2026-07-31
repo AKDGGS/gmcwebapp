@@ -94,7 +94,7 @@ func FileHealth(exec string, cfg *config.Config, cmd string, args []string) int 
 		}
 
 		if dirty {
-			if derr := db.PutFile(f, nil); derr != nil {
+			if derr := db.UpdateFile(f); derr != nil {
 				fmt.Printf("error updating file: %s\n", derr)
 			}
 		}

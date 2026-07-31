@@ -8,7 +8,7 @@ import (
 	"gmc/db/model"
 )
 
-func (pg *Postgres) PutFile(file *model.File, precommitFunc func(*model.File) (bool, error)) error {
+func (pg *Postgres) AddFile(file *model.File) error {
 	tx, err := pg.pool.Begin(context.Background())
 	if err != nil {
 		return err
@@ -43,35 +43,18 @@ func (pg *Postgres) PutFile(file *model.File, precommitFunc func(*model.File) (b
 		}
 	}
 
-	if file.ID == 0 {
-		// Handle an insert
-		insert_sql, err := assets.ReadString("pg/file/insert.sql")
-		if err != nil {
-			return err
+	insert_sql, err := assets.ReadString("pg/file/insert.sql")
+	if err != nil {
+		return err
+	}
+	_, err = tx.Exec(context.Background(), insert_sql,
+		file.ID, file.Name, file.Description, file.Size, file.Type, file.Hash,
+	)
+	if err != nil {
+		if err == ErrNoRows {
+			return nil
 		}
-		err = tx.QueryRow(context.Background(), insert_sql,
-			file.Name, file.Description, file.Size, file.Type,
-		).Scan(&file.ID)
-		if err != nil {
-			if err == ErrNoRows {
-				return nil
-			}
-			return err
-		}
-	} else {
-		// Handle an update
-		update_sql, err := assets.ReadString("pg/file/update.sql")
-		if err != nil {
-			return err
-		}
-		_, err = tx.Exec(
-			context.Background(), update_sql,
-			file.Name, file.Description, file.Size,
-			file.Type, file.Hash, file.ID,
-		)
-		if err != nil {
-			return err
-		}
+		return err
 	}
 
 	if len(file.InventoryIDs) > 0 {
@@ -145,27 +128,6 @@ func (pg *Postgres) PutFile(file *model.File, precommitFunc func(*model.File) (b
 				if err != nil {
 					return err
 				}
-			}
-		}
-	}
-
-	if precommitFunc != nil {
-		req_update, err := precommitFunc(file)
-		if err != nil {
-			return err
-		}
-		if req_update {
-			update_sql, err := assets.ReadString("pg/file/update.sql")
-			if err != nil {
-				return err
-			}
-			_, err = tx.Exec(
-				context.Background(), update_sql,
-				file.Name, file.Description, file.Size,
-				file.Type, file.Hash, file.ID,
-			)
-			if err != nil {
-				return err
 			}
 		}
 	}

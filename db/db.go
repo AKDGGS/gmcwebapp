@@ -49,15 +49,18 @@ type DB interface {
 	// Fetches wells point list
 	GetWellPoints() (interface{}, error)
 
+	// Fetches the next file_id
+	GetFileNextID() (int32, error)
 	// Fetches file details
 	GetFile(id int) (*model.File, error)
-
-	// Put file
-	PutFile(*model.File, func(*model.File) (bool, error)) error
-
+	// Fetches file details by hash
+	GetFileByHash(hash string) (*model.File, error)
+	// Update existing file
+	UpdateFile(*model.File) error
+	// Insert new file
+	AddFile(*model.File) error
 	// Delete a file from the file and linking tables
 	DeleteFile(id int, rm_links bool) error
-
 	// List all files
 	ListFiles(func(*model.File) error) error
 

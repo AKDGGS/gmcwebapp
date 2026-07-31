@@ -1,8 +1,10 @@
 package cmd
 
 import (
+	"crypto/md5"
 	"flag"
 	"fmt"
+	"io"
 	"mime"
 	"os"
 	"path/filepath"
@@ -66,48 +68,107 @@ func FilePut(exec string, cfg *config.Config, cmd string, args []string) int {
 			exit_code = 1
 			continue
 		}
-		file := model.File{
+
+		hash, err := md5file(filename)
+		if err != nil {
+			fmt.Fprintf(os.Stderr, "%s: %s\n", exec, err)
+			exit_code = 1
+			continue
+		}
+
+		f, err := db.GetFileByHash(hash)
+		if err != nil {
+			fmt.Fprintf(os.Stderr, "%s: %s\n", exec, err)
+			exit_code = 1
+			continue
+		}
+
+		// File already exists, just do an update
+		if f != nil {
+			f.InventoryIDs = []int{*inventory_id}
+			f.BoreholeIDs = []int{*borehole_id}
+			f.OutcropIDs = []int{*outcrop_id}
+			f.ProspectIDs = []int{*prospect_id}
+			f.WellIDs = []int{*well_id}
+
+			if err := db.AddFile(f); err != nil {
+				fmt.Fprintf(os.Stderr, "%s: %s\n", exec, err)
+				exit_code = 1
+			}
+			continue
+		}
+
+		// Fetch a new ID
+		id, err := db.GetFileNextID()
+		if err != nil {
+			fmt.Fprintf(os.Stderr, "%s: %s\n", exec, err)
+			exit_code = 1
+			continue
+		}
+
+		// Determine mime type, set default on failure
+		mt := mime.TypeByExtension(filepath.Ext(file_info.Name()))
+		if mt == "" {
+			mt = "application/octet-stream"
+		}
+
+		// Add the file to the filestore
+		file_obj, err := os.Open(filename)
+		if err != nil {
+			fmt.Fprintf(os.Stderr, "%s: %s\n", exec, err)
+			exit_code = 1
+			continue
+		}
+		fsfile := &fsutil.File{
+			Name:         fmt.Sprintf("%d/%s", id, file_info.Name()),
+			Size:         file_info.Size(),
+			LastModified: file_info.ModTime(),
+			ContentType:  mt,
+		}
+		fsfile.SetContent(file_obj, true)
+		if err := fs.PutFile(fsfile); err != nil {
+			fmt.Fprintf(os.Stderr, "%s: %s\n", exec, err)
+			exit_code = 1
+			continue
+		}
+
+		// Add the file into the database
+		dbfile := &model.File{
+			ID:           id,
 			Name:         file_info.Name(),
 			Size:         file_info.Size(),
+			Type:         mt,
+			Hash:         &hash,
 			BoreholeIDs:  []int{*borehole_id},
 			InventoryIDs: []int{*inventory_id},
 			OutcropIDs:   []int{*outcrop_id},
 			ProspectIDs:  []int{*prospect_id},
 			WellIDs:      []int{*well_id},
 		}
-
-		// Add the file to the database
-		err = db.PutFile(&file, func(dbfile *model.File) (bool, error) {
-			file_obj, err := os.Open(filename)
-			if err != nil {
-				return false, err
-			}
-
-			mt := mime.TypeByExtension(filepath.Ext(file_info.Name()))
-			if mt == "" {
-				mt = "application/octet-stream"
-			}
-
-			//Add the file to the filestore
-			fsfile := &fsutil.File{
-				Name:         fmt.Sprintf("%d/%s", file.ID, file_info.Name()),
-				Size:         file_info.Size(),
-				LastModified: file_info.ModTime(),
-				ContentType:  mt,
-			}
-
-			fsfile.SetContent(file_obj, true)
-			if err := fs.PutFile(fsfile); err != nil {
-				return false, fmt.Errorf("error putting file in filestore: %w", err)
-			}
-			hash := fmt.Sprintf("%x", fsfile.GetHash())
-			dbfile.Hash = &hash
-			return true, nil
-		})
-		if err != nil {
-			fmt.Fprintf(os.Stderr, "%s\n", err)
+		if err = db.AddFile(dbfile); err != nil {
+			// Try to cleanup file from filestore
+			fs.DeleteFile(
+				fmt.Sprintf("%d/%s", id, file_info.Name()),
+			)
+			fmt.Fprintf(os.Stderr, "%s: %s\n", exec, err)
 			exit_code = 1
+			continue
 		}
 	}
 	return exit_code
+}
+
+func md5file(path string) (string, error) {
+	f, err := os.Open(path)
+	if err != nil {
+		return "", err
+	}
+	defer f.Close()
+
+	hash := md5.New()
+	if _, err := io.Copy(hash, f); err != nil {
+		return "", err
+	}
+
+	return fmt.Sprintf("%x", hash.Sum(nil)), nil
 }
