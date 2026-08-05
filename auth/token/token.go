@@ -29,9 +29,12 @@ func (a *DatabaseTokenAuth) Name() string {
 }
 
 func (a *DatabaseTokenAuth) Check(u string, p string) (*authu.User, error) {
-	t, err := a.db.CheckToken(p)
-	if err == nil {
-		return &authu.User{Username: t.Description}, nil
+	if p == "" {
+		return nil, nil
 	}
-	return nil, err
+	t, err := a.db.CheckToken(p)
+	if err != nil || t == nil {
+		return nil, err
+	}
+	return &authu.User{Username: t.Description}, nil
 }
