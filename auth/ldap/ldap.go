@@ -91,7 +91,7 @@ func (a *LDAPAuth) Check(u string, p string) (*authu.User, error) {
 	defer conn.Close()
 	var buf bytes.Buffer
 	if a.bind_as_user {
-		t, err := template.New("bind_dn_tmpl").Parse(a.bind_dn)
+		t, err := template.New("base_dn_tmpl").Parse(a.base_dn)
 		if err != nil {
 			return nil, err
 		}
