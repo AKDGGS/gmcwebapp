@@ -253,7 +253,7 @@ function RefreshFileList(){
 			}
 		});
 	})
-	.catch(error => {
-		fl.innerHTML = "error refreshing file list: " + error;
+	.catch(err => {
+		if(window.console) console.log(err);
 	});
 }
