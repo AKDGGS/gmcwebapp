@@ -21,9 +21,9 @@ func (srv *Server) ServeInventory(w http.ResponseWriter, r *http.Request) {
 		)
 		return
 	}
-	flags := dbf.ALL
+	flags := dbf.ALL &^ dbf.FILES
 	if user == nil {
-		flags = dbf.ALL_NOPRIVATE
+		flags = dbf.ALL_NOPRIVATE &^ dbf.FILES
 	}
 	id, err := strconv.Atoi(r.PathValue("id"))
 	if err != nil {
@@ -80,6 +80,7 @@ func (srv *Server) ServeInventory(w http.ResponseWriter, r *http.Request) {
 		"stylesheets": []string{
 			"../ol/ol.css", "../ol/ol-layerswitcher.min.css",
 			"../css/map-defaults.css", "../css/view.css",
+			"../css/filediv-colors.css",
 		},
 		"scripts": []string{
 			"../ol/ol.js", "../ol/ol-layerswitcher.min.js",

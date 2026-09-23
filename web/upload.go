@@ -139,7 +139,7 @@ func (srv *Server) ServeUpload(w http.ResponseWriter, r *http.Request) {
 					Name:         fn,
 					Size:         fsfile.GetReadSize(),
 					Hash:         &hash,
-					Type:         mt,
+					MimeType:     mt,
 					Barcode:      barcode,
 					InventoryIDs: inventory_ids,
 					BoreholeIDs:  borehole_ids,

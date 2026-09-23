@@ -51,7 +51,7 @@ func (pg *Postgres) UpdateFile(file *model.File) error {
 	_, err = tx.Exec(
 		context.Background(), update_sql,
 		file.Name, file.Description, file.Size,
-		file.Type, file.Hash, file.ID,
+		file.MimeType, file.Hash, file.ID,
 	)
 	if err != nil {
 		return err

@@ -571,24 +571,14 @@
 				</table>
 			</fieldset>
 			{{- end}}
-			{{- if or .Files $.user}}
-
-			<fieldset>
+			
+			<fieldset {{- if not $.user}} class="files-hide" {{- end}}>
 				<legend>Files</legend>
-				<div data-inventory_id="{{.ID}}" {{- if $.user}} class="filedrop" {{- end}}>
+				<div data-inventory_id="{{.ID}}" {{- if $.user}} class="filedrop"{{- end}}>
 					<div id="file-list-container" class="file-list-container">
-					{{- if .Files}}
-						{{- range .Files}}
-						<div data-file_id="{{.ID}}" data-name="{{.Name}}" data-mimetype="{{.Type}}" data-size="{{.Size}}">
-							<a href="../file/{{.ID}}">{{.Name}}</a>
-							({{.FormattedSize}})
-						</div>
-						{{- end}}
-					{{- end}}
 					</div>
 				</div>
 			</fieldset>
-			{{- end}}
 			{{- if .Publications}}
 
 			<fieldset>

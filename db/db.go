@@ -55,6 +55,8 @@ type DB interface {
 	GetFile(id int) (*model.File, error)
 	// Fetches file details by hash
 	GetFileByHash(hash string) (*model.File, error)
+	// Get files for an item by id
+	ListFilesById(id, tbl int) ([]model.File, error)
 	// Update existing file
 	UpdateFile(*model.File) error
 	// Insert new file
@@ -102,6 +104,15 @@ type DB interface {
 	DeleteKeywords(keywords ...string) error
 	// Change the name of a keyword
 	RenameKeyword(old_name, new_name string) error
+
+	// Lists available file types
+	ListFileTypes() ([]string, error)
+	// Adds any number of file types
+	AddFileTypes(filetypes ...string) error
+	// Deletes any number of file types
+	DeleteFileTypes(filetypes ...string) error
+	// Change the name of a file type
+	RenameFileTypes(old_name, new_name string) error
 
 	// Lists available issues
 	ListIssues() ([]string, error)

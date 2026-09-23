@@ -105,7 +105,7 @@ table { max-width: 600px; }
 }
 .file-list-container {
 	display: inline-block;
-	max-width: auto;
+	width: 100%;
 	word-break: break-all;
 	word-wrap: break-word;
 	pointer-events: visible;
@@ -139,4 +139,29 @@ table { max-width: 600px; }
 	text-overflow: ellipsis;
 	text-align: center;
 	font-size: 14px;
+}
+.type-container {
+	border-style: solid;
+	border: none;
+	margin-bottom: 5px;
+	padding: 5px;
+}
+.type-title {
+	font-size: 14px;
+	font-weight: bold;
+}
+.file-item {
+	margin-left: 5%;
+}
+.file-list-container hr {
+    border: 0;
+    border-top: 1px solid black;
+	margin-top: 1px;
+	margin-bottom: 1px;
+}
+#filediv-empty .file-item {
+	margin-left: 0%;
+}
+.files-hide {
+	display: none;
 }

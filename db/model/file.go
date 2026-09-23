@@ -6,12 +6,14 @@ import (
 )
 
 type File struct {
-	ID          int32   `db:"id" json:"id,omitempty"`
-	Name        string  `json:"name,omitempty"`
-	Description *string `json:"description,omitempty"`
-	Type        string  `db:"mimetype" json:"mimetype"`
-	Size        int64   `json:"size"`
-	Hash        *string `db:"file_hash" json:"file_hash,omitempty"`
+	ID            int32   `db:"id" json:"id,omitempty"`
+	Name          string  `json:"name,omitempty"`
+	Description   *string `json:"description,omitempty"`
+	MimeType      string  `db:"mimetype" json:"mimetype"`
+	FileType      string  `db:"file_type" json:"file_type,omitempty"`
+	FileTypeColor *int32  `db:"file_type_int"`
+	Size          int64   `json:"size"`
+	Hash          *string `db:"file_hash" json:"file_hash,omitempty"`
 
 	// Transient fields that don't directly exist in the file table
 	Barcode      string `json:"barcode,omitempty"`

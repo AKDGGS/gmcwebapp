@@ -59,3 +59,7 @@ CREATE TYPE container_materials AS ENUM (
 	'cardboard', 'cardboard/plastic', 'cloth fiber', 'glass',
 	'metal', 'metal/wood',  'paper', 'plastic', 'wood'
 );
+
+CREATE TYPE file_types AS ENUM (
+	'Reports', 'Images', 'XRF Data', 'Hyperspectral Data'
+)

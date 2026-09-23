@@ -68,6 +68,7 @@ function FileDrop(drop_zone, file_list_container){
 	file_name = '';
 	let file_count = 0;
 	let start_time = Date.now();
+	let pq = ['borehole_id', 'inventory_id', 'outcrop_id', 'prospect_id', 'shotline_id', 'well_id'].filter(v => drop_zone.dataset[v]).map(v => `${v}=${drop_zone.dataset[v]}`).join('&');
 
 	// Test for "XHR2" support - AJAX style uploads
 	var xhr2 = ('XMLHttpRequest' in window) && ('upload' in new XMLHttpRequest());
@@ -132,8 +133,7 @@ function FileDrop(drop_zone, file_list_container){
 		
 		for(var i = 0; i < files.length; i++){
 			let xhr = new XMLHttpRequest();
-			let pq = ['borehole_id', 'inventory_id', 'outcrop_id', 'prospect_id', 'shotline_id', 'well_id'].filter(v => drop_zone.dataset[v]).map(v => `${v}=${drop_zone.dataset[v]}`).join('&');
-			let upload_url = '../upload' + (pq ? '?' + pq : '');
+			let upload_url = '../upload?' + pq;
 			let form_data = new FormData();
 			form_data.append('file'+i, files[i]);
 			form_data.append('format', 'json');
@@ -180,7 +180,7 @@ function FileDrop(drop_zone, file_list_container){
 				upload_total_fill.style.width = (file_count / files.length) * 100 + '%';
 				upload_total_text.textContent = file_count + ' / ' + files.length + " Files Transferred\n" 
 					+ size_formatter(Math.round(total_size / elapsed_time_total)) + '/s';
-				add_file_to_page(file);
+				RefreshFileList();
 			});
 			xhr.open('POST', upload_url);
 			xhr.send(form_data);
@@ -190,23 +190,6 @@ function FileDrop(drop_zone, file_list_container){
 	function size_formatter(size){
 		var i = size == 0 ? 0 : Math.floor(Math.log(size) / Math.log(1024));
 		return (size / Math.pow(1024, i)).toFixed(2) * 1 + ' ' + ['B', 'KiB', 'MiB', 'GiB', 'TiB'][i];
-	}
-
-	function add_file_to_page(file){
-		if (file_list_container.querySelector(`[data-file_id="${file_id}"]`)) {
-			return;
-		}
-		const filename_container = document.createElement('div');
-		const file_link = document.createElement('a');
-		file_link.href = `../file/${file_id}`;
-		file_link.textContent = file.name;
-		filename_container.appendChild(file_link);
-		const file_size = document.createTextNode(` (${size_formatter(file.size)})`);
-		filename_container.appendChild(file_size);
-		filename_container.setAttribute("data-file_id", file_id);
-		filename_container.setAttribute("data-name", file.name);
-		filename_container.setAttribute("data-size", file.size);
-		file_list_container.appendChild(filename_container);
 	}
 
 	function upload_error(name, err){

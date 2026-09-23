@@ -3,6 +3,7 @@ package assets
 import (
 	"html/template"
 	"io"
+	"strings"
 	"sync"
 	"time"
 )
@@ -29,6 +30,7 @@ var stdFuncs template.FuncMap = template.FuncMap{
 			return in
 		}
 	},
+	"lower": strings.ToLower,
 }
 
 type templateEntry struct {

@@ -137,7 +137,7 @@ func FilePut(exec string, cfg *config.Config, cmd string, args []string) int {
 			ID:           id,
 			Name:         file_info.Name(),
 			Size:         file_info.Size(),
-			Type:         mt,
+			MimeType:     mt,
 			Hash:         &hash,
 			BoreholeIDs:  []int{*borehole_id},
 			InventoryIDs: []int{*inventory_id},

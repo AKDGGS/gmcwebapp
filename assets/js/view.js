@@ -150,34 +150,7 @@ if(document.getElementById('stash-button')){
 }
 
 if(document.getElementById('file-list-container')){
-	let fl = document.getElementById('file-list-container');
-	Array.from(fl.querySelectorAll('div')).forEach((e,i) => {
-		if(e.dataset.mimetype.startsWith('text/csv') && e.dataset.size < 8192){
-			let fset = document.createElement('fieldset');
-			fset.className = 'csv';
-			let lgd = document.createElement('legend');
-			lgd.appendChild(document.createTextNode(e.dataset.name));
-			fset.appendChild(lgd);
-
-			let tbl = document.createElement('table');
-			Papa.parse(`../file/${e.dataset.file_id}`, {
-				download: true,
-				header: false,
-				skipEmptyLines: true,
-				step: function(r,p){
-					tbl.appendChild(r.data.reduce((a,v) => {
-						let td = document.createElement(p.readHeader ? 'td' : 'th');
-						td.appendChild(document.createTextNode(v));
-						a.appendChild(td);
-						return a;
-					}, document.createElement('tr')));
-					p.readHeader = true
-				}
-			});
-			fset.appendChild(tbl);
-			document.querySelector('.apptmpl-content').appendChild(fset);
-		}
-	});
+	RefreshFileList();
 }
 
 // Takes an arbitrary JSON object
@@ -236,4 +209,51 @@ function JSONToElement(obj){
 		default:
 			return document.createTextNode('Unknown - ' + type);
 	}
+}
+
+function RefreshFileList(){
+	let fl = document.getElementById('file-list-container');
+	let pq = ['borehole_id', 'inventory_id', 'outcrop_id', 'prospect_id', 'shotline_id', 'well_id'].filter(v => fl.parentElement.dataset[v]).map(v => `${v}=${fl.parentElement.dataset[v]}`).join('&');
+	let refresh_url = '../api/filelist.partial.html?' + pq;
+	fetch(refresh_url)
+	.then(response => response.text())
+	.then(html => {
+		if (html.length > 0) {
+			fl.closest('fieldset').style.display = 'block';
+			fl.innerHTML = html;
+		}
+		Array.from(fl.querySelectorAll('.file-item')).forEach((e,i) => {
+			if(e.dataset.name.endsWith('.csv') && e.dataset.size < 8192){
+				if(document.querySelector(`fieldset[data-file_id="${CSS.escape(e.dataset.file_id)}"]`) == null){
+					let fset = document.createElement('fieldset');
+					fset.dataset.file_id = e.dataset.file_id;
+					fset.className = 'csv';
+					let lgd = document.createElement('legend');
+					lgd.appendChild(document.createTextNode(e.dataset.name));
+					fset.appendChild(lgd);
+
+					let tbl = document.createElement('table');
+					Papa.parse(`../file/${e.dataset.file_id}`, {
+						download: true,
+						header: false,
+						skipEmptyLines: true,
+						step: function(r,p){
+							tbl.appendChild(r.data.reduce((a,v) => {
+								let td = document.createElement(p.readHeader ? 'td' : 'th');
+								td.appendChild(document.createTextNode(v));
+								a.appendChild(td);
+								return a;
+							}, document.createElement('tr')));
+							p.readHeader = true
+						}
+					});
+					fset.appendChild(tbl);
+					document.querySelector('.apptmpl-content').appendChild(fset);
+				}
+			}
+		});
+	})
+	.catch(error => {
+		fl.innerHTML = "error refreshing file list: " + error;
+	});
 }

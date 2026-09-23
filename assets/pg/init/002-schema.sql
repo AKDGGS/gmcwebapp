@@ -71,7 +71,8 @@ CREATE TABLE file (
 	mimetype VARCHAR(255) NOT NULL DEFAULT 'application/octet-stream',
 	size BIGINT NOT NULL,
 	filename VARCHAR(255) NOT NULL,
-	file_hash TEXT UNIQUE NOT NULL
+	file_hash TEXT UNIQUE NOT NULL,
+	file_type file_types NULL
 );
 
 
