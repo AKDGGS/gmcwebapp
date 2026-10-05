@@ -9,34 +9,34 @@ import (
 
 type FlatInventory struct {
 	ID             int32             `json:"id" parquet:"id,uncompressed"`
-	Collection     *string           `json:"collection,omitempty" parquet:"collection,uncompressed,omitempty"`
+	Collection     *string           `json:"collection,omitempty" parquet:"collection,uncompressed,optional"`
 	CollectionID   *int32            `json:"collection_id,omitempty" parquet:"-"`
-	SampleNumber   *string           `json:"sample,omitempty" parquet:"sample,uncompressed,omitempty"`
-	SlideNumber    *string           `json:"slide,omitempty" parquet:"slide,uncompressed,omitempty"`
-	BoxNumber      *string           `json:"box,omitempty" parquet:"box,uncompressed,omitempty"`
-	SetNumber      *string           `json:"set,omitempty" parquet:"set,uncompressed,omitempty"`
-	CoreNumber     *string           `json:"core,omitempty" parquet:"core,uncompressed,omitempty"`
-	CoreDiameter   *float64          `json:"diameter,omitempty" parquet:"diameter,uncompressed,omitempty"`
-	CoreName       *string           `json:"core_name,omitempty" parquet:"core_name,uncompressed,omitempty"`
-	CoreUnit       *string           `json:"core_unit,omitempty" parquet:"core_unit,uncompressed,omitempty"`
-	IntervalTop    *float64          `db:"interval_top" json:"top,omitempty" parquet:"top,uncompressed,omitempty"`
-	IntervalBottom *float64          `db:"interval_bottom" json:"bottom,omitempty" parquet:"bottom,uncompressed,omitempty"`
-	IntervalUnit   *string           `db:"interval_unit" json:"unit,omitempty" parquet:"unit,uncompressed,omitempty"`
-	Keyword        []string          `json:"keyword,omitempty" parquet:"keyword,uncompressed,omitempty"`
-	Barcode        *string           `json:"barcode,omitempty" parquet:"barcode,uncompressed,omitempty"`
-	AltBarcode     []string          `json:"alt_barcode,omitempty" parquet:"alt_barcode,uncompressed,omitempty"`
+	SampleNumber   *string           `json:"sample,omitempty" parquet:"sample,uncompressed,optional"`
+	SlideNumber    *string           `json:"slide,omitempty" parquet:"slide,uncompressed,optional"`
+	BoxNumber      *string           `json:"box,omitempty" parquet:"box,uncompressed,optional"`
+	SetNumber      *string           `json:"set,omitempty" parquet:"set,uncompressed,optional"`
+	CoreNumber     *string           `json:"core,omitempty" parquet:"core,uncompressed,optional"`
+	CoreDiameter   *float64          `json:"diameter,omitempty" parquet:"diameter,uncompressed,optional"`
+	CoreName       *string           `json:"core_name,omitempty" parquet:"core_name,uncompressed,optional"`
+	CoreUnit       *string           `json:"core_unit,omitempty" parquet:"core_unit,uncompressed,optional"`
+	IntervalTop    *float64          `db:"interval_top" json:"top,omitempty" parquet:"top,uncompressed,optional"`
+	IntervalBottom *float64          `db:"interval_bottom" json:"bottom,omitempty" parquet:"bottom,uncompressed,optional"`
+	IntervalUnit   *string           `db:"interval_unit" json:"unit,omitempty" parquet:"unit,uncompressed,optional"`
+	Keyword        []string          `json:"keyword,omitempty" parquet:"keyword,uncompressed,optional"`
+	Barcode        *string           `json:"barcode,omitempty" parquet:"barcode,uncompressed,optional"`
+	AltBarcode     []string          `json:"alt_barcode,omitempty" parquet:"alt_barcode,uncompressed,optional"`
 	ContainerID    *int32            `json:"container_id,omitempty" parquet:"-"`
-	ContainerPath  *string           `json:"container,omitempty" parquet:"container,uncompressed,omitempty"`
+	ContainerPath  *string           `json:"container,omitempty" parquet:"container,uncompressed,optional"`
 	Remark         *string           `json:"remark,omitempty" parquet:"-"`
 	Geometries     []json.RawMessage `json:"geometries,omitempty" parquet:"-"`
 	Latitude       *float64          `db:"latitude" json:"latitude,omitempty" parquet:"-"`
 	Longitude      *float64          `db:"longitude" json:"longitude,omitempty" parquet:"-"`
 	ProjectID      *int32            `json:"project_id,omitempty" parquet:"-"`
-	Project        *string           `json:"project,omitempty" parquet:"project,uncompressed,omitempty"`
-	CanPublish     *bool             `db:"can_publish" json:"can_publish,omitempty" parquet:"can_publish,uncompressed,omitempty"`
-	Description    *string           `json:"description,omitempty" parquet:"description,uncompressed,omitempty"`
+	Project        *string           `json:"project,omitempty" parquet:"project,uncompressed,optional"`
+	CanPublish     *bool             `db:"can_publish" json:"can_publish,omitempty" parquet:"can_publish,uncompressed,optional"`
+	Description    *string           `json:"description,omitempty" parquet:"description,uncompressed,optional"`
 	Note           []string          `json:"note,omitempty" parquet:"-"`
-	Issue          []string          `json:"issue,omitempty" parquet:"issue,uncompressed,omitempty"`
+	Issue          []string          `json:"issue,omitempty" parquet:"issue,uncompressed,optional"`
 	Filename       []string          `json:"filename,omitempty" parquet:"-"`
 	Interval       *struct {
 		GTE *float64 `db:"gte" json:"gte,omitempty" parquet:"-"`
@@ -44,44 +44,44 @@ type FlatInventory struct {
 	} `json:"interval,omitempty" parquet:"-"`
 	Well []struct {
 		ID        int32   `json:"id" parquet:"id,uncompressed"`
-		Name      string  `json:"name,omitempty" parquet:"name,uncompressed,omitempty"`
+		Name      string  `json:"name,omitempty" parquet:"name,uncompressed,optional"`
 		AltNames  string  `json:"alt_names,omitempty" parquet:"-"`
-		Number    *string `json:"number,omitempty" parquet:"number,uncompressed,omitempty"`
-		API       *string `json:"api,omitempty" parquet:"api,uncompressed,omitempty"`
+		Number    *string `json:"number,omitempty" parquet:"number,uncompressed,optional"`
+		API       *string `json:"api,omitempty" parquet:"api,uncompressed,optional"`
 		IsOnshore *bool   `json:"is_onshore,omitempty" parquet:"-"`
-	} `json:"well,omitempty" parquet:"well,omitempty"`
+	} `json:"well,omitempty" parquet:"well,optional"`
 	Outcrop []struct {
 		ID     int32   `json:"id"  parquet:"id,uncompressed"`
 		Name   string  `json:"name" parquet:"name,uncompressed"`
-		Number *string `json:"number,omitempty" parquet:"number,uncompressed,omitempty"`
+		Number *string `json:"number,omitempty" parquet:"number,uncompressed,optional"`
 		Year   *int32  `json:"year,omitempty" parquet:"-"`
-	} `json:"outcrop,omitempty" parquet:"outcrop,omitempty"`
+	} `json:"outcrop,omitempty" parquet:"outcrop,optional"`
 	Borehole []struct {
 		ID       int32  `json:"id" parquet:"id,uncompressed"`
-		Name     string `json:"name,omitempty" parquet:"name,uncompressed,omitempty"`
+		Name     string `json:"name,omitempty" parquet:"name,uncompressed,optional"`
 		AltNames string `json:"alt_names,omitempty" parquet:"-"`
 		Prospect struct {
 			ID       int32  `json:"id" parquet:"id,uncompressed"`
-			Name     string `json:"name,omitempty" parquet:"name,uncompressed,omitempty"`
+			Name     string `json:"name,omitempty" parquet:"name,uncompressed,optional"`
 			AltNames string `json:"alt_names,omitempty" parquet:"-"`
 			ARDF     string `json:"ardf,omitempty" parquet:"-"`
-		} `json:"prospect,omitempty" parquet:"prospect,omitempty"`
-	} `json:"borehole,omitempty" parquet:"borehole,omitempty"`
+		} `json:"prospect,omitempty" parquet:"prospect,optional"`
+	} `json:"borehole,omitempty" parquet:"borehole,optional"`
 	Shotline []struct {
 		ID   int32    `json:"id" parquet:"id,uncompressed"`
 		Name string   `json:"name" parquet:"name,uncompressed"`
 		Year *int32   `json:"year,omitempty" parquet:"-"`
-		Min  *float64 `json:"min,omitempty" parquet:"min,uncompressed,omitempty"`
-		Max  *float64 `json:"max,omitempty" parquet:"max,uncompressed,omitempty"`
-	} `json:"shotline,omitempty" parquet:"shotline,omitempty"`
+		Min  *float64 `json:"min,omitempty" parquet:"min,uncompressed,optional"`
+		Max  *float64 `json:"max,omitempty" parquet:"max,uncompressed,optional"`
+	} `json:"shotline,omitempty" parquet:"shotline,optional"`
 	Publication []struct {
 		ID          int32  `json:"id" parquet:"id,uncompressed"`
 		Title       string `json:"title" parquet:"title,uncompressed"`
-		Year        *int32 `json:"year,omitempty" parquet:"year,uncompressed,omitempty"`
+		Year        *int32 `json:"year,omitempty" parquet:"year,uncompressed,optional"`
 		Description string `json:"description,omitempty" parquet:"-"`
 		Number      string `json:"number,omitempty" parquet:"-"`
 		Series      string `json:"series,omitempty" parquet:"-"`
-	} `json:"publication,omitempty" parquet:"publication,omitempty"`
+	} `json:"publication,omitempty" parquet:"publication,optional"`
 }
 
 func (f *FlatInventory) StringID() string {
