@@ -124,6 +124,9 @@ type DB interface {
 	// Lists all collections
 	ListCollections() ([]*model.Collection, error)
 
+	// Lists all URLs
+	ListURLs(func(*model.URL) error) error
+
 	// Lists quality assurance reports
 	ListQAReports() ([]map[string]string, error)
 	// Runs just the count of a specific QA report
