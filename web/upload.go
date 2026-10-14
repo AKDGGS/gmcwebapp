@@ -68,6 +68,10 @@ func (srv *Server) ServeUpload(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	barcode := q.Get("barcode")
+	var description *string
+	if d := q.Get("description"); d != "" {
+		description = &d
+	}
 
 	var results []UploadStatus
 
@@ -137,6 +141,7 @@ func (srv *Server) ServeUpload(w http.ResponseWriter, r *http.Request) {
 				f = &model.File{
 					ID:           id,
 					Name:         fn,
+					Description:  description,
 					Size:         fsfile.GetReadSize(),
 					Hash:         &hash,
 					MimeType:     mt,
@@ -161,6 +166,7 @@ func (srv *Server) ServeUpload(w http.ResponseWriter, r *http.Request) {
 				srv.FileStores.DeleteFile(fmt.Sprintf("%d/%s", id, fn))
 
 				// Update the existing file
+				f.Description = description
 				f.Barcode = barcode
 				f.InventoryIDs = inventory_ids
 				f.BoreholeIDs = borehole_ids
