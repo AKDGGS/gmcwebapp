@@ -48,7 +48,7 @@ func (pg *Postgres) AddFile(file *model.File) error {
 		return err
 	}
 	_, err = tx.Exec(context.Background(), insert_sql,
-		file.ID, file.Name, file.Description, file.Size, file.MimeType, file.Hash,
+		file.ID, file.Name, file.Description, file.Size, file.MimeType, file.Hash, file.FileType,
 	)
 	if err != nil {
 		if err == ErrNoRows {

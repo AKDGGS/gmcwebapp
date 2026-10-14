@@ -10,7 +10,7 @@ type File struct {
 	Name          string  `json:"name,omitempty"`
 	Description   *string `json:"description,omitempty"`
 	MimeType      string  `db:"mimetype" json:"mimetype"`
-	FileType      string  `db:"file_type" json:"file_type,omitempty"`
+	FileType      *string  `db:"file_type" json:"file_type,omitempty"`
 	FileTypeColor *int32  `db:"file_type_int"`
 	Size          int64   `json:"size"`
 	Hash          *string `db:"file_hash" json:"file_hash,omitempty"`

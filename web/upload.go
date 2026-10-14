@@ -8,6 +8,8 @@ import (
 	"net/http"
 	"path/filepath"
 	"strconv"
+	"slices"
+	"strings"
 	"time"
 
 	"gmc/db/model"
@@ -71,6 +73,22 @@ func (srv *Server) ServeUpload(w http.ResponseWriter, r *http.Request) {
 	var description *string
 	if d := q.Get("description"); d != "" {
 		description = &d
+	}
+
+	var filetype *string
+	if ft := q.Get("filetype"); ft != "" {
+		fts, err := srv.DB.ListFileTypes()
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
+		}
+
+		i := slices.IndexFunc(fts, func(s string) bool {
+			return strings.EqualFold(s, ft)
+		})
+		if i >= 0 {
+			filetype = &fts[i]
+		}
 	}
 
 	var results []UploadStatus
@@ -145,6 +163,7 @@ func (srv *Server) ServeUpload(w http.ResponseWriter, r *http.Request) {
 					Size:         fsfile.GetReadSize(),
 					Hash:         &hash,
 					MimeType:     mt,
+					FileType:	  filetype,
 					Barcode:      barcode,
 					InventoryIDs: inventory_ids,
 					BoreholeIDs:  borehole_ids,
@@ -167,6 +186,7 @@ func (srv *Server) ServeUpload(w http.ResponseWriter, r *http.Request) {
 
 				// Update the existing file
 				f.Description = description
+				f.FileType = filetype
 				f.Barcode = barcode
 				f.InventoryIDs = inventory_ids
 				f.BoreholeIDs = borehole_ids
