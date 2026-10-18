@@ -7,8 +7,8 @@ import (
 	"mime"
 	"net/http"
 	"path/filepath"
-	"strconv"
 	"slices"
+	"strconv"
 	"strings"
 	"time"
 
@@ -163,7 +163,7 @@ func (srv *Server) ServeUpload(w http.ResponseWriter, r *http.Request) {
 					Size:         fsfile.GetReadSize(),
 					Hash:         &hash,
 					MimeType:     mt,
-					FileType:	  filetype,
+					FileType:     filetype,
 					Barcode:      barcode,
 					InventoryIDs: inventory_ids,
 					BoreholeIDs:  borehole_ids,

@@ -1,21 +1,16 @@
-{{- if .}}
 {{- $currentType := ""}}
 {{- range $i, $v := .}}
-{{- if or (ne .FileType $currentType) (eq $i 0)}}
-{{- if ne $i 0}}
-</div>
-{{end -}}
-<div id="filediv-{{or (lower $v.FileType) "empty"}}" class="type-container {{- if $v.FileType}} ftc{{$v.FileTypeColor}} {{- end}}">
-	{{- if ne $v.FileType ""}}
-	<div class="type-title">{{$v.FileType}}</div>
-	<hr>
+{{- if or (ne (deref .FileType) $currentType) (eq $i 0)}}
+{{- if ne $i 0}}</div>{{end -}}
+<div class="type-container ftc{{or .FileTypeColor 0}}">
+	{{- if ne (deref .FileType) ""}}
+	<div class="type-title">{{.FileType}}</div><hr>
 	{{- end}}
-	{{- $currentType = $v.FileType}}
+	{{- $currentType = (deref .FileType)}}
 	{{- end}}
-	<div data-file_id="{{$v.ID}}" data-name="{{$v.Name}}" data-mimetype="{{$v.MimeType}}" data-size="{{$v.Size}}" class="file-item">
-		<a href="../file/{{$v.ID}}">{{$v.Name}}</a>
-		({{$v.FormattedSize}})
+	<div data-file_id="{{.ID}}" data-name="{{.Name}}" data-mimetype="{{.MimeType}}" data-size="{{.Size}}" class="file-item">
+		<a href="../file/{{.ID}}">{{.Name}}</a>
+		({{.FormattedSize}})
 	</div>
 {{- end}}
 </div>
-{{- end }}

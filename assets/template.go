@@ -3,6 +3,7 @@ package assets
 import (
 	"html/template"
 	"io"
+	"reflect"
 	"strings"
 	"sync"
 	"time"
@@ -31,6 +32,19 @@ var stdFuncs template.FuncMap = template.FuncMap{
 		}
 	},
 	"lower": strings.ToLower,
+	"deref": func(v any) any {
+		if v == nil {
+			return ""
+		}
+		r := reflect.ValueOf(v)
+		if r.Kind() != reflect.Ptr {
+			return v
+		}
+		if r.IsNil() {
+			return reflect.Zero(r.Type().Elem()).Interface()
+		}
+		return r.Elem().Interface()
+	},
 }
 
 type templateEntry struct {

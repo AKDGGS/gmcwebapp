@@ -1,6 +1,6 @@
 package cmd
 
-import(
+import (
 	"context"
 	"crypto/tls"
 	"fmt"
@@ -24,7 +24,7 @@ func checkURL(address string, client *http.Client, ctx context.Context) int {
 		return 1
 	}
 
-	for i:=0; i <= MAX_REDIRECTS; i++ {
+	for i := 0; i <= MAX_REDIRECTS; i++ {
 		req, err := http.NewRequestWithContext(ctx, http.MethodHead, u.String(), nil)
 		if err != nil {
 			fmt.Fprintf(os.Stderr, "%s\n\t%s\n", address, err)
@@ -35,9 +35,9 @@ func checkURL(address string, client *http.Client, ctx context.Context) int {
 		if err != nil {
 			fmt.Fprintf(os.Stderr, "%s\n\t%s\n", address, err)
 			return 1
-		} 
+		}
 		defer resp.Body.Close()
-		
+
 		if (resp.StatusCode >= 200) && (resp.StatusCode <= 299) {
 			return 0
 
@@ -46,7 +46,7 @@ func checkURL(address string, client *http.Client, ctx context.Context) int {
 				fmt.Fprintf(os.Stderr, "%s\n\t%d : %s\n", address, resp.StatusCode, http.StatusText(resp.StatusCode))
 				return 1
 			}
-			
+
 			redirect := resp.Header.Get("Location")
 			new_url, err := url.Parse(redirect)
 			if err != nil {
@@ -74,12 +74,12 @@ func checkURL(address string, client *http.Client, ctx context.Context) int {
 }
 
 func HealthURL(exec string, cfg *config.Config) int {
-	cache := map[string][]net.IPAddr {}
+	cache := map[string][]net.IPAddr{}
 	transport := &http.Transport{
-		IdleConnTimeout: 15 * time.Second,
-		MaxIdleConns: 150,
+		IdleConnTimeout:     15 * time.Second,
+		MaxIdleConns:        150,
 		MaxIdleConnsPerHost: 10,
-		TLSClientConfig : &tls.Config{
+		TLSClientConfig: &tls.Config{
 			InsecureSkipVerify: true,
 		},
 		DialContext: func(ctx context.Context, network string, addr string) (net.Conn, error) {
@@ -107,17 +107,16 @@ func HealthURL(exec string, cfg *config.Config) int {
 		CheckRedirect: func(req *http.Request, via []*http.Request) error {
 			return http.ErrUseLastResponse
 		},
-		Timeout: 3 * time.Second,
+		Timeout:   3 * time.Second,
 		Transport: transport,
 	}
 
-	
 	db, err := db.New(cfg.Database)
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "%s: %s\n", exec, err)
 		return 1
 	}
-	
+
 	err = db.ListURLs(func(f *model.URL) error {
 		checkURL(*f.URL, client, context.Background())
 		return nil

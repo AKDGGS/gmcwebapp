@@ -92,7 +92,7 @@ func main() {
 
 	case "file", "f":
 		os.Exit(cmd.FileCommand(cfg, exec, cm, flag.Args()[1:]))
-		
+
 	case "filetypes", "filetype", "ft":
 		os.Exit(cmd.FileTypesCommand(cfg, exec, cm, flag.Args()[1:]))
 

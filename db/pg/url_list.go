@@ -1,11 +1,11 @@
-package pg 
+package pg
 
 import (
 	"context"
-	
+
 	"gmc/assets"
 	"gmc/db/model"
-	
+
 	"github.com/jackc/pgx/v5"
 )
 
@@ -14,7 +14,7 @@ func (pg *Postgres) ListURLs(cb func(*model.URL) error) error {
 	if err != nil {
 		return err
 	}
-	
+
 	rows, err := pg.pool.Query(context.Background(), q)
 	if err != nil {
 		return err
