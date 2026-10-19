@@ -3,7 +3,7 @@ SELECT
 	f.filename AS name,
 	f.mimetype,
 	f.size::numeric,
-	COALESCE(f.file_type::text, '') AS file_type,
+	f.file_type,
 	array_position(enum_range(NULL::file_types), file_type) AS file_type_int
 FROM prospect_file AS pf
 JOIN file AS f

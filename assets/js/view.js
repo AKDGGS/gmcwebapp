@@ -225,12 +225,6 @@ function RefreshFileList(){
 		Array.from(fl.querySelectorAll('.file-item')).forEach((e,i) => {
 			if(e.dataset.name.endsWith('.csv') && e.dataset.size < 8192){
 				if(document.querySelector(`fieldset[data-file_id="${CSS.escape(e.dataset.file_id)}"]`) == null){
-					let fset = document.createElement('fieldset');
-					fset.dataset.file_id = e.dataset.file_id;
-					fset.className = 'csv';
-					let lgd = document.createElement('legend');
-					lgd.appendChild(document.createTextNode(e.dataset.name));
-					fset.appendChild(lgd);
 
 					let tbl = document.createElement('table');
 					Papa.parse(`../file/${e.dataset.file_id}`, {
@@ -245,10 +239,18 @@ function RefreshFileList(){
 								return a;
 							}, document.createElement('tr')));
 							p.readHeader = true
+						},
+						complete: function(r,f){
+							let fset = document.createElement('fieldset');
+							fset.dataset.file_id = e.dataset.file_id;
+							fset.className = 'csv';
+							let lgd = document.createElement('legend');
+							lgd.appendChild(document.createTextNode(e.dataset.name));
+							fset.appendChild(lgd);
+							fset.appendChild(tbl);
+							document.querySelector('.apptmpl-content').appendChild(fset);
 						}
 					});
-					fset.appendChild(tbl);
-					document.querySelector('.apptmpl-content').appendChild(fset);
 				}
 			}
 		});
