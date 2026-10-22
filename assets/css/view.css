@@ -147,10 +147,11 @@ table { max-width: 600px; }
 	padding: 5px;
 }
 .type-title {
-	font-size: 14px;
-	font-weight: bold;
+	font-size: 12px;
+	text-transform: uppercase;
 }
 .file-item {
+	font-size: 14px;
 	margin-left: 5%;
 }
 .file-list-container hr {

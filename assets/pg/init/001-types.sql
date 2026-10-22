@@ -61,5 +61,5 @@ CREATE TYPE container_materials AS ENUM (
 );
 
 CREATE TYPE file_types AS ENUM (
-	'Reports', 'Images', 'XRF Data', 'Hyperspectral Data'
+	'reports', 'images', 'xrf data', 'hyperspectral Data'
 )
