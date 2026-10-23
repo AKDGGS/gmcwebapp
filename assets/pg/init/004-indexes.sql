@@ -8,8 +8,6 @@ CREATE INDEX collection_name_idx ON collection(name);
 
 CREATE INDEX container_barcode_idx ON container(barcode);
 
-CREATE INDEX container_container_type_id_idx ON container(container_type_id);
-
 CREATE INDEX container_name_idx ON container(name);
 
 CREATE INDEX container_alt_barcode_idx ON container(alt_barcode);

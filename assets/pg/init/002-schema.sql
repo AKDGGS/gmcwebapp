@@ -570,16 +570,10 @@ CREATE TABLE shotpoint_point (
 	PRIMARY KEY(shotpoint_id, point_id)
 );
 
-CREATE TABLE container_type (
-	container_type_id SERIAL PRIMARY KEY,
-	name VARCHAR(100) NOT NULL
-);
-
-
 CREATE TABLE container (
 	container_id SERIAL PRIMARY KEY,
 	parent_container_id INT REFERENCES container(container_id) NULL,
-	container_type_id INT REFERENCES container_type(container_type_id) NOT NULL,
+	container_type container_type NOT NULL,
 	container_material container_materials NULL,
 
 	name VARCHAR(50) NOT NULL,

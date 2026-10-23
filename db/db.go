@@ -121,6 +121,15 @@ type DB interface {
 	// Deletes any number of issues
 	DeleteIssues(issues ...string) error
 
+	// List all available container types
+	ListContainerTypes() ([]string, error)
+	// Adds any number of container types
+	AddContainerTypes(containertypes ...string) error
+	// Deletes any number of container types
+	DeleteContainerTypes(containertypes ...string) error
+	// Change the name of a container type
+	RenameContainerType(old_name, new_name string) error
+
 	// Lists all collections
 	ListCollections() ([]*model.Collection, error)
 

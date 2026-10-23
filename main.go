@@ -39,6 +39,8 @@ func main() {
 		fmt.Printf("      manage files\n")
 		fmt.Printf("  filetypes, filetype, ft\n")
 		fmt.Printf("      manage filetypes\n")
+		fmt.Printf("  containertype, containertypes, ct\n")
+		fmt.Printf("      manage container types\n")
 		fmt.Printf("  health, hea\n")
 		fmt.Printf("      do a health check\n")
 		fmt.Printf("See '%s <command> --help' for information ", exec)
@@ -95,6 +97,9 @@ func main() {
 
 	case "filetypes", "filetype", "ft":
 		os.Exit(cmd.FileTypesCommand(cfg, exec, cm, flag.Args()[1:]))
+
+	case "containertype", "containertypes", "ct":
+		os.Exit(cmd.ContainerTypeCommand(cfg, exec, cm, flag.Args()[1:]))
 
 	case "health", "hea":
 		os.Exit(cmd.HealthCommand(cfg, exec, cm, flag.Args()[1:]))

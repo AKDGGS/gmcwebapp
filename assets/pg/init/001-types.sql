@@ -55,6 +55,13 @@ CREATE TYPE issue AS ENUM (
 	'label_obscured', 'insufficient_material'
 );
 
+CREATE TYPE container_type AS ENUM (
+	'section', 'cabinet', 'drawer', 'table', 'row', 'column', 
+	'person', 'unknown', 'connex', 'special', 'property',
+	'shelf', 'building', 'file cabinet', 'room', 'campus',
+	'box', 'pallet'
+);
+
 CREATE TYPE container_materials AS ENUM (
 	'cardboard', 'cardboard/plastic', 'cloth fiber', 'glass',
 	'metal', 'metal/wood',  'paper', 'plastic', 'wood'

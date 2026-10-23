@@ -11,7 +11,6 @@ DROP TABLE IF EXISTS
 	container,
 	container_file,
 	container_log,
-	container_type,
 	core_diameter,
 	dimension,
 	energy_district,
@@ -85,6 +84,7 @@ DROP TABLE IF EXISTS
 CASCADE;
 
 DROP TYPE IF EXISTS
+	container_types,
 	issue,
 	keyword,
 	units,
