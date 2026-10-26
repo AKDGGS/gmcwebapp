@@ -9,44 +9,6 @@ import (
 	"time"
 )
 
-// Standard functions for templates
-var stdFuncs template.FuncMap = template.FuncMap{
-	"rawjs": func(in interface{}) interface{} {
-		switch v := in.(type) {
-		case string:
-			return template.JS(v)
-		case nil:
-			return nil
-		default:
-			return in
-		}
-	},
-	"rawhtml": func(in interface{}) interface{} {
-		switch v := in.(type) {
-		case string:
-			return template.HTML(v)
-		case nil:
-			return nil
-		default:
-			return in
-		}
-	},
-	"lower": strings.ToLower,
-	"deref": func(v any) any {
-		if v == nil {
-			return ""
-		}
-		r := reflect.ValueOf(v)
-		if r.Kind() != reflect.Ptr {
-			return v
-		}
-		if r.IsNil() {
-			return reflect.Zero(r.Type().Elem()).Interface()
-		}
-		return r.Elem().Interface()
-	},
-}
-
 type templateEntry struct {
 	ModTime  time.Time
 	Template *template.Template
@@ -71,12 +33,48 @@ func ExecuteTemplate(name string, wr io.Writer, data interface{}) error {
 			return err
 		}
 
-		t, err := template.New(name).Funcs(stdFuncs).Parse(string(b))
-		if err != nil {
+		tmpl := template.New(name)
+		tmpl.Funcs(template.FuncMap{
+			"rawjs": func(in interface{}) interface{} {
+				switch v := in.(type) {
+				case string:
+					return template.JS(v)
+				case nil:
+					return nil
+				default:
+					return in
+				}
+			},
+			"rawhtml": func(in interface{}) interface{} {
+				switch v := in.(type) {
+				case string:
+					return template.HTML(v)
+				case nil:
+					return nil
+				default:
+					return in
+				}
+			},
+			"lower": strings.ToLower,
+			"deref": func(v any) any {
+				if v == nil {
+					return ""
+				}
+				r := reflect.ValueOf(v)
+				if r.Kind() != reflect.Ptr {
+					return v
+				}
+				if r.IsNil() {
+					return reflect.Zero(r.Type().Elem()).Interface()
+				}
+				return r.Elem().Interface()
+			},
+		})
+		if _, err := tmpl.Parse(string(b)); err != nil {
 			return err
 		}
 
-		curEntry = &templateEntry{ModTime: s.ModTime(), Template: t}
+		curEntry = &templateEntry{ModTime: s.ModTime(), Template: tmpl}
 
 		templateLock.Lock()
 		templateCache[name] = curEntry

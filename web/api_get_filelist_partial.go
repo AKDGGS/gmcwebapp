@@ -11,7 +11,6 @@ import (
 )
 
 func (srv *Server) ServeAPIGetFileListPartial(w http.ResponseWriter, r *http.Request) {
-	var files []model.File
 	q := r.URL.Query()
 	var tbl int
 	var sid string
@@ -45,7 +44,7 @@ func (srv *Server) ServeAPIGetFileListPartial(w http.ResponseWriter, r *http.Req
 		)
 		return
 	}
-	files, err = srv.DB.ListFilesById(tbl, id)
+	files, err := srv.DB.ListFilesById(tbl, id)
 	if err != nil {
 		http.Error(
 			w,
@@ -54,8 +53,10 @@ func (srv *Server) ServeAPIGetFileListPartial(w http.ResponseWriter, r *http.Req
 		)
 		return
 	}
-	buf := bytes.Buffer{}
-	if files != nil {
+
+	w.Header().Set("Content-Type", "text/html; charset=utf-8")
+	if len(files) > 0 {
+		buf := bytes.Buffer{}
 		if err := assets.ExecuteTemplate("tmpl/filelist.partial.html", &buf, files); err != nil {
 			http.Error(
 				w,
@@ -64,17 +65,16 @@ func (srv *Server) ServeAPIGetFileListPartial(w http.ResponseWriter, r *http.Req
 			)
 			return
 		}
+		out, err := compressWriter(r.Header.Get("Accept-Encoding"), w)
+		if err != nil {
+			http.Error(
+				w,
+				fmt.Sprintf("compression error: %s", err),
+				http.StatusInternalServerError,
+			)
+			return
+		}
+		defer out.Close()
+		out.Write(buf.Bytes())
 	}
-	w.Header().Set("Content-Type", "text/html; charset=utf-8")
-	out, err := compressWriter(r.Header.Get("Accept-Encoding"), w)
-	if err != nil {
-		http.Error(
-			w,
-			fmt.Sprintf("compression error: %s", err),
-			http.StatusInternalServerError,
-		)
-		return
-	}
-	defer out.Close()
-	out.Write(buf.Bytes())
 }

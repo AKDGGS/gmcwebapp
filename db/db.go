@@ -56,7 +56,7 @@ type DB interface {
 	// Fetches file details by hash
 	GetFileByHash(hash string) (*model.File, error)
 	// Get files for an item by id
-	ListFilesById(id, tbl int) ([]model.File, error)
+	ListFilesById(id, tbl int) ([]*model.File, error)
 	// Update existing file
 	UpdateFile(*model.File) error
 	// Insert new file
